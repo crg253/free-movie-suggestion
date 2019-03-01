@@ -1,5 +1,6 @@
 import csv
-from flask_app import Movie, db
+from ../app import db
+from ../app.models import Movie
 import json
 
 def csvLoader(file):
@@ -14,10 +15,9 @@ def csvLoader(file):
                                     name=row[0],
                                     year=row[1],
                                     video_link=row[2],
-                                    genre=row[3])
                 db.session.add(uniquename)
                 db.session.commit()
 
     for movie in Movie.query.all():
-        print(str(movie.id) + ' ' + movie.uniquename + ' ' + movie.name + ' ' + str(movie.year) + ' ' + movie.video_link + ' ' + movie.genre )
+        print(str(movie.movie_id) + ' ' + movie.uniquename + ' ' + movie.name + ' ' + str(movie.year) + ' ' + movie.video_link)
         print(json.dumps({'uniquename': movie.uniquename}))
