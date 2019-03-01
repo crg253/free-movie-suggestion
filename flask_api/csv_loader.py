@@ -3,6 +3,7 @@ from app import db
 from app.models import Movie, Tag
 import json
 
+#For initial database load. Not for loading changes to csv
 
 def CSVLoader(file):
 
@@ -11,7 +12,7 @@ def CSVLoader(file):
         cro = csvReaderObject
         for row in cro:
 
-            #refine this
+            #Refine this
             uniquename = (row[0].lower() +row[1]).replace(' ', '')
             uniquename = uniquename.replace("'", '')
             uniquename = uniquename.replace(',', '')
@@ -20,7 +21,7 @@ def CSVLoader(file):
             uniquename = uniquename.replace(':', '')
             uniquename = uniquename.replace('&', '')
 
-
+            #Change so that it just loads each row, without condition
             if Movie.query.filter_by(uniquename=uniquename).first()  == None:
                 uniquename = Movie(uniquename=uniquename,
                                     name=row[0],
@@ -34,6 +35,11 @@ def CSVLoader(file):
                     if Tag.query.filter_by(name=tagname).first()  == None:
                         tagname = Tag(name=tagname)
                         db.session.add(tagname)
+
+
+                    #Shouldn't need this else condition.. Although, might need to create
+                    #a modified tagname like mysterysuspense
+
                     else:
                         tagname = Tag.query.filter_by(name=tagname).first()
 
