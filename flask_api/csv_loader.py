@@ -3,7 +3,9 @@ from app import db
 from app.models import Movie, Tag
 import json
 
-#For initial database load. Not for loading changes to csv
+#For initial database load.
+#ALSO to update a new movie entry.
+#NOT for updating changes to movie genres
 
 def CSVLoader(file):
 
@@ -12,14 +14,12 @@ def CSVLoader(file):
         cro = csvReaderObject
         for row in cro:
 
-            #Refine this
-            uniquename = (row[0].lower() +row[1]).replace(' ', '')
-            uniquename = uniquename.replace("'", '')
-            uniquename = uniquename.replace(',', '')
-            uniquename = uniquename.replace('!', '')
-            uniquename = uniquename.replace('.', '')
-            uniquename = uniquename.replace(':', '')
-            uniquename = uniquename.replace('&', '')
+            #Is there a better way to do this?
+            uniquename = (row[0].lower() +row[1])
+            to_remove = [' ', "'", ',', '!', '.', ':', '&', '-' ]
+            for item in to_remove:
+                uniquename = uniquename.replace(item, '')
+
 
             if Movie.query.filter_by(uniquename=uniquename).first()  == None:
 
@@ -31,9 +31,9 @@ def CSVLoader(file):
 
                 for t in range(3, len(row)):
 
-                    tagname = row[t].replace(' ', '')
-                    tagname = tagname.replace('&', '')
-                    tagname = tagname.replace('-', '')
+                    tagname = row[t]
+                    for item in to_remove:
+                        tagname = tagname.replace(item, '')
 
                     if Tag.query.filter_by(name= row[t]).first()  == None:
                         tagname = Tag(name=row[t])
