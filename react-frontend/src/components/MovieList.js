@@ -1,30 +1,19 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React from "react";
 
+import AppContext from "./AppContext";
 
-class movielist extends Component {
-  state = {
-    Movies:[]
-  }
+const MovieList = () => {
+  return(
+        <div>
+          <AppContext.Consumer>
+            {(context) =>  context.Movies.map(movie=>(
+              <div key={movie.id}>
+                <p>{movie.name}</p>
+              </div>
+            ))}
+          </AppContext.Consumer>
+        </div>
+  );
+};
 
-  componentDidMount(){
-    axios.get('http://127.0.0.1:5000/movies')
-      .then(response => {
-        this.setState({Movies: response.data});
-      });
-  }
-
-  render() {
-    let movieTitles = this.state.Movies.map(movie =>(
-      <p>{movie.name}</p>
-    ))
-
-    return (
-      <div>
-        {movieTitles}
-      </div>
-    );
-  }
-}
-
-export default movielist;
+export default MovieList;
