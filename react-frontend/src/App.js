@@ -10,15 +10,15 @@ class App extends Component {
 
   render() {
     return (
-        <BrowserRouter>
-            <Switch>
-              <Route path='/' component={Home} exact />
-              <AppProvider>
-              <Route path='/movielist' component={MovieList}/>
-              </AppProvider>
-              <Route component = {Error} />
-            </Switch>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Switch>
+          <Route path='/' component={Home} exact />
+            <Route
+              path='/movielist'
+              render={(props)=> <AppProvider {...props}><MovieList/></AppProvider>}/>
+            <Route component = {Error} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
