@@ -1,10 +1,11 @@
 import React from "react";
 
+import AppProvider from "./AppProvider";
 import AppContext from "./AppContext";
 
 const MovieList = () => {
   return(
-        <div>
+        <AppProvider>
           <AppContext.Consumer>
             {(context) =>  context.Movies.map(movie=>(
               <div key={movie.id}>
@@ -12,7 +13,7 @@ const MovieList = () => {
               </div>
             ))}
           </AppContext.Consumer>
-        </div>
+        </AppProvider>
   );
 };
 

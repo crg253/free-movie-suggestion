@@ -4,17 +4,15 @@ import axios from 'axios';
 
 class AppProvider extends Component {
   state = {
-    Movies:[],
+    Movies:[]
     }
 
     componentDidMount(){
-        console.log('loading movies')
         axios.get('http://127.0.0.1:5000/movies')
         .then(response=> {
           this.setState({Movies: response.data})
         })
       }
-
 
   render() {
     return (

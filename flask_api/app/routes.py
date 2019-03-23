@@ -1,6 +1,7 @@
 from flask import jsonify
 from app import app
 from app.models import Movie, Tag
+from flask_cors import cross_origin
 
 @app.route('/')
 @app.route('/index')
@@ -8,6 +9,7 @@ def index():
     return "Hello, World!"
 
 @app.route('/movies')
+@cross_origin()
 def movies():
     movies = []
     for movie in Movie.query.all():
