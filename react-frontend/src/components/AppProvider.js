@@ -4,13 +4,18 @@ import axios from 'axios';
 
 class AppProvider extends Component {
   state = {
-    Movies:[]
+    Movies:[],
+    Genres:[]
     }
 
     componentDidMount(){
         axios.get('http://127.0.0.1:5000/movies')
         .then(response=> {
           this.setState({Movies: response.data})
+        })
+        axios.get('http://127.0.0.1:5000/genres')
+        .then(response=> {
+          this.setState({Genres: response.data})
         })
       }
 

@@ -20,3 +20,11 @@ def movies():
                         "video":movie.video_link,
                         "year":movie.year})
     return jsonify(movies)
+
+@app.route('/genres')
+@cross_origin()
+def genres():
+    genres = []
+    for genre in Tag.query.all():
+        genres.append(genre.name)
+    return jsonify(genres)
