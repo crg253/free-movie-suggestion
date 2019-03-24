@@ -13,11 +13,7 @@ const MovieList = () => {
           {(context) =>  context.Genres.map(genre=>(
             <div key={genre} style={{marginRight:'10px'}}>
               <p>{genre}</p>
-
-              <AppContext.Consumer>
-                {(context) => <button onClick={()=>context.selectMoviesByGenre(genre)}></button>}
-              </AppContext.Consumer>
-
+                <button onClick={()=>context.chooseGenre(genre)}></button>
             </div>
           ))}
         </AppContext.Consumer>
