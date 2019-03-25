@@ -9,7 +9,19 @@ const MovieList = ({match}) => {
 
     <AppProvider>
 
-    <h1>{match.params.movieslug}</h1>
+    <AppContext.Consumer>
+      {(context) => context.Movies.filter(movie=>movie.slug === match.params.movieslug)
+        .map(selection=>(
+          <div
+            style={{
+              margin:"30px 0 0 40px",
+              width: "300px",
+            }}>
+            <iframe title={selection.name} src = {selection.video}></iframe>
+            <h1 >{selection.name} {selection.year}</h1>
+          </div>
+          ))}
+     </AppContext.Consumer>
 
       <div style={{display:"flex"}}>
         <AppContext.Consumer>
@@ -21,6 +33,7 @@ const MovieList = ({match}) => {
           ))}
         </AppContext.Consumer>
       </div>
+
 
       <h1>Selected Movies</h1>
       <AppContext.Consumer>
