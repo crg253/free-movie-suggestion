@@ -3,13 +3,13 @@ import React from "react";
 import AppProvider from "./AppProvider";
 import AppContext from "./AppContext";
 
-const MovieList = () => {
+const MovieList = ({match}) => {
   return(
+
 
     <AppProvider>
 
-    <h1>{props.testProps}</h1>
-
+    <h1>{match.params.movieslug}</h1>
 
       <div style={{display:"flex"}}>
         <AppContext.Consumer>
@@ -32,6 +32,7 @@ const MovieList = () => {
       </AppContext.Consumer>
 
     </AppProvider>
+
   );
 };
 
