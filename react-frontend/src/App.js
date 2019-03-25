@@ -12,7 +12,9 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route path='/' component={Home} exact />
-          <Route path='/:movieslug' component={MovieList}/>
+          <Route
+              path='/:movieslug'
+              render={(props)=> <MovieList{...props} testProps="Test Props"/>}/>
           <Route component = {Error} />
         </Switch>
       </BrowserRouter>

@@ -8,9 +8,7 @@ const MovieList = () => {
 
     <AppProvider>
 
-      <AppContext.Consumer>
-        {(context) => <h1>{context.ChosenMovie.name}</h1>}
-      </AppContext.Consumer>
+    <h1>{props.testProps}</h1>
 
 
       <div style={{display:"flex"}}>
