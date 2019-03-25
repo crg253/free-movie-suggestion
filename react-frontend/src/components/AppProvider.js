@@ -6,8 +6,8 @@ class AppProvider extends Component {
   state = {
     Movies:[],
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
-    ChosenMovie:{},
-    SelectedMovies:[]
+    SelectedMovies:[],
+    SavedMovies:[]
   }
 
   chooseGenre = (genre) =>{
@@ -33,6 +33,15 @@ class AppProvider extends Component {
         randomMovies[this.state.Genres[i]]=randomMovie;
       }
     }
+
+    console.log("All Movies");
+    console.log(this.state.Movies);
+    console.log("All Genres");
+    console.log(this.state.Genres);
+    console.log("Random Movies");
+    console.log(randomMovies);
+    console.log("Selected Movies");
+    console.log(this.state.SelectedMovies);
 
     return (
       <AppContext.Provider
