@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 import AppProvider from "./AppProvider";
 import AppContext from "./AppContext";
@@ -8,9 +10,10 @@ const Home = () => {
     <AppProvider>
       <AppContext.Consumer>
       {(context) =>  context.Genres.map(genre=>(
-        <div key = {genre.concat("home")}>
-          <h2>{genre}</h2>
-          <p>{context.randomMovies[genre].name}{context.randomMovies[genre].tags}</p>
+        <div key={genre.concat('home')}>
+        <Link
+          to={'/' + context.randomMovies[genre].slug}>{genre}
+        </Link>
         </div>
       ))}
       </AppContext.Consumer>

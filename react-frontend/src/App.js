@@ -12,8 +12,8 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route path='/' component={Home} exact />
-            <Route path='/movielist' component={MovieList}/>
-            <Route component = {Error} />
+          <Route path='/:movieslug' component={MovieList}/>
+          <Route component = {Error} />
         </Switch>
       </BrowserRouter>
     );

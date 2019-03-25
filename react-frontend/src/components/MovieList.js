@@ -8,6 +8,11 @@ const MovieList = () => {
 
     <AppProvider>
 
+      <AppContext.Consumer>
+        {(context) => <h1>{context.ChosenMovie.name}</h1>}
+      </AppContext.Consumer>
+
+
       <div style={{display:"flex"}}>
         <AppContext.Consumer>
           {(context) =>  context.Genres.map(genre=>(
