@@ -8,12 +8,13 @@ const Home = () => {
       <AppContext.Consumer>
       {(context) =>  context.Genres.map(genre=>(
         <div
-          style={{margin:"40px 0 0 35%"}}
+          style={{textAlign:"center"}}
           key={genre.concat('home')}
           onClick={()=>context.chooseGenre(genre)}>
-          <h1>
+          <h2
+            style={{lineHeight:"0.8"}}>
           <Link to={'/' + context.randomMovies[genre].slug}>{genre}</Link>
-          </h1>
+          </h2>
         </div>
       ))}
       </AppContext.Consumer>

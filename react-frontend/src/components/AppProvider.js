@@ -10,8 +10,17 @@ class AppProvider extends Component {
     SavedMovies:[]
   }
 
+  chooseAll = () => {
+    this.setState({SelectedMovies: this.state.Movies})
+  }
+
   chooseGenre = (genre) =>{
     const newSelections = [...this.state.Movies].filter(movie =>movie.tags.includes(genre));
+    this.setState({SelectedMovies: newSelections});
+  }
+
+  chooseSaved = () => {
+    const newSelections = [...this.state.Movies].filter(movie =>this.state.SavedMovies.includes(movie.id));
     this.setState({SelectedMovies: newSelections});
   }
 
@@ -36,6 +45,7 @@ class AppProvider extends Component {
       localStorage.setItem(id, 'unsaved');
     }
     this.locStorToState();
+    this.chooseSaved();
   }
 
   componentDidMount(){
@@ -59,14 +69,14 @@ class AppProvider extends Component {
       }
     }
 
-    // console.log("All Movies");
-    // console.log(this.state.Movies);
-    // console.log("All Genres");
-    // console.log(this.state.Genres);
-    // console.log("Random Movies");
-    // console.log(randomMovies);
-    // console.log("Selected Movies");
-    // console.log(this.state.SelectedMovies);
+    console.log("All Movies");
+    console.log(this.state.Movies);
+    console.log("All Genres");
+    console.log(this.state.Genres);
+    console.log("Random Movies");
+    console.log(randomMovies);
+    console.log("Selected Movies");
+    console.log(this.state.SelectedMovies);
     console.log("Saved Movies");
     console.log(this.state.SavedMovies);
 
@@ -77,7 +87,9 @@ class AppProvider extends Component {
                     randomMovies:randomMovies,
                     saveUnsave:this.saveUnsave,
                     inSaved:this.inSaved,
-                    locStorToState:this.locStorToState }}>
+                    locStorToState:this.locStorToState,
+                    chooseSaved:this.chooseSaved,
+                    chooseAll:this.chooseAll}}>
         {this.props.children}
       </AppContext.Provider>
     );

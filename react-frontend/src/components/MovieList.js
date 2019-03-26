@@ -14,7 +14,9 @@ const MovieList = ({match}) => {
         </div>
         <div style={{margin:"50px 30px 0 30px"}}>
           <Genres/>
-          <SelectedMovies/>
+          <div style={{margin:"50px 0 0 0", lineHeight:"1.5"}}>
+            <SelectedMovies/>
+          </div>
         </div>
     </div>
   );

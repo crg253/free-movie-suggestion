@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import AppContext from "./AppContext";
 
@@ -9,7 +10,7 @@ const SelectedMovies = (props) => {
     <AppContext.Consumer>
       {(context) =>  context.SelectedMovies.map(movie=>(
         <div key={movie.id}>
-          <p>{movie.name} {movie.year} {movie.tags}</p>
+          <Link to={'/' + movie.slug}>{movie.name} {movie.year} {movie.tags}</Link>
         </div>
       ))}
     </AppContext.Consumer>
