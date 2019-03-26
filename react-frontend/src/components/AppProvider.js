@@ -15,11 +15,36 @@ class AppProvider extends Component {
     this.setState({SelectedMovies: newSelections});
   }
 
+  inSaved = (id) => {
+    return this.state.SavedMovies.includes(id)
+  }
+
+  locStorToState = () => {
+    let saved = Object.keys(localStorage).map(n =>Number(n))
+      .filter(n =>localStorage.getItem(n)==="saved");
+
+    this.setState({SavedMovies:saved});
+    }
+
+
+  saveUnsave = (id) => {
+    if (!localStorage.getItem(id)){
+      localStorage.setItem(id, 'saved');
+    }else if (localStorage.getItem(id)==='unsaved'){
+      localStorage.setItem(id, 'saved');
+    }else{
+      localStorage.setItem(id, 'unsaved');
+    }
+    this.locStorToState();
+  }
+
   componentDidMount(){
       axios.get('http://127.0.0.1:5000/movies')
       .then(response=> {
         this.setState({Movies: response.data})
+        this.setState({SelectedMovies: response.data})
       })
+      this.locStorToState();
   }
 
   render() {
@@ -34,20 +59,25 @@ class AppProvider extends Component {
       }
     }
 
-    console.log("All Movies");
-    console.log(this.state.Movies);
-    console.log("All Genres");
-    console.log(this.state.Genres);
-    console.log("Random Movies");
-    console.log(randomMovies);
-    console.log("Selected Movies");
-    console.log(this.state.SelectedMovies);
+    // console.log("All Movies");
+    // console.log(this.state.Movies);
+    // console.log("All Genres");
+    // console.log(this.state.Genres);
+    // console.log("Random Movies");
+    // console.log(randomMovies);
+    // console.log("Selected Movies");
+    // console.log(this.state.SelectedMovies);
+    console.log("Saved Movies");
+    console.log(this.state.SavedMovies);
 
     return (
       <AppContext.Provider
           value={{...this.state,
                     chooseGenre: this.chooseGenre,
-                    randomMovies:randomMovies}}>
+                    randomMovies:randomMovies,
+                    saveUnsave:this.saveUnsave,
+                    inSaved:this.inSaved,
+                    locStorToState:this.locStorToState }}>
         {this.props.children}
       </AppContext.Provider>
     );

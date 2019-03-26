@@ -17,6 +17,15 @@ const selection = (props) => {
             }}>
             <iframe title={selection.name} src = {selection.video}></iframe>
             <h1 >{selection.name} {selection.year}</h1>
+
+            <button
+              onClick = {()=>context.saveUnsave(selection.id)}
+              style = {{
+                width:"20px",
+                height:"20px",
+                backgroundColor: context.inSaved(selection.id) ? 'purple': 'black'
+              }}>
+            </button>
           </div>
           ))}
      </AppContext.Consumer>
