@@ -26,6 +26,7 @@ const selection = (props) => {
                 backgroundColor: context.inSaved(selection.id) ? 'purple': 'black'
               }}>
             </button>
+            <p>Save/Unsave</p>
           </div>
           ))}
      </AppContext.Consumer>
