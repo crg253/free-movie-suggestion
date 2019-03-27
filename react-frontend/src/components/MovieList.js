@@ -4,7 +4,7 @@ import Selection from './Selection';
 import Genres from './Genres';
 import SelectedMovies from './SelectedMovies';
 
-
+//Need to change the name of this component
 const MovieList = ({match}) => {
 
   return(

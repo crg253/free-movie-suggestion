@@ -2,26 +2,27 @@ import React, { Component } from 'react';
 import AppContext from "./AppContext";
 import axios from 'axios';
 
+import GenreList from "./GenreList";
+import SavedList from "./SavedList";
+import CompleteList from "./CompleteList";
+
+
+
 class AppProvider extends Component {
   state = {
     Movies:[],
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
-    SelectedMovies:[],
-    SavedMovies:[]
+    SavedMovies:[],
+    SelectBy:"All"
   }
 
-  chooseAll = () => {
-    this.setState({SelectedMovies: this.state.Movies})
+  selectBy = (choice) => {
+    console.log(choice);
+    this.setState({SelectBy:choice});
   }
 
   chooseGenre = (genre) =>{
-    const newSelections = [...this.state.Movies].filter(movie =>movie.tags.includes(genre));
-    this.setState({SelectedMovies: newSelections});
-  }
-
-  chooseSaved = () => {
-    const newSelections = [...this.state.Movies].filter(movie =>this.state.SavedMovies.includes(movie.id));
-    this.setState({SelectedMovies: newSelections});
+    this.setState({SelectBy: genre});
   }
 
   inSaved = (id) => {
@@ -35,7 +36,6 @@ class AppProvider extends Component {
     this.setState({SavedMovies:saved});
     }
 
-
   saveUnsave = (id) => {
     if (!localStorage.getItem(id)){
       localStorage.setItem(id, 'saved');
@@ -45,7 +45,6 @@ class AppProvider extends Component {
       localStorage.setItem(id, 'unsaved');
     }
     this.locStorToState();
-    this.chooseSaved();
   }
 
   componentDidMount(){
@@ -58,7 +57,7 @@ class AppProvider extends Component {
   }
 
   render() {
-    //Create the random movies list here
+
     let randomMovies = {
         Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'',"Mystery & Suspense":'',Romance:'',"Sci-Fi":''};
     if(this.state.Movies.length>0){
@@ -69,27 +68,28 @@ class AppProvider extends Component {
       }
     }
 
-    console.log("All Movies");
-    console.log(this.state.Movies);
-    console.log("All Genres");
-    console.log(this.state.Genres);
-    console.log("Random Movies");
-    console.log(randomMovies);
-    console.log("Selected Movies");
-    console.log(this.state.SelectedMovies);
-    console.log("Saved Movies");
-    console.log(this.state.SavedMovies);
+    let selectionComponent = null;
+    switch(this.state.SelectBy){
+      case("All"):
+        selectionComponent = <CompleteList/>
+        break;
+      case("Saved"):
+        selectionComponent = <SavedList/>
+        break;
+      default:
+        selectionComponent =<GenreList/>
+    }
 
     return (
       <AppContext.Provider
           value={{...this.state,
-                    chooseGenre: this.chooseGenre,
                     randomMovies:randomMovies,
                     saveUnsave:this.saveUnsave,
                     inSaved:this.inSaved,
                     locStorToState:this.locStorToState,
-                    chooseSaved:this.chooseSaved,
-                    chooseAll:this.chooseAll}}>
+                    selectBy:this.selectBy,
+                    selectionComponent:selectionComponent,
+                    chooseGenre:this.chooseGenre}}>
         {this.props.children}
       </AppContext.Provider>
     );

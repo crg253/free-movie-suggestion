@@ -2,7 +2,7 @@ import React from 'react';
 
 import AppContext from "./AppContext";
 
-
+//Need to change this component to Buttons
 const genres = () => {
   return(
       <div>
@@ -12,7 +12,7 @@ const genres = () => {
           {(context) =>  context.Genres.map(genre=>(
             <div key={genre} style={{marginRight:'10px'}}>
               <p>{genre}</p>
-                <button onClick={()=>context.chooseGenre(genre)}></button>
+                <button onClick={()=>context.selectBy(genre)}></button>
             </div>
           ))}
         </AppContext.Consumer>
@@ -23,7 +23,7 @@ const genres = () => {
             {(context) => context && (
               <div>
                 <p>Saved</p>
-                <button onClick={()=>context.chooseSaved()}></button>
+                <button onClick={()=>context.selectBy("Saved")}></button>
               </div>
             )}
         </AppContext.Consumer>
@@ -32,7 +32,7 @@ const genres = () => {
             {(context) => context && (
               <div style={{marginLeft:"10px"}}>
                 <p>All Movies</p>
-                <button onClick={()=>context.chooseAll()}></button>
+                <button onClick={()=>context.selectBy("All")}></button>
               </div>
             )}
         </AppContext.Consumer>
