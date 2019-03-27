@@ -16,6 +16,7 @@ class AppProvider extends Component {
     SelectBy:"All"
   }
 
+
   selectBy = (choice) => {
     console.log(choice);
     this.setState({SelectBy:choice});
@@ -44,6 +45,11 @@ class AppProvider extends Component {
     }else{
       localStorage.setItem(id, 'unsaved');
     }
+    this.locStorToState();
+  }
+
+  unsave = (id) => {
+    localStorage.setItem(id, 'unsaved');
     this.locStorToState();
   }
 
@@ -89,7 +95,8 @@ class AppProvider extends Component {
                     locStorToState:this.locStorToState,
                     selectBy:this.selectBy,
                     selectionComponent:selectionComponent,
-                    chooseGenre:this.chooseGenre}}>
+                    chooseGenre:this.chooseGenre,
+                    unsave:this.unsave}}>
         {this.props.children}
       </AppContext.Provider>
     );
