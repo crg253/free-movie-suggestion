@@ -53,7 +53,7 @@ class AppProvider extends Component {
 
   componentDidMount(){
       console.log("Axios call to get all movies");
-      axios.get('/movies')
+      axios.get('http://127.0.0.1:5000/movies')
       .then(response=> {
         this.setState({Movies: response.data})
       })

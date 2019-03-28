@@ -4,9 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 
-app = Flask(__name__,
-    static_folder='../../react-frontend/build/static',
-    template_folder="../../react-frontend/build")
+app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
