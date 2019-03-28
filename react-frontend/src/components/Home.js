@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import AppContext from "./AppContext";
 
 const Home = () => {
+
   return(
-      <AppContext.Consumer>
+    <AppContext.Consumer>
       {(context) =>  context.Genres.map(genre=>(
         <div
           onClick={()=>context.chooseGenre(genre)}
@@ -17,7 +18,7 @@ const Home = () => {
           </h2>
         </div>
       ))}
-      </AppContext.Consumer>
+    </AppContext.Consumer>
   );
 };
 

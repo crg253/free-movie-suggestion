@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, render_template
 from app import app
 from app.models import Movie, Tag
 from flask_cors import cross_origin
@@ -6,7 +6,7 @@ from flask_cors import cross_origin
 @app.route('/')
 @app.route('/index')
 def index():
-    return "Hello, World!"
+    return render_template('index.html')
 
 @app.route('/movies')
 @cross_origin()

@@ -7,15 +7,13 @@ import SavedList from "./SavedList";
 import CompleteList from "./CompleteList";
 
 
-
 class AppProvider extends Component {
   state = {
     Movies:[],
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
     SavedMovies:[],
     SelectBy:"All"
-  }
-
+   }
 
   selectBy = (choice) => {
     console.log(choice);
@@ -54,10 +52,10 @@ class AppProvider extends Component {
   }
 
   componentDidMount(){
-      axios.get('http://127.0.0.1:5000/movies')
+      console.log("Axios call to get all movies");
+      axios.get('/movies')
       .then(response=> {
         this.setState({Movies: response.data})
-        this.setState({SelectedMovies: response.data})
       })
       this.locStorToState();
   }
@@ -72,18 +70,22 @@ class AppProvider extends Component {
         const randomMovie = genreMovies[Math.floor(Math.random() * genreMovies.length)];
         randomMovies[this.state.Genres[i]]=randomMovie;
       }
+    console.log("New random movie list generated");
     }
 
     let selectionComponent = null;
     switch(this.state.SelectBy){
       case("All"):
         selectionComponent = <CompleteList/>
+        console.log("Complete List selected");
         break;
       case("Saved"):
         selectionComponent = <SavedList/>
+        console.log("Saved List selected");
         break;
       default:
         selectionComponent =<GenreList/>
+        console.log("Genre List selected");
     }
 
     return (

@@ -12,7 +12,6 @@ const savedList = () => {
       <div key={context.SelectBy + film.slug}>
         <Link to={'/' + film.slug}><p>{film.name} {film.year} {film.tags}</p></Link>
         <button onClick={()=>context.unsave(film.id)}>Remove</button>
-
       </div>
     )}
 
