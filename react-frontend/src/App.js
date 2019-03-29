@@ -57,6 +57,7 @@ class App extends Component {
       .then(response=> {
         this.setState({Movies: response.data})
       })
+      console.log("Syncing localStorage to state")
       this.locStorToState();
   }
 
@@ -64,6 +65,8 @@ class App extends Component {
 
     console.log("All Movies");
     console.log(this.state.Movies);
+    console.log("Saved Movies");
+    console.log(this.state.SavedMovies)
 
     return (
         <BrowserRouter>

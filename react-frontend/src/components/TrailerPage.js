@@ -1,6 +1,6 @@
 import React from "react";
 
-import Selection from './Selection';
+import Trailer from './Trailer';
 import Genres from './Genres';
 import SelectedMovies from './SelectedMovies';
 
@@ -9,6 +9,11 @@ const TrailerPage = (props) => {
 
   return(
     <div>
+    <div style={{margin:"40px 30px 0 30px"}}>
+      <Trailer
+          movieslug={props.match.params.movieslug}
+          movies={props.movies}/>
+    </div>
     {props.movies.map(movie=><p>{movie.name}</p>)}
     </div>
   );
@@ -16,9 +21,7 @@ const TrailerPage = (props) => {
 
 export default TrailerPage;
 
-// <div style={{margin:"40px 30px 0 30px"}}>
-//   <Selection movieslug={match.params.movieslug}/>
-// </div>
+
 //
 // <div style={{margin:"50px 30px 0 30px"}}>
 //   <Genres/>
