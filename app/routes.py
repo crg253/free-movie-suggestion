@@ -3,11 +3,6 @@ from app import app
 from app.models import Movie, Tag
 from flask_cors import cross_origin
 
-@app.route('/')
-@app.route('/index')
-def index():
-    return ('Change to render_template index')
-
 @app.route('/movies')
 @cross_origin()
 def movies():
@@ -20,3 +15,8 @@ def movies():
                         "video":movie.video_link,
                         "year":movie.year})
     return jsonify(movies)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return ('Change to render_template index')
