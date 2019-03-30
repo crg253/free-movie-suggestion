@@ -11,10 +11,8 @@ const HomePage = (props) => {
       const genreMovies = [...props.movies].filter(movie =>movie.tags.includes(props.genres[i]));
       const randomMovie = genreMovies[Math.floor(Math.random() * genreMovies.length)];
       randomMovies[props.genres[i]]=randomMovie;
-    }
-  console.log("New random movie list generated");
-  console.log(randomMovies);
-   }
+      }
+  }
 
   return(
       props.genres.map(genre=>

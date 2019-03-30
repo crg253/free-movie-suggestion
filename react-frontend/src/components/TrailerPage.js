@@ -2,30 +2,32 @@ import React from "react";
 
 import Trailer from './Trailer';
 import Genres from './Genres';
-import SelectedMovies from './SelectedMovies';
+import SelectedList from './SelectedList';
 
-//Need to change the name of this component
 const TrailerPage = (props) => {
 
   return(
-    <div>
-    <div style={{margin:"40px 30px 0 30px"}}>
-      <Trailer
-          movieslug={props.match.params.movieslug}
-          movies={props.movies}/>
-    </div>
-    {props.movies.map(movie=><p>{movie.name}</p>)}
+    <div style={{display:"flex"}} >
+      <div style={{margin:"40px 30px 0 30px"}}>
+        <Trailer
+            movieslug={props.match.params.movieslug}
+            movies={props.movies}
+            saveUnsave={props.saveUnsave}
+            inSaved={props.inSaved}/>
+      </div>
+      <div>
+        <Genres
+              genres={props.genres}
+              selectBy={props.selectBy}/>
+        <SelectedList
+              movies ={props.movies}
+              savedmovies={props.savedmovies}
+              unsave = {props.unsave}
+              genres ={props.genres}
+              listby={props.listby}/>
+      </div>
     </div>
   );
 };
 
 export default TrailerPage;
-
-
-//
-// <div style={{margin:"50px 30px 0 30px"}}>
-//   <Genres/>
-//   <div style={{margin:"50px 0 0 0", lineHeight:"1.5"}}>
-//     <SelectedMovies/>
-//   </div>
-// </div>

@@ -1,43 +1,25 @@
 import React from 'react';
 
-import AppContext from "./AppContext";
-
-//Need to change this component to Buttons
-const genres = () => {
+const genres = (props) => {
   return(
-      <div>
+    <div>
       <div style={{display:"flex"}}>
-
-        <AppContext.Consumer>
-          {(context) =>  context.Genres.map(genre=>(
-            <div key={genre} style={{marginRight:'10px'}}>
-              <p>{genre}</p>
-                <button onClick={()=>context.selectBy(genre)}></button>
-            </div>
-          ))}
-        </AppContext.Consumer>
+        {props.genres.map(genre=>(
+          <div style={{marginRight:'10px'}}>
+            <p onClick={()=>props.selectBy(genre)}>{genre}</p>
+          </div>
+        ))}
       </div>
 
       <div style={{display:"flex"}}>
-        <AppContext.Consumer>
-            {(context) => context && (
-              <div>
-                <p>Saved</p>
-                <button onClick={()=>context.selectBy("Saved")}></button>
-              </div>
-            )}
-        </AppContext.Consumer>
-
-        <AppContext.Consumer>
-            {(context) => context && (
-              <div style={{marginLeft:"10px"}}>
-                <p>All Movies</p>
-                <button onClick={()=>context.selectBy("All")}></button>
-              </div>
-            )}
-        </AppContext.Consumer>
+        <div>
+          <p onClick={()=>props.selectBy("Saved")}>Saved</p>
+        </div>
+        <div style={{marginLeft:"10px"}}>
+          <p onClick={()=>props.selectBy("All")}>All Movies</p>
+        </div>
       </div>
-      </div>
+    </div>
   );
 };
 

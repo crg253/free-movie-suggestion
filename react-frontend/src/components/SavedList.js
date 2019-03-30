@@ -1,21 +1,16 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-import AppContext from "./AppContext";
-
-const savedList = () => {
+const savedList = (props) => {
 
   return(
-    <AppContext.Consumer>
-    {(context) => context.Movies.filter(movie => context.SavedMovies.includes(movie.id))
+    props.movies.filter(movie => props.savedmovies.includes(movie.id))
     .map(film =>
-      <div key={context.SelectBy + film.slug}>
+      <div>
         <Link to={'/' + film.slug}><p>{film.name} {film.year} {film.tags}</p></Link>
-        <button onClick={()=>context.unsave(film.id)}>Remove</button>
+        <button onClick={()=>props.unsave(film.id)}>Remove</button>
       </div>
-    )}
-
-    </AppContext.Consumer>
+    )
   );
 };
 

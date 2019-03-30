@@ -11,17 +11,15 @@ class App extends Component {
     Movies:[],
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
     SavedMovies:[],
-    SelectBy:"All"
+    ListBy:"All"
    }
 
   selectBy = (choice) => {
-    this.setState({SelectBy:choice});
+    this.setState({ListBy:choice});
   }
 
   chooseGenre = (genre) =>{
-    console.log("Genre Selected")
-    console.log(genre)
-    this.setState({SelectBy: genre});
+    this.setState({ListBy: genre});
   }
 
   inSaved = (id) => {
@@ -33,7 +31,7 @@ class App extends Component {
       .filter(n =>localStorage.getItem(n)==="saved");
 
     this.setState({SavedMovies:saved});
-    }
+  }
 
   saveUnsave = (id) => {
     if (!localStorage.getItem(id)){
@@ -52,35 +50,30 @@ class App extends Component {
   }
 
   componentDidMount(){
-      console.log("Axios call to get all movies");
       axios.get('http://127.0.0.1:5000/movies')
       .then(response=> {
         this.setState({Movies: response.data})
       })
-      console.log("Syncing localStorage to state")
       this.locStorToState();
   }
 
   render() {
-
-    console.log("All Movies");
-    console.log(this.state.Movies);
-    console.log("Saved Movies");
-    console.log(this.state.SavedMovies)
-
     return (
-        <BrowserRouter>
-          <Switch>
-            <Route
-              path='/:movieslug'
-              render={(props)=> <TrailerPage
-                                    {...props}
-                                    movies={this.state.Movies}
-                                    selectBy={this.selectBy}
-                                    saveUnsave={this.saveUnsave}
-                                    inSaved={this.inSaved}
-                                    locStorToState={this.locStorToState}
-                                    unsave={this.unsave}/>}/>
+      <BrowserRouter>
+        <Switch>
+          <Route
+            path='/:movieslug'
+            render={(props)=> <TrailerPage
+                                  {...props}
+                                  movies={this.state.Movies}
+                                  savedmovies={this.state.SavedMovies}
+                                  selectBy={this.selectBy}
+                                  saveUnsave={this.saveUnsave}
+                                  inSaved={this.inSaved}
+                                  locStorToState={this.locStorToState}
+                                  unsave={this.unsave}
+                                  genres={this.state.Genres}
+                                  listby={this.state.ListBy}/>}/>
           <Route
             path='/'
             render={(props)=> <HomePage
@@ -88,9 +81,9 @@ class App extends Component {
                                 movies={this.state.Movies}
                                 genres={this.state.Genres}
                                 chooseGenre={this.chooseGenre}/>}/>
-            <Route component = {Error} />
-          </Switch>
-        </BrowserRouter>
+          <Route component = {Error} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
