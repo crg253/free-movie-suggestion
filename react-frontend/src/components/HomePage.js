@@ -17,22 +17,18 @@ const HomePage = (props) => {
   }
 
   return(
-
       <div>
-      <NavBar/>
-      {props.genres.map(genre=>
-        <div
-          style={{textAlign:"center"}}
-          onClick={()=>props.chooseGenre(genre)}>
-          <h2 style={{lineHeight:"0.8"}}>
-            <Link to={'/' + randomMovies[genre].slug}>{genre}</Link>
-          </h2>
-        </div>
-      )}
+        <NavBar/>
+        {props.genres.map(genre=>
+          <div
+            style={{textAlign:"center"}}
+            onClick={()=>props.chooseGenre(genre)}>
+            <h2 style={{lineHeight:"0.8"}}>
+              <Link to={'/' + randomMovies[genre].slug}>{genre}</Link>
+            </h2>
+          </div>
+        )}
       </div>
-
-
-
   );
 };
 

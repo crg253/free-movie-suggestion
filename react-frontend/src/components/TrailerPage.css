@@ -1,0 +1,8 @@
+.List{
+  border:1px solid red;
+}
+@media (max-width:800px){
+  .List{
+    display: none;
+  }
+}

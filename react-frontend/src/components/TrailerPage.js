@@ -1,5 +1,6 @@
 import React from "react";
 
+import './TrailerPage.css';
 import NavBar from './NavBar';
 import Trailer from './Trailer';
 import Genres from './Genres';
@@ -18,7 +19,7 @@ const TrailerPage = (props) => {
               saveUnsave={props.saveUnsave}
               inSaved={props.inSaved}/>
         </div>
-        <div>
+        <div className = "List">
           <Genres
                 genres={props.genres}
                 selectBy={props.selectBy}/>
