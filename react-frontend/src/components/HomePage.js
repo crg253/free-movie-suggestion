@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import NavBar from './NavBar';
+
 
 const HomePage = (props) => {
 
@@ -15,7 +17,10 @@ const HomePage = (props) => {
   }
 
   return(
-      props.genres.map(genre=>
+
+      <div>
+      <NavBar/>
+      {props.genres.map(genre=>
         <div
           style={{textAlign:"center"}}
           onClick={()=>props.chooseGenre(genre)}>
@@ -23,7 +28,11 @@ const HomePage = (props) => {
             <Link to={'/' + randomMovies[genre].slug}>{genre}</Link>
           </h2>
         </div>
-      )
+      )}
+      </div>
+
+
+
   );
 };
 
