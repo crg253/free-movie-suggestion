@@ -62,7 +62,6 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-
           <Route
             path='/list'
             render={(props)=> <ListPage
