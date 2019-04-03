@@ -1,3 +1,54 @@
+#SN-SPY{
+  display: none;
+}
+#SN-DOC{
+  display: none;
+}
+#SN-SCIFI{
+  display: none;
+}
+#SN-ACTION{
+  display: none;
+}
+#SN-ROMANCE{
+  display: none;
+}
+#SN-COMEDY{
+  display: none;
+}
+#SN-DRAMA{
+  display: none;
+}
+#SN-HORROR{
+  display: none;
+}
+
+
+#doc:hover #SN-DOC{
+  display: inline;
+}
+#scifi:hover #SN-SCIFI{
+  display: inline;
+}
+#action:hover #SN-ACTION{
+  display: inline;
+}
+#romance:hover #SN-ROMANCE{
+  display: inline;
+}
+#comedy:hover #SN-COMEDY{
+  display: inline;
+}
+#drama:hover #SN-DRAMA{
+  display: inline;
+}
+#horror:hover #SN-HORROR{
+  display: inline;
+}
+#spy:hover #SN-SPY{
+  display: inline;
+}
+
 .cls-1 {
   fill: url("#linear-gradient");
 }
