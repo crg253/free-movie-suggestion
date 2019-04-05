@@ -1,4 +1,13 @@
-/*
+@import url("https://fonts.googleapis.com/css?family=Sigmar+One");
+
+
+#main-title{
+  font-family: 'Sigmar One', cursive;
+  margin: 0;
+  text-align: center;
+}
+
+
 #SN-SPY{
   display: none;
 }
@@ -25,31 +34,31 @@
 }
 
 
-#doc:hover #SN-DOC{
+#doc-layer:hover #SN-DOC{
   display: inline;
 }
-#scifi:hover #SN-SCIFI{
+#scifi-layer:hover #SN-SCIFI{
   display: inline;
 }
-#action:hover #SN-ACTION{
+#action-layer:hover #SN-ACTION{
   display: inline;
 }
-#romance:hover #SN-ROMANCE{
+#romance-layer:hover #SN-ROMANCE{
   display: inline;
 }
-#comedy:hover #SN-COMEDY{
+#comedy-layer:hover #SN-COMEDY{
   display: inline;
 }
-#drama:hover #SN-DRAMA{
+#drama-layer:hover #SN-DRAMA{
   display: inline;
 }
-#horror:hover #SN-HORROR{
+#horror-layer:hover #SN-HORROR{
   display: inline;
 }
-#spy:hover #SN-SPY{
+#spy-layer:hover #SN-SPY{
   display: inline;
 }
-*/
+
 
 .cls-1 {
   fill: url("#linear-gradient");
