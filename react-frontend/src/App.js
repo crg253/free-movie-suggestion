@@ -12,8 +12,30 @@ class App extends Component {
     Movies:[],
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
     SavedMovies:[],
-    ListBy:"All"
+    ListBy:"All",
+    Display:[
+      {genre:"Mystery & Suspense",opacity:1, signDisplay:null},
+      {genre:"Sci-Fi",opacity:1, signDisplay:null},
+      {genre:"Horror",opacity:1, signDisplay:null},
+      {genre:"Action",opacity:1, signDisplay:null},
+      {genre:"Drama",opacity:1, signDisplay:null},
+      {genre:"Documentary",opacity:1, signDisplay:null},
+      {genre:"Comedy",opacity:1, signDisplay:null},
+      {genre:"Romance",opacity:1, signDisplay:null}
+    ]
    }
+
+  highlight = (genreName) => {
+    // go through and for each one where genre does not match, then change others
+    let newValues = []
+    this.state.Display.forEach(element=>{
+      if(element.genre === genreName){
+        newValues.push({genre:genreName,opacity:1, signDisplay:"inline"})
+      }else{
+        newValues.push({genre:element.genre,opacity:0.7, signDisplay:"none"})
+      }})
+    this.setState({Display: newValues});
+  }
 
   selectBy = (choice) => {
     this.setState({ListBy:choice});
@@ -91,9 +113,11 @@ class App extends Component {
             path='/'
             render={(props)=> <HomePage
                                 {...props}
+                                display={this.state.Display}
                                 movies={this.state.Movies}
                                 genres={this.state.Genres}
-                                chooseGenre={this.chooseGenre}/>}/>
+                                chooseGenre={this.chooseGenre}
+                                highlight={this.highlight}/>}/>
           <Route component = {Error} />
         </Switch>
       </BrowserRouter>

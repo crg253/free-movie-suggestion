@@ -1,3 +1,4 @@
+/*
 #SN-SPY{
   display: none;
 }
@@ -48,6 +49,7 @@
 #spy:hover #SN-SPY{
   display: inline;
 }
+*/
 
 .cls-1 {
   fill: url("#linear-gradient");
