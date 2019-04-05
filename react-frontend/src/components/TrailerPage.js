@@ -19,10 +19,11 @@ const TrailerPage = (props) => {
               saveUnsave={props.saveUnsave}
               inSaved={props.inSaved}/>
         </div>
-        <div className = "List">
+        <div className = "List" style={{margin:"60px 0 0 0"}}>
           <Genres
                 genres={props.genres}
-                selectBy={props.selectBy}/>
+                selectBy={props.selectBy}
+                listby={props.listby}/>
           <SelectedList
                 movies ={props.movies}
                 savedmovies={props.savedmovies}
