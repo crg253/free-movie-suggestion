@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
 
-class DramaSVGLink extends Component {
+class DramaSVG extends Component {
 
   render() {
     return (
-      <Link to={'/' + this.props.randomMovies["Drama"].slug}>
 
       <g id="drama-layer" onClick={()=>this.props.chooseGenre("Drama")}>
         <g id="drama-drawing">
@@ -204,10 +202,9 @@ class DramaSVGLink extends Component {
             </g>
 
           </g>
-          </Link>
 
     );
   }
 }
 
-export default DramaSVGLink;
+export default DramaSVG;

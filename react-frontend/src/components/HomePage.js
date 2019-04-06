@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import './HomePage.css';
 import GradientsSVG from './SVG/GradientsSVG';
 import SkyAndGroundSVG from './SVG/SkyAndGroundSVG';
-import DocumentarySVGLink from './SVG/DocumentarySVGLink';
-import SciFiSVGLink from './SVG/SciFiSVGLink';
-import ActionSVGLink from './SVG/ActionSVGLink.js';
-import HorrorSVGLink from './SVG/HorrorSVGLink.js';
-import RomanceSVGLink from './SVG/RomanceSVGLink';
-import DramaSVGLink from './SVG/DramaSVGLink';
-import MysterySuspenseSVGLink from './SVG/MysterySuspenseSVGLink';
-import ComedySVGLink from './SVG/ComedySVGLink';
+import DocumentarySVG from './SVG/DocumentarySVG';
+import SciFiSVG from './SVG/SciFiSVG';
+import ActionSVG from './SVG/ActionSVG.js';
+import HorrorSVG from './SVG/HorrorSVG.js';
+import RomanceSVG from './SVG/RomanceSVG';
+import DramaSVG from './SVG/DramaSVG';
+import MysterySuspenseSVG from './SVG/MysterySuspenseSVG';
+import ComedySVG from './SVG/ComedySVG';
 
 
 const HomePage = (props) => {
@@ -26,20 +26,31 @@ const HomePage = (props) => {
   }
 
   return(
+
     <div>
       <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+
       <svg style={{width:"80%", margin:"2% 10% 2% 10%"}} viewBox="0 0 1920 911">
         <GradientsSVG/>
         <SkyAndGroundSVG/>
-        <DocumentarySVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <SciFiSVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <ActionSVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <HorrorSVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <RomanceSVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <DramaSVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <MysterySuspenseSVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
-        <ComedySVGLink randomMovies={randomMovies} chooseGenre={props.chooseGenre}/>
+        <Link to={'/' + randomMovies["Documentary"].slug}>
+            <DocumentarySVG chooseGenre={props.chooseGenre}/></Link>
+        <Link to={'/' + randomMovies["Sci-Fi"].slug}>
+            <SciFiSVG chooseGenre={props.chooseGenre} /></Link>
+        <Link to={'/' + randomMovies["Action"].slug}>
+            <ActionSVG chooseGenre={props.chooseGenre} /></Link>
+        <Link to={'/' + randomMovies["Horror"].slug}>
+          <HorrorSVG chooseGenre={props.chooseGenre}/></Link>
+        <Link to={'/' + randomMovies["Romance"].slug}>
+          <RomanceSVG chooseGenre={props.chooseGenre}/></Link>
+        <Link to={'/' + randomMovies["Drama"].slug}>
+          <DramaSVG chooseGenre={props.chooseGenre}/></Link>
+        <Link to={'/' + randomMovies["Mystery & Suspense"].slug}>
+          <MysterySuspenseSVG chooseGenre={props.chooseGenre}/></Link>
+        <Link to={'/' + randomMovies["Comedy"].slug}>
+          <ComedySVG chooseGenre={props.chooseGenre}/></Link>
       </svg>
+
 
       <div style={{margin:"0 12% 0 11%",display:"flex", textAlign:"center"}}>
       {props.genres.map(genre=>

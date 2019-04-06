@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
 
-class HorrorSVGLink extends Component {
+class HorrorSVG extends Component {
 
   render() {
     return (
-      <Link to={'/' + this.props.randomMovies["Horror"].slug}>
-
       <g id="horror-layer" onClick={()=>this.props.chooseGenre("Horror")}>
         <g id="horror-drawing">
       <path
@@ -113,9 +110,8 @@ class HorrorSVGLink extends Component {
           </g>
 
         </g>
-      </Link>
     );
   }
 }
 
-export default HorrorSVGLink;
+export default HorrorSVG;

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
-class ComedySVGLink extends Component {
+class ComedySVG extends Component {
 
   render() {
     return (
-      <Link to={'/' + this.props.randomMovies["Comedy"].slug}>
-
       <g id="comedy-layer" onClick={()=>this.props.chooseGenre("Comedy")} data-name="Layer 17">
         <g id="e3g73a.tif"><path
           className="cls-238"
@@ -88,10 +85,9 @@ class ComedySVGLink extends Component {
             d="M1088,253.92l9.49-.75q9.18-.72,12.59.41a10.46,10.46,0,0,1,5.48,4.21,20.7,20.7,0,0,1,3,7q.9,3.9,2.31,15.41l3.47,28.37c.88,7.27,1.27,12.13,1.14,14.58a11.41,11.41,0,0,1-1.52,5.7,6.8,6.8,0,0,1-3.57,2.8,21.32,21.32,0,0,1-6.93.65l-16.52-.39Zm14.28,12.56,6.15,52.15c1.88,0,3-.58,3.25-1.77s.12-4.45-.51-9.77l-3.69-31q-.65-5.42-1-6.93a4.06,4.06,0,0,0-1.24-2.18A4.46,4.46,0,0,0,1102.31,266.48Z"/><path className="cls-4" d="M1149.14,249.11l-2.45,53.9,3.85,30.15-12.13-.29-3.72-29.72-15.46-51.69,11.65-.92c3.85,16,6.26,26.79,7.2,32.36q-.6-13.29-.59-32.87Z"/>
             </g>
       </g>
-      </Link>
 
     );
   }
 }
 
-export default ComedySVGLink;
+export default ComedySVG;

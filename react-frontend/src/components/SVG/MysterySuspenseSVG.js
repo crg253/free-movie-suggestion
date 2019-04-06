@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
-class MysterySuspenseSVGLink extends Component {
+class MysterySuspenseSVG extends Component {
 
   render() {
     return (
-
-      <Link to={'/' + this.props.randomMovies["Mystery & Suspense"].slug}>
 
       <g id="spy-layer" onClick={()=>this.props.chooseGenre("Mystery & Suspense")}>
 
@@ -277,10 +274,9 @@ class MysterySuspenseSVGLink extends Component {
           d="M1181.92,249l9-.4q9-.41,12.42.65t6.49,5.88q3,4.84,5.35,15.62,2.1,9.84,1.39,13.25t-4.81,4.14a12.44,12.44,0,0,1,6.07,4.24,21.44,21.44,0,0,1,2.7,4.95q.81,2.26,3,12.47l4.74,22.23-12.18-.23L1210.22,304c-.94-4.48-1.74-7.24-2.38-8.31s-1.86-1.58-3.64-1.56l7.87,37.55-13.11-.24Zm15.68,13.69,3.89,18.52c1.44,0,2.38-.38,2.82-1.06s.28-2.87-.5-6.55l-1-4.59c-.55-2.65-1.2-4.38-1.93-5.19A4,4,0,0,0,1197.6,262.67Z"/>
           </g>
       </g>
-      </Link>
 
     );
   }
 }
 
-export default MysterySuspenseSVGLink;
+export default MysterySuspenseSVG;

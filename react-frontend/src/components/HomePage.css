@@ -1,13 +1,12 @@
+/* GLOBAL */
+
 @import url("https://fonts.googleapis.com/css?family=Sigmar+One");
-
-
 
 #main-title{
   font-family: 'Sigmar One', cursive;
   margin: 0;
   text-align: center;
 }
-
 
 #SN-SPY{
   display: none;
@@ -34,7 +33,6 @@
   display: none;
 }
 
-
 #doc-layer:hover #SN-DOC{
   display: inline;
 }
@@ -60,7 +58,17 @@
   display: inline;
 }
 
+/* LANDSCAPE */
+@media only screen and (orientation:landscape){
 
+}
+
+/* PORTRAIT */
+@media only screen and (orientation:portrait){
+
+}
+
+/* GLOBAL SVG CLASSES */
 .cls-1 {
   fill: url("#linear-gradient");
 }

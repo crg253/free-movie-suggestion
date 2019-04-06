@@ -26,6 +26,8 @@ class GradientsSVG extends Component {
           <stop offset="0.83" stopColor="#c16bc1" stopOpacity="0"/></linearGradient>
         <linearGradient id="linear-gradient-5" x1="1447.52" y1="133.04" x2="1447.52" y2="258.21"/>
         <linearGradient id="linear-gradient-6" x1="1438.7" y1="133.04" x2="1438.7" y2="258.21"/>
+
+
         <linearGradient id="linear-gradient-7" x1="1411.32" y1="133.04" x2="1411.32" y2="258.21" />
         <linearGradient id="linear-gradient-8" x1="1419.2" y1="133.04" x2="1419.2" y2="258.21"/>
         <linearGradient id="linear-gradient-9" x1="1407.66" y1="133.04" x2="1407.66" y2="258.21"/>
@@ -60,11 +62,15 @@ class GradientsSVG extends Component {
           <stop offset="0.66" stopColor="#0b130a" stopOpacity="0.05"/>
           <stop offset="0.81" stopColor="#030502" stopOpacity="0.01"/>
           <stop offset="1" stopOpacity="0"/></linearGradient>
+
+
         <radialGradient id="radial-gradient" cx="1047.55" cy="291.52" r="212.98" gradientTransform="translate(0 87.46) scale(1 0.7)" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#fff" stopOpacity="0.6"/>
           <stop offset="0.92" stopColor="#fff" stopOpacity="0"/></radialGradient>
         <radialGradient id="radial-gradient-3" cx="1047.55" cy="292.52" r="212.98" gradientTransform="translate(0 87.76) scale(1 0.7)"/>
         <radialGradient id="radial-gradient-7" cx="1047.55" cy="290.52" r="212.98" gradientTransform="translate(0 87.16) scale(1 0.7)"/>
+
+
         <linearGradient id="linear-gradient-32" x1="1746.63" y1="150.33" x2="1780.91" y2="150.33" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#f0f4b4"/>
           <stop offset="1" stopColor="#f0f4b4" stopOpacity="0.4"/></linearGradient>
@@ -81,7 +87,6 @@ class GradientsSVG extends Component {
         <linearGradient id="linear-gradient-43" x1="1633.23" y1="36.07" x2="1737.63" y2="36.07"/>
         <linearGradient id="linear-gradient-44" x1="1614.03" y1="193.32" x2="1676.43" y2="193.32" />
       </defs>
-
     );
   }
 }

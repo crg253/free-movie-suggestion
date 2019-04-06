@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
-class SciFiSVGLink extends Component {
+class SciFiSVG extends Component {
 
   render() {
     return (
-      <Link to={'/' + this.props.randomMovies["Sci-Fi"].slug}>
-
       <g id="scifi-layer" onClick={()=>this.props.chooseGenre("Sci-Fi")}>
         <g id="JCXN2E.tif"><path
           className="cls-79"
@@ -92,9 +89,8 @@ class SciFiSVGLink extends Component {
             d="M1041,287.53l-12.85.67-.81-12.34a31.09,31.09,0,0,0-.85-6.68,1.66,1.66,0,0,0-1.88-1.16,2,2,0,0,0-1.9,1.8,35.87,35.87,0,0,0,0,7l2.09,32.66a32.78,32.78,0,0,0,.86,6.69,2.06,2.06,0,0,0,2,1.58,1.71,1.71,0,0,0,1.8-1.56,36.15,36.15,0,0,0,0-7.43l-.59-8.93,12.92-.36.2,2.84q.8,11.31,0,16a14.44,14.44,0,0,1-4.31,8.15,12,12,0,0,1-9.08,3.22,16.33,16.33,0,0,1-9.66-3.17,15.15,15.15,0,0,1-5.42-8q-1.5-5-2.1-15.09l-1.19-20q-.43-7.4-.3-11.13a20.13,20.13,0,0,1,1.73-7.36,15.07,15.07,0,0,1,4.64-6,14.11,14.11,0,0,1,7.17-2.88,13,13,0,0,1,9.45,2.08,14.42,14.42,0,0,1,5.35,7.51q1.48,4.72,2.19,14.93Z"/><path className="cls-4" d="M1056,253.78l5.64,75.4-13.09-.39-5.22-73.53Z"/><path className="cls-4" d="M1078.82,291l1.08,13.49-16.34.27-1-13.09Z"/><path className="cls-4" d="M1079.26,251.08l21.47-2.48,1.42,16.41-8.85.75,1.3,15.3,7.93-.45,1.35,15.56-8,.24,2.87,33.88-13.1-.4Z"/><path className="cls-4" d="M1116.47,246.78l7.65,84.29-13.1-.41-7.22-82.42Z"/>
             </g>
           </g>
-        </Link>
     );
   }
 }
 
-export default SciFiSVGLink;
+export default SciFiSVG;
