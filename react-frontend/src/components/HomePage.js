@@ -13,6 +13,9 @@ import DramaSVG from './SVG/DramaSVG';
 import MysterySuspenseSVG from './SVG/MysterySuspenseSVG';
 import ComedySVG from './SVG/ComedySVG';
 
+import DocumentarySign from './SVG/DocumentarySign';
+
+
 
 const HomePage = (props) => {
   let randomMovies = {
@@ -26,15 +29,21 @@ const HomePage = (props) => {
   }
 
   return(
-
-    <div>
+    <div id="home-container">
       <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
 
-      <svg style={{width:"80%", margin:"2% 10% 2% 10%"}} viewBox="0 0 1920 911">
+      <svg viewBox="0 0 1920 911">
         <GradientsSVG/>
         <SkyAndGroundSVG/>
-        <Link to={'/' + randomMovies["Documentary"].slug}>
-            <DocumentarySVG chooseGenre={props.chooseGenre}/></Link>
+
+        <g id="doc-wrapper" onClick={()=>props.chooseGenre("Documentary")}>
+          <Link to={'/' + randomMovies["Documentary"].slug}>
+              <DocumentarySVG/>
+              <DocumentarySign id="SN-DOC"/>
+          </Link>
+        </g>
+
+
         <Link to={'/' + randomMovies["Sci-Fi"].slug}>
             <SciFiSVG chooseGenre={props.chooseGenre} /></Link>
         <Link to={'/' + randomMovies["Action"].slug}>
@@ -52,7 +61,7 @@ const HomePage = (props) => {
       </svg>
 
 
-      <div style={{margin:"0 12% 0 11%",display:"flex", textAlign:"center"}}>
+      <div id="genre-list" style={{margin:"0 12% 0 11%", textAlign:"center"}}>
       {props.genres.map(genre=>
         <div style={{margin:"auto"}} onClick={()=>props.chooseGenre(genre)}>
           <Link to={'/' + randomMovies[genre].slug}>{genre}</Link>

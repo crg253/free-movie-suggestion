@@ -1,13 +1,13 @@
 import React from 'react';
 
+
 const genres = (props) => {
+
   return(
     <div>
-      <div style={{display:"flex"}}>
+      <div>
         {props.genres.map(genre=>(
-          <div style={{marginRight:'10px'}}>
-            <p onClick={()=>props.selectBy(genre)}>{genre}</p>
-          </div>
+            <p style={{display:"inline"}} onClick={()=>props.selectBy(genre)}>{genre+" "} </p>
         ))}
       </div>
 

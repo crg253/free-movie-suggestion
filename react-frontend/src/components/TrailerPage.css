@@ -1,8 +1,34 @@
-.List{
-  border:1px solid red;
+iframe{
+  width:38vw;
+  height: 21.38vw;
 }
-@media (max-width:800px){
+
+#mobile-genre-link{
+  display:none;
+}
+
+/* LANDSCAPE */
+@media only screen and (orientation:landscape){
+  #genre-list{
+    display: flex;
+  }
+}
+
+/* PORTRAIT */
+@media only screen and (orientation:portrait){
   .List{
     display: none;
   }
+  iframe{
+    width:95vw;
+    height: 53.44vw;
+  }
+  #trailer-stuff-wrapper{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #mobile-genre-link{
+    display:flex;
+  }
+
 }

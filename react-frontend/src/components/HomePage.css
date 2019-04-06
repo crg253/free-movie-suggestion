@@ -8,6 +8,11 @@
   text-align: center;
 }
 
+svg{
+  width:80%;
+  margin:2% 10% 2% 10%;
+}
+
 #SN-SPY{
   display: none;
 }
@@ -33,7 +38,7 @@
   display: none;
 }
 
-#doc-layer:hover #SN-DOC{
+#doc-wrapper:hover #SN-DOC{
   display: inline;
 }
 #scifi-layer:hover #SN-SCIFI{
@@ -60,12 +65,17 @@
 
 /* LANDSCAPE */
 @media only screen and (orientation:landscape){
-
+  #genre-list{
+    display: flex;
+  }
 }
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
-
+  svg{
+    width:95%;
+    margin:2% 2.5% 2% 2.5%;
+  }
 }
 
 /* GLOBAL SVG CLASSES */

@@ -7,14 +7,16 @@ const trailer = (props) => {
 
     props.movies.filter(movie=>movie.slug===props.movieslug)
     .map(selection=>(
-      <div
-        style={{ margin:"30px 0 0 40px"}}>
-        <iframe style={{width:"500px", height:"281px"}} title={selection.name} src = {selection.video}></iframe>
-        <h1 >{selection.name} {selection.year}</h1>
+      <div style={{marginLeft:"auto", marginRight:"auto"}}>
+        <div id="trailer">
+          <iframe title={selection.name} src = {selection.video}></iframe>
+        </div>
+        <p >{selection.name} {selection.year}</p>
 
         <button
           onClick = {()=>props.saveUnsave(selection.id)}
           style = {{
+            border:"1px solid green",
             width:"20px",
             height:"20px",
             backgroundColor: props.inSaved(selection.id) ? 'purple': 'black'

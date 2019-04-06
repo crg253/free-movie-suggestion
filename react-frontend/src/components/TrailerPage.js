@@ -1,7 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import './TrailerPage.css';
-import NavBar from './NavBar';
 import Trailer from './Trailer';
 import Genres from './Genres';
 import SelectedList from './SelectedList';
@@ -9,16 +9,25 @@ import SelectedList from './SelectedList';
 const TrailerPage = (props) => {
 
   return(
-    <div>
-      <NavBar/>
       <div style={{display:"flex"}} >
-        <div style={{margin:"40px 30px 0 30px"}}>
+
+
+
+        <div id="trailer-stuff-wrapper">
+
+          <div id="mobile-genre-link">
+            <p>{props.listby}</p>
+            <p><Link to={'/list'}>List</Link></p>
+          </div>
+
           <Trailer
               movieslug={props.match.params.movieslug}
               movies={props.movies}
               saveUnsave={props.saveUnsave}
               inSaved={props.inSaved}/>
         </div>
+
+
         <div className = "List" style={{margin:"60px 0 0 0"}}>
           <Genres
                 genres={props.genres}
@@ -31,7 +40,8 @@ const TrailerPage = (props) => {
                 genres ={props.genres}
                 listby={props.listby}/>
         </div>
-      </div>
+
+
     </div>
   );
 };
