@@ -9,31 +9,28 @@ import SelectedList from './SelectedList';
 const TrailerPage = (props) => {
 
   return(
-      <div style={{display:"flex"}} >
+    <div id="trailer-page-wrapper">
+      <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+      <div id="trailer-and-list-wrapper">
 
-
-
-        <div id="trailer-stuff-wrapper">
-
-          <div id="mobile-genre-link">
+        <div id="trailer-things-wrapper">
+          <div id="genre-and-list-link">
             <p>{props.listby}</p>
             <p><Link to={'/list'}>List</Link></p>
           </div>
-
-          <Trailer
+          <Trailer id="trailer-component"
               movieslug={props.match.params.movieslug}
               movies={props.movies}
               saveUnsave={props.saveUnsave}
               inSaved={props.inSaved}/>
         </div>
 
-
-        <div className = "List" style={{margin:"60px 0 0 0"}}>
-          <Genres
+        <div id="genres-and-list">
+          <Genres id="genres-component"
                 genres={props.genres}
                 selectBy={props.selectBy}
                 listby={props.listby}/>
-          <SelectedList
+          <SelectedList id="selected-list-component"
                 movies ={props.movies}
                 savedmovies={props.savedmovies}
                 unsave = {props.unsave}
@@ -41,7 +38,7 @@ const TrailerPage = (props) => {
                 listby={props.listby}/>
         </div>
 
-
+      </div>
     </div>
   );
 };

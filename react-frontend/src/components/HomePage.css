@@ -63,18 +63,27 @@ svg{
   display: inline;
 }
 
-/* LANDSCAPE */
-@media only screen and (orientation:landscape){
-  #genre-list{
-    display: flex;
-  }
+
+
+#random-genre-list{
+  margin:0 11.5% 5% 11.5%;
+  text-align:center;
+  display:flex;
 }
+.random-genre-link{
+  margin:auto;
+}
+
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
   svg{
     width:95%;
     margin:2% 2.5% 2% 2.5%;
+  }
+  #random-genre-list{
+    text-align:center;
+    display:block;
   }
 }
 

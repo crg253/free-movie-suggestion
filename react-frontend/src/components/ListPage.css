@@ -1,0 +1,12 @@
+#list-page-wrapper{
+}
+@import url("https://fonts.googleapis.com/css?family=Sigmar+One");
+
+#main-title{
+  font-family: 'Sigmar One', cursive;
+  margin: 0;
+  text-align: center;
+}
+#genres-and-list-wrapper{
+  margin:5% 5% 5% 5%;
+}

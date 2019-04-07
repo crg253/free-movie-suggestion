@@ -1,34 +1,68 @@
+#trailer-page-wrapper{
+}
+@import url("https://fonts.googleapis.com/css?family=Sigmar+One");
+
+#main-title{
+  font-family: 'Sigmar One', cursive;
+  margin: 0;
+  text-align: center;
+}
+#trailer-and-list-wrapper{
+  display:flex;
+  margin: 2% 5% 5% 5%;
+}
+#trailer-things-wrapper{
+}
+#genre-and-list-link{
+  display:none;
+}
+#trailer-component{
+}
+#trailer-div{
+}
 iframe{
   width:38vw;
   height: 21.38vw;
 }
-
-#mobile-genre-link{
-  display:none;
+#trailer-save-button{
+  width:20px;
+  height:20px;
+}
+#genres-and-list{
+  margin: 0 0 0 5%;
+}
+#genres-component{
+}
+#saved-all-list-links{
+  margin:5px 0 0 0;
+}
+.genre-list-link{
+  display:inline;
+  margin:0 5px 0 0;
+}
+#selected-list-component{
 }
 
-/* LANDSCAPE */
-@media only screen and (orientation:landscape){
-  #genre-list{
-    display: flex;
-  }
-}
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
-  .List{
-    display: none;
+  #trailer-and-list-wrapper{
+    margin: 0;
+  }
+  #trailer-things-wrapper{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #genre-and-list-link{
+    display:flex;
   }
   iframe{
     width:95vw;
     height: 53.44vw;
   }
-  #trailer-stuff-wrapper{
-    margin-left: auto;
-    margin-right: auto;
+  #genres-and-list{
+    display:none;
   }
-  #mobile-genre-link{
-    display:flex;
-  }
+
 
 }

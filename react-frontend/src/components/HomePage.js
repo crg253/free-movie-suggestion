@@ -29,7 +29,7 @@ const HomePage = (props) => {
   }
 
   return(
-    <div id="home-container">
+    <div id="home-page-container">
       <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
 
       <svg viewBox="0 0 1920 911">
@@ -61,9 +61,9 @@ const HomePage = (props) => {
       </svg>
 
 
-      <div id="genre-list" style={{margin:"0 12% 0 11%", textAlign:"center"}}>
+      <div id="random-genre-list" >
       {props.genres.map(genre=>
-        <div style={{margin:"auto"}} onClick={()=>props.chooseGenre(genre)}>
+        <div className="random-genre-link" onClick={()=>props.chooseGenre(genre)}>
           <Link to={'/' + randomMovies[genre].slug}>{genre}</Link>
         </div>
       )}
