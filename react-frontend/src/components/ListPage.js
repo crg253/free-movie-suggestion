@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import './ListPage.css';
 import Genres from './Genres';
@@ -8,7 +9,9 @@ const ListPage = (props) => {
 
   return(
     <div id="list-page-wrapper">
-    <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+      <Link to={'/'}>
+        <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+      </Link>
       <div id="genres-and-list-wrapper">
         <Genres
               genres={props.genres}

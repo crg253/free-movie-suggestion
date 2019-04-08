@@ -10,7 +10,9 @@ const TrailerPage = (props) => {
 
   return(
     <div id="trailer-page-wrapper">
-      <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+        <Link to={'/'}>
+          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+        </Link>
       <div id="trailer-and-list-wrapper">
 
         <div id="trailer-things-wrapper">
