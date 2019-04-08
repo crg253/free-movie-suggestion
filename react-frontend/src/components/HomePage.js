@@ -14,6 +14,14 @@ import MysterySuspenseSVG from './SVG/MysterySuspenseSVG';
 import ComedySVG from './SVG/ComedySVG';
 
 import DocumentarySign from './SVG/DocumentarySign';
+import ActionSign from './SVG/ActionSign';
+import ComedySign from './SVG/ComedySign';
+import DramaSign from './SVG/DramaSign';
+import HorrorSign from './SVG/HorrorSign';
+import MysterySuspenseSign from './SVG/MysterySuspenseSign';
+import RomanceSign from './SVG/RomanceSign';
+import SciFiSign from './SVG/SciFiSign';
+
 
 
 
@@ -28,6 +36,43 @@ const HomePage = (props) => {
       }
   }
 
+  let sign = null;
+  if(props.listby ==="Action"){
+    sign = <Link to={'/' + randomMovies["Action"].slug}>
+            <ActionSign/>
+            </Link>
+  }else if(props.listby ==="Comedy"){
+    sign = <Link to={'/' + randomMovies["Comedy"].slug}>
+            <ComedySign/>
+            </Link>
+  }else if(props.listby ==="Documentary"){
+    sign = <Link to={'/' + randomMovies["Documentary"].slug}>
+            <DocumentarySign/>
+            </Link>
+  }else if(props.listby ==="Drama"){
+    sign = <Link to={'/' + randomMovies["Drama"].slug}>
+            <DramaSign/>
+            </Link>
+  }else if(props.listby ==="Horror"){
+    sign = <Link to={'/' + randomMovies["Horror"].slug}>
+            <HorrorSign/>
+            </Link>
+  }else if(props.listby ==="Mystery & Suspense"){
+    sign = <Link to={'/' + randomMovies["Mystery & Suspense"].slug}>
+            <MysterySuspenseSign/>
+            </Link>
+  }else if(props.listby ==="Romance"){
+    sign = <Link to={'/' + randomMovies["Romance"].slug}>
+            <RomanceSign/>
+            </Link>
+  }else if(props.listby ==="Sci-Fi"){
+    sign = <Link to={'/' + randomMovies["Sci-Fi"].slug}>
+            <SciFiSign/>
+            </Link>
+  }
+
+
+
   return(
     <div id="home-page-container">
       <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
@@ -35,29 +80,15 @@ const HomePage = (props) => {
       <svg viewBox="0 0 1920 911">
         <GradientsSVG/>
         <SkyAndGroundSVG/>
-
-        <g id="doc-wrapper" onClick={()=>props.chooseGenre("Documentary")}>
-          <Link to={'/' + randomMovies["Documentary"].slug}>
-              <DocumentarySVG/>
-              <DocumentarySign id="SN-DOC"/>
-          </Link>
-        </g>
-
-
-        <Link to={'/' + randomMovies["Sci-Fi"].slug}>
-            <SciFiSVG chooseGenre={props.chooseGenre} /></Link>
-        <Link to={'/' + randomMovies["Action"].slug}>
-            <ActionSVG chooseGenre={props.chooseGenre} /></Link>
-        <Link to={'/' + randomMovies["Horror"].slug}>
-          <HorrorSVG chooseGenre={props.chooseGenre}/></Link>
-        <Link to={'/' + randomMovies["Romance"].slug}>
-          <RomanceSVG chooseGenre={props.chooseGenre}/></Link>
-        <Link to={'/' + randomMovies["Drama"].slug}>
-          <DramaSVG chooseGenre={props.chooseGenre}/></Link>
-        <Link to={'/' + randomMovies["Mystery & Suspense"].slug}>
-          <MysterySuspenseSVG chooseGenre={props.chooseGenre}/></Link>
-        <Link to={'/' + randomMovies["Comedy"].slug}>
-          <ComedySVG chooseGenre={props.chooseGenre}/></Link>
+        <g onClick={()=>props.chooseGenre("Documentary")}><DocumentarySVG/></g>
+        <g onClick={()=>props.chooseGenre("Sci-Fi")}><SciFiSVG/></g>
+        <g onClick={()=>props.chooseGenre("Horror")}><HorrorSVG/></g>
+        <g onClick={()=>props.chooseGenre("Action")}><ActionSVG/></g>
+        <g onClick={()=>props.chooseGenre("Romance")}><RomanceSVG/></g>
+        <g onClick={()=>props.chooseGenre("Drama")}><DramaSVG/></g>
+        <g onClick={()=>props.chooseGenre("Comedy")}><ComedySVG/></g>
+        <g onClick={()=>props.chooseGenre("Mystery & Suspense")}><MysterySuspenseSVG/></g>
+        {sign}
       </svg>
 
 

@@ -13,58 +13,6 @@ svg{
   margin:2% 10% 2% 10%;
 }
 
-#SN-SPY{
-  display: none;
-}
-#SN-DOC{
-  display: none;
-}
-#SN-SCIFI{
-  display: none;
-}
-#SN-ACTION{
-  display: none;
-}
-#SN-ROMANCE{
-  display: none;
-}
-#SN-COMEDY{
-  display: none;
-}
-#SN-DRAMA{
-  display: none;
-}
-#SN-HORROR{
-  display: none;
-}
-
-#doc-wrapper:hover #SN-DOC{
-  display: inline;
-}
-#scifi-layer:hover #SN-SCIFI{
-  display: inline;
-}
-#action-layer:hover #SN-ACTION{
-  display: inline;
-}
-#romance-layer:hover #SN-ROMANCE{
-  display: inline;
-}
-#comedy-layer:hover #SN-COMEDY{
-  display: inline;
-}
-#drama-layer:hover #SN-DRAMA{
-  display: inline;
-}
-#horror-layer:hover #SN-HORROR{
-  display: inline;
-}
-#spy-layer:hover #SN-SPY{
-  display: inline;
-}
-
-
-
 #random-genre-list{
   margin:0 11.5% 5% 11.5%;
   text-align:center;

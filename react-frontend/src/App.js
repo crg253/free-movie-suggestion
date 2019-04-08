@@ -94,7 +94,8 @@ class App extends Component {
                                 {...props}
                                 movies={this.state.Movies}
                                 genres={this.state.Genres}
-                                chooseGenre={this.chooseGenre}/>}/>
+                                chooseGenre={this.chooseGenre}
+                                listby={this.state.ListBy}/>}/>
           <Route component = {Error} />
         </Switch>
       </BrowserRouter>
