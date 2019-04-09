@@ -1,17 +1,10 @@
-@import url("https://fonts.googleapis.com/css?family=Sigmar+One");
-
-#main-title{
-  font-family: 'Sigmar One', cursive;
-  margin: 0;
-  text-align: center;
-}
 #trailer-genres-list{
   display:flex;
   margin: 2% 5% 5% 5%;
 }
 iframe{
-  width:38vw;
-  height: 21.38vw;
+  width:40vw;
+  height: 22.5vw;
 }
 #save-button{
   width:20px;
@@ -24,7 +17,6 @@ iframe{
   display: inline;
   margin:0 5px 5px 0;
 }
-
 
 
 /* PORTRAIT */

@@ -7,16 +7,22 @@ const genres = (props) => {
     <div>
       {props.genres.map(genre=>(
           <p
-          style = {{color: props.inlistby(genre) ? 'green': 'black'}}
+          style = {{color: props.inlistby(genre) ? 'purple': 'black',
+            fontWeight:'bold',
+            fontSize: props.inlistby(genre) ? '22px': '18px'}}
           className="genre-links"
           onClick={()=>props.selectBy(genre)}>{genre+" "} </p>
       ))}
       <p
-        style = {{color: props.inlistby("Saved") ? 'green': 'black'}}
+        style = {{color: props.inlistby("Saved") ? 'purple': 'black',
+        fontWeight:'bold',
+        fontSize: props.inlistby("Saved") ? '22px': '18px'}}
         className="genre-links"
         onClick={()=>props.selectBy("Saved")}>Saved</p>
       <p
-        style = {{color: props.inlistby("All") ? 'green': 'black'}}
+        style = {{color: props.inlistby("All") ? 'purple': 'black',
+        fontWeight:'bold',
+        fontSize: props.inlistby("All") ? '22px': '18px'}}
         className="genre-links"
         onClick={()=>props.selectBy("All")}>All Movies</p>
     </div>
