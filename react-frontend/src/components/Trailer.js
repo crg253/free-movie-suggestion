@@ -8,7 +8,12 @@ const trailer = (props) => {
     props.movies.filter(movie=>movie.slug===props.movieslug)
     .map(selection=>(
       <div>
-        <iframe title={selection.name} src = {selection.video}></iframe>
+      <iframe
+        src={selection.video}
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
 
         <div id="title-and-button">
         <h2 >{selection.name} {selection.year}</h2>

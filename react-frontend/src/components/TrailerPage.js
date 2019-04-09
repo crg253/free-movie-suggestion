@@ -8,7 +8,7 @@ import SelectedList from './SelectedList';
 
 const TrailerPage = (props) => {
 
-  if(props.match.params.movieslug!=props.param){
+  if(props.match.params.movieslug!==props.param){
     props.setparam(props.match.params.movieslug)
     window.scrollTo(0, 0)
   }
@@ -30,7 +30,8 @@ const TrailerPage = (props) => {
           <Genres
                 genres={props.genres}
                 selectBy={props.selectBy}
-                listby={props.listby}/>
+                listby={props.listby}
+                inlistby={props.inlistby}/>
           <SelectedList
                 movies ={props.movies}
                 savedmovies={props.savedmovies}

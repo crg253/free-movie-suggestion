@@ -26,6 +26,10 @@ class App extends Component {
     this.setState({ListBy: genre});
   }
 
+  inListBy = (genre) =>{
+    return this.state.ListBy.includes(genre)
+  }
+
   inSaved = (id) => {
     return this.state.SavedMovies.includes(id)
   }
@@ -78,6 +82,7 @@ class App extends Component {
                                   unsave={this.unsave}
                                   genres={this.state.Genres}
                                   listby={this.state.ListBy}
+                                  inlistby={this.inListBy}
                                   param={this.state.Param}
                                   setparam={this.setParam}/>}/>
 
