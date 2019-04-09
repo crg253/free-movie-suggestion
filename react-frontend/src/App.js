@@ -11,10 +11,13 @@ class App extends Component {
     Movies:[],
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
     SavedMovies:[],
-    ListBy:"All"
+    ListBy:"All",
+    Param:''
    }
 
-
+  setParam = (newParam) =>{
+    this.setState({Param:newParam})
+  }
   selectBy = (choice) => {
     this.setState({ListBy:choice});
   }
@@ -74,7 +77,9 @@ class App extends Component {
                                   locStorToState={this.locStorToState}
                                   unsave={this.unsave}
                                   genres={this.state.Genres}
-                                  listby={this.state.ListBy}/>}/>
+                                  listby={this.state.ListBy}
+                                  param={this.state.Param}
+                                  setparam={this.setParam}/>}/>
 
           <Route
             path='/'

@@ -7,7 +7,11 @@ import Genres from './Genres';
 import SelectedList from './SelectedList';
 
 const TrailerPage = (props) => {
-  window.scrollTo(0, 0)
+
+  if(props.match.params.movieslug!=props.param){
+    props.setparam(props.match.params.movieslug)
+    window.scrollTo(0, 0)
+  }
 
   return(
     <div>
