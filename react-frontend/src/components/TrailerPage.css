@@ -17,6 +17,15 @@ iframe{
   display: inline;
   margin:0 5px 5px 0;
 }
+#sort-by{
+  display:inline;
+  line-height: 2;
+}
+.sort-selector{
+  display: inline;
+  margin-right: 2px;
+  color:blue;
+}
 
 
 /* PORTRAIT */

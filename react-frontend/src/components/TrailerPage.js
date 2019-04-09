@@ -33,6 +33,8 @@ const TrailerPage = (props) => {
                 listby={props.listby}
                 inlistby={props.inlistby}/>
           <SelectedList
+                setSort={props.setSort}
+                sortby={props.sortby}
                 movies ={props.movies}
                 savedmovies={props.savedmovies}
                 unsave = {props.unsave}

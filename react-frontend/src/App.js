@@ -13,8 +13,13 @@ class App extends Component {
     Genres:["Action", "Comedy", "Documentary", "Drama", "Horror", "Mystery & Suspense", "Romance", "Sci-Fi" ],
     SavedMovies:[],
     ListBy:"All",
-    Param:''
+    Param:'',
+    SortBy:'name'
    }
+
+  setSort = (sortParam) =>{
+    this.setState({SortBy:sortParam})
+  }
 
   setParam = (newParam) =>{
     this.setState({Param:newParam})
@@ -85,7 +90,9 @@ class App extends Component {
                                   listby={this.state.ListBy}
                                   inlistby={this.inListBy}
                                   param={this.state.Param}
-                                  setparam={this.setParam}/>}/>
+                                  setparam={this.setParam}
+                                  sortby={this.state.SortBy}
+                                  setSort={this.setSort}/>}/>
 
           <Route
             path='/'
