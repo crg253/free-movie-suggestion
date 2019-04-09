@@ -7,39 +7,33 @@ import Genres from './Genres';
 import SelectedList from './SelectedList';
 
 const TrailerPage = (props) => {
+  window.scrollTo(0, 0)
 
   return(
-    <div id="trailer-page-wrapper">
-        <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
-        </Link>
-      <div id="trailer-and-list-wrapper">
+    <div>
+      <Link to={'/'}>
+        <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+      </Link>
 
-        <div id="trailer-things-wrapper">
-          <div id="genre-and-list-link">
-            <p>{props.listby}</p>
-            <p><Link to={'/list'}>List</Link></p>
-          </div>
-          <Trailer id="trailer-component"
-              movieslug={props.match.params.movieslug}
-              movies={props.movies}
-              saveUnsave={props.saveUnsave}
-              inSaved={props.inSaved}/>
-        </div>
+      <div id="trailer-genres-list">
+        <Trailer
+            movieslug={props.match.params.movieslug}
+            movies={props.movies}
+            saveUnsave={props.saveUnsave}
+            inSaved={props.inSaved}/>
 
-        <div id="genres-and-list">
-          <Genres id="genres-component"
+        <div id="genre-and-list">
+          <Genres
                 genres={props.genres}
                 selectBy={props.selectBy}
                 listby={props.listby}/>
-          <SelectedList id="selected-list-component"
+          <SelectedList
                 movies ={props.movies}
                 savedmovies={props.savedmovies}
                 unsave = {props.unsave}
                 genres ={props.genres}
                 listby={props.listby}/>
         </div>
-
       </div>
     </div>
   );

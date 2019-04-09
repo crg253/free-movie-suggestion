@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import HomePage from "./components/HomePage";
 import TrailerPage from "./components/TrailerPage";
-import ListPage from "./components/ListPage";
 import Error from "./components/Error";
 
 class App extends Component {
@@ -63,17 +62,6 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route
-            path='/list'
-            render={(props)=> <ListPage
-                                  {...props}
-                                  movies={this.state.Movies}
-                                  savedmovies={this.state.SavedMovies}
-                                  unsave={this.unsave}
-                                  genres={this.state.Genres}
-                                  listby={this.state.ListBy}
-                                  selectBy={this.selectBy}/>}/>
-
           <Route
             path='/:movieslug'
             render={(props)=> <TrailerPage
