@@ -28,12 +28,7 @@ const SelectedList = (props) => {
   }
 
   return(
-    <div>
-    <div>
-      <p id='sort-by'>Sort by ...</p>
-      <p className='sort-selector'onClick = {()=>props.setSort("name")}>Title</p>
-      <p className='sort-selector' onClick = {()=>props.setSort("year")}>Year</p>
-    </div>
+    <div id="selected-list">
     {showList}
     </div>
   );

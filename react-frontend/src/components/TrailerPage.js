@@ -28,6 +28,8 @@ const TrailerPage = (props) => {
 
         <div id="genre-and-list">
           <Genres
+                setSort={props.setSort}
+                sortby={props.sortby}
                 genres={props.genres}
                 selectBy={props.selectBy}
                 listby={props.listby}

@@ -1,7 +1,13 @@
+body {
+  background-color: black;
+  color: white;
+}
+
 a{
   text-decoration: none;
-  color:black;
+  color:white;
 }
+
 
 @import url("https://fonts.googleapis.com/css?family=Sigmar+One");
 
@@ -9,4 +15,5 @@ a{
   font-family: 'Sigmar One', cursive;
   margin: 0;
   text-align: center;
+  color: DodgerBlue;
 }

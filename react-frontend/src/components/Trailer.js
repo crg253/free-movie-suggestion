@@ -14,7 +14,7 @@ const trailer = (props) => {
         <button id="save-button"
           onClick = {()=>props.saveUnsave(selection.id)}
           style = {{
-            backgroundColor: props.inSaved(selection.id) ? 'purple': 'black'
+            backgroundColor: props.inSaved(selection.id) ? 'DarkOrchid': 'black'
           }}>
         </button>
         <p>Save/Unsave</p>
