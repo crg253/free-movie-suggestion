@@ -5,6 +5,7 @@ const genres = (props) => {
 
   return(
     <div>
+    <div style={{textAlign:"justify",textJustify:"inter-word"}}>
       {props.genres.map(genre=>(
           <p
           style = {{color: props.inlistby(genre) ? 'Aqua': 'white'}}
@@ -19,20 +20,23 @@ const genres = (props) => {
         style = {{color: props.inlistby("All") ? 'Aqua': 'white'}}
         className="genre-links"
         onClick={()=>props.selectBy("All")}>All Movies</p>
+      </div>
 
-      <p className='sort-selector'>...sort by </p>
+      <div id="sort-by-wrapper">
+      <p className='sort-selector'>sort by </p>
       <p
         style = {{
           color: props.sortby==='name' ? 'LawnGreen': 'white'
         }}
         className='sort-selector'
-        onClick = {()=>props.setSort("name")}>Title</p>
+        onClick = {()=>props.setSort("name")}>TITLE</p>
       <p
         style = {{
           color: props.sortby==='year' ? 'LawnGreen': 'white'
         }}
         className='sort-selector'
-        onClick = {()=>props.setSort("year")}>Year</p>
+        onClick = {()=>props.setSort("year")}>YEAR</p>
+    </div>
     </div>
   );
 };

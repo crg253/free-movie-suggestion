@@ -6,6 +6,10 @@ iframe{
   width:40vw;
   height: 22.5vw;
 }
+#title-and-button{
+  text-align: center;
+  margin: 0 0 25px 0;
+}
 #save-button{
   width:20px;
   height:20px;
@@ -14,8 +18,12 @@ iframe{
   margin:0 0 0 5%;
 }
 .genre-links{
+  font-size: 20px;
   display: inline;
   margin:0 5px 5px 0;
+}
+#sort-by-wrapper{
+  margin:15px 0 0 0;
 }
 .sort-selector{
   display: inline;
@@ -37,19 +45,30 @@ iframe{
     width:90vw;
     height: 50.63vw;
   }
-  #title-and-button{
-    text-align: center;
+  #trailer-title{
+    margin-bottom: 2px;
   }
   #genre-and-list{
     margin:5% 0 5% 0;
   }
   #selected-list{
-    margin:10% 2% 10% 2%;
+    margin:3px 5% 10% 5%;
+    font-size: 15px;
+    text-align: center;
   }
+  .genre-links{
+    font-size: 17px;
+  }
+  #sort-by-wrapper{
+    margin:3px 0 0 0;
+    display:flex;
+    justify-content: center;
+  }
+
 }
 
 /* SMALL LANDSCAPE */
-@media only screen and (max-width : 800px) {
+@media only screen and (orientation:landscape) and (max-width : 800px) {
   #trailer-genres-list{
     width:90vw;
     height: 50.63vw;
@@ -62,13 +81,19 @@ iframe{
     width:90vw;
     height: 50.63vw;
   }
-  #title-and-button{
-    text-align: center;
-  }
   #genre-and-list{
     margin:5% 0 5% 0;
   }
   #selected-list{
-    margin:10% 2% 10% 2%;
+    margin:3px 2% 10% 2%;
+    text-align: center;
+  }
+  .genre-links{
+    font-size: 17px;
+  }
+  #sort-by-wrapper{
+    margin:3px 0 0 0;
+    display:flex;
+    justify-content: center;
   }
 }

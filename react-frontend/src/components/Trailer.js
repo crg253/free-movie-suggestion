@@ -10,7 +10,7 @@ const trailer = (props) => {
       <div>
         <iframe title={selection.name} src={selection.video} allowFullScreen></iframe>
         <div id="title-and-button">
-        <h2 >{selection.name} {selection.year}</h2>
+        <h2 id="trailer-title" >{selection.name} {selection.year}</h2>
         <button id="save-button"
           onClick = {()=>props.saveUnsave(selection.id)}
           style = {{
