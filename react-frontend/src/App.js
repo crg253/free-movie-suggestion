@@ -6,6 +6,8 @@ import './App.css';
 import HomePage from "./components/HomePage";
 import TrailerPage from "./components/TrailerPage";
 import Error from "./components/Error";
+import AllUsers from "./components/AllUsers";
+import AddUser from "./components/AddUser";
 
 class App extends Component {
   state = {
@@ -75,6 +77,14 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
+          <Route
+            path='/allusers'
+            component = {AllUsers}/>
+
+          <Route
+            path='/adduser'
+            component= {AddUser}/>
+
           <Route
             path='/:movieslug'
             render={(props)=> <TrailerPage

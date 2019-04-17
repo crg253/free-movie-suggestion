@@ -19,3 +19,7 @@ class Movie(db.Model):
 class Tag(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
+
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
