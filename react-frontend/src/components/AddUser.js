@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 
 class AddUser extends Component {
@@ -9,13 +8,15 @@ class AddUser extends Component {
   handleChange = (event) =>{
     this.setState({value:event.target.value});
   }
+
   handleSubmit = (event) =>{
-    axios.post('/api/adduser', { userName:this.state.value })
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-    })
-  }
+    event.preventDefault();
+    fetch('/api/adduser', {
+     method: 'POST',
+     headers: {'Content-Type':'application/json'},
+     body: JSON.stringify({userName: this.state.value})
+    }).then(res=>console.log(res))
+  };
 
   render() {
     console.log(this.state.value)

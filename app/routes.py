@@ -5,10 +5,11 @@ from app.models import Movie, Tag, User
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
     data=request.get_json(silent=True) or {}
+    print(data)
     newUser = User(username=data.get('userName'))
     db.session.add(newUser)
     db.session.commit()
-    return jsonify(newUser)
+    return jsonify(''),201
 
 
 @app.route('/api/allusers', methods=['GET'])
