@@ -1,18 +1,17 @@
-from flask import jsonify, render_template
-from app import app
+from flask import jsonify, render_template, request
+from app import app, db
 from app.models import Movie, Tag, User
-from flask_cors import cross_origin
 
 @app.route('/api/adduser', methods=['POST'])
-@cross_origin()
 def add_user():
-    #user = User(username=username)
-    #db.session.add(user)
-    #db.session.commit()
+    data=request.get_json(silent=True) or {}
+    newUser = User(username=data.get('userName'))
+    db.session.add(newUser)
+    db.session.commit()
+    return jsonify(newUser)
 
 
 @app.route('/api/allusers', methods=['GET'])
-@cross_origin()
 def all_users():
     all_users = []
     for u in User.query.all():
@@ -20,7 +19,6 @@ def all_users():
     return jsonify(all_users)
 
 @app.route('/movies')
-@cross_origin()
 def movies():
     movies = []
     for movie in Movie.query.all():

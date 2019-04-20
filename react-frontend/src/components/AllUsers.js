@@ -6,7 +6,7 @@ class AllUsers extends Component  {
     Users:[]
   }
   componentDidMount(){
-      axios.get('http://127.0.0.1:5000/api/allusers')
+      axios.get('/api/allusers')
       .then(response=> {
         this.setState({Users: response.data})
       })
