@@ -2,14 +2,16 @@ from flask import jsonify, render_template, request
 from app import app, db
 from app.models import Movie, Tag, User
 
+
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
     data=request.get_json(silent=True) or {}
     print(data)
     newUser = User(username=data.get('userName'))
+    newUser.set_password(data.get('password'))
     db.session.add(newUser)
     db.session.commit()
-    return jsonify(''),201
+    return jsonify('Test Response'),201
 
 
 @app.route('/api/allusers', methods=['GET'])
@@ -17,6 +19,7 @@ def all_users():
     all_users = []
     for u in User.query.all():
         all_users.append({'username':u.username})
+        all_users.append({'password':u.password_hash})
     return jsonify(all_users)
 
 @app.route('/movies')

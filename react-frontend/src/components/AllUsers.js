@@ -14,7 +14,7 @@ class AllUsers extends Component  {
   render() {
     return (
       <div>
-      {this.state.Users.map(user=><h3>{user.username}</h3>)}
+      {this.state.Users.map(user=><h3>{user.username} {user.password}</h3>)}
       </div>
     );
   }
