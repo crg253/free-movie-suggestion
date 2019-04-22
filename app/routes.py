@@ -15,17 +15,14 @@ def add_user():
     return jsonify('Test Response'),201
 
 
-@app.route('/api/allusers', methods=['GET'])
+@app.route('/api/user', methods=['GET'])
 @basic_auth.login_required
-def all_users():
-    all_users = []
-    for u in User.query.all():
-        all_users.append({'username':u.username})
-        all_users.append({'password':u.password_hash})
-    return jsonify(all_users)
+def user():
+    return jsonify(g.current_user.username)
 
 @app.route('/movies')
 def movies():
+    #print("/movies api call")
     movies = []
     for movie in Movie.query.all():
         movies.append({"id":movie.movie_id,

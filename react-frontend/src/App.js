@@ -6,7 +6,7 @@ import './App.css';
 import HomePage from "./components/HomePage";
 import TrailerPage from "./components/TrailerPage";
 import Error from "./components/Error";
-import AllUsers from "./components/AllUsers";
+import User from "./components/User";
 import AddUser from "./components/AddUser";
 
 class App extends Component {
@@ -66,11 +66,11 @@ class App extends Component {
   }
 
   componentDidMount(){
-      axios.get('/movies')
-      .then(response=> {
-        this.setState({Movies: response.data})
-      })
-      this.locStorToState();
+    axios.get('/movies')
+    .then(response=> {
+      this.setState({Movies: response.data})
+    })
+    this.locStorToState();
   }
 
   render() {
@@ -78,8 +78,8 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route
-            path='/allusers'
-            component = {AllUsers}/>
+            path='/user'
+            component = {User}/>
 
           <Route
             path='/adduser'
