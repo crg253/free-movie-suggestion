@@ -1,6 +1,7 @@
-from flask import jsonify, render_template, request
+from flask import jsonify, render_template, request, g
 from app import app, db
 from app.models import Movie, Tag, User
+from app.auth import basic_auth
 
 
 @app.route('/api/adduser', methods=['POST'])
@@ -15,6 +16,7 @@ def add_user():
 
 
 @app.route('/api/allusers', methods=['GET'])
+@basic_auth.login_required
 def all_users():
     all_users = []
     for u in User.query.all():
