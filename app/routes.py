@@ -18,7 +18,13 @@ def add_user():
 @app.route('/api/user', methods=['GET'])
 @basic_auth.login_required
 def user():
-    return jsonify(g.current_user.username)
+    movies =[]
+    for movie in User.query.filter_by(username=g.current_user.username).first().user_movies:
+        movies.append(movie.user_movie_name)
+    current_user = {
+        'username': g.current_user.username,
+        'movies': movies}
+    return jsonify(current_user)
 
 @app.route('/movies')
 def movies():
