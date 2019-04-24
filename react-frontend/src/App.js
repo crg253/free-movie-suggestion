@@ -66,7 +66,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    axios.get('/movies')
+    axios.get('/api/movies')
     .then(response=> {
       this.setState({Movies: response.data})
     })
