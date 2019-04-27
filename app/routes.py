@@ -1,7 +1,13 @@
 from flask import jsonify, render_template, request, g
 from app import app, db
 from app.models import Movie, Tag, User
-from app.auth import basic_auth
+from app.auth import basic_auth, token_auth
+
+@app.route('/api/user', methods=['GET'])
+@token_auth.login_required
+def user():
+    print("user route")
+    return jsonify({'user':g.current_user.username}), 200
 
 
 @app.route('/api/adduser', methods=['POST'])
@@ -13,19 +19,12 @@ def add_user():
     db.session.commit()
     return jsonify('Test Response'),201
 
-@app.route('/api/user', methods=['GET','POST'])
+@app.route('/api/signin', methods=['GET','POST'])
 @basic_auth.login_required
-def user():
-    movies =[]
-    for movie in User.query.filter_by(username=g.current_user.username).first().user_movies:
-        movies.append(movie.user_movie_name)
+def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
-    current_user = {
-        'username': g.current_user.username,
-        'movies': movies,
-        'token': token}
-    return jsonify(current_user)
+    return jsonify({'token':token})
 
 @app.route('/api/movies')
 def movies():

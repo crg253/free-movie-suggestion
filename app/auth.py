@@ -1,4 +1,4 @@
-from flask import g
+from flask import g, request
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from app.models import User
 #import error_response
@@ -20,6 +20,8 @@ def verify_password(username, password):
 
 @token_auth.verify_token
 def verify_token(token):
+    #print(request.headers)
+    print(token)
     g.current_user = User.check_token(token) if token else None
     return g.current_user is not None
 

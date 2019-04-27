@@ -6,8 +6,9 @@ import './App.css';
 import HomePage from "./components/HomePage";
 import TrailerPage from "./components/TrailerPage";
 import Error from "./components/Error";
-import User from "./components/User";
+import SignIn from "./components/SignIn";
 import AddUser from "./components/AddUser";
+import User from "./components/User";
 
 class App extends Component {
   state = {
@@ -80,6 +81,10 @@ class App extends Component {
           <Route
             path='/user'
             component = {User}/>
+
+          <Route
+            path='/signin'
+            component = {SignIn}/>
 
           <Route
             path='/adduser'
