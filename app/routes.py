@@ -29,15 +29,14 @@ def sign_in():
 @app.route('/api/movies')
 def movies():
     movies = []
-    for movie in Movie.query.all():
-        #if movie is approved
+    for movie in Movie.query.filter_by(status='approved'):
         movies.append({"id":movie.movie_id,
                         "name":movie.name,
                         "slug":movie.uniquename,
                         "tags":[x.name for x in movie.tags],
                         "video":movie.video_link,
-                        "year":movie.year})
-                        #user = User.filter_by(user_id=movie.user_id).username
+                        "year":movie.year,
+                        'user':User.query.filter_by(user_id=movie.user_id).first().username})
     return jsonify(movies)
 
 @app.route('/', defaults={'path': ''})
