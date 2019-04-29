@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class SignIn extends Component  {
-  state={
-    Token:''
-  }
+
   componentDidMount(){
       axios.get('/api/signin')
       .then(response=> {
@@ -15,7 +13,6 @@ class SignIn extends Component  {
   render() {
     return (
       <div>
-      {this.state.Token}
       </div>
     );
   }

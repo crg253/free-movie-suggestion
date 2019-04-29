@@ -19,12 +19,10 @@ class AddUser extends Component {
      method: 'POST',
      headers: {'Content-Type':'application/json'},
      body: JSON.stringify({userName: this.state.name, password:this.state.password})
-    }).then(res=>console.log(res))
+    })
   };
 
   render() {
-    console.log(this.state.name)
-    console.log(this.state.password)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>

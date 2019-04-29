@@ -20,8 +20,6 @@ def verify_password(username, password):
 
 @token_auth.verify_token
 def verify_token(token):
-    #print(request.headers)
-    print(token)
     g.current_user = User.check_token(token) if token else None
     return g.current_user is not None
 

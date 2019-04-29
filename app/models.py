@@ -17,6 +17,9 @@ class Movie(db.Model):
     video_link = db.Column(db.String(1000))
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('movies', lazy=True))
+    status = db.Column(db.String(20))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+
 
 class Tag(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
@@ -26,9 +29,9 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    user_movies = db.relationship('UserMovie', backref="user", lazy=True)
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    user_movies = db.relationship('Movie', backref="user", lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -54,8 +57,3 @@ class User(db.Model):
         if user is None or user.token_expiration < datetime.utcnow():
             return None
         return user
-
-class UserMovie(db.Model):
-    user_movie_id = db.Column(db.Integer, primary_key=True)
-    user_movie_name = db.Column(db.String(128))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)

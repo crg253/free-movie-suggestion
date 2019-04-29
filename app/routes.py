@@ -3,10 +3,10 @@ from app import app, db
 from app.models import Movie, Tag, User
 from app.auth import basic_auth, token_auth
 
+
 @app.route('/api/user', methods=['GET'])
 @token_auth.login_required
 def user():
-    print("user route")
     return jsonify({'user':g.current_user.username}), 200
 
 
@@ -30,12 +30,14 @@ def sign_in():
 def movies():
     movies = []
     for movie in Movie.query.all():
+        #if movie is approved
         movies.append({"id":movie.movie_id,
                         "name":movie.name,
                         "slug":movie.uniquename,
                         "tags":[x.name for x in movie.tags],
                         "video":movie.video_link,
                         "year":movie.year})
+                        #user = User.filter_by(user_id=movie.user_id).username
     return jsonify(movies)
 
 @app.route('/', defaults={'path': ''})
