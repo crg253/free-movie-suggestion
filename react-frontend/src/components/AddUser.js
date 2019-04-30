@@ -20,7 +20,9 @@ class AddUser extends Component {
      headers: {'Content-Type':'application/json'},
      body: JSON.stringify({userName: this.state.name, password:this.state.password})
     })
-  };
+    .then(res=>res.json())
+    .then(res=>console.log(res))
+  }
 
   render() {
     return (

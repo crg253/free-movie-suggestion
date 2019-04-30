@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 class User extends Component {
 
   state={
-    User:'',
     Query:'',
     Options:[]
   }
@@ -12,16 +11,7 @@ class User extends Component {
     this.setState({Query:event.target.value});
   }
 
-  componentDidMount(){
-    fetch('/api/user', {
-     method: 'GET',
-     headers: {'Authorization':"Bearer " +localStorage.getItem('token')},
-    })
-    .then(res=>res.json())
-    .then(data => this.setState({User:data.user}))
-  }
-
-  handleSubmit = (event) =>{
+  handleSearchSubmit = (event) =>{
     console.log(this.state.Query)
     event.preventDefault();
     fetch('http://www.omdbapi.com/?s='+this.state.Query+'&apikey=e0bc91cd')
@@ -29,12 +19,21 @@ class User extends Component {
     .then(res=>this.setState({Options:res.Search}));
   }
 
+  // HANDLE THE OTHER SUBMIT
+  // fetch('api/checktoken',{
+  //   method:'GET',
+  //   headers:{'Authorization':"Bearer " +localStorage.getItem('token')}
+  // })
+  // .then(res=>res.json())
+  // .then(data=>this.props.setUser(data.user))
+
+
   render() {
-    console.log(this.state.Options)
+
     return (
       <div>
       <h3>{this.state.User}</h3>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSearchSubmit}>
         <label>
           Add Movie:
           <input type="text" value={this.state.Movie} onChange={this.handleMovieChange}/>

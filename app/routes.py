@@ -4,11 +4,17 @@ from app.models import Movie, Tag, User
 from app.auth import basic_auth, token_auth
 
 
-@app.route('/api/user', methods=['GET'])
+@app.route('/api/checktoken', methods=['GET'])
 @token_auth.login_required
 def user():
     return jsonify({'user':g.current_user.username}), 200
 
+@app.route('/api/signin', methods=['POST'])
+@basic_auth.login_required
+def sign_in():
+    token = g.current_user.get_token()
+    db.session.commit()
+    return jsonify({'token':token}), 200
 
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
@@ -18,13 +24,6 @@ def add_user():
     db.session.add(newUser)
     db.session.commit()
     return jsonify('Test Response'),201
-
-@app.route('/api/signin', methods=['GET','POST'])
-@basic_auth.login_required
-def sign_in():
-    token = g.current_user.get_token()
-    db.session.commit()
-    return jsonify({'token':token})
 
 @app.route('/api/movies')
 def movies():
