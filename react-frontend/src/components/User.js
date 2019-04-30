@@ -12,24 +12,31 @@ class User extends Component {
   }
 
   handleSearchSubmit = (event) =>{
-    console.log(this.state.Query)
     event.preventDefault();
     fetch('http://www.omdbapi.com/?s='+this.state.Query+'&apikey=e0bc91cd')
     .then(res=>res.json())
-    .then(res=>this.setState({Options:res.Search}));
+    .then(res=>{
+        if(res.Search !== undefined){
+          this.setState({Options:res.Search})
+        }});
   }
 
-  // HANDLE THE OTHER SUBMIT
-  // fetch('api/checktoken',{
-  //   method:'GET',
-  //   headers:{'Authorization':"Bearer " +localStorage.getItem('token')}
-  // })
-  // .then(res=>res.json())
-  // .then(data=>this.props.setUser(data.user))
+  handleAddMovie = (title, year) =>{
+    fetch('api/addmovie',{
+      method:'POST',
+      headers:{
+        'Authorization':"Bearer " +localStorage.getItem('token'),
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({title: title, year:year})
+     })
+     .then(res=>res.json())
+     .then(data=>console.log(data));
+  }
+
 
 
   render() {
-
     return (
       <div>
       <h3>{this.state.User}</h3>
@@ -43,7 +50,7 @@ class User extends Component {
       {this.state.Options.map(mov=>(
         <div>
         <p>{mov.Title} {mov.Year}</p>
-        <button>Add</button>
+        <button onClick={()=>this.handleAddMovie(mov.Title, mov.Year)}>Add</button>
         </div>
       ))}
       </div>

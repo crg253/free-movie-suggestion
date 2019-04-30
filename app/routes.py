@@ -3,11 +3,24 @@ from app import app, db
 from app.models import Movie, Tag, User
 from app.auth import basic_auth, token_auth
 
+def slugify(slug):
+    to_remove = [' ', "'", ',', '!', '.', ':', '&', '-' ]
+    for item in to_remove:
+        slug = slug.replace(item, '')
+    return slug
 
-@app.route('/api/checktoken', methods=['GET'])
+@app.route('/api/addmovie', methods=['POST'])
 @token_auth.login_required
 def user():
-    return jsonify({'user':g.current_user.username}), 200
+    data=request.get_json(silent=True) or {}
+    uniquename = slugify(data.get('title')).lower()
+    title = data.get('title')
+    year = data.get('year')
+    user = User.query.filter_by(username=g.current_user.username).first()
+    movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id)
+    db.session.add(movie)
+    db.session.commit()
+    return jsonify('Movie Added'), 200
 
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
@@ -23,7 +36,7 @@ def add_user():
     newUser.set_password(data.get('password'))
     db.session.add(newUser)
     db.session.commit()
-    return jsonify('Test Response'),201
+    return jsonify(''),201
 
 @app.route('/api/movies')
 def movies():
