@@ -26,8 +26,13 @@ import SciFiSign from './SVG/SciFiSign';
 
 class HomePage extends Component {
 
+  state={
+    Instructions:'*Click on Character to See Genre'
+  }
 
-
+  updateInstructions = () =>{
+    this.setState({Instructions:'*Click on Screen for Random Movie'})
+  }
 
 
   render() {
@@ -84,18 +89,18 @@ class HomePage extends Component {
       <svg viewBox="0 0 1920 911">
         <GradientsSVG/>
         <SkyAndGroundSVG/>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Documentary")}><DocumentarySVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Sci-Fi")}><SciFiSVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Horror")}><HorrorSVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Action")}><ActionSVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Romance")}><RomanceSVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Drama")}><DramaSVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Comedy")}><ComedySVG/></g></a>
-        <a href='#'><g onClick={()=>this.props.chooseGenre("Mystery & Suspense")}><MysterySuspenseSVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Documentary");}}><DocumentarySVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Sci-Fi");}}><SciFiSVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Horror");}}><HorrorSVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Action");}}><ActionSVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Romance");}}><RomanceSVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Drama");}}><DramaSVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Comedy");}}><ComedySVG/></g></a>
+        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Mystery & Suspense");}}><MysterySuspenseSVG/></g></a>
         {sign}
       </svg>
 
-      <p id="instructions">*Click on Character to See Genre</p>
+      <p id="instructions">{this.state.Instructions}</p>
 
       </div>
 
