@@ -11,7 +11,7 @@ tags = db.Table('tags',
 
 class Movie(db.Model):
     movie_id = db.Column(db.Integer, primary_key=True)
-    uniquename = db.Column(db.String(200))
+    uniquename = db.Column(db.String(200), unique=True)
     name = db.Column(db.String(200))
     year = db.Column(db.Integer)
     video_link = db.Column(db.String(1000))

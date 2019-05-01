@@ -1,15 +1,18 @@
+a{
+  outline: none;
+}
+
 svg{
   width:80%;
   margin:2% 10% 2% 10%;
 }
 
-#random-genre-list{
-  margin:0 11.5% 5% 11.5%;
-  text-align:center;
-  display:flex;
+#main-title{
+  max-width: 95vw;
 }
-.random-genre-link{
-  margin:auto;
+
+#instructions{
+  text-align: center;
 }
 
 
@@ -18,10 +21,6 @@ svg{
   svg{
     width:95%;
     margin:2% 2.5% 2% 2.5%;
-  }
-  #random-genre-list{
-    text-align:center;
-    display:block;
   }
 }
 

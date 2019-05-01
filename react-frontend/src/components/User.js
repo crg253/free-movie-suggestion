@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
 
 class User extends Component {
 
   state={
     Query:'',
-    Options:[]
+    Options:[],
+    Redirect:''
   }
 
   handleMovieChange = (event) =>{
@@ -30,15 +32,17 @@ class User extends Component {
       },
       body: JSON.stringify({title: title, year:year})
      })
-     .then(res=>res.json())
-     .then(data=>console.log(data));
+     .then(res=>{
+       if(!res.ok){
+         this.setState({Redirect:<Redirect to='/signin'/>})
+       }});
   }
-
 
 
   render() {
     return (
       <div>
+      {this.state.Redirect}
       <h3>{this.state.User}</h3>
       <form onSubmit={this.handleSearchSubmit}>
         <label>

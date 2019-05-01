@@ -17,7 +17,7 @@ def user():
     title = data.get('title')
     year = data.get('year')
     user = User.query.filter_by(username=g.current_user.username).first()
-    movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id)
+    movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id, status="pending")
     db.session.add(movie)
     db.session.commit()
     return jsonify('Movie Added'), 200
@@ -41,12 +41,13 @@ def add_user():
 @app.route('/api/movies')
 def movies():
     movies = []
-    for movie in Movie.query.filter_by(status='approved'):
+    for movie in Movie.query.all():
         movies.append({"id":movie.movie_id,
                         "name":movie.name,
                         "slug":movie.uniquename,
                         "tags":[x.name for x in movie.tags],
                         "video":movie.video_link,
+                        "status":movie.status,
                         "year":movie.year,
                         'user':User.query.filter_by(user_id=movie.user_id).first().username})
     return jsonify(movies)

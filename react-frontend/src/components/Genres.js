@@ -20,6 +20,10 @@ const genres = (props) => {
         style = {{color: props.inlistby("All") ? 'Aqua': 'white'}}
         className="genre-links"
         onClick={()=>props.selectBy("All")}>All Movies</p>
+      <p
+        style = {{color: props.inlistby("User Suggestions") ? 'Aqua': 'white'}}
+        className="genre-links"
+        onClick={()=>props.selectBy("User Suggestions")}>USER SUGGESTIONS</p>
       </div>
 
       <div id="sort-by-wrapper">

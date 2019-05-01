@@ -19,6 +19,11 @@ const SelectedList = (props) => {
               setSort={props.setSort}
               sortby={props.sortby}
               movies={props.movies}/>
+  }else if(props.listby==="User Suggestions"){
+    showList=<CompleteList
+              setSort={props.setSort}
+              sortby={props.sortby}
+              movies={props.userMovies}/>
   }else{
     showList=<GenreList
               setSort={props.setSort}
@@ -26,6 +31,7 @@ const SelectedList = (props) => {
               movies={props.movies}
               listby={props.listby}/>
   }
+  console.log(props.UserMovies)
 
   return(
     <div id="selected-list">

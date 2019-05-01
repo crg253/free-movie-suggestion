@@ -75,6 +75,10 @@ class App extends Component {
   }
 
   render() {
+    let movies = this.state.Movies.filter(movie=>movie.status==="approved");
+    let userMovies = this.state.Movies.filter(movie=>movie.status==="pending");
+    console.log(this.state.ListBy)
+    console.log(userMovies)
     return (
       <BrowserRouter>
         <Switch>
@@ -94,7 +98,8 @@ class App extends Component {
             path='/:movieslug'
             render={(props)=> <TrailerPage
                                   {...props}
-                                  movies={this.state.Movies}
+                                  movies={movies}
+                                  userMovies={userMovies}
                                   savedmovies={this.state.SavedMovies}
                                   selectBy={this.selectBy}
                                   saveUnsave={this.saveUnsave}
@@ -113,7 +118,7 @@ class App extends Component {
             path='/'
             render={(props)=> <HomePage
                                 {...props}
-                                movies={this.state.Movies}
+                                movies={movies}
                                 genres={this.state.Genres}
                                 chooseGenre={this.chooseGenre}
                                 listby={this.state.ListBy}/>}/>
