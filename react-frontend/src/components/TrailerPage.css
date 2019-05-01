@@ -22,6 +22,11 @@ iframe{
   display: inline;
   margin:0 5px 5px 0;
 }
+#listed-by{
+  display: flex;
+  align-items: center;
+
+}
 #sort-by-wrapper{
   margin:15px 0 0 0;
 }
@@ -56,8 +61,16 @@ iframe{
     font-size: 15px;
     text-align: center;
   }
+  #genre-link-list{
+    display:none;
+  }
   .genre-links{
     font-size: 17px;
+  }
+  #listed-by{
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   #sort-by-wrapper{
     margin:3px 0 0 0;
