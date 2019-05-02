@@ -75,10 +75,22 @@ class App extends Component {
   }
 
   render() {
+
     let movies = this.state.Movies.filter(movie=>movie.status==="approved");
     let userMovies = this.state.Movies.filter(movie=>movie.status==="pending");
-    console.log(this.state.ListBy)
-    console.log(userMovies)
+
+    let randomMovies = {
+        Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'',"Mystery & Suspense":'',Romance:'',"Sci-Fi":''
+    };
+    if(movies.length>0){
+        for(let i in this.state.Genres){
+        const genreMovies = [...movies].filter(movie =>movie.tags.includes(this.state.Genres[i]));
+        const randomMovie = genreMovies[Math.floor(Math.random() * genreMovies.length)];
+        randomMovies[this.state.Genres[i]]=randomMovie;
+        }
+    }
+    console.log(randomMovies)
+
     return (
       <BrowserRouter>
         <Switch>
@@ -112,7 +124,8 @@ class App extends Component {
                                   param={this.state.Param}
                                   setparam={this.setParam}
                                   sortby={this.state.SortBy}
-                                  setSort={this.setSort}/>}/>
+                                  setSort={this.setSort}
+                                  randomMovies={randomMovies}/>}/>
 
           <Route
             path='/'
@@ -121,7 +134,8 @@ class App extends Component {
                                 movies={movies}
                                 genres={this.state.Genres}
                                 chooseGenre={this.chooseGenre}
-                                listby={this.state.ListBy}/>}/>
+                                listby={this.state.ListBy}
+                                randomMovies={randomMovies}/>}/>
           <Route component = {Error} />
         </Switch>
       </BrowserRouter>

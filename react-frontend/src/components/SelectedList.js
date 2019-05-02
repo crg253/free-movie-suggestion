@@ -31,7 +31,6 @@ const SelectedList = (props) => {
               movies={props.movies}
               listby={props.listby}/>
   }
-  console.log(props.UserMovies)
 
   return(
     <div id="selected-list">

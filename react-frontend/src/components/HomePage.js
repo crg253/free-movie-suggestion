@@ -36,48 +36,38 @@ class HomePage extends Component {
 
 
   render() {
-    let randomMovies = {
-        Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'',"Mystery & Suspense":'',Romance:'',"Sci-Fi":''
-    };
-    if(this.props.movies.length>0){
-        for(let i in this.props.genres){
-        const genreMovies = [...this.props.movies].filter(movie =>movie.tags.includes(this.props.genres[i]));
-        const randomMovie = genreMovies[Math.floor(Math.random() * genreMovies.length)];
-        randomMovies[this.props.genres[i]]=randomMovie;
-        }
-    }
 
     let sign = null;
     if(this.props.listby ==="Action"){
-      sign = <Link to={'/' + randomMovies["Action"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Action"].slug}>
               <ActionSign/>
               </Link>
     }else if(this.props.listby ==="Comedy"){
-      sign = <Link to={'/' + randomMovies["Comedy"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Comedy"].slug}>
               <ComedySign/>
               </Link>
     }else if(this.props.listby ==="Documentary"){
-      sign = <Link to={'/' + randomMovies["Documentary"].slug}>
+      sign = <Link to={'/' + this.props.this.props.randomMovies["Documentary"].slug}>
               <DocumentarySign/>
               </Link>
     }else if(this.props.listby ==="Drama"){
-      sign = <Link to={'/' + randomMovies["Drama"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Drama"].slug}>
               <DramaSign/>
               </Link>
     }else if(this.props.listby ==="Horror"){
-      sign = <Link to={'/' + randomMovies["Horror"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Horror"].slug}>
               <HorrorSign/>
               </Link>
     }else if(this.props.listby ==="Mystery & Suspense"){
-      sign = <Link to={'/' + randomMovies["Mystery & Suspense"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Mystery & Suspense"].slug}>
               <MysterySuspenseSign/>
               </Link>
     }else if(this.props.listby ==="Romance"){
-      sign = <Link to={'/' + randomMovies["Romance"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Romance"].slug}>
               <RomanceSign/>
               </Link>
     }else if(this.props.listby ==="Sci-Fi"){
-      sign = <Link to={'/' + randomMovies["Sci-Fi"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Sci-Fi"].slug}>
               <SciFiSign/>
               </Link>
     }
