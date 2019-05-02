@@ -51,6 +51,9 @@ iframe{
   #genre-and-list{
     margin:5% 0 5% 0;
   }
+  #listed-by{
+    justify-content:center;
+  }
   #selected-list{
     margin:3px 5% 10% 5%;
     font-size: 15px;
