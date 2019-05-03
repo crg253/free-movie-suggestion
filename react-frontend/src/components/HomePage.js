@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 
 import './HomePage.css';
-import Menu from './Menu'
 
 import GradientsSVG from './SVG/GradientsSVG';
 import SkyAndGroundSVG from './SVG/SkyAndGroundSVG';
@@ -74,7 +73,6 @@ class HomePage extends Component {
     return (
       <div id="home-page-container">
       <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
-      <Menu/>
 
       <svg viewBox="0 0 1920 911">
         <GradientsSVG/>

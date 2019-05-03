@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import './TrailerPage.css';
+import Menu from './Menu'
 import Trailer from './Trailer';
 import Genres from './Genres';
 import SelectedList from './SelectedList';
@@ -18,8 +19,9 @@ const TrailerPage = (props) => {
       <Link to={'/'}>
         <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
       </Link>
+      <Menu/>
 
-      <div id="trailer-and-genres-list">
+      <div id="trailer-and-genres-and-list">
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}

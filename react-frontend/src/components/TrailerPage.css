@@ -1,4 +1,4 @@
-#trailer-and-genres-list{
+#trailer-and-genres-and-list{
   display:flex;
   margin: 2% 5% 5% 5%;
 }
@@ -6,7 +6,7 @@ iframe{
   width:40vw;
   height: 22.5vw;
 }
-#title-and-button{
+#title-and-save-button{
   text-align: center;
   margin: 0 0 25px 0;
 }
@@ -41,7 +41,7 @@ iframe{
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
-  #trailer-and-genres-list{
+  #trailer-and-genres-and-list{
     width:90vw;
     height: 50.63vw;
     display:block;
@@ -78,7 +78,7 @@ iframe{
 
 /* SMALL LANDSCAPE */
 @media only screen and (orientation:landscape) and (max-width : 800px) {
-  #trailer-and-genres-list{
+  #trailer-and-genres-and-list{
     width:90vw;
     height: 50.63vw;
     display:block;

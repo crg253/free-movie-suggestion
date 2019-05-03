@@ -9,15 +9,15 @@ const trailer = (props) => {
     .map(selection=>(
       <div>
         <iframe title={selection.name} src={selection.video} allowFullScreen></iframe>
-        <div id="title-and-button">
-        <h2 id="trailer-title" >{selection.name} {selection.year}</h2>
-        <button id="save-button"
-          onClick = {()=>props.saveUnsave(selection.id)}
-          style = {{
-            backgroundColor: props.inSaved(selection.id) ? 'DarkOrchid': 'black'
-          }}>
-        </button>
-        <p>Save/Unsave</p>
+        <div id="title-and-save-button">
+          <h2 id="trailer-title" >{selection.name} {selection.year}</h2>
+          <button id="save-button"
+            onClick = {()=>props.saveUnsave(selection.id)}
+            style = {{
+              backgroundColor: props.inSaved(selection.id) ? 'DarkOrchid': 'black'
+            }}>
+          </button>
+          <p>Save/Unsave</p>
         </div>
       </div>
     ))
