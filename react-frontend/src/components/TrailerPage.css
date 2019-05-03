@@ -1,4 +1,4 @@
-#trailer-genres-list{
+#trailer-and-genres-list{
   display:flex;
   margin: 2% 5% 5% 5%;
 }
@@ -14,13 +14,21 @@ iframe{
   width:20px;
   height:20px;
 }
-#genre-and-list{
+#genres-and-list{
   margin:0 0 0 5%;
 }
-.genre-links{
-  font-size: 20px;
-  display: inline;
-  margin:0 5px 5px 0;
+#genre-and-button{
+  align-items: center;
+}
+#get-genres-button{
+  margin-left: 10px;
+  width:20px;
+  height: 20px;
+  background-color: blue;
+}
+#genre-link-list{
+  display:flex;
+  flex-wrap: wrap;
 }
 #sort-by-wrapper{
   margin:15px 0 0 0;
@@ -33,7 +41,7 @@ iframe{
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
-  #trailer-genres-list{
+  #trailer-and-genres-list{
     width:90vw;
     height: 50.63vw;
     display:block;
@@ -48,31 +56,29 @@ iframe{
   #trailer-title{
     margin-bottom: 2px;
   }
-  #genre-and-list{
+  #genres-and-list{
     margin:5% 0 5% 0;
   }
-  #listed-by{
-    justify-content:center;
+  #genre-and-button{
+    justify-content: center;
+  }
+  #genre-link-list{
+    display:inline;
+    text-align: center;
+  }
+  #sort-by-wrapper{
+    text-align: center;
   }
   #selected-list{
     margin:3px 5% 10% 5%;
     font-size: 15px;
     text-align: center;
   }
-  .genre-links{
-    font-size: 17px;
-  }
-  #sort-by-wrapper{
-    margin:3px 0 0 0;
-    display:flex;
-    justify-content: center;
-  }
-
 }
 
 /* SMALL LANDSCAPE */
 @media only screen and (orientation:landscape) and (max-width : 800px) {
-  #trailer-genres-list{
+  #trailer-and-genres-list{
     width:90vw;
     height: 50.63vw;
     display:block;
@@ -84,19 +90,16 @@ iframe{
     width:90vw;
     height: 50.63vw;
   }
-  #genre-and-list{
+  #genres-and-list{
     margin:5% 0 5% 0;
-  }
-  #selected-list{
-    margin:3px 2% 10% 2%;
-    text-align: center;
-  }
-  .genre-links{
-    font-size: 17px;
   }
   #sort-by-wrapper{
     margin:3px 0 0 0;
     display:flex;
     justify-content: center;
+  }
+  #selected-list{
+    margin:3px 2% 10% 2%;
+    text-align: center;
   }
 }

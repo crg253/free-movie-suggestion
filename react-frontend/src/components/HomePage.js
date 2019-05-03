@@ -47,7 +47,7 @@ class HomePage extends Component {
               <ComedySign/>
               </Link>
     }else if(this.props.listby ==="Documentary"){
-      sign = <Link to={'/' + this.props.this.props.randomMovies["Documentary"].slug}>
+      sign = <Link to={'/' + this.props.randomMovies["Documentary"].slug}>
               <DocumentarySign/>
               </Link>
     }else if(this.props.listby ==="Drama"){

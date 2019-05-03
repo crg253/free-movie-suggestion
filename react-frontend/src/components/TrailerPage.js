@@ -19,14 +19,14 @@ const TrailerPage = (props) => {
         <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
       </Link>
 
-      <div id="trailer-genres-list">
+      <div id="trailer-and-genres-list">
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
             saveUnsave={props.saveUnsave}
             inSaved={props.inSaved}/>
 
-        <div id="genre-and-list">
+        <div id="genres-and-list">
           <Genres
                 setSort={props.setSort}
                 sortby={props.sortby}
