@@ -31,40 +31,28 @@ class AddUser extends Component {
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div style={{textAlign:'center'}}>
+        <div class="user-pages-body-wrapper">
           <form onSubmit={this.handleSubmit}>
-
-            <label style={{display:"block"}}>
+            <label>
               Name:
-              <input style={{
-                          display:"block",
-                          marginLeft:"auto",
-                          marginRight:"auto"}}
+              <input
                      type="text"
                      value={this.state.name}
                      onChange={this.handleNameChange} />
             </label>
-
-            <label style={{display:"block"}}>
+            <label>
               Password:
-              <input style={{
-                          display:"block",
-                          marginLeft:"auto",
-                          marginRight:"auto"}}
+              <input
                      type="text"
                      value={this.state.password}
                      onChange={this.handlePasswordChange}/>
             </label>
-
-            <input style={{
-                        display:"block",
-                        marginLeft:"auto",
-                        marginRight:"auto"}}
+            <input
                    type="submit"
                    value="Submit" />
-             <Link to={'/signin'}>sign in</Link>
           </form>
-        </div>
+          <Link to={'/signin'}><h3>sign in</h3></Link>
+        </div>{/* class="user-pages-body-wrapper"*/}
       </div>
     );
   }

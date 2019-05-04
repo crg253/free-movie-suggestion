@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import './User.css';
 class SignIn extends Component  {
   state={
     name:'',
-    password:''
+    password:'',
+    Redirect:''
   }
   handleNameChange = (event) =>{
     this.setState({name:event.target.value});
@@ -25,48 +26,45 @@ class SignIn extends Component  {
       headers: headers
     })
     .then(res=>res.json())
-    .then(res=>localStorage.setItem('token', res.token))
+    .then(res=>{
+        localStorage.setItem('token', res.token);
+        this.setState({Redirect:<Redirect to='/user'/>})
+        console.log('reroute to /user')
+    })
   }
 
   render() {
     return (
       <div>
+        {this.state.Redirect}
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div style={{textAlign:'center'}}>
+        <div class="user-pages-body-wrapper">
           <form onSubmit={this.handleSubmit}>
 
-            <label style={{display:"block"}}>
+            <label>
               Name:
-              <input style={{
-                          display:"block",
-                          marginLeft:"auto",
-                          marginRight:"auto"}}
+              <input
                       type="text"
                       value={this.state.name}
                       onChange={this.handleNameChange} />
             </label>
 
-            <label style={{display:"block"}}>
+            <label>
               Password:
-              <input style={{
-                          display:"block",
-                          marginLeft:"auto",
-                          marginRight:"auto"}}
+              <input
                      type="text"
                      value={this.state.password}
                      onChange={this.handlePasswordChange}/>
             </label>
 
-            <input style={{
-                        display:"block",
-                        marginLeft:"auto",
-                        marginRight:"auto"}}
+            <input
                    type="submit"
                    value="Submit" />
           </form>
-        </div>
+          <Link to={'/adduser'}><h3>create account</h3></Link>
+        </div>{/*class="user-pages-body-wrapper"*/}
       </div>
     );
   }

@@ -10,6 +10,18 @@ class User extends Component {
     Redirect:''
   }
 
+  componentDidMount(){
+    fetch('api/checktoken',{
+      method:'POST',
+      headers:{
+        'Authorization':"Bearer " +localStorage.getItem('token')
+    }})
+    .then(res=>{
+      if(!res.ok){
+        this.setState({Redirect:<Redirect to='/signin'/>})
+      }});
+  }
+
   handleMovieChange = (event) =>{
     this.setState({Query:event.target.value});
   }
@@ -39,16 +51,16 @@ class User extends Component {
        }});
   }
 
-  componentDidMount(){
-    fetch('api/checktoken',{
-      method:'POST',
+  handleSignOut = () =>{
+    fetch('api/revoketoken', {
+      method:'DELETE',
       headers:{
         'Authorization':"Bearer " +localStorage.getItem('token')
-    }})
+      }
+    })
     .then(res=>{
-      if(!res.ok){
-        this.setState({Redirect:<Redirect to='/signin'/>})
-      }});
+      this.setState({Redirect:<Redirect to='/signin'/>})
+    })
   }
 
 
@@ -59,23 +71,17 @@ class User extends Component {
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div style={{textAlign:'center'}}>
+        <div class="user-pages-body-wrapper">
           <h3>{this.state.User}</h3>
           <form onSubmit={this.handleSearchSubmit}>
-            <label style={{display:"block"}}>
+            <label>
               Find Movie:
-              <input style={{
-                          display:"block",
-                          marginLeft:"auto",
-                          marginRight:"auto"}}
+              <input
                     type="text"
                     value={this.state.Movie}
                     onChange={this.handleMovieChange}/>
             </label>
-            <input style={{
-                        display:"block",
-                        marginLeft:"auto",
-                        marginRight:"auto"}}
+            <input
                    type="submit"
                    value="Submit"/>
           </form>
@@ -85,7 +91,8 @@ class User extends Component {
             <button onClick={()=>this.handleAddMovie(mov.Title, mov.Year)}>Add</button>
             </div>
           ))}
-        </div>
+        <a href='javascript:void(0);' onClick={()=>this.handleSignOut()}>sign out</a>
+        </div>{/*class="user-pages-body-wrapper"*/}
       </div>
     );
   }

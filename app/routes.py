@@ -9,11 +9,14 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
-@app.route('/api/checktoken', methods=['POST'])
+
+@app.route('/api/revoketoken', methods=['DELETE'])
 @token_auth.login_required
-def checktoken():
-    print("check token route")
-    return jsonify('Token Looks OK')
+def revoke_token():
+    g.current_user.revoke_token()
+    db.session.commit()
+    return '', 204
+
 
 @app.route('/api/addmovie', methods=['POST'])
 @token_auth.login_required
@@ -26,11 +29,18 @@ def user():
     movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id, status="pending")
     db.session.add(movie)
     db.session.commit()
-    return jsonify('Movie Added'), 200
+    return '', 200
+
+@app.route('/api/checktoken', methods=['POST'])
+@token_auth.login_required
+def checktoken():
+    print("check token route")
+    return '', 200
 
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
 def sign_in():
+    print('/api/signin route')
     token = g.current_user.get_token()
     db.session.commit()
     return jsonify({'token':token}), 200
@@ -42,7 +52,7 @@ def add_user():
     newUser.set_password(data.get('password'))
     db.session.add(newUser)
     db.session.commit()
-    return jsonify(''),201
+    return '',201
 
 @app.route('/api/movies')
 def movies():
