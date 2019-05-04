@@ -29,7 +29,6 @@ class SignIn extends Component  {
     .then(res=>{
         localStorage.setItem('token', res.token);
         this.setState({Redirect:<Redirect to='/user'/>})
-        console.log('reroute to /user')
     })
   }
 

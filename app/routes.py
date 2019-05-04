@@ -10,6 +10,16 @@ def slugify(slug):
     return slug
 
 
+@app.route('/api/usermovies', methods=['GET'])
+@token_auth.login_required
+def user_movies():
+    user_movies = []
+    for movie in g.current_user.user_movies:
+        user_movies.append({"name":movie.name,"year":movie.year})
+    print(user_movies)
+    return jsonify(user_movies), 201
+
+
 @app.route('/api/revoketoken', methods=['DELETE'])
 @token_auth.login_required
 def revoke_token():
