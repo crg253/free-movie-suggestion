@@ -89,7 +89,6 @@ class App extends Component {
         randomMovies[this.state.Genres[i]]=randomMovie;
         }
     }
-    console.log(randomMovies)
 
     return (
       <BrowserRouter>

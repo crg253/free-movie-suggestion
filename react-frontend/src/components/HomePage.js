@@ -72,8 +72,9 @@ class HomePage extends Component {
     }
     return (
       <div id="home-page-container">
-      <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
-
+      <Link to={'/'}>
+        <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+      </Link>
       <svg viewBox="0 0 1920 911">
         <GradientsSVG/>
         <SkyAndGroundSVG/>

@@ -2,7 +2,6 @@
   position: fixed;
   right: 0;
   top: 0;
-  border: 1px dotted red;
   width: 50px;
   height: 50px;
 }
@@ -10,9 +9,11 @@
   position:fixed;
   right:0;
   top:0;
-  background-color: white;
+  background-color: black;
 }
 #open-menu a{
-  color:black;
   display: block;
+}
+#menu-links{
+  margin: 40px 20px 20px 20px;
 }

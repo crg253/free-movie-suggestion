@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
-
+import './User.css';
 class AddUser extends Component {
   state={
     name:'',
@@ -27,20 +28,43 @@ class AddUser extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <Link to={'/'}>
+          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+        </Link>
+        <div style={{textAlign:'center'}}>
+          <form onSubmit={this.handleSubmit}>
 
-          <label>
-            Name:
-            <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-          </label>
+            <label style={{display:"block"}}>
+              Name:
+              <input style={{
+                          display:"block",
+                          marginLeft:"auto",
+                          marginRight:"auto"}}
+                     type="text"
+                     value={this.state.name}
+                     onChange={this.handleNameChange} />
+            </label>
 
-          <label>
-            Password:
-            <input type="text" value={this.state.password} onChange={this.handlePasswordChange}/>
-          </label>
+            <label style={{display:"block"}}>
+              Password:
+              <input style={{
+                          display:"block",
+                          marginLeft:"auto",
+                          marginRight:"auto"}}
+                     type="text"
+                     value={this.state.password}
+                     onChange={this.handlePasswordChange}/>
+            </label>
 
-          <input type="submit" value="Submit" />
-        </form>
+            <input style={{
+                        display:"block",
+                        marginLeft:"auto",
+                        marginRight:"auto"}}
+                   type="submit"
+                   value="Submit" />
+             <Link to={'/signin'}>sign in</Link>
+          </form>
+        </div>
       </div>
     );
   }

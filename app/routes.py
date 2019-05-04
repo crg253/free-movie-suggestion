@@ -9,6 +9,12 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
+@app.route('/api/checktoken', methods=['POST'])
+@token_auth.login_required
+def checktoken():
+    print("check token route")
+    return jsonify('Token Looks OK')
+
 @app.route('/api/addmovie', methods=['POST'])
 @token_auth.login_required
 def user():

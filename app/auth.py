@@ -20,9 +20,9 @@ def verify_password(username, password):
 
 @token_auth.verify_token
 def verify_token(token):
+    print('token auth')
     g.current_user = User.check_token(token) if token else None
-    print("token auth")
-    print(g.current_user.username)
+    print(g.current_user is not None)
     return g.current_user is not None
 
 # @token_auth.error_handler

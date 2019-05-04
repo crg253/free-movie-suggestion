@@ -33,10 +33,9 @@ class Menu extends Component {
           id="open-menu"
           style={{display:this.state.displayMenu}}
           onClick={()=>this.changeMenuDisplay()}>
-
-          <Link to={'/adduser'}>Sign Up</Link>
-          <Link to={'/signin'}>Sign In</Link>
-          <Link to={'/user' }>Contribute</Link>
+          <div id="menu-links">
+            <Link to={'/user' }>Contribute</Link>
+          </div>
         </div>
       </div>
     );
