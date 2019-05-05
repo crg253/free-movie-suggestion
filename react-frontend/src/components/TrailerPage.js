@@ -19,7 +19,6 @@ const TrailerPage = (props) => {
       <Link to={'/'}>
         <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
       </Link>
-      <Menu/>
 
       <div id="trailer-and-genres-and-list">
         <Trailer

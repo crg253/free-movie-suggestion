@@ -31,7 +31,7 @@ def revoke_token():
 @token_auth.login_required
 def user():
     data=request.get_json(silent=True) or {}
-    uniquename = slugify(data.get('title')).lower()
+    uniquename = slugify(data.get('title')).lower() +  data.get('year')
     title = data.get('title')
     year = data.get('year')
     user = User.query.filter_by(username=g.current_user.username).first()

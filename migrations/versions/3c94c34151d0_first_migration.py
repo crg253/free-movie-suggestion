@@ -1,8 +1,8 @@
-"""First Migration
+"""First Migration.
 
-Revision ID: a782268c8480
+Revision ID: 3c94c34151d0
 Revises: 
-Create Date: 2019-04-28 23:13:06.615823
+Create Date: 2019-05-05 12:58:47.007480
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a782268c8480'
+revision = '3c94c34151d0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,7 +21,8 @@ def upgrade():
     op.create_table('tag',
     sa.Column('tag_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=True),
-    sa.PrimaryKeyConstraint('tag_id')
+    sa.PrimaryKeyConstraint('tag_id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('user',
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -42,7 +43,8 @@ def upgrade():
     sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
-    sa.PrimaryKeyConstraint('movie_id')
+    sa.PrimaryKeyConstraint('movie_id'),
+    sa.UniqueConstraint('uniquename')
     )
     op.create_table('tags',
     sa.Column('movie_id', sa.Integer(), nullable=False),

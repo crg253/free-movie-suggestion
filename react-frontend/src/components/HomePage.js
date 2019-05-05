@@ -23,6 +23,8 @@ import MysterySuspenseSign from './SVG/MysterySuspenseSign';
 import RomanceSign from './SVG/RomanceSign';
 import SciFiSign from './SVG/SciFiSign';
 
+import Menu from './Menu';
+
 class HomePage extends Component {
 
   state={

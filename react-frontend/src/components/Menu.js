@@ -21,6 +21,7 @@ class Menu extends Component {
   }
 
   render() {
+
     return (
       <div>
         <div
@@ -34,7 +35,14 @@ class Menu extends Component {
           style={{display:this.state.displayMenu}}
           onClick={()=>this.changeMenuDisplay()}>
           <div id="menu-links">
-            <Link to={'/user' }>Contribute</Link>
+            <Link to={'/'}><h3>Home</h3></Link>
+            <Link to={'/user'}><h3>Contribute</h3></Link>
+
+            {this.props.genres.map(genre=>(
+              <div onClick={()=>this.props.selectBy(genre)}>
+              <Link to={'/' + this.props.randomMovies[genre].slug}><p>{genre} </p></Link>
+              </div>//Javascript Comment
+            ))}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Redirect, Link} from 'react-router-dom';
 
 import './User.css';
+import Menu from './Menu';
 
 class User extends Component {
 
@@ -9,7 +10,8 @@ class User extends Component {
     UserMovies:[],
     SearchValue:'',
     SearchResultOptions:[],
-    Redirect:''
+    AddMovieRejection:'',
+    Redirect:'',
   }
 
   componentDidMount(){
@@ -53,7 +55,10 @@ class User extends Component {
       body: JSON.stringify({title: title, year:year})
      })
      .then(res=>{
-       if(res.status===401){
+       if(res.status===500){
+         this.setState({SearchResultOptions:[], SearchValue:'', AddMovieRejection:'Movie Already in Database'})
+       }
+       else if(res.status===401){
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          this.setState({SearchResultOptions:[], SearchValue:''})
@@ -75,8 +80,6 @@ class User extends Component {
       })
   }
 
-
-
   handleSignOut = () =>{
     fetch('api/revoketoken', {
       method:'DELETE',
@@ -90,8 +93,6 @@ class User extends Component {
   }
 
   render() {
-    console.log(this.state.UserMovies)
-
     return (
       <div className='user-pages-body-wrapper'>
         {this.state.Redirect}
@@ -112,6 +113,8 @@ class User extends Component {
                  value="Submit"/>
         </form>
 
+        {this.state.AddMovieRejection}
+
         {this.state.SearchResultOptions.map(mov=>(
           <div>
           <p>{mov.Title} {mov.Year}</p>
@@ -119,9 +122,14 @@ class User extends Component {
           </div>
         ))}
 
-        {this.state.UserMovies.map(film =><h1>{film.name} {film.year}</h1>)}
+        <h1>Your Movie List</h1>
+        {this.state.UserMovies.map(film =>
+          <div>
+            <h3>{film.name} {film.year}</h3>
+            <button onclick={()=>this.handleRemoveMovie(film.name)}>Remove</button>
+          </div>)}
 
-        <a href='javascript:void(0);' onClick={()=>this.handleSignOut()}>sign out</a>
+        <a href='javascript:void(0);' onClick={()=>this.handleSignOut()}><p style={{marginTop:'100px'}}>sign out</p></a>
       </div>
     );
   }

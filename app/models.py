@@ -23,7 +23,7 @@ class Movie(db.Model):
 
 class Tag(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200))
+    name = db.Column(db.String(200), unique=True)
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -39,7 +39,7 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def get_token(self, expires_in=3600):
+    def get_token(self, expires_in=1440):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
             return self.token

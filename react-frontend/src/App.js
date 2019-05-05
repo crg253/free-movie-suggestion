@@ -9,6 +9,7 @@ import Error from "./components/Error";
 import SignIn from "./components/SignIn";
 import AddUser from "./components/AddUser";
 import User from "./components/User";
+import Menu from "./components/Menu";
 
 class App extends Component {
   state = {
@@ -92,51 +93,59 @@ class App extends Component {
 
     return (
       <BrowserRouter>
-        <Switch>
-          <Route
-            path='/user'
-            component = {User}/>
-
-          <Route
-            path='/signin'
-            component = {SignIn}/>
-
-          <Route
-            path='/adduser'
-            component= {AddUser}/>
-
-          <Route
-            path='/:movieslug'
-            render={(props)=> <TrailerPage
-                                  {...props}
-                                  movies={movies}
-                                  userMovies={userMovies}
-                                  savedmovies={this.state.SavedMovies}
-                                  selectBy={this.selectBy}
-                                  saveUnsave={this.saveUnsave}
-                                  inSaved={this.inSaved}
-                                  locStorToState={this.locStorToState}
-                                  unsave={this.unsave}
-                                  genres={this.state.Genres}
-                                  listby={this.state.ListBy}
-                                  inlistby={this.inListBy}
-                                  param={this.state.Param}
-                                  setparam={this.setParam}
-                                  sortby={this.state.SortBy}
-                                  setSort={this.setSort}
-                                  randomMovies={randomMovies}/>}/>
-
+        <div>
           <Route
             path='/'
-            render={(props)=> <HomePage
+            render={(props)=> <Menu
                                 {...props}
-                                movies={movies}
                                 genres={this.state.Genres}
-                                chooseGenre={this.chooseGenre}
-                                listby={this.state.ListBy}
+                                selectBy={this.selectBy}
                                 randomMovies={randomMovies}/>}/>
-          <Route component = {Error} />
-        </Switch>
+          <Switch>
+            <Route
+              path='/user'
+              component = {User}/>
+
+            <Route
+              path='/signin'
+              component = {SignIn}/>
+
+            <Route
+              path='/adduser'
+              component= {AddUser}/>
+
+            <Route
+              path='/:movieslug'
+              render={(props)=> <TrailerPage
+                                    {...props}
+                                    movies={movies}
+                                    userMovies={userMovies}
+                                    savedmovies={this.state.SavedMovies}
+                                    selectBy={this.selectBy}
+                                    saveUnsave={this.saveUnsave}
+                                    inSaved={this.inSaved}
+                                    locStorToState={this.locStorToState}
+                                    unsave={this.unsave}
+                                    genres={this.state.Genres}
+                                    listby={this.state.ListBy}
+                                    inlistby={this.inListBy}
+                                    param={this.state.Param}
+                                    setparam={this.setParam}
+                                    sortby={this.state.SortBy}
+                                    setSort={this.setSort}
+                                    randomMovies={randomMovies}/>}/>
+
+            <Route
+              path='/'
+              render={(props)=> <HomePage
+                                  {...props}
+                                  movies={movies}
+                                  genres={this.state.Genres}
+                                  chooseGenre={this.chooseGenre}
+                                  listby={this.state.ListBy}
+                                  randomMovies={randomMovies}/>}/>
+          </Switch>
+        </div>
       </BrowserRouter>
     );
   }
