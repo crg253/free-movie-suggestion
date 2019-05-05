@@ -32,7 +32,7 @@ class SignIn extends Component  {
       }else if(res.status ===200){
         res.json()
           .then(data=>localStorage.setItem('token', data.token))
-          .then(this.setState({Redirect:<Redirect to='/user'/>}))
+          .then(data=>this.setState({Redirect:<Redirect to='/user'/>}))
       }
     })
   }
