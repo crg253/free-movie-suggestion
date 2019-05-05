@@ -6,7 +6,8 @@ class SignIn extends Component  {
   state={
     name:'',
     password:'',
-    Redirect:''
+    Redirect:'',
+    Message:""
   }
   handleNameChange = (event) =>{
     this.setState({name:event.target.value});
@@ -25,10 +26,14 @@ class SignIn extends Component  {
       method:'POST',
       headers: headers
     })
-    .then(res=>res.json())
     .then(res=>{
-        localStorage.setItem('token', res.token);
-        this.setState({Redirect:<Redirect to='/user'/>})
+      if(res.status===401){
+        this.setState({Message:"Invalid username and/or password", name:'', password:''})
+      }else if(res.status ===200){
+        res.json()
+          .then(data=>localStorage.setItem('token', data.token))
+          .then(this.setState({Redirect:<Redirect to='/user'/>}))
+      }
     })
   }
 
@@ -39,7 +44,8 @@ class SignIn extends Component  {
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div class="user-pages-body-wrapper">
+        <div className="user-pages-body-wrapper">
+        <h1>Sign In</h1>
           <form onSubmit={this.handleSubmit}>
 
             <label>
@@ -62,6 +68,7 @@ class SignIn extends Component  {
                    type="submit"
                    value="Submit" />
           </form>
+          {this.state.Message}
           <Link to={'/adduser'}><h3>create account</h3></Link>
         </div>{/*class="user-pages-body-wrapper"*/}
       </div>

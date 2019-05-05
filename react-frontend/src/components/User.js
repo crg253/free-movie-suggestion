@@ -5,7 +5,6 @@ import './User.css';
 import AddUserMovie from "./AddUserMovie";
 import UserMovies from "./UserMovies";
 
-
 class User extends Component {
 
   state={
@@ -18,12 +17,11 @@ class User extends Component {
       headers:{
         'Authorization':"Bearer " +localStorage.getItem('token')
     }})
-    .then(res=>{
-      if(!res.ok){
-        this.setState({Redirect:<Redirect to='/signin'/>})
-      }});
+    // .then(res=>{
+    //   if(!res.ok){
+    //     this.setState({Redirect:<Redirect to='/signin'/>})
+    //   }});
   }
-
 
   handleSignOut = () =>{
     fetch('api/revoketoken', {
@@ -37,7 +35,6 @@ class User extends Component {
     })
   }
 
-
   render() {
     return (
       <div className='user-pages-body-wrapper'>
@@ -46,7 +43,7 @@ class User extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
         <AddUserMovie/>
-        <UserMovies/>
+        {/*<UserMovies/>*/}
         <a href='javascript:void(0);' onClick={()=>this.handleSignOut()}>sign out</a>
       </div>
     );

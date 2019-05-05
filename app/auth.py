@@ -13,7 +13,6 @@ def verify_password(username, password):
     if user is None:
         return False
     g.current_user = user
-    print(user.check_password(password))
     return user.check_password(password)
 
 # @basic_auth.error_handler

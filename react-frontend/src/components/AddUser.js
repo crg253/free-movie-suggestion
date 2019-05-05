@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import './User.css';
 class AddUser extends Component {
   state={
     name:'',
-    password:''
+    password:'',
+    Redirect:'',
+    Message:''
   }
   handleNameChange = (event) =>{
     this.setState({name:event.target.value});
@@ -21,17 +23,26 @@ class AddUser extends Component {
      headers: {'Content-Type':'application/json'},
      body: JSON.stringify({userName: this.state.name, password:this.state.password})
     })
-    .then(res=>res.json())
-    .then(res=>console.log(res))
+    .then(res=>{
+      console.log(res)
+      console.log(res.status)
+      if(!res.ok){
+        this.setState({Message:"username not available", name:'', password:''})
+      }else{
+        this.setState({Redirect:<Redirect to='/signin'/>})
+      }
+    })
   }
 
   render() {
     return (
       <div>
+        {this.state.Redirect}
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div class="user-pages-body-wrapper">
+        <div className="user-pages-body-wrapper">
+          <h1>Create Account</h1>
           <form onSubmit={this.handleSubmit}>
             <label>
               Name:
@@ -51,6 +62,7 @@ class AddUser extends Component {
                    type="submit"
                    value="Submit" />
           </form>
+          {this.state.Message}
           <Link to={'/signin'}><h3>sign in</h3></Link>
         </div>{/* class="user-pages-body-wrapper"*/}
       </div>

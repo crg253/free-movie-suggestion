@@ -9,7 +9,6 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
-
 @app.route('/api/usermovies', methods=['GET'])
 @token_auth.login_required
 def user_movies():
@@ -62,7 +61,7 @@ def add_user():
     newUser.set_password(data.get('password'))
     db.session.add(newUser)
     db.session.commit()
-    return '',201
+    return jsonify({'comment':"It worked!"}),201
 
 @app.route('/api/movies')
 def movies():
