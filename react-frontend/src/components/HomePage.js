@@ -23,8 +23,6 @@ import MysterySuspenseSign from './SVG/MysterySuspenseSign';
 import RomanceSign from './SVG/RomanceSign';
 import SciFiSign from './SVG/SciFiSign';
 
-import Menu from './Menu';
-
 class HomePage extends Component {
 
   state={
@@ -80,7 +78,7 @@ class HomePage extends Component {
       <svg viewBox="0 0 1920 911">
         <GradientsSVG/>
         <SkyAndGroundSVG/>
-        <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Documentary");}}><DocumentarySVG/></g></a>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Documentary");}}><a href='#'><DocumentarySVG/></a></g>
         <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Sci-Fi");}}><SciFiSVG/></g></a>
         <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Horror");}}><HorrorSVG/></g></a>
         <a href='#'><g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Action");}}><ActionSVG/></g></a>

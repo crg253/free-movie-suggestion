@@ -5,7 +5,6 @@ import axios from 'axios';
 import './App.css';
 import HomePage from "./components/HomePage";
 import TrailerPage from "./components/TrailerPage";
-import Error from "./components/Error";
 import SignIn from "./components/SignIn";
 import AddUser from "./components/AddUser";
 import User from "./components/User";
@@ -18,8 +17,13 @@ class App extends Component {
     SavedMovies:[],
     ListBy:"All",
     Param:'',
-    SortBy:'name'
+    SortBy:'name',
+    User:''
    }
+
+  setUser = (newUser) =>{
+    this.setState({User:newUser});
+  }
 
   setSort = (sortParam) =>{
     this.setState({SortBy:sortParam})
@@ -100,15 +104,23 @@ class App extends Component {
                                 {...props}
                                 genres={this.state.Genres}
                                 selectBy={this.selectBy}
-                                randomMovies={randomMovies}/>}/>
+                                randomMovies={randomMovies}
+                                setUser={this.setUser}
+                                user={this.state.User}/>}/>
           <Switch>
             <Route
               path='/user'
-              component = {User}/>
+              render={(props)=><User
+                                {...props}
+                                setUser={this.setUser}
+                                user={this.state.User}/>}/>
 
             <Route
               path='/signin'
-              component = {SignIn}/>
+              render = {(props)=><SignIn
+                                    {...props}
+                                    setUser={this.setUser}
+                                    user={this.state.User}/>}/>
 
             <Route
               path='/adduser'

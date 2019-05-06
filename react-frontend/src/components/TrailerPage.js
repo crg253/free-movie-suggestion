@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import './TrailerPage.css';
-import Menu from './Menu'
 import Trailer from './Trailer';
 import Genres from './Genres';
 import SelectedList from './SelectedList';

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from "react-router-dom";
 
+
 import './User.css';
 class SignIn extends Component  {
   state={
@@ -32,6 +33,7 @@ class SignIn extends Component  {
       }else if(res.status ===200){
         res.json()
           .then(data=>localStorage.setItem('token', data.token))
+          .then(this.props.setUser(this.state.name))
           .then(data=>this.setState({Redirect:<Redirect to='/user'/>}))
       }
     })
@@ -39,39 +41,39 @@ class SignIn extends Component  {
 
   render() {
     return (
-      <div>
-        {this.state.Redirect}
-        <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
-        </Link>
-        <div className="user-pages-body-wrapper">
-        <h1>Sign In</h1>
-          <form onSubmit={this.handleSubmit}>
+        <div>
+          {this.state.Redirect}
+          <Link to={'/'}>
+            <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+          </Link>
+          <div className="user-pages-body-wrapper">
+          <h1>Sign In</h1>
+            <form onSubmit={this.handleSubmit}>
 
-            <label>
-              Name:
+              <label>
+                Name:
+                <input
+                        type="text"
+                        value={this.state.name}
+                        onChange={this.handleNameChange} />
+              </label>
+
+              <label>
+                Password:
+                <input
+                       type="text"
+                       value={this.state.password}
+                       onChange={this.handlePasswordChange}/>
+              </label>
+
               <input
-                      type="text"
-                      value={this.state.name}
-                      onChange={this.handleNameChange} />
-            </label>
-
-            <label>
-              Password:
-              <input
-                     type="text"
-                     value={this.state.password}
-                     onChange={this.handlePasswordChange}/>
-            </label>
-
-            <input
-                   type="submit"
-                   value="Submit" />
-          </form>
-          {this.state.Message}
-          <Link to={'/adduser'}><h3>create account</h3></Link>
-        </div>{/*class="user-pages-body-wrapper"*/}
-      </div>
+                     type="submit"
+                     value="Submit" />
+            </form>
+            {this.state.Message}
+            <Link to={'/adduser'}><h3>create account</h3></Link>
+          </div>{/*class="user-pages-body-wrapper"*/}
+        </div>
     );
   }
 }

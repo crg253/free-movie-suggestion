@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Redirect, Link} from 'react-router-dom';
 
 import './User.css';
-import Menu from './Menu';
 
 class User extends Component {
 
@@ -26,7 +25,11 @@ class User extends Component {
         this.setState({Redirect:<Redirect to='/signin'/>})
       }else if(res.status ===201){
         res.json()
-          .then(res=>this.setState({UserMovies:res}))
+          .then(res=>{
+                this.setState({UserMovies:res.movies})
+                this.props.setUser(res.user)
+          }
+        )
       }
     })
   }
@@ -80,17 +83,6 @@ class User extends Component {
       })
   }
 
-  handleSignOut = () =>{
-    fetch('api/revoketoken', {
-      method:'DELETE',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token')
-      }
-    })
-    .then(res=>{
-      this.setState({Redirect:<Redirect to='/signin'/>})
-    })
-  }
 
   render() {
     return (
@@ -100,17 +92,24 @@ class User extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
 
+        <h1>Hi {this.props.user} !</h1>
         <form onSubmit={this.handleSearchSubmit}>
           <label>
-            Find Movie:
+            Search the OMDb to find a movie to suggest.
             <input
+                  style={{
+                    marginTop:"20px"
+                  }}
                   type="text"
                   value={this.state.SearchValue}
                   onChange={this.handleSearchValueChange}/>
           </label>
           <input
-                 type="submit"
-                 value="Submit"/>
+                style={{
+                  marginTop:"20px"
+                }}
+                type="submit"
+                value="Search"/>
         </form>
 
         {this.state.AddMovieRejection}
@@ -122,14 +121,14 @@ class User extends Component {
           </div>
         ))}
 
+        {/*
         <h1>Your Movie List</h1>
         {this.state.UserMovies.map(film =>
           <div>
             <h3>{film.name} {film.year}</h3>
             <button onclick={()=>this.handleRemoveMovie(film.name)}>Remove</button>
           </div>)}
-
-        <a href='javascript:void(0);' onClick={()=>this.handleSignOut()}><p style={{marginTop:'100px'}}>sign out</p></a>
+        */}
       </div>
     );
   }

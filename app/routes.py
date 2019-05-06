@@ -15,8 +15,8 @@ def user_movies():
     user_movies = []
     for movie in g.current_user.user_movies:
         user_movies.append({"name":movie.name,"year":movie.year})
-    print(user_movies)
-    return jsonify(user_movies), 201
+    print(g.current_user.username)
+    return jsonify({'movies':user_movies, 'user':g.current_user.username}), 201
 
 
 @app.route('/api/revoketoken', methods=['DELETE'])
@@ -40,7 +40,7 @@ def user():
     db.session.commit()
     return '', 200
 
-@app.route('/api/checktoken', methods=['POST'])
+@app.route('/api/checktoken', methods=['GET'])
 @token_auth.login_required
 def checktoken():
     print("check token route")

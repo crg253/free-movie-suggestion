@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 
 import './Menu.css';
 
-
 class Menu extends Component {
   state={
     displayButton:'inline',
-    displayMenu:'none'
+    displayMenu:'none',
   }
 
   changeMenuDisplay = () =>{
@@ -20,31 +19,53 @@ class Menu extends Component {
     }
   }
 
+  handleSignOut = () =>{
+    fetch('api/revoketoken', {
+      method:'DELETE',
+      headers:{
+        'Authorization':"Bearer " +localStorage.getItem('token')
+      }
+    })
+  }
+
   render() {
+
+    let signOutLink = ''
+    if(this.props.user !==''){
+      signOutLink= <div onClick={()=>{this.handleSignOut();this.props.setUser('')}}>
+                          <Link to={'/'}><h3>Sign Out</h3></Link>
+                        </div>
+    }
 
     return (
       <div>
-        <div
-          id="menu-button"
-          style={{display:this.state.displayButton}}
-          onClick={()=>this.changeMenuDisplay()}>
-          MENU
-        </div>
-        <div
-          id="open-menu"
-          style={{display:this.state.displayMenu}}
-          onClick={()=>this.changeMenuDisplay()}>
-          <div id="menu-links">
-            <Link to={'/'}><h3>Home</h3></Link>
-            <Link to={'/user'}><h3>Contribute</h3></Link>
+      <div
+        id="menu-button"
+        style={{display:this.state.displayButton}}
+        onClick={()=>this.changeMenuDisplay()}>
+        MENU
+      </div>
 
-            {this.props.genres.map(genre=>(
-              <div onClick={()=>this.props.selectBy(genre)}>
-              <Link to={'/' + this.props.randomMovies[genre].slug}><p>{genre} </p></Link>
-              </div>//Javascript Comment
-            ))}
-          </div>
+      <div
+        id="open-menu"
+        style={{display:this.state.displayMenu}}
+        onClick={()=>this.changeMenuDisplay()}>
+
+        <div id="menu-links">
+          <Link to={'/'}><h3>Home</h3></Link>
+          <Link to={'/user'}><h3>Contribute</h3></Link>
+
+
+          {signOutLink}
+
+          {this.props.genres.map(genre=>(
+            <div onClick={()=>this.props.selectBy(genre)}>
+            <Link to={'/' + this.props.randomMovies[genre].slug}><p>{genre} </p></Link>
+            </div>//Javascript Comment
+          ))}
         </div>
+      </div>
+
       </div>
     );
   }
