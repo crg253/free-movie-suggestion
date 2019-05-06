@@ -32,9 +32,9 @@ const savedList = (props) => {
     }else{
       props.movies.sort(compareSlug);
     }
-    
+
   return(
-    props.movies.filter(movie => props.savedmovies.includes(movie.id))
+    props.movies.filter(movie => props.savedmovies.includes(movie.slug))
     .map(film =>
       <div>
         <Link to={'/' + film.slug}><p>{film.name} {film.year} {film.tags}</p></Link>

@@ -30,6 +30,7 @@ class Menu extends Component {
 
   render() {
 
+
     let signOutLink = ''
     if(this.props.user !==''){
       signOutLink= <div onClick={()=>{this.handleSignOut();this.props.setUser('')}}>
@@ -37,13 +38,13 @@ class Menu extends Component {
                         </div>
     }
 
+
     return (
       <div>
       <div
         id="menu-button"
         style={{display:this.state.displayButton}}
         onClick={()=>this.changeMenuDisplay()}>
-        MENU
       </div>
 
       <div
@@ -58,11 +59,13 @@ class Menu extends Component {
 
           {signOutLink}
 
+          {/*
           {this.props.genres.map(genre=>(
             <div onClick={()=>this.props.selectBy(genre)}>
             <Link to={'/' + this.props.randomMovies[genre].slug}><p>{genre} </p></Link>
             </div>//Javascript Comment
           ))}
+          */}
         </div>
       </div>
 

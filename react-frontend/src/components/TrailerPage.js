@@ -24,7 +24,8 @@ const TrailerPage = (props) => {
             movieslug={props.match.params.movieslug}
             movies={props.movies}
             saveUnsave={props.saveUnsave}
-            inSaved={props.inSaved}/>
+            inSaved={props.inSaved}
+            savedmovies={props.savedmovies}/>
 
         <div id="genres-and-list">
           <Genres

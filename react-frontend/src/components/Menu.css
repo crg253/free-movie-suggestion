@@ -2,8 +2,11 @@
   position: fixed;
   right: 0;
   top: 0;
-  width: 50px;
-  height: 50px;
+}
+#menu-button:after{
+  content: '\2807';
+  font-size: 50px;
+  color:white;
 }
 #open-menu{
   position:fixed;

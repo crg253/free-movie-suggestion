@@ -49,19 +49,20 @@ class App extends Component {
   }
 
   locStorToState = () => {
-    let saved = Object.keys(localStorage).map(n =>Number(n))
-      .filter(n =>localStorage.getItem(n)==="saved");
+
+    let saved = Object.keys(localStorage)
+                    .filter(slug=>localStorage.getItem(slug)==='saved');
 
     this.setState({SavedMovies:saved});
   }
 
-  saveUnsave = (id) => {
-    if (!localStorage.getItem(id)){
-      localStorage.setItem(id, 'saved');
-    }else if (localStorage.getItem(id)==='unsaved'){
-      localStorage.setItem(id, 'saved');
+  saveUnsave = (movieslug) => {
+    if (!localStorage.getItem(movieslug)){
+      localStorage.setItem(movieslug, 'saved');
+    }else if (localStorage.getItem(movieslug)==='unsaved'){
+      localStorage.setItem(movieslug, 'saved');
     }else{
-      localStorage.setItem(id, 'unsaved');
+      localStorage.setItem(movieslug, 'unsaved');
     }
     this.locStorToState();
   }

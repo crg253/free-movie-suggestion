@@ -22,9 +22,11 @@ iframe{
 }
 #get-genres-button{
   margin-left: 10px;
-  width:20px;
-  height: 20px;
-  background-color: blue;
+  width:15px;
+  height: 15px;
+  border-right:1px solid white;
+  border-bottom:1px solid white;
+  transform:rotate(45deg);
 }
 #genre-link-list{
   display:flex;
