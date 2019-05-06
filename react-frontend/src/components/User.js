@@ -76,12 +76,22 @@ class User extends Component {
              this.setState({Redirect:<Redirect to='/signin'/>})
            }else if(res.status ===201){
              res.json()
-               .then(res=>this.setState({UserMovies:res}))
+             .then(res=>{
+                   this.setState({UserMovies:res.movies})
+                   this.props.setUser(res.user)
+             })
            }
          })
         }
       })
-  }
+    }
+
+
+
+
+
+
+
 
 
   render() {
