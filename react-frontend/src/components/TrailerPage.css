@@ -2,9 +2,11 @@
   display:flex;
   margin: 2% 5% 5% 5%;
 }
+#trailer-and-title-and-save{
+}
 iframe{
-  width:40vw;
-  height: 22.5vw;
+  width:45vw;
+  height: 25.28vw;
 }
 #title-and-save-button{
   text-align: center;
@@ -98,6 +100,7 @@ iframe{
   }
   #Com{
     font-family: 'Luckiest Guy', cursive;
+    margin-top:5px;
   }
   #Dra{
     font-family: 'Amatic SC', cursive;

@@ -15,7 +15,7 @@ const trailer = (props) => {
   return(
     props.movies.filter(movie=>movie.slug===props.movieslug)
     .map(selection=>(
-      <div>
+      <div id="trailer-and-title-and-save">
 
         <iframe title={selection.name} src={selection.video} allowFullScreen></iframe>
 
