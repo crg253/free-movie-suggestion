@@ -34,12 +34,17 @@ const genreList = (props) => {
       }
 
   return(
-    props.movies.filter(movie => movie.tags.includes(props.listby))
+    <div class="list-items-wrapper">
+    {props.movies.filter(movie => movie.tags.includes(props.listby))
     .map(film =>
-      <div>
-        <Link to={'/' + film.slug}><p>{film.name} {film.year} {film.tags}</p></Link>
-      </div>
-    )
+        <Link to={'/' + film.slug}>
+          <div class='list-items'>
+            <p>{film.name}</p> <p>{film.year}</p> {film.tags.map(tag=><p>{tag}</p>)}
+          </div>
+        </Link>
+
+    )}
+    </div>
   );
 };
 

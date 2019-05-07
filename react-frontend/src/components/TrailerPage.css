@@ -20,6 +20,9 @@ iframe{
 #genre-and-button{
   align-items: center;
 }
+.select-genre{
+  margin:0 5px 2px 0;
+}
 #get-genres-button{
   margin-left: 10px;
   width:15px;
@@ -38,6 +41,18 @@ iframe{
 .sort-selector{
   display: inline;
   margin-right: 2px;
+}
+.list-items-wrapper{
+  margin-top: 15px;
+}
+.list-items{
+  display:flex;
+  flex-flow: wrap;
+  padding:5px;
+}
+.list-items p{
+  padding: 0;
+  margin: 0 5px 0 0;
 }
 
 
@@ -58,6 +73,10 @@ iframe{
   #trailer-title{
     margin-bottom: 2px;
   }
+  #get-genres-button{
+    width:7px;
+    height: 7px;
+  }
   #genres-and-list{
     margin:5% 0 5% 0;
   }
@@ -68,6 +87,35 @@ iframe{
     display:inline;
     text-align: center;
   }
+  .select-genre{
+    font-size: 30px;
+    margin:0 0 2px 0;
+
+  }
+  #Act{
+    font-family: 'Ceviche One', cursive;
+    font-size: 50px;
+  }
+  #Com{
+    font-family: 'Luckiest Guy', cursive;
+  }
+  #Dra{
+    font-family: 'Amatic SC', cursive;
+    font-size: 50px;
+
+  }
+  #Hor{
+    font-family: 'Schoolbell', cursive;
+  }
+  #Mys{
+    font-family: 'Bangers', cursive;
+  }
+  #Rom{
+    font-family: 'Sophia', cursive;
+  }
+  #Sci{
+    font-family: 'Gugi', cursive;
+  }
   #sort-by-wrapper{
     text-align: center;
   }
@@ -75,6 +123,11 @@ iframe{
     margin:3px 5% 10% 5%;
     font-size: 15px;
     text-align: center;
+  }
+  .list-items{
+    justify-content: center;
+  }
+  .list-items p{
   }
 }
 

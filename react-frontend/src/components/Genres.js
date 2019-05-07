@@ -28,8 +28,9 @@ class genres extends Component {
     return (
       <div>
         <div id="genre-button-or-list">
+
           <div id="genre-and-button" style={{display:this.state.displayGenreButton}}>
-            <h2 >{this.props.listby}</h2>
+            <h2 class="select-genre" id={this.props.listby.slice(0,3)}>{this.props.listby}</h2>
             <a href="javascript:void(0);">
               <div
                 id='get-genres-button'
@@ -42,25 +43,31 @@ class genres extends Component {
             <div id="genre-link-list">
 
                 {this.props.genres.map(genre=>(
-                  <div onClick={()=>{this.props.selectBy(genre);this.changeGenreDisplay();this.changeGenreButton();}}>
-                  <Link to={'/' + this.props.randomMovies[genre].slug}><h2>{genre} </h2></Link>
+                  <div
+                    onClick={()=>{
+                    this.props.selectBy(genre);
+                    this.changeGenreDisplay();
+                    this.changeGenreButton();}}>
+                        <Link to={'/' + this.props.randomMovies[genre].slug}>
+                          <h2 id={genre.slice(0,3)}class="select-genre">{genre} </h2>
+                        </Link>
                   </div>//Javascript Comment
                 ))}
 
               <a
                 href="javascript:void(0);"
                 onClick={()=>{this.props.selectBy("Saved");this.changeGenreDisplay();this.changeGenreButton();}}>
-                <h2>Saved</h2>
+                <h2 class="select-genre">Saved</h2>
               </a>
 
               <a href="javascript:void(0);"
                 onClick={()=>{this.props.selectBy("All");this.changeGenreDisplay();this.changeGenreButton();}}>
-                <h2>All Movies</h2>
+                <h2 class="select-genre">All Movies</h2>
               </a>
 
               <a href="javascript:void(0);"
                 onClick={()=>{this.props.selectBy("User Suggestions");this.changeGenreDisplay();this.changeGenreButton();}}>
-                <h2>USER SUGGESTIONS</h2>
+                <h2 class="select-genre">User Suggestions</h2>
               </a>
             </div>{/* id = genre-link-list */}
           </div>{/* id= genre-link-list-wrapper */}

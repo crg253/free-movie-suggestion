@@ -9,7 +9,8 @@ a{
 }
 
 
-@import url("https://fonts.googleapis.com/css?family=Sigmar+One");
+@import url(
+  "https://fonts.googleapis.com/css?family=Amatic+SC|Bangers|Ceviche+One|Gugi|Luckiest+Guy|Schoolbell|Sigmar+One|Sofia");
 
 #main-title{
   font-family: 'Sigmar One', cursive;
