@@ -22,6 +22,7 @@ class User extends Component {
     })
     .then(res=>{
       if(res.status===401){
+        this.props.setUser('')
         this.setState({Redirect:<Redirect to='/signin'/>})
       }else if(res.status ===201){
         res.json()
@@ -62,6 +63,7 @@ class User extends Component {
          this.setState({SearchResultOptions:[], SearchValue:'', AddMovieRejection:'Movie Already in Database'})
        }
        else if(res.status===401){
+         this.props.setUser('')
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          this.setState({SearchResultOptions:[], SearchValue:''})
@@ -73,6 +75,7 @@ class User extends Component {
          })
          .then(res=>{
            if(res.status===401){
+             this.props.setUser('')
              this.setState({Redirect:<Redirect to='/signin'/>})
            }else if(res.status ===201){
              res.json()
