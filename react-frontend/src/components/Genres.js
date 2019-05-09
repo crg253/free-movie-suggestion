@@ -40,7 +40,35 @@ class genres extends Component {
           </div>{/* id= genre-and-button */}
 
           <div id="genre-link-list-wrapper" style={{display:this.state.displayGenres}}>
-            <div id="genre-link-list">
+
+            <div id="desk-genre-link-list">
+                {this.props.genres.map(genre=>(
+                  <div
+                    onClick={()=>this.props.selectBy(genre)}>
+                        <Link to={'/' + this.props.randomMovies[genre].slug}>
+                          <h2 id={genre.slice(0,3)}class="select-genre">{genre} </h2>
+                        </Link>
+                  </div>//Javascript Comment
+                ))}
+
+              <a
+                href="javascript:void(0);"
+                onClick={()=>this.props.selectBy("Saved")}>
+                <h2 class="select-genre">Saved</h2>
+              </a>
+
+              <a href="javascript:void(0);"
+                onClick={()=>this.props.selectBy("All")}>
+                <h2 class="select-genre">All Movies</h2>
+              </a>
+
+              <a href="javascript:void(0);"
+                onClick={()=>this.props.selectBy("User Suggestions")}>
+                <h2 class="select-genre">User Suggestions</h2>
+              </a>
+            </div>{/* id = desk-genre-link-list */}
+
+            <div id="mobile-genre-link-list">
 
                 {this.props.genres.map(genre=>(
                   <div
@@ -69,7 +97,9 @@ class genres extends Component {
                 onClick={()=>{this.props.selectBy("User Suggestions");this.changeGenreDisplay();this.changeGenreButton();}}>
                 <h2 class="select-genre">User Suggestions</h2>
               </a>
-            </div>{/* id = genre-link-list */}
+            </div>{/* id = mobile-genre-link-list */}
+
+
           </div>{/* id= genre-link-list-wrapper */}
         </div>{/* id= genre-button-or-list */}
 

@@ -41,34 +41,38 @@ class Menu extends Component {
 
     return (
       <div>
-      <div
-        id="menu-button"
-        style={{display:this.state.displayButton}}
-        onClick={()=>this.changeMenuDisplay()}>
-      </div>
-
-      <div
-        id="open-menu"
-        style={{display:this.state.displayMenu}}
-        onClick={()=>this.changeMenuDisplay()}>
-
-        <div id="menu-links">
-          <Link to={'/'}><h3>Home</h3></Link>
-          <Link to={'/user'}><h3>Contribute</h3></Link>
-
-
-          {signOutLink}
-
-          {/*
-          {this.props.genres.map(genre=>(
-            <div onClick={()=>this.props.selectBy(genre)}>
-            <Link to={'/' + this.props.randomMovies[genre].slug}><p>{genre} </p></Link>
-            </div>//Javascript Comment
-          ))}
-          */}
+      <a href="javascript:void(0);">
+        <div
+          id="menu-button"
+          style={{display:this.state.displayButton}}
+          onClick={()=>this.changeMenuDisplay()}>
         </div>
-      </div>
+      </a>
 
+
+      <a href="javascript:void(0);">
+        <div
+          id="open-menu"
+          style={{display:this.state.displayMenu}}
+          onClick={()=>this.changeMenuDisplay()}>
+
+          <div id="menu-links">
+            <Link to={'/'}><h3>Home</h3></Link>
+            <Link to={'/user'}><h3>Contribute</h3></Link>
+
+
+            {signOutLink}
+
+            {/*
+            {this.props.genres.map(genre=>(
+              <div onClick={()=>this.props.selectBy(genre)}>
+              <Link to={'/' + this.props.randomMovies[genre].slug}><p>{genre} </p></Link>
+              </div>//Javascript Comment
+            ))}
+            */}
+          </div>
+        </div>
+        </a>
       </div>
     );
   }

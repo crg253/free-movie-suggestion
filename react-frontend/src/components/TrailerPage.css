@@ -33,9 +33,12 @@ iframe{
   border-bottom:1px solid white;
   transform:rotate(45deg);
 }
-#genre-link-list{
+#desk-genre-link-list{
   display:flex;
   flex-wrap: wrap;
+}
+#mobile-genre-link-list{
+  display:none;
 }
 #sort-by-wrapper{
   margin:15px 0 0 0;
@@ -85,7 +88,10 @@ iframe{
   #genre-and-button{
     justify-content: center;
   }
-  #genre-link-list{
+  #desk-genre-link-list{
+    display: none;
+  }
+  #mobile-genre-link-list{
     display:inline;
     text-align: center;
   }

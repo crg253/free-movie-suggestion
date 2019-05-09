@@ -5,6 +5,7 @@
 }
 #menu-button:after{
   content: '\2807';
+  line-height: 40px;
   font-size: 50px;
   color:white;
 }
@@ -23,8 +24,9 @@
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
-  
+
   #menu-button:after{
+    margin-right: 10px;
     font-size: 30px;
   }
 }

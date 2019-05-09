@@ -9,7 +9,7 @@ class User extends Component {
     UserMovies:[],
     SearchValue:'',
     SearchResultOptions:[],
-    AddMovieRejection:'',
+    MovieMessage:'',
     Redirect:'',
   }
 
@@ -40,6 +40,7 @@ class User extends Component {
   }
 
   handleSearchSubmit = (event) =>{
+    this.setState({MovieMessage:''})
     event.preventDefault();
     fetch('http://www.omdbapi.com/?s='+this.state.SearchValue+'&apikey=e0bc91cd')
     .then(res=>res.json())
@@ -60,13 +61,14 @@ class User extends Component {
      })
      .then(res=>{
        if(res.status===500){
-         this.setState({SearchResultOptions:[], SearchValue:'', AddMovieRejection:'Movie Already in Database'})
+         this.setState({SearchResultOptions:[], SearchValue:'',
+                        MovieMessage:'Sorry, that movie has already been suggested'})
        }
        else if(res.status===401){
          this.props.setUser('')
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
-         this.setState({SearchResultOptions:[], SearchValue:''})
+         this.setState({SearchResultOptions:[], SearchValue:'', MovieMessage:"Thank you for suggesting"})
          fetch('api/usermovies',{
            method:'GET',
            headers: {
@@ -125,7 +127,7 @@ class User extends Component {
                 value="Search"/>
         </form>
 
-        {this.state.AddMovieRejection}
+        <p>{this.state.MovieMessage}</p>
 
         {this.state.SearchResultOptions.map(mov=>(
           <div>

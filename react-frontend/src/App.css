@@ -15,7 +15,9 @@ a{
 #main-title{
   font-family: 'Sigmar One', cursive;
   margin: 0;
+  line-height: 40px;
   text-align: center;
+  max-width: 95vw;
   color: DodgerBlue;
   margin-left: auto;
   margin-right: auto;
