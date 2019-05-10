@@ -36,9 +36,10 @@ const MovieList = (props) => {
   return(
     <div className="list-items-wrapper">
     {props.selectedmovies.map(film =>
-        <Link to={'/' + film.slug}>
+        <Link key={film.slug} to={'/' + film.slug}>
           <div className='list-items'>
-            <p>{film.name}</p> <p>{film.year}</p> {film.tags.map(tag=><p>{tag}</p>)}
+            <p>{film.name}</p> <p>{film.year}</p>
+              {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
           </div>
         </Link>
 

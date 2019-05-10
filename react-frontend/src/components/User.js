@@ -130,7 +130,7 @@ class User extends Component {
         <p>{this.state.MovieMessage}</p>
 
         {this.state.SearchResultOptions.map(mov=>(
-          <div>
+          <div key={"searchresult" + mov.Title+mov.Year}>
           <p>{mov.Title} {mov.Year}</p>
           <button onClick={()=>this.handleAddMovie(mov.Title, mov.Year)}>Add</button>
           </div>

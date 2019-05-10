@@ -15,7 +15,6 @@ def user_movies():
     user_movies = []
     for movie in g.current_user.user_movies:
         user_movies.append({"name":movie.name,"year":movie.year})
-    print(g.current_user.username)
     return jsonify({'movies':user_movies, 'user':g.current_user.username}), 201
 
 
@@ -43,13 +42,11 @@ def user():
 @app.route('/api/checktoken', methods=['GET'])
 @token_auth.login_required
 def checktoken():
-    print("check token route")
     return '', 200
 
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
 def sign_in():
-    print('/api/signin route')
     token = g.current_user.get_token()
     db.session.commit()
     return jsonify({'token':token}), 200

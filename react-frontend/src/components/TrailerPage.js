@@ -14,7 +14,9 @@ const TrailerPage = (props) => {
   if(props.listby==="Saved"){
     selectedmovies= props.movies.filter(movie => props.savedmovies.includes(movie.slug))
   }else if(props.listby==="All"){
+    selectedmovies = props.movies
   }else if(props.listby==="User Suggestions"){
+    selectedmovies = props.userMovies
   }else{
     selectedmovies = props.movies.filter(movie => movie.tags.includes(props.listby))
 
