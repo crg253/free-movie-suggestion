@@ -4,13 +4,20 @@ import { Link } from "react-router-dom";
 import './TrailerPage.css';
 import Trailer from './Trailer';
 import Genres from './Genres';
-import SelectedList from './SelectedList';
+import MovieList from './MovieList';
 
 const TrailerPage = (props) => {
 
-  if(props.match.params.movieslug!==props.param){
-    props.setparam(props.match.params.movieslug)
-    window.scrollTo(0, 0)
+  window.scrollTo(0, 0);
+
+  let selectedmovies = []
+  if(props.listby==="Saved"){
+    selectedmovies= props.movies.filter(movie => props.savedmovies.includes(movie.slug))
+  }else if(props.listby==="All"){
+  }else if(props.listby==="User Suggestions"){
+  }else{
+    selectedmovies = props.movies.filter(movie => movie.tags.includes(props.listby))
+
   }
 
   return(
@@ -36,11 +43,11 @@ const TrailerPage = (props) => {
                 listby={props.listby}
                 inlistby={props.inlistby}
                 randomMovies={props.randomMovies}/>
-          <SelectedList
+          <MovieList
                 userMovies={props.userMovies}
                 setSort={props.setSort}
                 sortby={props.sortby}
-                movies ={props.movies}
+                selectedmovies ={selectedmovies}
                 savedmovies={props.savedmovies}
                 unsave = {props.unsave}
                 genres ={props.genres}

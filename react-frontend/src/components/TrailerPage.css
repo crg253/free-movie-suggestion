@@ -24,6 +24,7 @@ iframe{
 }
 .select-genre{
   margin:0 5px 2px 0;
+  color:white;
 }
 #get-genres-button{
   margin-left: 10px;
@@ -94,6 +95,7 @@ iframe{
   #mobile-genre-link-list{
     display:inline;
     text-align: center;
+    align-items: center;
   }
   .select-genre{
     font-size: 30px;
@@ -125,6 +127,7 @@ iframe{
   #Sci{
     font-family: 'Gugi', cursive;
   }
+
   #sort-by-wrapper{
     text-align: center;
   }

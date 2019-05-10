@@ -7,6 +7,13 @@ a{
   text-decoration: none;
   color: #E8E8E8;
 }
+.button-nostyle{
+  background:none;
+  border:none;
+  margin:0;
+  padding:0;
+  cursor: pointer;
+}
 
 
 @import url(

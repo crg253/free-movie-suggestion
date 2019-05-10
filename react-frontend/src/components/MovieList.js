@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const genreList = (props) => {
+const MovieList = (props) => {
 
       function dropThe(slug) {
         if (slug.slice(0,3)==="the"){
@@ -28,17 +28,16 @@ const genreList = (props) => {
       }
 
       if(props.sortby==="year"){
-        props.movies.sort(compareYear);
+        props.selectedmovies.sort(compareYear);
       }else{
-        props.movies.sort(compareSlug);
+        props.selectedmovies.sort(compareSlug);
       }
 
   return(
-    <div class="list-items-wrapper">
-    {props.movies.filter(movie => movie.tags.includes(props.listby))
-    .map(film =>
+    <div className="list-items-wrapper">
+    {props.selectedmovies.map(film =>
         <Link to={'/' + film.slug}>
-          <div class='list-items'>
+          <div className='list-items'>
             <p>{film.name}</p> <p>{film.year}</p> {film.tags.map(tag=><p>{tag}</p>)}
           </div>
         </Link>
@@ -48,4 +47,4 @@ const genreList = (props) => {
   );
 };
 
-export default genreList;
+export default MovieList;

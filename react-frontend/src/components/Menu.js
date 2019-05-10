@@ -41,17 +41,16 @@ class Menu extends Component {
 
     return (
       <div>
-      <a href="javascript:void(0);">
-        <div
+
+        <button
+          className="button-nostyle"
           id="menu-button"
           style={{display:this.state.displayButton}}
-          onClick={()=>this.changeMenuDisplay()}>
-        </div>
-      </a>
+          onClick={()=>this.changeMenuDisplay()}></button>
 
 
-      <a href="javascript:void(0);">
-        <div
+        <button
+          className="button-nostyle"
           id="open-menu"
           style={{display:this.state.displayMenu}}
           onClick={()=>this.changeMenuDisplay()}>
@@ -59,8 +58,6 @@ class Menu extends Component {
           <div id="menu-links">
             <Link to={'/'}><h3>Home</h3></Link>
             <Link to={'/user'}><h3>Contribute</h3></Link>
-
-
             {signOutLink}
 
             {/*
@@ -71,8 +68,7 @@ class Menu extends Component {
             ))}
             */}
           </div>
-        </div>
-        </a>
+        </button>
       </div>
     );
   }
