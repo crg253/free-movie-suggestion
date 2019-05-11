@@ -73,7 +73,6 @@ class App extends Component {
   }
 
   refreshMovies = () => {
-    console.log("refresh movies")
     axios.get('/api/movies')
     .then(response=> {
       this.setState({Movies: response.data})
