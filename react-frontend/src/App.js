@@ -72,6 +72,14 @@ class App extends Component {
     this.locStorToState();
   }
 
+  refreshMovies = () => {
+    console.log("refresh movies")
+    axios.get('/api/movies')
+    .then(response=> {
+      this.setState({Movies: response.data})
+    })
+  }
+
   componentDidMount(){
     axios.get('/api/movies')
     .then(response=> {
@@ -131,6 +139,7 @@ class App extends Component {
               path='/:movieslug'
               render={(props)=> <TrailerPage
                                     {...props}
+                                    refreshMovies={this.refreshMovies}
                                     movies={movies}
                                     userMovies={userMovies}
                                     savedmovies={this.state.SavedMovies}
