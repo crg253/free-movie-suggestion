@@ -32,7 +32,7 @@ class Menu extends Component {
 
     let signOutLink = ''
     if(this.props.user !==''){
-      signOutLink= <div onClick={()=>{this.handleSignOut();this.props.setUser('')}}>
+      signOutLink= <div onClick={()=>{this.handleSignOut();this.props.setUser('');this.changeMenuDisplay();}}>
                       <Link to={'/'}>
                         <h4 className="menu-genre-links">Sign Out</h4>
                       </Link>
