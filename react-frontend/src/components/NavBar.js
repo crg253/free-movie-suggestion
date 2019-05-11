@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const navBar = (props) => {
+const NavBar = (props) => {
   return(
     <div style={{border:"1px solid red"}}>
       <div style={{float:"right"}}>
@@ -19,4 +19,4 @@ const navBar = (props) => {
   );
 };
 
-export default navBar;
+export default NavBar;

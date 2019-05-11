@@ -20,29 +20,24 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            saveUnsave={props.saveUnsave}
-            inSaved={props.inSaved}
-            savedmovies={props.savedmovies}/>
+            saveUnsave={props.saveUnsave}/>
 
         <div id="genres-and-list">
           <Genres
                 setSort={props.setSort}
-                sortby={props.sortby}
+                sortBy={props.sortBy}
                 genres={props.genres}
-                selectBy={props.selectBy}
-                listby={props.listby}
-                inlistby={props.inlistby}
+                chooseListBy={props.chooseListBy}
+                listBy={props.listBy}
                 randomMovies={props.randomMovies}/>
           <MovieList
-                refreshMovies={props.refreshMovies}
                 movies={props.movies}
                 userMovies={props.userMovies}
-                setSort={props.setSort}
-                sortby={props.sortby}
-                savedmovies={props.savedmovies}
-                unsave = {props.unsave}
-                genres ={props.genres}
-                listby={props.listby}/>
+                sortBy={props.sortBy}
+                savedMovies={props.savedMovies}
+                unSave = {props.unSave}
+                listBy={props.listBy}
+                refreshMovies={props.refreshMovies}/>
         </div>
       </div>
     </div>

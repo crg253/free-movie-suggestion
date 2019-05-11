@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import './HomePage.css';
 
@@ -41,76 +41,76 @@ class HomePage extends Component {
   render() {
 
     let sign = null;
-    if(this.props.listby ==="Action"){
-      sign = <Link to={'/' + this.props.randomMovies["Action"].slug}>
+    if(this.props.listBy ==='Action'){
+      sign = <Link to={'/' + this.props.randomMovies['Action'].slug}>
               <ActionSign/>
               </Link>
-    }else if(this.props.listby ==="Comedy"){
-      sign = <Link to={'/' + this.props.randomMovies["Comedy"].slug}>
+    }else if(this.props.listBy ==='Comedy'){
+      sign = <Link to={'/' + this.props.randomMovies['Comedy'].slug}>
               <ComedySign/>
               </Link>
-    }else if(this.props.listby ==="Documentary"){
-      sign = <Link to={'/' + this.props.randomMovies["Documentary"].slug}>
+    }else if(this.props.listBy ==='Documentary'){
+      sign = <Link to={'/' + this.props.randomMovies['Documentary'].slug}>
               <DocumentarySign/>
               </Link>
-    }else if(this.props.listby ==="Drama"){
-      sign = <Link to={'/' + this.props.randomMovies["Drama"].slug}>
+    }else if(this.props.listBy ==='Drama'){
+      sign = <Link to={'/' + this.props.randomMovies['Drama'].slug}>
               <DramaSign/>
               </Link>
-    }else if(this.props.listby ==="Horror"){
-      sign = <Link to={'/' + this.props.randomMovies["Horror"].slug}>
+    }else if(this.props.listBy ==='Horror'){
+      sign = <Link to={'/' + this.props.randomMovies['Horror'].slug}>
               <HorrorSign/>
               </Link>
-    }else if(this.props.listby ==="Mystery & Suspense"){
-      sign = <Link to={'/' + this.props.randomMovies["Mystery & Suspense"].slug}>
+    }else if(this.props.listBy ==='Mystery & Suspense'){
+      sign = <Link to={'/' + this.props.randomMovies['Mystery & Suspense'].slug}>
               <MysterySuspenseSign/>
               </Link>
-    }else if(this.props.listby ==="Romance"){
-      sign = <Link to={'/' + this.props.randomMovies["Romance"].slug}>
+    }else if(this.props.listBy ==='Romance'){
+      sign = <Link to={'/' + this.props.randomMovies['Romance'].slug}>
               <RomanceSign/>
               </Link>
-    }else if(this.props.listby ==="Sci-Fi"){
-      sign = <Link to={'/' + this.props.randomMovies["Sci-Fi"].slug}>
+    }else if(this.props.listBy ==='Sci-Fi'){
+      sign = <Link to={'/' + this.props.randomMovies['Sci-Fi'].slug}>
               <SciFiSign/>
               </Link>
     }
     return (
-      <div id="home-page-container">
+      <div id='home-page-container'>
       <Link to={'/'}>
-        <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+        <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
       </Link>
-      <svg viewBox="0 0 1920 911">
+      <svg viewBox='0 0 1920 911'>
         <GradientsSVG/>
         <SkyAndGroundSVG/>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Documentary");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Documentary');}}>
           <Link to={'/'}><DocumentarySVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Sci-Fi");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Sci-Fi');}}>
           <Link to={'/'}><SciFiSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Horror");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Horror');}}>
           <Link to={'/'}><HorrorSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Action");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Action');}}>
           <Link to={'/'}><ActionSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Romance");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Romance');}}>
           <Link to={'/'}><RomanceSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Drama");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Drama');}}>
           <Link to={'/'}><DramaSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Comedy");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Comedy');}}>
           <Link to={'/'}><ComedySVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseGenre("Mystery & Suspense");}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Mystery & Suspense');}}>
           <Link to={'/'}><MysterySuspenseSVG/></Link></g>
 
         {sign}
       </svg>
 
-      <p id="instructions">{this.state.Instructions}</p>
+      <p id='instructions'>{this.state.Instructions}</p>
 
       </div>
 

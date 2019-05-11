@@ -45,7 +45,7 @@ class Menu extends Component {
       menuGenreLinks = this.props.genres.map(genre=>(
                 <div
                   key={"menu" + genre}
-                  onClick={()=>{this.props.selectBy(genre);this.changeMenuDisplay();}}>
+                  onClick={()=>{this.props.chooseListBy(genre);this.changeMenuDisplay();}}>
                   <Link to={'/' + this.props.randomMovies[genre].slug}>
                     <p className="menu-genre-links">{genre} </p>
                   </Link>

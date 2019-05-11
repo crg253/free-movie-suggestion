@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const trailer = (props) => {
+const Trailer = (props) => {
 
   let saveUnsaveButton = ''
   if (!localStorage.getItem(props.movieslug)){
@@ -37,4 +37,4 @@ const trailer = (props) => {
   );
 };
 
-export default trailer;
+export default Trailer;

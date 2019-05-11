@@ -3,26 +3,17 @@ import { Link } from "react-router-dom";
 
 class MovieList extends Component {
 
-
   render() {
 
-    fetch('api/movies')
-    .then(res=>res.json())
-    .then(res=>{
-      if(res.length > this.props.movies.length + this.props.userMovies.length){
-        this.props.refreshMovies(res)
-       }
-    })
-
     let selectedMovieList = []
-    if(this.props.listby==="Saved"){
-      selectedMovieList= this.props.movies.filter(movie => this.props.savedmovies.includes(movie.slug))
-    }else if(this.props.listby==="All"){
+    if(this.props.listBy==="Saved"){
+      selectedMovieList= this.props.movies.filter(movie => this.props.savedMovies.includes(movie.slug))
+    }else if(this.props.listBy==="All"){
       selectedMovieList = this.props.movies
-    }else if(this.props.listby==="User Suggestions"){
+    }else if(this.props.listBy==="User Suggestions"){
       selectedMovieList = this.props.userMovies
     }else{
-      selectedMovieList = this.props.movies.filter(movie => movie.tags.includes(this.props.listby))
+      selectedMovieList = this.props.movies.filter(movie => movie.tags.includes(this.props.listBy))
     }
 
     function dropThe(slug) {
@@ -49,7 +40,7 @@ class MovieList extends Component {
     return 0;
     }
 
-    if(this.props.sortby==="year"){
+    if(this.props.sortBy==="year"){
       selectedMovieList.sort(compareYear);
     }else{
       selectedMovieList.sort(compareSlug);
