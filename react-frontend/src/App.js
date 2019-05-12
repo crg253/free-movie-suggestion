@@ -39,34 +39,34 @@ class App extends Component {
     this.setState({SavedMovies:saved});
   }
 
-  saveUnsave = (movieslug) => {
-    if (!localStorage.getItem(movieslug)){
-      localStorage.setItem(movieslug, 'saved');
-    }else if (localStorage.getItem(movieslug)==='unsaved'){
-      localStorage.setItem(movieslug, 'saved');
-    }else{
-      localStorage.setItem(movieslug, 'unsaved');
-    }
-    this.locStorToState();
-  }
+  // saveUnsave = (movieslug) => {
+  //   if (!localStorage.getItem(movieslug)){
+  //     localStorage.setItem(movieslug, 'saved');
+  //   }else if (localStorage.getItem(movieslug)==='unsaved'){
+  //     localStorage.setItem(movieslug, 'saved');
+  //   }else{
+  //     localStorage.setItem(movieslug, 'unsaved');
+  //   }
+  //   this.locStorToState();
+  // }
 
-  unSave = (id) => {
-    localStorage.setItem(id, 'unsaved');
-    this.locStorToState();
-  }
+  // unSave = (id) => {
+  //   localStorage.setItem(id, 'unsaved');
+  //   this.locStorToState();
+  // }
 
   componentDidMount(){
     axios.get('/api/movies')
     .then(response=> {
       this.setState({Movies: response.data})
     })
-    this.locStorToState();
+    //this.locStorToState();
   }
 
   render() {
 
     let movies = this.state.Movies.filter(movie=>movie.status==='approved');
-    let userMovies = this.state.Movies.filter(movie=>movie.status==='pending');
+    let userSuggestions = this.state.Movies.filter(movie=>movie.status==='pending');
 
     let randomMovies = {
         Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'','Mystery & Suspense':'',Romance:'','Sci-Fi':''
@@ -115,7 +115,7 @@ class App extends Component {
               render={(props)=> <TrailerPage
                                     {...props}
                                     movies={movies}
-                                    userMovies={userMovies}
+                                    userSuggestions={userSuggestions}
                                     savedMovies={this.state.SavedMovies}
                                     chooseListBy={this.chooseListBy}
                                     saveUnsave={this.saveUnsave}

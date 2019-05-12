@@ -11,7 +11,7 @@ class MovieList extends Component {
     }else if(this.props.listBy==="All"){
       selectedMovieList = this.props.movies
     }else if(this.props.listBy==="User Suggestions"){
-      selectedMovieList = this.props.userMovies
+      selectedMovieList = this.props.userSuggestions
     }else{
       selectedMovieList = this.props.movies.filter(movie => movie.tags.includes(this.props.listBy))
     }

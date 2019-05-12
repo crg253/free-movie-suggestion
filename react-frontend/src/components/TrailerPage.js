@@ -32,12 +32,11 @@ const TrailerPage = (props) => {
                 randomMovies={props.randomMovies}/>
           <MovieList
                 movies={props.movies}
-                userMovies={props.userMovies}
+                userSuggestions={props.userSuggestions}
                 sortBy={props.sortBy}
                 savedMovies={props.savedMovies}
                 unSave = {props.unSave}
-                listBy={props.listBy}
-                refreshMovies={props.refreshMovies}/>
+                listBy={props.listBy}/>
         </div>
       </div>
     </div>

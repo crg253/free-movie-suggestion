@@ -9,6 +9,11 @@ tags = db.Table('tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.tag_id'), primary_key=True)
 )
 
+savers = db.Table('savers',
+    db.Column('movie_id', db.Integer, db.ForeignKey('movie.movie_id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+)
+
 class Movie(db.Model):
     movie_id = db.Column(db.Integer, primary_key=True)
     uniquename = db.Column(db.String(200), unique=True)
@@ -19,7 +24,8 @@ class Movie(db.Model):
         backref=db.backref('movies', lazy=True))
     status = db.Column(db.String(20))
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-
+    savers = db.relationship('User', secondary=savers, lazy='subquery',
+        backref=db.backref('saves', lazy=True))
 
 class Tag(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
