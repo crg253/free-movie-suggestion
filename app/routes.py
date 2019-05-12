@@ -22,6 +22,23 @@ Need to split this into two functions? getsavedmovies getsuggested movies
 #         user_movies.append({"name":movie.name,"year":movie.year})
 #     return jsonify({'movies':user_movies, 'user':g.current_user.username}), 201
 
+@app.route('/api/getsavedmovies', methods=['GET'])
+@token_auth.login_required
+def getsavedmovies():
+    saved_movies = []
+    user = User.query.filter_by(username=g.current_user.username).first()
+    print(user)
+    for movie in user.saves:
+        saved_movies.append({"id":movie.movie_id,
+                        "name":movie.name,
+                        "slug":movie.uniquename,
+                        "tags":[x.name for x in movie.tags],
+                        "video":movie.video_link,
+                        "status":movie.status,
+                        "year":movie.year})
+    print(saved_movies)
+    return jsonify({'savedMovies':saved_movies, 'user':g.current_user.username})
+
 @app.route('/api/savemovie', methods=['POST'])
 @token_auth.login_required
 def savemovie():

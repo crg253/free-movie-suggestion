@@ -14,13 +14,15 @@ class App extends Component {
   state = {
     Movies:[],
     Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi' ],
-    SavedMovies:[],
     ListBy:'All',
     SortBy:'name',
     User:'',
+    SavedMovies:[]
    }
 
-
+  setSavedMovies = (newSavedMovies) =>{
+    this.setState({SavedMovies:newSavedMovies})
+  }
 
   setUser = (newUser) =>{
     this.setState({User:newUser});
@@ -128,7 +130,8 @@ class App extends Component {
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
-                                    setUser={this.setUser}/>}/>
+                                    setUser={this.setUser}
+                                    setSavedMovies={this.setSavedMovies}/>}/>
 
             <Route
               path='/'

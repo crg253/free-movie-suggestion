@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 
 class Genres extends Component {
   state={
     displayGenreButton:'flex',
-    displayGenres:'none'
+    displayGenres:'none',
+    Redirect:''
   }
 
   changeGenreDisplay = () =>{
@@ -24,9 +25,33 @@ class Genres extends Component {
     }
   }
 
+  handleGetSavedMovies = () =>{
+    fetch('api/getsavedmovies',{
+      method:'GET',
+      headers:{
+        'Authorization':"Bearer " +localStorage.getItem('token'),
+      },
+     })
+     .then(res=>{
+       if(res.status===401){
+         this.props.setUser('')
+         this.setState({Redirect:<Redirect to='/signin'/>})
+       }else if(res.status===200){
+         res.json()
+           .then(res=>{
+             this.props.setSavedMovies(res.savedMovies)
+             this.props.setUser(res.user)
+           }
+         )
+       }
+    })
+  }
+
+
   render() {
     return (
       <div>
+        {this.state.Redirect}
         <div id="genre-button-or-list">
 
           <div id="genre-and-button" style={{display:this.state.displayGenreButton}}>
@@ -56,7 +81,7 @@ class Genres extends Component {
 
               <button
                 className="button-nostyle"
-                onClick={()=>this.props.chooseListBy("Saved")}>
+                onClick={()=>{this.props.chooseListBy("Saved"); this.handleGetSavedMovies();}}>
                   <h2 className="select-genre">Saved</h2>
               </button>
 
