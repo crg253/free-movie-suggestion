@@ -20,6 +20,8 @@ class App extends Component {
     User:'',
    }
 
+
+
   setUser = (newUser) =>{
     this.setState({User:newUser});
   }
@@ -125,7 +127,8 @@ class App extends Component {
                                     listBy={this.state.ListBy}
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
-                                    randomMovies={randomMovies}/>}/>
+                                    randomMovies={randomMovies}
+                                    setUser={this.setUser}/>}/>
 
             <Route
               path='/'

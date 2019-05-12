@@ -50,8 +50,8 @@ class User extends Component {
         }});
   }
 
-  handleAddMovie = (title, year) =>{
-    fetch('api/addmovie',{
+  handleSuggestMovie = (title, year) =>{
+    fetch('api/suggestmovie',{
       method:'POST',
       headers:{
         'Authorization':"Bearer " +localStorage.getItem('token'),
@@ -125,7 +125,7 @@ class User extends Component {
         {this.state.SearchResultOptions.map(mov=>(
           <div key={"searchresult" + mov.Title+mov.Year}>
           <p>{mov.Title} {mov.Year}</p>
-          <button onClick={()=>this.handleAddMovie(mov.Title, mov.Year)}>Add</button>
+          <button onClick={()=>this.handleSuggestMovie(mov.Title, mov.Year)}>Add</button>
           </div>
         ))}
 
