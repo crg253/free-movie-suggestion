@@ -50,6 +50,9 @@ class Genres extends Component {
 
 
   render() {
+
+    console.log(this.props.listBy)
+
     return (
       <div>
         {this.state.Redirect}
@@ -75,7 +78,12 @@ class Genres extends Component {
                     key={"desk-genre-link-list"+genre}
                     onClick={()=>this.props.chooseListBy(genre)}>
                         <Link to={'/' + this.props.randomMovies[genre].slug}>
-                          <h2 id={genre.slice(0,3)}className="select-genre">{genre} </h2>
+                          <h2
+                          style = {{
+                            color: this.props.listBy===genre ? 'green': 'purple'
+                          }}
+                          id={genre.slice(0,3)}
+                          className="select-genre">{genre} </h2>
                         </Link>
                   </div>//Javascript Comment
                 ))}
@@ -83,19 +91,31 @@ class Genres extends Component {
               <button
                 className="button-nostyle"
                 onClick={()=>{this.props.chooseListBy("Saved"); this.handleGetSavedMovies();}}>
-                  <h2 className="select-genre">Saved</h2>
+                  <h2
+                  style = {{
+                    color: this.props.listBy==="Saved" ? 'green': 'purple'
+                  }}
+                   className="select-genre">Saved</h2>
               </button>
 
               <button
                 className="button-nostyle"
                 onClick={()=>this.props.chooseListBy("All")}>
-                  <h2 className="select-genre">All</h2>
+                  <h2
+                  style = {{
+                    color: this.props.listBy==="All" ? 'green': 'purple'
+                  }}
+                  className="select-genre">All</h2>
               </button>
 
               <button
                 className="button-nostyle"
                 onClick={()=>this.props.chooseListBy("User Suggestions")}>
-                  <h2 className="select-genre">User Suggestions</h2>
+                  <h2
+                  style = {{
+                    color: this.props.listBy==="User Suggestions" ? 'green': 'purple'
+                  }}
+                  className="select-genre">User Suggestions</h2>
               </button>
 
             </div>{/* id = desk-genre-link-list */}
@@ -110,7 +130,9 @@ class Genres extends Component {
                     this.changeGenreDisplay();
                     this.changeGenreButton();}}>
                         <Link to={'/' + this.props.randomMovies[genre].slug}>
-                          <h2 id={genre.slice(0,3)}className="select-genre">{genre} </h2>
+                          <h2
+                            id={genre.slice(0,3)}
+                            className="select-genre">{genre} </h2>
                         </Link>
                   </div>//Javascript Comment
                 ))}
