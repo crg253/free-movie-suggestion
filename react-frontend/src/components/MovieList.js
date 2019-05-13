@@ -37,7 +37,6 @@ class MovieList extends Component {
 
     let selectedMovieList = []
     if(this.props.listBy==="Saved"){
-      //Here do a fetch for savedMovies
       selectedMovieList= this.props.savedMovies
     }else if(this.props.listBy==="All"){
       selectedMovieList = this.props.movies
@@ -77,12 +76,11 @@ class MovieList extends Component {
       selectedMovieList.sort(compareSlug);
     }
 
-    return (
-
-      <div className="list-items-wrapper">
-      {this.state.Redirect}
-
-      {selectedMovieList.map(film =>
+    let chosenList = ''
+    if(this.props.listBy==="Saved"){
+      chosenList =
+        <div>
+        {selectedMovieList.map(film =>
         <div>
           <Link key={film.slug} to={'/' + film.slug}>
             <div className='list-items'>
@@ -93,11 +91,34 @@ class MovieList extends Component {
           {this.props.savedMovies.filter(savedMovie => savedMovie.slug===film.slug)
           .map(saveButton=>
             <div className='list-unsave-button'>
-              <button onClick = {()=>this.handleUnsaveMovie(film.slug)}>Unsave</button>
+              <button
+                onClick = {()=>this.handleUnsaveMovie(film.slug)}
+                >unsave</button>
             </div>
           )}
         </div>
       )}
+      </div>
+    }else{
+      chosenList =
+        <div>
+        {selectedMovieList.map(film =>
+          <Link key={film.slug} to={'/' + film.slug}>
+            <div className='list-items'>
+              <p>{film.name}</p> <p>{film.year}</p>
+                {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
+            </div>
+          </Link>
+      )}
+      </div>
+    }
+
+    return (
+
+      <div className="list-items-wrapper">
+      {this.state.Redirect}
+      {chosenList}
+
       </div>
 
     );

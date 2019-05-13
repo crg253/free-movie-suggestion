@@ -35,6 +35,7 @@ class Genres extends Component {
      .then(res=>{
        if(res.status===401){
          this.props.setUser('')
+         this.props.setSignInRedirect(this.props.movieslug)
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status===200){
          res.json()
@@ -154,13 +155,15 @@ class Genres extends Component {
 
           <button
             style = {{
-              color: this.props.sortBy==='name' ? 'LawnGreen': 'white'
+              fontSize:'16px',
+              color: this.props.sortBy==='name' ? '#00FFFF': 'white'
             }}
             className='sort-selector button-nostyle'
             onClick = {()=>this.props.setSort("name")}>TITLE</button>
           <button
             style = {{
-              color: this.props.sortBy==='year' ? 'LawnGreen': 'white'
+              fontSize:'16px',
+              color: this.props.sortBy==='year' ? '#00FFFF': 'white'
             }}
             className='sort-selector button-nostyle'
             onClick = {()=>this.props.setSort("year")}>YEAR</button>
