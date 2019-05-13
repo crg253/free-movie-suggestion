@@ -9,45 +9,23 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
-
-
-'''
-Need to split this into two functions? getsavedmovies getsuggested movies
-'''
-# @app.route('/api/usermovies', methods=['GET'])
-# @token_auth.login_required
-# def user_movies():
-#     user_movies = []
-#     for movie in g.current_user.user_movies:
-#         user_movies.append({"name":movie.name,"year":movie.year})
-#     return jsonify({'movies':user_movies, 'user':g.current_user.username}), 201
-
-@app.route('/api/getsavedmovies', methods=['GET'])
-@token_auth.login_required
-def getsavedmovies():
+def fetchsavedmovies():
     saved_movies = []
     user = User.query.filter_by(username=g.current_user.username).first()
-    print(user)
     for movie in user.saves:
         saved_movies.append({"id":movie.movie_id,
-                        "name":movie.name,
-                        "slug":movie.uniquename,
-                        "tags":[x.name for x in movie.tags],
-                        "video":movie.video_link,
-                        "status":movie.status,
-                        "year":movie.year})
-    print(saved_movies)
-    return jsonify({'savedMovies':saved_movies, 'user':g.current_user.username})
+            "name":movie.name,
+            "slug":movie.uniquename,
+            "tags":[x.name for x in movie.tags],
+            "video":movie.video_link,
+            "status":movie.status,
+            "year":movie.year,
+            'user':User.query.filter_by(user_id=movie.user_id).first().username})
+    return(saved_movies)
 
-@app.route('/api/savemovie', methods=['POST'])
-@token_auth.login_required
-def savemovie():
-    data=request.get_json(silent=True) or {}
-    movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
-    g.current_user.saves.append(movie_to_save)
-    db.session.commit()
-    return '', 200
-    pass
+#def getsuggestedmovies
+
+#def removesuggestion
 
 @app.route('/api/suggestmovie', methods=['POST'])
 @token_auth.login_required
@@ -62,6 +40,22 @@ def user():
     db.session.commit()
     return '', 200
 
+@app.route('/api/getsavedmovies', methods=['GET'])
+@token_auth.login_required
+def getsavedmovies():
+    return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
+
+#def unsavemovie
+
+@app.route('/api/savemovie', methods=['POST'])
+@token_auth.login_required
+def savemovie():
+    data=request.get_json(silent=True) or {}
+    movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
+    g.current_user.saves.append(movie_to_save)
+    db.session.commit()
+    return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
+
 @app.route('/api/revoketoken', methods=['DELETE'])
 @token_auth.login_required
 def revoke_token():
@@ -72,14 +66,14 @@ def revoke_token():
 @app.route('/api/checktoken', methods=['GET'])
 @token_auth.login_required
 def checktoken():
-    return '', 200
+    return jsonify({'user':g.current_user.username}), 200
 
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
 def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
-    return jsonify({'token':token}), 200
+    return jsonify({'user':g.current_user.username,'token':token, 'savedMovies':fetchsavedmovies()}), 200
 
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
@@ -90,7 +84,7 @@ def add_user():
     db.session.commit()
     return jsonify({'comment':"It worked!"}),201
 
-@app.route('/api/movies')
+@app.route('/api/getallmovies')
 def movies():
     movies = []
     for movie in Movie.query.all():

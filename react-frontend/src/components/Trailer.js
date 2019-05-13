@@ -5,6 +5,7 @@ import {Redirect} from 'react-router-dom';
 class Trailer extends Component {
 
   state={
+    Message:'',
     Redirect:''
   }
 
@@ -20,9 +21,34 @@ class Trailer extends Component {
      .then(res=>{
        if(res.status===401){
          this.props.setUser('')
+         this.props.setSavedMovies([])
+         this.props.setSignInRedirect(this.props.movieslug)
          this.setState({Redirect:<Redirect to='/signin'/>})
+       }else if(res.status ===200){
+         res.json()
+         .then(res=>{
+               this.props.setUser(res.user)
+               this.props.setSavedMovies(res.savedMovies)
+               this.setState({Message:"Thank you, movie has been saved."})
+         })
        }
     })
+  }
+
+  getSaveButton = (slug) =>{
+    let buttonComponent = ''
+    let savedMatches = this.props.savedMovies.filter(savedMovie=>savedMovie.slug===slug)
+    if(savedMatches.length>0){
+      buttonComponent= 'unsave'
+    }else{
+      buttonComponent=
+      <button
+        className="button-nostyle"
+        onClick = {()=>this.handleSaveMovie(slug)}
+        style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
+            Save</button>
+    }
+    return buttonComponent
   }
 
   render() {
@@ -41,11 +67,9 @@ class Trailer extends Component {
             <div id="title-and-save-button">
               <h2 id="trailer-title" >{selection.name} {selection.year}</h2>
 
-              <button
-                className="button-nostyle"
-                onClick = {()=>this.handleSaveMovie(selection.slug)}
-                style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
-                    Save</button>
+              {this.getSaveButton(selection.slug)}
+
+              <h4>{this.state.Message}</h4>
 
             </div>
           </div>

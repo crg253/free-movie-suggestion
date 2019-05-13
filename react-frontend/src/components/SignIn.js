@@ -32,9 +32,13 @@ class SignIn extends Component  {
         this.setState({Message:"Invalid username and/or password", name:'', password:''})
       }else if(res.status ===200){
         res.json()
-          .then(data=>localStorage.setItem('token', data.token))
-          .then(this.props.setUser(this.state.name))
-          .then(data=>this.setState({Redirect:<Redirect to='/user'/>}))
+          .then(data=>{
+            localStorage.setItem('token', data.token)
+            this.props.setUser(data.user)
+            this.props.setSavedMovies(data.savedMovies)
+            this.setState({Redirect:<Redirect to={'/'+this.props.signInRedirect}/>})
+          }
+        )
       }
     })
   }

@@ -7,6 +7,7 @@ class MovieList extends Component {
 
     let selectedMovieList = []
     if(this.props.listBy==="Saved"){
+      //Here do a fetch for savedMovies
       selectedMovieList= this.props.savedMovies
     }else if(this.props.listBy==="All"){
       selectedMovieList = this.props.movies

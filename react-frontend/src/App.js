@@ -17,8 +17,13 @@ class App extends Component {
     ListBy:'All',
     SortBy:'name',
     User:'',
-    SavedMovies:[]
+    SavedMovies:[],
+    SignInRedirect:''
    }
+
+  setSignInRedirect = (redirect) => {
+    this.setState({SignInRedirect:redirect})
+  }
 
   setSavedMovies = (newSavedMovies) =>{
     this.setState({SavedMovies:newSavedMovies})
@@ -36,38 +41,35 @@ class App extends Component {
     this.setState({ListBy:choice});
   }
 
-  locStorToState = () => {
-    let saved = Object.keys(localStorage)
-                    .filter(slug=>localStorage.getItem(slug)==='saved');
-
-    this.setState({SavedMovies:saved});
-  }
-
-  // saveUnsave = (movieslug) => {
-  //   if (!localStorage.getItem(movieslug)){
-  //     localStorage.setItem(movieslug, 'saved');
-  //   }else if (localStorage.getItem(movieslug)==='unsaved'){
-  //     localStorage.setItem(movieslug, 'saved');
-  //   }else{
-  //     localStorage.setItem(movieslug, 'unsaved');
-  //   }
-  //   this.locStorToState();
-  // }
-
-  // unSave = (id) => {
-  //   localStorage.setItem(id, 'unsaved');
-  //   this.locStorToState();
-  // }
 
   componentDidMount(){
-    axios.get('/api/movies')
+    axios.get('/api/getallmovies')
     .then(response=> {
       this.setState({Movies: response.data})
     })
-    //this.locStorToState();
+    fetch('api/getsavedmovies',{
+      method:'GET',
+      headers: {
+        'Authorization':"Bearer " +localStorage.getItem('token')
+        }
+    })
+    .then(res=>{
+      if(res.status ===200){
+        res.json()
+          .then(res=>{
+                this.setState({User:res.user})
+                this.setState({SavedMovies:res.savedMovies})
+          }
+        )
+      }
+    })
   }
 
   render() {
+
+    console.log("user from app.js is ".concat(this.state.User))
+    console.log(this.state.User.concat(" saved movies are ..."))
+    console.log(this.state.SavedMovies)
 
     let movies = this.state.Movies.filter(movie=>movie.status==='approved');
     let userSuggestions = this.state.Movies.filter(movie=>movie.status==='pending');
@@ -94,7 +96,8 @@ class App extends Component {
                                 chooseListBy={this.chooseListBy}
                                 randomMovies={randomMovies}
                                 setUser={this.setUser}
-                                user={this.state.User}/>}/>
+                                user={this.state.User}
+                                setSavedMovies={this.setSavedMovies}/>}/>
           <Switch>
             <Route
               path='/user'
@@ -108,7 +111,9 @@ class App extends Component {
               render = {(props)=><SignIn
                                     {...props}
                                     setUser={this.setUser}
-                                    user={this.state.User}/>}/>
+                                    user={this.state.User}
+                                    signInRedirect={this.state.SignInRedirect}
+                                    setSavedMovies={this.setSavedMovies}/>}/>
 
             <Route
               path='/adduser'
@@ -122,8 +127,6 @@ class App extends Component {
                                     userSuggestions={userSuggestions}
                                     savedMovies={this.state.SavedMovies}
                                     chooseListBy={this.chooseListBy}
-                                    saveUnsave={this.saveUnsave}
-                                    locStorToState={this.locStorToState}
                                     unSave={this.unSave}
                                     genres={this.state.Genres}
                                     listBy={this.state.ListBy}
@@ -131,7 +134,8 @@ class App extends Component {
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
                                     setUser={this.setUser}
-                                    setSavedMovies={this.setSavedMovies}/>}/>
+                                    setSavedMovies={this.setSavedMovies}
+                                    setSignInRedirect={this.setSignInRedirect}/>}/>
 
             <Route
               path='/'

@@ -26,13 +26,19 @@ class Menu extends Component {
         'Authorization':"Bearer " +localStorage.getItem('token')
       }
     })
+    .then(res=>{
+      this.props.setUser('')
+      this.props.setSavedMovies([])
+    }
+      
+    )
   }
 
   render() {
 
     let signOutLink = ''
     if(this.props.user !==''){
-      signOutLink= <div onClick={()=>{this.handleSignOut();this.props.setUser('');this.changeMenuDisplay();}}>
+      signOutLink= <div onClick={()=>{this.handleSignOut();this.changeMenuDisplay();}}>
                       <Link to={'/'}>
                         <h4 className="menu-genre-links">Sign Out</h4>
                       </Link>
@@ -72,7 +78,10 @@ class Menu extends Component {
             className="button-nostyle"
             onClick={()=>this.changeMenuDisplay()}>X</button>
 
+
             <div id="menu-links">
+              <h4 className="menu-genre-links">{this.props.user}</h4>
+
               <div onClick={()=>this.changeMenuDisplay()}>
                 <Link to={'/'}>
                   <h4 className="menu-genre-links">Home</h4>

@@ -20,8 +20,10 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            saveUnsave={props.saveUnsave}
-            setUser={props.setUser}/>
+            setUser={props.setUser}
+            setSignInRedirect={props.setSignInRedirect}
+            setSavedMovies={props.setSavedMovies}
+            savedMovies={props.savedMovies}/>
 
         <div id="genres-and-list">
           <Genres

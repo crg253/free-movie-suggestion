@@ -5,6 +5,7 @@ import './User.css';
 
 class User extends Component {
 
+  //UserMovies should be in global state
   state={
     UserMovies:[],
     SearchValue:'',
@@ -14,6 +15,7 @@ class User extends Component {
   }
 
   componentDidMount(){
+    //change to getmysuggestions
     fetch('api/usermovies',{
       method:'GET',
       headers: {
