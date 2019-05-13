@@ -60,6 +60,9 @@ iframe{
   padding: 0;
   margin: 0 5px 0 0;
 }
+.list-unsave-button button{
+  margin-left: 10px;
+}
 
 
 /* PORTRAIT */
@@ -139,8 +142,10 @@ iframe{
   .list-items{
     justify-content: center;
   }
-  .list-items p{
+  .list-unsave-button{
+    text-align: center;
   }
+
 }
 
 /* SMALL LANDSCAPE */

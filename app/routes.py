@@ -23,7 +23,6 @@ def fetchsavedmovies():
             'user':User.query.filter_by(user_id=movie.user_id).first().username})
     return(saved_movies)
 
-#def getsuggestedmovies
 
 #def removesuggestion
 
@@ -39,6 +38,9 @@ def user():
     db.session.add(movie)
     db.session.commit()
     return '', 200
+
+#def getsuggestedmovies
+
 
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required

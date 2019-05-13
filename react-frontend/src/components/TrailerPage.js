@@ -41,7 +41,10 @@ const TrailerPage = (props) => {
                 sortBy={props.sortBy}
                 savedMovies={props.savedMovies}
                 unSave = {props.unSave}
-                listBy={props.listBy}/>
+                listBy={props.listBy}
+                savedMovies={props.savedMovies}
+                setUser={props.setUser}
+                setSavedMovies={props.setSavedMovies}/>
         </div>
       </div>
     </div>

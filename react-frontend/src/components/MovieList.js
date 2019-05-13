@@ -1,7 +1,37 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class MovieList extends Component {
+
+  state={
+    Redirect:''
+  }
+
+  handleUnsaveMovie = (slug) =>{
+    fetch('api/unsavemovie',{
+      method:'POST',
+      headers:{
+        'Authorization':"Bearer " +localStorage.getItem('token'),
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({slug: slug})
+     })
+     .then(res=>{
+       if(res.status===401){
+         this.props.setUser('')
+         this.props.setSavedMovies([])
+         this.props.setSignInRedirect(this.props.movieslug)
+         this.setState({Redirect:<Redirect to='/signin'/>})
+       }else if(res.status ===200){
+         res.json()
+         .then(res=>{
+               this.props.setUser(res.user)
+               this.props.setSavedMovies(res.savedMovies)
+         })
+       }
+    })
+  }
+
 
   render() {
 
@@ -46,17 +76,27 @@ class MovieList extends Component {
     }else{
       selectedMovieList.sort(compareSlug);
     }
+
     return (
 
       <div className="list-items-wrapper">
+      {this.state.Redirect}
+
       {selectedMovieList.map(film =>
+        <div>
           <Link key={film.slug} to={'/' + film.slug}>
             <div className='list-items'>
               <p>{film.name}</p> <p>{film.year}</p>
                 {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
             </div>
           </Link>
-
+          {this.props.savedMovies.filter(savedMovie => savedMovie.slug===film.slug)
+          .map(saveButton=>
+            <div className='list-unsave-button'>
+              <button onClick = {()=>this.handleUnsaveMovie(film.slug)}>Unsave</button>
+            </div>
+          )}
+        </div>
       )}
       </div>
 
