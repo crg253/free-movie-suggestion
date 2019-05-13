@@ -21,6 +21,7 @@ class App extends Component {
     SignInRedirect:''
    }
 
+
   setSignInRedirect = (redirect) => {
     this.setState({SignInRedirect:redirect})
   }

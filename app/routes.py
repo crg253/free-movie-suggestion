@@ -40,12 +40,14 @@ def user():
     db.session.commit()
     return '', 200
 
-@app.route('/api/getsavedmovies', methods=['GET'])
+@app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required
-def getsavedmovies():
+def unsavemovie():
+    data=request.get_json(silent=True) or {}
+    movie_to_unsave = Movie.query.filter_by(uniquename=data.get('slug')).first()
+    g.current_user.saves.remove(movie_to_unsave)
+    db.session.commit()
     return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
-
-#def unsavemovie
 
 @app.route('/api/savemovie', methods=['POST'])
 @token_auth.login_required
@@ -54,6 +56,11 @@ def savemovie():
     movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
     g.current_user.saves.append(movie_to_save)
     db.session.commit()
+    return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
+
+@app.route('/api/getsavedmovies', methods=['GET'])
+@token_auth.login_required
+def getsavedmovies():
     return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/revoketoken', methods=['DELETE'])
