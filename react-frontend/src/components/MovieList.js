@@ -81,21 +81,18 @@ class MovieList extends Component {
       chosenList =
         <div>
         {selectedMovieList.map(film =>
-        <div>
-          <Link key={film.slug} to={'/' + film.slug}>
+        <div key={'saved'+film.slug}>
+          <Link to={'/' + film.slug}>
             <div className='list-items'>
               <p>{film.name}</p> <p>{film.year}</p>
                 {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
             </div>
           </Link>
-          {this.props.savedMovies.filter(savedMovie => savedMovie.slug===film.slug)
-          .map(saveButton=>
             <div className='list-unsave-button'>
               <button
                 onClick = {()=>this.handleUnsaveMovie(film.slug)}
                 >unsave</button>
             </div>
-          )}
         </div>
       )}
       </div>

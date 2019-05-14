@@ -14,6 +14,7 @@ class User extends Component {
   }
 
   componentDidMount(){
+    //change to getmysuggestions
     fetch('api/getusermovies',{
       method:'GET',
       headers: {
@@ -27,7 +28,7 @@ class User extends Component {
         this.props.setSavedMovies([])
         this.props.setSignInRedirect('user')
         this.setState({Redirect:<Redirect to='/signin'/>})
-      }else if(res.status ===200){
+      }else if(res.status ===201){
         res.json()
           .then(res=>{
                 this.props.setSuggestedMovies(res.suggestedMovies)
@@ -70,9 +71,6 @@ class User extends Component {
        }
        else if(res.status===401){
          this.props.setUser('')
-         this.props.setSuggestedMovies([])
-         this.props.setSavedMovies([])
-         this.props.setSignInRedirect('user')
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          this.setState({SearchResultOptions:[], SearchValue:'', MovieMessage:"Thank you for suggesting"})
@@ -85,18 +83,13 @@ class User extends Component {
          .then(res=>{
            if(res.status===401){
              this.props.setUser('')
-             this.props.setSuggestedMovies([])
-             this.props.setSavedMovies([])
-             this.props.setSignInRedirect('user')
              this.setState({Redirect:<Redirect to='/signin'/>})
            }else if(res.status ===201){
              res.json()
-               .then(res=>{
-                     this.props.setSuggestedMovies(res.suggestedMovies)
-                     this.props.setSavedMovies(res.savedMovies)
-                     this.props.setUser(res.user)
-               }
-             )
+             .then(res=>{
+                   this.setState({UserMovies:res.movies})
+                   this.props.setUser(res.user)
+             })
            }
          })
         }

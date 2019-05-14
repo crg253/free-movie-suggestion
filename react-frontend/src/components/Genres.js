@@ -26,7 +26,7 @@ class Genres extends Component {
   }
 
   handleGetSavedMovies = () =>{
-    fetch('api/getsavedmovies',{
+    fetch('api/getusermovies',{
       method:'GET',
       headers:{
         'Authorization':"Bearer " +localStorage.getItem('token'),
@@ -35,11 +35,14 @@ class Genres extends Component {
      .then(res=>{
        if(res.status===401){
          this.props.setUser('')
+         this.props.setSuggestedMovies([])
+         this.props.setSavedMovies([])
          this.props.setSignInRedirect(this.props.movieslug)
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status===200){
          res.json()
            .then(res=>{
+             this.props.setSuggestedMovies(res.suggestedMovies)
              this.props.setSavedMovies(res.savedMovies)
              this.props.setUser(res.user)
            }
@@ -80,7 +83,7 @@ class Genres extends Component {
                         <Link to={'/' + this.props.randomMovies[genre].slug}>
                           <h2
                           style = {{
-                            color: this.props.listBy===genre ? 'green': 'purple'
+                            color: this.props.listBy===genre ? 'white': '#9E9E9E'
                           }}
                           id={genre.slice(0,3)}
                           className="select-genre">{genre} </h2>
@@ -93,7 +96,7 @@ class Genres extends Component {
                 onClick={()=>{this.props.chooseListBy("Saved"); this.handleGetSavedMovies();}}>
                   <h2
                   style = {{
-                    color: this.props.listBy==="Saved" ? 'green': 'purple'
+                    color: this.props.listBy==="Saved" ? 'white': '#9E9E9E'
                   }}
                    className="select-genre">Saved</h2>
               </button>
@@ -103,9 +106,9 @@ class Genres extends Component {
                 onClick={()=>this.props.chooseListBy("All")}>
                   <h2
                   style = {{
-                    color: this.props.listBy==="All" ? 'green': 'purple'
+                    color: this.props.listBy==="All" ? 'white': '#9E9E9E'
                   }}
-                  className="select-genre">All</h2>
+                  className="select-genre">All Movies</h2>
               </button>
 
               <button
@@ -113,7 +116,7 @@ class Genres extends Component {
                 onClick={()=>this.props.chooseListBy("User Suggestions")}>
                   <h2
                   style = {{
-                    color: this.props.listBy==="User Suggestions" ? 'green': 'purple'
+                    color: this.props.listBy==="User Suggestions" ? 'white': '#9E9E9E'
                   }}
                   className="select-genre">User Suggestions</h2>
               </button>
@@ -126,9 +129,9 @@ class Genres extends Component {
                   <div
                     key={"mobile-genre-link-list"+genre}
                     onClick={()=>{
-                    this.props.chooseListBy(genre);
-                    this.changeGenreDisplay();
-                    this.changeGenreButton();}}>
+                      this.props.chooseListBy(genre);
+                      this.changeGenreDisplay();
+                      this.changeGenreButton();}}>
                         <Link to={'/' + this.props.randomMovies[genre].slug}>
                           <h2
                             id={genre.slice(0,3)}
@@ -141,8 +144,10 @@ class Genres extends Component {
                 <button
                   className="button-nostyle"
                   onClick={()=>{this.props.chooseListBy("Saved");
-                    this.changeGenreDisplay();
-                    this.changeGenreButton();}}>
+                                  this.handleGetSavedMovies();
+                                  this.changeGenreDisplay();
+                                  this.changeGenreButton();
+                                  }}>
                       <h2 className="select-genre">Saved</h2>
                 </button>
               </div>

@@ -9,6 +9,7 @@ import SignIn from './components/SignIn';
 import AddUser from './components/AddUser';
 import User from './components/User';
 import Menu from './components/Menu';
+import UserMovies from './components/UserMovies'
 
 class App extends Component {
   state = {
@@ -18,9 +19,13 @@ class App extends Component {
     SortBy:'name',
     User:'',
     SavedMovies:[],
-    SignInRedirect:''
+    SignInRedirect:'',
+    SuggestedMovies:[]
    }
 
+  setSuggestedMovies = (newSuggestedMovies) =>{
+    this.setState({SuggestedMovies:newSuggestedMovies})
+  }
 
   setSignInRedirect = (redirect) => {
     this.setState({SignInRedirect:redirect})
@@ -48,7 +53,7 @@ class App extends Component {
     .then(response=> {
       this.setState({Movies: response.data})
     })
-    fetch('api/getsavedmovies',{
+    fetch('api/getusermovies',{
       method:'GET',
       headers: {
         'Authorization':"Bearer " +localStorage.getItem('token')
@@ -60,6 +65,7 @@ class App extends Component {
           .then(res=>{
                 this.setState({User:res.user})
                 this.setState({SavedMovies:res.savedMovies})
+                this.setState({SuggestedMovies:res.suggestedMovies})
           }
         )
       }
@@ -71,6 +77,8 @@ class App extends Component {
     console.log("user from app.js is ".concat(this.state.User))
     console.log(this.state.User.concat(" saved movies are ..."))
     console.log(this.state.SavedMovies)
+    console.log(this.state.User.concat(" suggested movies are ..."))
+    console.log(this.state.SuggestedMovies)
 
     let movies = this.state.Movies.filter(movie=>movie.status==='approved');
     let userSuggestions = this.state.Movies.filter(movie=>movie.status==='pending');
@@ -100,12 +108,25 @@ class App extends Component {
                                 user={this.state.User}
                                 setSavedMovies={this.setSavedMovies}/>}/>
           <Switch>
+          <Route
+            path='/usermovies'
+            render={(props)=><UserMovies
+                              {...props}
+                              setUser={this.setUser}
+                              user={this.state.User}
+                              setSignInRedirect={this.setSignInRedirect}
+                              setSuggestedMovies={this.setSuggestedMovies}
+                              setSavedMovies={this.setSavedMovies}/>}/>
+
             <Route
               path='/user'
               render={(props)=><User
                                 {...props}
                                 setUser={this.setUser}
-                                user={this.state.User}/>}/>
+                                user={this.state.User}
+                                setSignInRedirect={this.setSignInRedirect}
+                                setSuggestedMovies={this.setSuggestedMovies}
+                                setSavedMovies={this.setSavedMovies}/>}/>
 
             <Route
               path='/signin'
@@ -136,7 +157,8 @@ class App extends Component {
                                     randomMovies={randomMovies}
                                     setUser={this.setUser}
                                     setSavedMovies={this.setSavedMovies}
-                                    setSignInRedirect={this.setSignInRedirect}/>}/>
+                                    setSignInRedirect={this.setSignInRedirect}
+                                    setSuggestedMovies={this.setSuggestedMovies}/>}/>
 
             <Route
               path='/'

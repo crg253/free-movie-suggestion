@@ -23,6 +23,20 @@ def fetchsavedmovies():
             'user':User.query.filter_by(user_id=movie.user_id).first().username})
     return(saved_movies)
 
+def fetchsuggestedmovies():
+    suggested_movies = []
+    user = User.query.filter_by(username=g.current_user.username).first()
+    for movie in user.user_movies:
+        suggested_movies.append({"id":movie.movie_id,
+            "name":movie.name,
+            "slug":movie.uniquename,
+            "tags":[x.name for x in movie.tags],
+            "video":movie.video_link,
+            "status":movie.status,
+            "year":movie.year,
+            'user':User.query.filter_by(user_id=movie.user_id).first().username})
+    return(suggested_movies)
+
 
 #def removesuggestion
 
@@ -38,9 +52,6 @@ def user():
     db.session.add(movie)
     db.session.commit()
     return '', 200
-
-#def getsuggestedmovies
-
 
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required
@@ -60,10 +71,11 @@ def savemovie():
     db.session.commit()
     return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
 
-@app.route('/api/getsavedmovies', methods=['GET'])
+@app.route('/api/getusermovies')
 @token_auth.login_required
-def getsavedmovies():
-    return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
+def getusermovies():
+    #get both saved movies and suggested movies
+    return jsonify({'suggestedMovies':fetchsuggestedmovies(),'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/revoketoken', methods=['DELETE'])
 @token_auth.login_required

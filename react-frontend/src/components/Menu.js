@@ -30,11 +30,20 @@ class Menu extends Component {
       this.props.setUser('')
       this.props.setSavedMovies([])
     }
-      
+
     )
   }
 
   render() {
+
+    let userMoviesLink = ''
+    if(this.props.user !==''){
+      userMoviesLink= <div onClick={()=>{this.changeMenuDisplay();}}>
+                      <Link to={'/usermovies'}>
+                        <h4 className="menu-genre-links">Your Movies</h4>
+                      </Link>
+                    </div>
+    }
 
     let signOutLink = ''
     if(this.props.user !==''){
@@ -46,7 +55,7 @@ class Menu extends Component {
     }
 
     let menuGenreLinks = ''
-    const userPaths = ['/user', '/signin', '/adduser']
+    const userPaths = ['/user', '/usermovies', '/signin', '/adduser']
     if (userPaths.includes(this.props.location.pathname)){
       menuGenreLinks = this.props.genres.map(genre=>(
                 <div
@@ -82,11 +91,7 @@ class Menu extends Component {
             <div id="menu-links">
               <h4 className="menu-genre-links">{this.props.user}</h4>
 
-              <div onClick={()=>this.changeMenuDisplay()}>
-                <Link to={'/'}>
-                  <h4 className="menu-genre-links">Home</h4>
-                </Link>
-              </div>
+              {userMoviesLink}
 
               <div onClick={()=>this.changeMenuDisplay()}>
                 <Link to={'/user'}>
@@ -94,6 +99,13 @@ class Menu extends Component {
                 </Link>
               </div>
               {signOutLink}
+
+              <div onClick={()=>this.changeMenuDisplay()}>
+                <Link to={'/'}>
+                  <h4 className="menu-genre-links">Home</h4>
+                </Link>
+              </div>
+              
               {menuGenreLinks}
 
 

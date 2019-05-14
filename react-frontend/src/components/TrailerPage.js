@@ -36,7 +36,8 @@ const TrailerPage = (props) => {
                 setSavedMovies={props.setSavedMovies}
                 setUser={props.setUser}
                 setSignInRedirect={props.setSignInRedirect}
-                movieslug={props.match.params.movieslug}/>
+                movieslug={props.match.params.movieslug}
+                setSuggestedMovies={props.setSuggestedMovies}/>
           <MovieList
                 movies={props.movies}
                 userSuggestions={props.userSuggestions}
@@ -44,7 +45,6 @@ const TrailerPage = (props) => {
                 savedMovies={props.savedMovies}
                 unSave = {props.unSave}
                 listBy={props.listBy}
-                savedMovies={props.savedMovies}
                 setUser={props.setUser}
                 setSavedMovies={props.setSavedMovies}/>
         </div>
