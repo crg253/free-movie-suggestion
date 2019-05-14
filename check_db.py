@@ -12,9 +12,10 @@ def check_db():
         # print(movie.video_link + '/')
         # for t in movie.tags:
         #     print(t.name + '/')
-        for saver in movie.savers:
-            print('SAVER')
-            print(saver.username + '/')
+        print(movie.username)
+        # for saver in movie.savers:
+        #     print('SAVER')
+        #     print(saver.username + '/')
 
     # for tag in Tag.query.all():
     #     print(tag.name + '/')
@@ -24,11 +25,11 @@ def check_db():
     for user in User.query.all():
         print('USER')
         print(user.username + '/' )
-        for m in user.saves:
+        for m in user.user_movies:
             #print(str(m.movie_id) + '/')
             #print(m.name + '/')
             print(m.uniquename + '/')
             # print(str(m.year) + '/')
             # print(m.video_link + '/')
-            for t in m.tags:
-                print(t.name + '/')
+            # for t in m.tags:
+            #     print(t.name + '/')

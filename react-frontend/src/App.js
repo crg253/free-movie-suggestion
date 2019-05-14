@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import axios from 'axios';
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import './App.css';
 import HomePage from './components/HomePage';
@@ -18,67 +17,60 @@ class App extends Component {
     ListBy:'All',
     SortBy:'name',
     User:'',
-    SavedMovies:[],
     SignInRedirect:'',
-    SuggestedMovies:[]
    }
 
-  setSuggestedMovies = (newSuggestedMovies) =>{
-    this.setState({SuggestedMovies:newSuggestedMovies})
-  }
-
-  setSignInRedirect = (redirect) => {
-    this.setState({SignInRedirect:redirect})
-  }
-
-  setSavedMovies = (newSavedMovies) =>{
-    this.setState({SavedMovies:newSavedMovies})
-  }
-
-  setUser = (newUser) =>{
-    this.setState({User:newUser});
-  }
-
-  setSort = (sortParam) =>{
-    this.setState({SortBy:sortParam})
-  }
-
-  chooseListBy = (choice) => {
-    this.setState({ListBy:choice});
-  }
-
+   setMovies = (newMovies) => {
+     this.setState({Movies:newMovies})
+   }
+   chooseListBy = (choice) => {
+     this.setState({ListBy:choice});
+   }
+   setSort = (sortParam) =>{
+     this.setState({SortBy:sortParam})
+   }
+   setUser = (newUser) =>{
+     this.setState({User:newUser});
+   }
+   setSignInRedirect = (redirect) => {
+     this.setState({SignInRedirect:redirect})
+   }
+   resetUserAndMovies = () =>{
+     fetch('api/getmovies',{
+       method:'GET'
+     })
+     .then(res=>{
+       if(res.status===200){
+         res.json()
+         .then(res=>{
+           this.setState({User:res.user})
+           this.setState({Movies:res.movies})
+         })
+       }
+     })
+   }
 
   componentDidMount(){
-    axios.get('/api/getallmovies')
-    .then(response=> {
-      this.setState({Movies: response.data})
-    })
-    fetch('api/getusermovies',{
-      method:'GET',
+    fetch('api/checktoken',{
+      method:'POST',
       headers: {
         'Authorization':"Bearer " +localStorage.getItem('token')
         }
     })
     .then(res=>{
-      if(res.status ===200){
+      if(res.status===200){
         res.json()
-          .then(res=>{
-                this.setState({User:res.user})
-                this.setState({SavedMovies:res.savedMovies})
-                this.setState({SuggestedMovies:res.suggestedMovies})
-          }
-        )
+        .then(res=>{
+              this.setState({User:res.user})
+              this.setState({Movies:res.movies})
+        })
+      }else if (res.status===401) {
+        this.resetUserAndMovies()
       }
     })
   }
 
   render() {
-
-    console.log("user from app.js is ".concat(this.state.User))
-    console.log(this.state.User.concat(" saved movies are ..."))
-    console.log(this.state.SavedMovies)
-    console.log(this.state.User.concat(" suggested movies are ..."))
-    console.log(this.state.SuggestedMovies)
 
     let movies = this.state.Movies.filter(movie=>movie.status==='approved');
     let userSuggestions = this.state.Movies.filter(movie=>movie.status==='pending');
@@ -94,6 +86,11 @@ class App extends Component {
         }
     }
 
+    console.log('saved movie list ...')
+    console.log(this.state.Movies.filter(movie=>movie.saved ===true))
+    console.log('SUGGESTED movie list ...')
+    console.log(this.state.Movies.filter(movie=>movie.username===this.state.User))
+
     return (
       <BrowserRouter>
         <div>
@@ -105,8 +102,7 @@ class App extends Component {
                                 chooseListBy={this.chooseListBy}
                                 randomMovies={randomMovies}
                                 setUser={this.setUser}
-                                user={this.state.User}
-                                setSavedMovies={this.setSavedMovies}/>}/>
+                                user={this.state.User}/>}/>
           <Switch>
           <Route
             path='/usermovies'
@@ -115,8 +111,7 @@ class App extends Component {
                               setUser={this.setUser}
                               user={this.state.User}
                               setSignInRedirect={this.setSignInRedirect}
-                              setSuggestedMovies={this.setSuggestedMovies}
-                              setSavedMovies={this.setSavedMovies}/>}/>
+                              setSuggestedMovies={this.setSuggestedMovies}/>}/>
 
             <Route
               path='/user'
@@ -125,8 +120,7 @@ class App extends Component {
                                 setUser={this.setUser}
                                 user={this.state.User}
                                 setSignInRedirect={this.setSignInRedirect}
-                                setSuggestedMovies={this.setSuggestedMovies}
-                                setSavedMovies={this.setSavedMovies}/>}/>
+                                setSuggestedMovies={this.setSuggestedMovies}/>}/>
 
             <Route
               path='/signin'
@@ -134,8 +128,8 @@ class App extends Component {
                                     {...props}
                                     setUser={this.setUser}
                                     user={this.state.User}
-                                    signInRedirect={this.state.SignInRedirect}
-                                    setSavedMovies={this.setSavedMovies}/>}/>
+                                    setMovies={this.setMovies}
+                                    signInRedirect={this.state.SignInRedirect}/>}/>
 
             <Route
               path='/adduser'
@@ -147,7 +141,6 @@ class App extends Component {
                                     {...props}
                                     movies={movies}
                                     userSuggestions={userSuggestions}
-                                    savedMovies={this.state.SavedMovies}
                                     chooseListBy={this.chooseListBy}
                                     unSave={this.unSave}
                                     genres={this.state.Genres}
@@ -156,9 +149,9 @@ class App extends Component {
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
                                     setUser={this.setUser}
-                                    setSavedMovies={this.setSavedMovies}
                                     setSignInRedirect={this.setSignInRedirect}
-                                    setSuggestedMovies={this.setSuggestedMovies}/>}/>
+                                    resetUserAndMovies={this.resetUserAndMovies}
+                                    setMovies = {this.setMovies}/>}/>
 
             <Route
               path='/'

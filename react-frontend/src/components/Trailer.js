@@ -19,15 +19,14 @@ class Trailer extends Component {
      })
      .then(res=>{
        if(res.status===401){
-         this.props.setUser('')
-         this.props.setSavedMovies([])
+         this.props.resetUserAndMovies()
          this.props.setSignInRedirect(this.props.movieslug)
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          res.json()
          .then(res=>{
                this.props.setUser(res.user)
-               this.props.setSavedMovies(res.savedMovies)
+               this.props.setMovies(res.movies)
          })
        }
     })
@@ -44,15 +43,14 @@ class Trailer extends Component {
      })
      .then(res=>{
        if(res.status===401){
-         this.props.setUser('')
-         this.props.setSavedMovies([])
+         this.props.resetUserAndMovies()
          this.props.setSignInRedirect(this.props.movieslug)
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          res.json()
          .then(res=>{
                this.props.setUser(res.user)
-               this.props.setSavedMovies(res.savedMovies)
+               this.props.setMovies(res.movies)
          })
        }
     })
@@ -60,8 +58,8 @@ class Trailer extends Component {
 
   getSaveButton = (slug) =>{
     let buttonComponent = ''
-    let savedMatches = this.props.savedMovies.filter(savedMovie=>savedMovie.slug===slug)
-    if(savedMatches.length>0){
+    let selectedMovie = this.props.movies.filter(movie=>movie.slug===slug)[0]
+    if(selectedMovie.saved===true){
       buttonComponent=
         <button
           className="button-nostyle"

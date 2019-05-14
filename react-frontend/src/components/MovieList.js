@@ -18,26 +18,24 @@ class MovieList extends Component {
      })
      .then(res=>{
        if(res.status===401){
-         this.props.setUser('')
-         this.props.setSavedMovies([])
+         this.props.resetUserAndMovies()
          this.props.setSignInRedirect(this.props.movieslug)
          this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          res.json()
          .then(res=>{
                this.props.setUser(res.user)
-               this.props.setSavedMovies(res.savedMovies)
+               this.props.setMovies(res.movies)
          })
        }
     })
   }
 
-
   render() {
 
     let selectedMovieList = []
     if(this.props.listBy==="Saved"){
-      selectedMovieList= this.props.savedMovies
+      selectedMovieList= this.props.movies.filter(movie=>movie.saved===true)
     }else if(this.props.listBy==="All"){
       selectedMovieList = this.props.movies
     }else if(this.props.listBy==="User Suggestions"){

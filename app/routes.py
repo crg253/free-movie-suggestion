@@ -9,33 +9,21 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
-def fetchsavedmovies():
-    saved_movies = []
-    user = User.query.filter_by(username=g.current_user.username).first()
-    for movie in user.saves:
-        saved_movies.append({"id":movie.movie_id,
-            "name":movie.name,
-            "slug":movie.uniquename,
-            "tags":[x.name for x in movie.tags],
-            "video":movie.video_link,
-            "status":movie.status,
-            "year":movie.year,
-            'user':User.query.filter_by(user_id=movie.user_id).first().username})
-    return(saved_movies)
+def getusermovies():
+    movies = []
+    for movie in Movie.query.all():
+        movies.append({"id":movie.movie_id,
+                        "slug":movie.uniquename,
+                        "name":movie.name,
+                        "year":movie.year,
+                        "video":movie.video_link,
+                        "tags":[x.name for x in movie.tags],
+                        "status":movie.status,
+                        'username':movie.username,
+                        'saved':True if g.current_user in movie.savers else False })
+    return(movies)
 
-def fetchsuggestedmovies():
-    suggested_movies = []
-    user = User.query.filter_by(username=g.current_user.username).first()
-    for movie in user.user_movies:
-        suggested_movies.append({"id":movie.movie_id,
-            "name":movie.name,
-            "slug":movie.uniquename,
-            "tags":[x.name for x in movie.tags],
-            "video":movie.video_link,
-            "status":movie.status,
-            "year":movie.year,
-            'user':User.query.filter_by(user_id=movie.user_id).first().username})
-    return(suggested_movies)
+
 
 
 #def removesuggestion
@@ -51,7 +39,8 @@ def user():
     movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id, status="pending")
     db.session.add(movie)
     db.session.commit()
-    return '', 200
+    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
+
 
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required
@@ -60,7 +49,7 @@ def unsavemovie():
     movie_to_unsave = Movie.query.filter_by(uniquename=data.get('slug')).first()
     g.current_user.saves.remove(movie_to_unsave)
     db.session.commit()
-    return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
+    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/savemovie', methods=['POST'])
 @token_auth.login_required
@@ -69,13 +58,7 @@ def savemovie():
     movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
     g.current_user.saves.append(movie_to_save)
     db.session.commit()
-    return jsonify({'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
-
-@app.route('/api/getusermovies')
-@token_auth.login_required
-def getusermovies():
-    #get both saved movies and suggested movies
-    return jsonify({'suggestedMovies':fetchsuggestedmovies(),'savedMovies':fetchsavedmovies(), 'user':g.current_user.username}), 200
+    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/revoketoken', methods=['DELETE'])
 @token_auth.login_required
@@ -84,17 +67,17 @@ def revoke_token():
     db.session.commit()
     return '', 204
 
-@app.route('/api/checktoken', methods=['GET'])
+@app.route('/api/checktoken', methods=['POST'])
 @token_auth.login_required
 def checktoken():
-    return jsonify({'user':g.current_user.username}), 200
+    return jsonify({'user':g.current_user.username, 'movies':getusermovies()}), 200
 
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
 def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
-    return jsonify({'user':g.current_user.username,'token':token, 'savedMovies':fetchsavedmovies()}), 200
+    return jsonify({'user':g.current_user.username,'token':token, 'movies':getusermovies()}), 200
 
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
@@ -103,21 +86,23 @@ def add_user():
     newUser.set_password(data.get('password'))
     db.session.add(newUser)
     db.session.commit()
-    return jsonify({'comment':"It worked!"}),201
+    return '',201
 
-@app.route('/api/getallmovies')
-def movies():
+@app.route('/api/getmovies')
+def getmovies():
     movies = []
     for movie in Movie.query.all():
         movies.append({"id":movie.movie_id,
-                        "name":movie.name,
                         "slug":movie.uniquename,
-                        "tags":[x.name for x in movie.tags],
-                        "video":movie.video_link,
-                        "status":movie.status,
+                        "name":movie.name,
                         "year":movie.year,
-                        'user':User.query.filter_by(user_id=movie.user_id).first().username})
-    return jsonify(movies)
+                        "video":movie.video_link,
+                        "tags":[x.name for x in movie.tags],
+                        "status":movie.status,
+                        'username':movie.username,
+                        'saved':False})
+    return jsonify({'movies':movies}), 200
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

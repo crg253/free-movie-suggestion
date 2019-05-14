@@ -35,7 +35,7 @@ class SignIn extends Component  {
           .then(data=>{
             localStorage.setItem('token', data.token)
             this.props.setUser(data.user)
-            this.props.setSavedMovies(data.savedMovies)
+            this.props.setMovies(data.movies)
             this.setState({Redirect:<Redirect to={'/'+this.props.signInRedirect}/>})
           }
         )

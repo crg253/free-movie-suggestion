@@ -26,35 +26,29 @@ class Genres extends Component {
   }
 
   handleGetSavedMovies = () =>{
-    fetch('api/getusermovies',{
-      method:'GET',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token'),
-      },
-     })
-     .then(res=>{
-       if(res.status===401){
-         this.props.setUser('')
-         this.props.setSuggestedMovies([])
-         this.props.setSavedMovies([])
-         this.props.setSignInRedirect(this.props.movieslug)
-         this.setState({Redirect:<Redirect to='/signin'/>})
-       }else if(res.status===200){
-         res.json()
-           .then(res=>{
-             this.props.setSuggestedMovies(res.suggestedMovies)
-             this.props.setSavedMovies(res.savedMovies)
-             this.props.setUser(res.user)
-           }
-         )
-       }
+    fetch('api/checktoken',{
+      method:'POST',
+      headers: {
+        'Authorization':"Bearer " +localStorage.getItem('token')
+        }
     })
+    .then(res=>{
+      if(res.status===401){
+        this.props.resetUserAndMovies()
+        this.props.setSignInRedirect(this.props.movieslug)
+        this.setState({Redirect:<Redirect to='/signin'/>})
+      }else if(res.status ===200){
+        res.json()
+        .then(res=>{
+              this.props.setUser(res.user)
+              this.props.setMovies(res.movies)
+        })
+      }
+   })
   }
 
 
   render() {
-
-    console.log(this.props.listBy)
 
     return (
       <div>

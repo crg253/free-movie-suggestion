@@ -28,7 +28,6 @@ class Menu extends Component {
     })
     .then(res=>{
       this.props.setUser('')
-      this.props.setSavedMovies([])
     }
 
     )
@@ -105,7 +104,7 @@ class Menu extends Component {
                   <h4 className="menu-genre-links">Home</h4>
                 </Link>
               </div>
-              
+
               {menuGenreLinks}
 
 

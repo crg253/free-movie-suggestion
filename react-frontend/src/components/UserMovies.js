@@ -25,14 +25,12 @@ class User extends Component {
       if(res.status===401){
         this.props.setUser('')
         this.props.setSuggestedMovies([])
-        this.props.setSavedMovies([])
         this.props.setSignInRedirect('user')
         this.setState({Redirect:<Redirect to='/signin'/>})
       }else if(res.status ===201){
         res.json()
           .then(res=>{
                 this.props.setSuggestedMovies(res.suggestedMovies)
-                this.props.setSavedMovies(res.savedMovies)
                 this.props.setUser(res.user)
           }
         )
@@ -87,6 +85,7 @@ class User extends Component {
            }else if(res.status ===201){
              res.json()
              .then(res=>{
+                  console.log(res.movies)
                    this.setState({UserMovies:res.movies})
                    this.props.setUser(res.user)
              })

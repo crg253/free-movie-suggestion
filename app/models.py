@@ -23,7 +23,7 @@ class Movie(db.Model):
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('movies', lazy=True))
     status = db.Column(db.String(20))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    username = db.Column(db.Integer, db.ForeignKey('user.username'), nullable=False)
     savers = db.relationship('User', secondary=savers, lazy='subquery',
         backref=db.backref('saves', lazy=True))
 
@@ -45,7 +45,7 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def get_token(self, expires_in=1440):
+    def get_token(self, expires_in=1800):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
             return self.token
