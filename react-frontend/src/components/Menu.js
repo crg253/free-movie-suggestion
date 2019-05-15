@@ -32,7 +32,6 @@ class Menu extends Component {
                             this.props.handleTokenFetch('revoketoken', '');
                             this.changeMenuDisplay();}}>
                         <h4
-                          style={{color:'white'}}
                           className="menu-genre-links">Sign Out</h4>
                         </button>
     return (

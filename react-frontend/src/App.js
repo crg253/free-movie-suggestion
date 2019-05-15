@@ -32,14 +32,15 @@ class App extends Component {
      this.setState({User:newUser});
    }
 
-
    handleTokenFetch = (route,slug) => {
      console.log(route)
      fetch('api/'.concat(route),{
       method:'POST',
-      headers: {
-        'Authorization':"Bearer " +localStorage.getItem('token')
-        }
+      headers:{
+        'Authorization':"Bearer " +localStorage.getItem('token'),
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({slug: slug})
     })
     .then(res=>{
         res.json()
@@ -53,8 +54,6 @@ class App extends Component {
   componentDidMount(){
     this.handleTokenFetch('checktoken', '')
   }
-
-
 
   render() {
 
@@ -131,7 +130,8 @@ class App extends Component {
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
                                     handleSaveUnsave={this.handleSaveUnsave}
-                                    handleGetSavedMovies={this.handleGetSavedMovies}/>}/>
+                                    handleGetSavedMovies={this.handleGetSavedMovies}
+                                    handleTokenFetch={this.handleTokenFetch}/>}/>
 
             <Route
               path='/'

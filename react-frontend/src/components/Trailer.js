@@ -11,14 +11,14 @@ class Trailer extends Component {
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.props.handleSaveUnsave('unsavemovie',slug)}
+          onClick = {()=>this.props.handleTokenFetch('unsavemovie',selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Unsave</button>
     }else{
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.props.handleSaveUnsave('savemovie', slug)}
+          onClick = {()=>this.props.handleTokenFetch('savemovie',selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Save</button>
     }

@@ -37,8 +37,6 @@ def getnonusermovies():
                         'saved':False})
     return(movies)
 
-
-
 #def removesuggestion
 
 @app.route('/api/suggestmovie', methods=['POST'])
@@ -51,25 +49,6 @@ def user():
     user = User.query.filter_by(username=g.current_user.username).first()
     movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id, status="pending")
     db.session.add(movie)
-    db.session.commit()
-    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
-
-
-@app.route('/api/unsavemovie', methods=['POST'])
-@token_auth.login_required
-def unsavemovie():
-    data=request.get_json(silent=True) or {}
-    movie_to_unsave = Movie.query.filter_by(uniquename=data.get('slug')).first()
-    g.current_user.saves.remove(movie_to_unsave)
-    db.session.commit()
-    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
-
-@app.route('/api/savemovie', methods=['POST'])
-@token_auth.login_required
-def savemovie():
-    data=request.get_json(silent=True) or {}
-    movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
-    g.current_user.saves.append(movie_to_save)
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
@@ -88,6 +67,25 @@ def add_user():
 
 
 
+
+@app.route('/api/unsavemovie', methods=['POST'])
+@token_auth.login_required
+def unsavemovie():
+    data=request.get_json(silent=True) or {}
+    print(data.get('slug'))
+    movie_to_unsave = Movie.query.filter_by(uniquename=data.get('slug')).first()
+    g.current_user.saves.remove(movie_to_unsave)
+    db.session.commit()
+    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
+
+@app.route('/api/savemovie', methods=['POST'])
+@token_auth.login_required
+def savemovie():
+    data=request.get_json(silent=True) or {}
+    movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
+    g.current_user.saves.append(movie_to_save)
+    db.session.commit()
+    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/revoketoken', methods=['POST'])
 @token_auth.login_required
