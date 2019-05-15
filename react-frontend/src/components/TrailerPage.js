@@ -12,6 +12,7 @@ const TrailerPage = (props) => {
 
   return(
     <div>
+      {props.redirect}
       <Link to={'/'}>
         <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
       </Link>
@@ -20,11 +21,7 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            setUser={props.setUser}
-            setSignInRedirect={props.setSignInRedirect}
-            savedMovies={props.savedMovies}
-            resetUserAndMovies={props.resetUserAndMovies}
-            setMovies = {props.setMovies}/>
+            handleSaveUnsave ={props.handleSaveUnsave}/>
 
         <div id="genres-and-list">
           <Genres
@@ -34,22 +31,14 @@ const TrailerPage = (props) => {
                 chooseListBy={props.chooseListBy}
                 listBy={props.listBy}
                 randomMovies={props.randomMovies}
-                setUser={props.setUser}
-                setSignInRedirect={props.setSignInRedirect}
                 movieslug={props.match.params.movieslug}
-                setSuggestedMovies={props.setSuggestedMovies}
-                resetUserAndMovies={props.resetUserAndMovies}
-                setMovies = {props.setMovies}/>
+                handleGetSavedMovies= {props.handleGetSavedMovies}/>
           <MovieList
                 movies={props.movies}
                 userSuggestions={props.userSuggestions}
                 sortBy={props.sortBy}
-                savedMovies={props.savedMovies}
-                unSave = {props.unSave}
                 listBy={props.listBy}
-                setUser={props.setUser}
-                setMovies = {props.setMovies}
-                resetUserAndMovies={props.resetUserAndMovies}/>
+                handleSaveUnsave ={props.handleSaveUnsave}/>
         </div>
       </div>
     </div>

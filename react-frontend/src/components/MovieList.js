@@ -3,33 +3,6 @@ import { Redirect, Link } from "react-router-dom";
 
 class MovieList extends Component {
 
-  state={
-    Redirect:''
-  }
-
-  handleUnsaveMovie = (slug) =>{
-    fetch('api/unsavemovie',{
-      method:'POST',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token'),
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify({slug: slug})
-     })
-     .then(res=>{
-       if(res.status===401){
-         this.props.resetUserAndMovies()
-         this.props.setSignInRedirect(this.props.movieslug)
-         this.setState({Redirect:<Redirect to='/signin'/>})
-       }else if(res.status ===200){
-         res.json()
-         .then(res=>{
-               this.props.setUser(res.user)
-               this.props.setMovies(res.movies)
-         })
-       }
-    })
-  }
 
   render() {
 
@@ -88,7 +61,7 @@ class MovieList extends Component {
           </Link>
             <div className='list-unsave-button'>
               <button
-                onClick = {()=>this.handleUnsaveMovie(film.slug)}
+                onClick = {()=>this.props.handleSaveUnsave('unsavemovie',film.slug)}
                 >unsave</button>
             </div>
         </div>
@@ -111,7 +84,6 @@ class MovieList extends Component {
     return (
 
       <div className="list-items-wrapper">
-      {this.state.Redirect}
       {chosenList}
 
       </div>

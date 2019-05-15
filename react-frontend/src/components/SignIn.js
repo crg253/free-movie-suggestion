@@ -7,7 +7,6 @@ class SignIn extends Component  {
   state={
     name:'',
     password:'',
-    Redirect:'',
     Message:""
   }
   handleNameChange = (event) =>{
@@ -36,17 +35,22 @@ class SignIn extends Component  {
             localStorage.setItem('token', data.token)
             this.props.setUser(data.user)
             this.props.setMovies(data.movies)
-            this.setState({Redirect:<Redirect to={'/'+this.props.signInRedirect}/>})
+            this.props.setRedirectBack(<Redirect to={'/'+this.props.redirectBackSlug}/>)
           }
         )
       }
     })
   }
 
+  componentDidMount(){
+    this.props.setRedirect('')
+    this.props.setRedirectBack('')
+  }
+
   render() {
     return (
         <div>
-          {this.state.Redirect}
+          {this.props.redirectBack}
           <Link to={'/'}>
             <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
           </Link>

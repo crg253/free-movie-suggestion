@@ -6,7 +6,6 @@ class Genres extends Component {
   state={
     displayGenreButton:'flex',
     displayGenres:'none',
-    Redirect:''
   }
 
   changeGenreDisplay = () =>{
@@ -25,34 +24,11 @@ class Genres extends Component {
     }
   }
 
-  handleGetSavedMovies = () =>{
-    fetch('api/checktoken',{
-      method:'POST',
-      headers: {
-        'Authorization':"Bearer " +localStorage.getItem('token')
-        }
-    })
-    .then(res=>{
-      if(res.status===401){
-        this.props.resetUserAndMovies()
-        this.props.setSignInRedirect(this.props.movieslug)
-        this.setState({Redirect:<Redirect to='/signin'/>})
-      }else if(res.status ===200){
-        res.json()
-        .then(res=>{
-              this.props.setUser(res.user)
-              this.props.setMovies(res.movies)
-        })
-      }
-   })
-  }
-
 
   render() {
 
     return (
       <div>
-        {this.state.Redirect}
         <div id="genre-button-or-list">
 
           <div id="genre-and-button" style={{display:this.state.displayGenreButton}}>
@@ -87,7 +63,9 @@ class Genres extends Component {
 
               <button
                 className="button-nostyle"
-                onClick={()=>{this.props.chooseListBy("Saved"); this.handleGetSavedMovies();}}>
+                onClick={()=>{
+                  this.props.chooseListBy("Saved");
+                  this.props.handleGetSavedMovies(this.props.movieslug);}}>
                   <h2
                   style = {{
                     color: this.props.listBy==="Saved" ? 'white': '#9E9E9E'
@@ -138,7 +116,7 @@ class Genres extends Component {
                 <button
                   className="button-nostyle"
                   onClick={()=>{this.props.chooseListBy("Saved");
-                                  this.handleGetSavedMovies();
+                                  this.props.handleGetSavedMovies(this.props.movieslug);
                                   this.changeGenreDisplay();
                                   this.changeGenreButton();
                                   }}>

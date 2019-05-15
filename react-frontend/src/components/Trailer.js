@@ -4,57 +4,6 @@ import {Redirect} from 'react-router-dom';
 
 class Trailer extends Component {
 
-  state={
-    Redirect:''
-  }
-
-  handleUnsaveMovie = (slug) =>{
-    fetch('api/unsavemovie',{
-      method:'POST',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token'),
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify({slug: slug})
-     })
-     .then(res=>{
-       if(res.status===401){
-         this.props.resetUserAndMovies()
-         this.props.setSignInRedirect(this.props.movieslug)
-         this.setState({Redirect:<Redirect to='/signin'/>})
-       }else if(res.status ===200){
-         res.json()
-         .then(res=>{
-               this.props.setUser(res.user)
-               this.props.setMovies(res.movies)
-         })
-       }
-    })
-  }
-
-  handleSaveMovie = (slug) =>{
-    fetch('api/savemovie',{
-      method:'POST',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token'),
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify({slug: slug})
-     })
-     .then(res=>{
-       if(res.status===401){
-         this.props.resetUserAndMovies()
-         this.props.setSignInRedirect(this.props.movieslug)
-         this.setState({Redirect:<Redirect to='/signin'/>})
-       }else if(res.status ===200){
-         res.json()
-         .then(res=>{
-               this.props.setUser(res.user)
-               this.props.setMovies(res.movies)
-         })
-       }
-    })
-  }
 
   getSaveButton = (slug) =>{
     let buttonComponent = ''
@@ -63,14 +12,14 @@ class Trailer extends Component {
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.handleUnsaveMovie(slug)}
+          onClick = {()=>this.props.handleSaveUnsave('unsavemovie',slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Unsave</button>
     }else{
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.handleSaveMovie(slug)}
+          onClick = {()=>this.props.handleSaveUnsave('savemovie', slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Save</button>
     }
@@ -81,7 +30,6 @@ class Trailer extends Component {
 
     return (
       <div>
-        {this.state.Redirect}
         {this.props.movies.filter(movie=>movie.slug===this.props.movieslug)
         .map(selection=>(
           <div
