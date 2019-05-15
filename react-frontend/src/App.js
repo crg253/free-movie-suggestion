@@ -32,8 +32,9 @@ class App extends Component {
      this.setState({User:newUser});
    }
 
+
    handleTokenFetch = (route,slug) => {
-     console.log("Token fetch, should get user name and movies or RESET both")
+     console.log(route)
      fetch('api/'.concat(route),{
       method:'POST',
       headers: {
@@ -90,7 +91,7 @@ class App extends Component {
                                 randomMovies={randomMovies}
                                 setUser={this.setUser}
                                 user={this.state.User}
-                                handleSignOut={this.handleSignOut}/>}/>
+                                handleTokenFetch={this.handleTokenFetch}/>}/>
           <Switch>
           <Route
             path='/usermovies'

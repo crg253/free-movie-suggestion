@@ -21,8 +21,6 @@ class Menu extends Component {
 
 
   render() {
-
-
     let signInLink=
                       <Link to={'/signin'}>
                         <h4 className="menu-genre-links">Sign In</h4>
@@ -30,14 +28,13 @@ class Menu extends Component {
 
     let signOutLink= <button
                         className='button-nostyle'
-                        onClick={()=>{this.props.handleSignOut();this.changeMenuDisplay();}}>
+                        onClick={()=>{
+                            this.props.handleTokenFetch('revoketoken', '');
+                            this.changeMenuDisplay();}}>
                         <h4
                           style={{color:'white'}}
                           className="menu-genre-links">Sign Out</h4>
                         </button>
-
-
-
     return (
       <div>
 
