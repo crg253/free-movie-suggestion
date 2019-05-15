@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import './App.css';
 import HomePage from './components/HomePage';
@@ -16,11 +16,8 @@ class App extends Component {
     Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi' ],
     ListBy:'All',
     SortBy:'name',
-    User:'',
-    Redirect:'',
-    RedirectBackSlug:'',
-    RedirectBack:'',
-   }
+    User:''
+  }
 
    setMovies = (newMovies) => {
      this.setState({Movies:newMovies})
@@ -34,97 +31,29 @@ class App extends Component {
    setUser = (newUser) =>{
      this.setState({User:newUser});
    }
-   setRedirect = (redirect) => {
-     this.setState({Redirect:redirect})
-   }
-   setRedirectBack = (redirect) => {
-     this.setState({RedirectBack:redirect})
-   }
-   setRedirectSlug = (redirect) => {
-     this.setState({RedirectBack:redirect})
-   }
 
-   resetUserAndMovies = () =>{
-     fetch('api/getmovies',{
-       method:'GET'
-     })
-     .then(res=>{
-       if(res.status===200){
-         res.json()
-         .then(res=>{
-           this.setState({User:res.user})
-           this.setState({Movies:res.movies})
-         })
-       }
-     })
-   }
-
-   handleSaveUnsave = (action, slug) =>{
-     fetch('api/'.concat(action),{
-       method:'POST',
-       headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
-         'Content-Type':'application/json'
-       },
-       body: JSON.stringify({slug: slug})
-      })
-      .then(res=>{
-        if(res.status===401){
-          this.resetUserAndMovies()
-          this.setState({RedirectBackSlug:slug})
-          this.setState({Redirect:<Redirect to='/signin'/>})
-        }else if(res.status ===200){
-          res.json()
-          .then(res=>{
-            this.setState({'User':res.user})
-            this.setState({'Movies':res.movies})
-
-          })
-        }
-     })
-   }
-
-   handleGetSavedMovies = (slug) =>{
-     fetch('api/checktoken',{
-       method:'POST',
-       headers: {
-         'Authorization':"Bearer " +localStorage.getItem('token')
-         }
-     })
-     .then(res=>{
-       if(res.status===401){
-         this.resetUserAndMovies()
-         this.setState({RedirectBackSlug:slug})
-         this.setState({Redirect:<Redirect to='/signin'/>})
-       }else if(res.status ===200){
-         res.json()
-         .then(res=>{
-           this.setState({'User':res.user})
-           this.setState({'Movies':res.movies})
-         })
-       }
-    })
-   }
-
-  componentDidMount(){
-    fetch('api/checktoken',{
+   handleTokenFetch = (route,slug) => {
+     console.log("Token fetch, should get user name and movies or RESET both")
+     fetch('api/'.concat(route),{
       method:'POST',
       headers: {
         'Authorization':"Bearer " +localStorage.getItem('token')
         }
     })
     .then(res=>{
-      if(res.status===200){
         res.json()
         .then(res=>{
               this.setState({User:res.user})
               this.setState({Movies:res.movies})
         })
-      }else if (res.status===401) {
-        this.resetUserAndMovies()
-      }
     })
+   }
+
+  componentDidMount(){
+    this.handleTokenFetch('checktoken', '')
   }
+
+
 
   render() {
 
@@ -142,10 +71,12 @@ class App extends Component {
         }
     }
 
-    console.log('saved movie list ...')
+    console.log('movies are ...')
+    console.log(this.state.Movies)
+    console.log('user is ...')
+    console.log(this.state.User)
+    console.log('SAVED MOVIES are ...')
     console.log(this.state.Movies.filter(movie=>movie.saved ===true))
-    console.log('SUGGESTED movie list ...')
-    console.log(this.state.Movies.filter(movie=>movie.username===this.state.User))
 
     return (
       <BrowserRouter>
@@ -158,37 +89,29 @@ class App extends Component {
                                 chooseListBy={this.chooseListBy}
                                 randomMovies={randomMovies}
                                 setUser={this.setUser}
-                                user={this.state.User}/>}/>
+                                user={this.state.User}
+                                handleSignOut={this.handleSignOut}/>}/>
           <Switch>
           <Route
             path='/usermovies'
             render={(props)=><UserMovies
                               {...props}
                               setUser={this.setUser}
-                              user={this.state.User}
-                              setSignInRedirect={this.setSignInRedirect}
-                              setSuggestedMovies={this.setSuggestedMovies}/>}/>
+                              user={this.state.User}/>}/>
 
             <Route
               path='/user'
               render={(props)=><User
                                 {...props}
                                 setUser={this.setUser}
-                                user={this.state.User}
-                                setSignInRedirect={this.setSignInRedirect}
-                                setSuggestedMovies={this.setSuggestedMovies}/>}/>
+                                user={this.state.User}/>}/>
 
             <Route
               path='/signin'
               render = {(props)=><SignIn
                                     {...props}
                                     setUser={this.setUser}
-                                    user={this.state.User}
-                                    setMovies={this.setMovies}
-                                    setRedirect={this.setRedirect}
-                                    redirectBackSlug={this.state.RedirectBackSlug}
-                                    setRedirectBack={this.setRedirectBack}
-                                    redirectBack={this.state.RedirectBack}/>}/>
+                                    setMovies={this.setMovies}/>}/>
 
             <Route
               path='/adduser'
@@ -207,7 +130,6 @@ class App extends Component {
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
                                     handleSaveUnsave={this.handleSaveUnsave}
-                                    redirect={this.state.Redirect}
                                     handleGetSavedMovies={this.handleGetSavedMovies}/>}/>
 
             <Route

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 import './User.css';
@@ -16,7 +16,7 @@ class SignIn extends Component  {
     this.setState({password:event.target.value})
   }
 
-  handleSubmit = (event) =>{
+  handleSignInSubmit = (event) =>{
     let headers = new Headers();
     headers.set(
       'Authorization','Basic '+ Buffer.from(this.state.name +":"+this.state.password).toString('base64')
@@ -29,34 +29,25 @@ class SignIn extends Component  {
     .then(res=>{
       if(res.status===401){
         this.setState({Message:"Invalid username and/or password", name:'', password:''})
-      }else if(res.status ===200){
-        res.json()
-          .then(data=>{
-            localStorage.setItem('token', data.token)
-            this.props.setUser(data.user)
-            this.props.setMovies(data.movies)
-            this.props.setRedirectBack(<Redirect to={'/'+this.props.redirectBackSlug}/>)
-          }
-        )
       }
+      res.json()
+      .then(data=>{
+        localStorage.setItem('token', data.token)
+        this.props.setUser(data.user)
+        this.props.setMovies(data.movies)
+      })
     })
-  }
-
-  componentDidMount(){
-    this.props.setRedirect('')
-    this.props.setRedirectBack('')
   }
 
   render() {
     return (
         <div>
-          {this.props.redirectBack}
           <Link to={'/'}>
             <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
           </Link>
           <div className="user-pages-body-wrapper">
           <h1>Sign In</h1>
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSignInSubmit}>
 
               <label>
                 Name:

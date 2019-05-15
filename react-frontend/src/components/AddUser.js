@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import './User.css';
 class AddUser extends Component {
   state={
     name:'',
     password:'',
-    Redirect:'',
     Message:''
   }
   handleNameChange = (event) =>{
@@ -29,7 +28,7 @@ class AddUser extends Component {
       if(!res.ok){
         this.setState({Message:"username not available", name:'', password:''})
       }else{
-        this.setState({Redirect:<Redirect to='/signin'/>})
+
       }
     })
   }
@@ -37,7 +36,6 @@ class AddUser extends Component {
   render() {
     return (
       <div>
-        {this.state.Redirect}
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>

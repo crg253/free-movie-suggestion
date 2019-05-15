@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Redirect, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import './User.css';
 
@@ -10,7 +10,6 @@ class User extends Component {
     SearchValue:'',
     SearchResultOptions:[],
     MovieMessage:'',
-    Redirect:'',
   }
 
   componentDidMount(){
@@ -24,8 +23,6 @@ class User extends Component {
       if(res.status===401){
         this.props.setUser('')
         this.props.setSuggestedMovies([])
-        this.props.setSignInRedirect('user')
-        this.setState({Redirect:<Redirect to='/signin'/>})
       }else if(res.status ===200){
         res.json()
           .then(res=>{
@@ -69,8 +66,6 @@ class User extends Component {
        else if(res.status===401){
          this.props.setUser('')
          this.props.setSuggestedMovies([])
-         this.props.setSignInRedirect('user')
-         this.setState({Redirect:<Redirect to='/signin'/>})
        }else if(res.status ===200){
          this.setState({SearchResultOptions:[], SearchValue:'', MovieMessage:"Thank you for suggesting"})
          fetch('api/getusermovies',{
@@ -83,8 +78,6 @@ class User extends Component {
            if(res.status===401){
              this.props.setUser('')
              this.props.setSuggestedMovies([])
-             this.props.setSignInRedirect('user')
-             this.setState({Redirect:<Redirect to='/signin'/>})
            }else if(res.status ===201){
              res.json()
                .then(res=>{
@@ -102,7 +95,6 @@ class User extends Component {
   render() {
     return (
       <div className='user-pages-body-wrapper'>
-        {this.state.Redirect}
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>

@@ -23,6 +23,19 @@ def getusermovies():
                         'saved':True if g.current_user in movie.savers else False })
     return(movies)
 
+def getnonusermovies():
+    movies = []
+    for movie in Movie.query.all():
+        movies.append({"id":movie.movie_id,
+                        "slug":movie.uniquename,
+                        "name":movie.name,
+                        "year":movie.year,
+                        "video":movie.video_link,
+                        "tags":[x.name for x in movie.tags],
+                        "status":movie.status,
+                        'username':movie.username,
+                        'saved':False})
+    return(movies)
 
 
 
@@ -60,24 +73,12 @@ def savemovie():
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
-@app.route('/api/revoketoken', methods=['DELETE'])
+@app.route('/api/revoketoken', methods=['POST'])
 @token_auth.login_required
 def revoke_token():
     g.current_user.revoke_token()
     db.session.commit()
-    return '', 204
-
-@app.route('/api/checktoken', methods=['POST'])
-@token_auth.login_required
-def checktoken():
-    return jsonify({'user':g.current_user.username, 'movies':getusermovies()}), 200
-
-@app.route('/api/signin', methods=['POST'])
-@basic_auth.login_required
-def sign_in():
-    token = g.current_user.get_token()
-    db.session.commit()
-    return jsonify({'user':g.current_user.username,'token':token, 'movies':getusermovies()}), 200
+    return jsonify({'movies':getnonusermovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
@@ -88,21 +89,23 @@ def add_user():
     db.session.commit()
     return '',201
 
-@app.route('/api/getmovies')
-def getmovies():
-    movies = []
-    for movie in Movie.query.all():
-        movies.append({"id":movie.movie_id,
-                        "slug":movie.uniquename,
-                        "name":movie.name,
-                        "year":movie.year,
-                        "video":movie.video_link,
-                        "tags":[x.name for x in movie.tags],
-                        "status":movie.status,
-                        'username':movie.username,
-                        'saved':False})
-    return jsonify({'movies':movies}), 200
 
+
+
+
+
+
+@app.route('/api/signin', methods=['POST'])
+@basic_auth.login_required
+def sign_in():
+    token = g.current_user.get_token()
+    db.session.commit()
+    return jsonify({'user':g.current_user.username,'token':token, 'movies':getusermovies()}), 200
+
+@app.route('/api/checktoken', methods=['POST'])
+@token_auth.login_required
+def checktoken():
+    return jsonify({'user':g.current_user.username, 'movies':getusermovies()}), 200
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

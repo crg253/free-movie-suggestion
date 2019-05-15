@@ -19,53 +19,23 @@ class Menu extends Component {
     }
   }
 
-  handleSignOut = () =>{
-    fetch('api/revoketoken', {
-      method:'DELETE',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token')
-      }
-    })
-    .then(res=>{
-      this.props.setUser('')
-    }
-
-    )
-  }
 
   render() {
 
-    let userMoviesLink = ''
-    if(this.props.user !==''){
-      userMoviesLink= <div onClick={()=>{this.changeMenuDisplay();}}>
-                      <Link to={'/usermovies'}>
-                        <h4 className="menu-genre-links">Your Movies</h4>
-                      </Link>
-                    </div>
-    }
 
-    let signOutLink = ''
-    if(this.props.user !==''){
-      signOutLink= <div onClick={()=>{this.handleSignOut();this.changeMenuDisplay();}}>
-                      <Link to={'/'}>
-                        <h4 className="menu-genre-links">Sign Out</h4>
+    let signInLink=
+                      <Link to={'/signin'}>
+                        <h4 className="menu-genre-links">Sign In</h4>
                       </Link>
-                    </div>
-    }
 
-    let menuGenreLinks = ''
-    const userPaths = ['/user', '/usermovies', '/signin', '/adduser']
-    if (userPaths.includes(this.props.location.pathname)){
-      menuGenreLinks = this.props.genres.map(genre=>(
-                <div
-                  key={"menu" + genre}
-                  onClick={()=>{this.props.chooseListBy(genre);this.changeMenuDisplay();}}>
-                  <Link to={'/' + this.props.randomMovies[genre].slug}>
-                    <p className="menu-genre-links">{genre} </p>
-                  </Link>
-                </div>
-      ))
-    }
+    let signOutLink= <button
+                        className='button-nostyle'
+                        onClick={()=>{this.props.handleSignOut();this.changeMenuDisplay();}}>
+                        <h4
+                          style={{color:'white'}}
+                          className="menu-genre-links">Sign Out</h4>
+                        </button>
+
 
 
     return (
@@ -88,25 +58,9 @@ class Menu extends Component {
 
 
             <div id="menu-links">
-              <h4 className="menu-genre-links">{this.props.user}</h4>
 
-              {userMoviesLink}
-
-              <div onClick={()=>this.changeMenuDisplay()}>
-                <Link to={'/user'}>
-                  <h4 className="menu-genre-links">Contribute</h4>
-                </Link>
-              </div>
+              {signInLink}
               {signOutLink}
-
-              <div onClick={()=>this.changeMenuDisplay()}>
-                <Link to={'/'}>
-                  <h4 className="menu-genre-links">Home</h4>
-                </Link>
-              </div>
-
-              {menuGenreLinks}
-
 
           </div>
         </div>

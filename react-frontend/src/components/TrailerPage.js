@@ -12,7 +12,6 @@ const TrailerPage = (props) => {
 
   return(
     <div>
-      {props.redirect}
       <Link to={'/'}>
         <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
       </Link>

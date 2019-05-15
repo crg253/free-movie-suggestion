@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 class Genres extends Component {
@@ -33,18 +33,17 @@ class Genres extends Component {
 
           <div id="genre-and-button" style={{display:this.state.displayGenreButton}}>
             <h2 className="select-genre" id={this.props.listBy.slice(0,3)}>{this.props.listBy}</h2>
-
             <button
               className="button-nostyle"
               id='get-genres-button'
               onClick={()=>{this.changeGenreDisplay();this.changeGenreButton();}}>
             </button>
-
-
           </div>{/* id= genre-and-button */}
+
 
           <div id="genre-link-list-wrapper" style={{display:this.state.displayGenres}}>
 
+          {/********** DESKTOP LANDSCAPE GENRE LIST CONFIGURATION ***********/}
             <div id="desk-genre-link-list">
                 {this.props.genres.map(genre=>(
                   <div
@@ -58,9 +57,8 @@ class Genres extends Component {
                           id={genre.slice(0,3)}
                           className="select-genre">{genre} </h2>
                         </Link>
-                  </div>//Javascript Comment
+                  </div>
                 ))}
-
               <button
                 className="button-nostyle"
                 onClick={()=>{
@@ -72,7 +70,6 @@ class Genres extends Component {
                   }}
                    className="select-genre">Saved</h2>
               </button>
-
               <button
                 className="button-nostyle"
                 onClick={()=>this.props.chooseListBy("All")}>
@@ -82,7 +79,6 @@ class Genres extends Component {
                   }}
                   className="select-genre">All Movies</h2>
               </button>
-
               <button
                 className="button-nostyle"
                 onClick={()=>this.props.chooseListBy("User Suggestions")}>
@@ -92,11 +88,11 @@ class Genres extends Component {
                   }}
                   className="select-genre">User Suggestions</h2>
               </button>
-
             </div>{/* id = desk-genre-link-list */}
 
-            <div id="mobile-genre-link-list">
 
+            {/********* MOBILE PORTRAIT GENRE LIST CONFIGURATION ************/}
+            <div id="mobile-genre-link-list">
                 {this.props.genres.map(genre=>(
                   <div
                     key={"mobile-genre-link-list"+genre}
@@ -111,7 +107,6 @@ class Genres extends Component {
                         </Link>
                   </div>//Javascript Comment
                 ))}
-
               <div style={{display:'block'}}>
                 <button
                   className="button-nostyle"
@@ -123,7 +118,6 @@ class Genres extends Component {
                       <h2 className="select-genre">Saved</h2>
                 </button>
               </div>
-
               <div style={{display:'block'}}>
                 <button
                   className="button-nostyle"
@@ -133,7 +127,6 @@ class Genres extends Component {
                       <h2 className="select-genre">All</h2>
                 </button>
               </div>
-
               <div style={{display:'block'}}>
                 <button
                   className="button-nostyle"
@@ -144,10 +137,11 @@ class Genres extends Component {
                 </button>
               </div>
             </div>{/* id = mobile-genre-link-list */}
-
-
           </div>{/* id= genre-link-list-wrapper */}
         </div>{/* id= genre-button-or-list */}
+
+
+        {/************** SORT BY BUTTONS *****************/}
 
         <div id="sort-by-wrapper">
           <p className='sort-selector'>sort by </p>
