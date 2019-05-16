@@ -19,6 +19,13 @@ class Menu extends Component {
     }
   }
 
+  handleSignOut = (event) =>{
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    this.props.handleFetch('revoketoken',headers,'', )
+  }
+
 
   render() {
     let signInLink=
@@ -29,7 +36,7 @@ class Menu extends Component {
     let signOutLink= <button
                         className='button-nostyle'
                         onClick={()=>{
-                            this.props.handleTokenFetch('revoketoken', '');
+                            this.handleSignOut();
                             this.changeMenuDisplay();}}>
                         <h4
                           className="menu-genre-links">Sign Out</h4>

@@ -67,7 +67,6 @@ def add_user():
 
 
 
-
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required
 def unsavemovie():
@@ -87,6 +86,13 @@ def savemovie():
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
+
+
+
+
+
+
+
 @app.route('/api/revoketoken', methods=['POST'])
 @token_auth.login_required
 def revoke_token():
@@ -94,17 +100,18 @@ def revoke_token():
     db.session.commit()
     return jsonify({'movies':getnonusermovies(), 'user':''}), 200
 
-@app.route('/api/checktoken', methods=['POST'])
-@token_auth.login_required
-def checktoken():
-    return jsonify({'user':g.current_user.username, 'movies':getusermovies()}), 200
-
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
 def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
     return jsonify({'user':g.current_user.username,'token':token, 'movies':getusermovies()}), 200
+
+@app.route('/api/checktoken', methods=['POST'])
+@token_auth.login_required
+def checktoken():
+    return jsonify({'user':g.current_user.username, 'movies':getusermovies()}), 200
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

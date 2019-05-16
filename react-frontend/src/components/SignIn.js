@@ -22,21 +22,7 @@ class SignIn extends Component  {
       'Authorization','Basic '+ Buffer.from(this.state.name +":"+this.state.password).toString('base64')
     );
     event.preventDefault();
-    fetch('api/signin',{
-      method:'POST',
-      headers: headers
-    })
-    .then(res=>{
-      if(res.status===401){
-        this.setState({Message:"Invalid username and/or password", name:'', password:''})
-      }
-      res.json()
-      .then(data=>{
-        localStorage.setItem('token', data.token)
-        this.props.setUser(data.user)
-        this.props.setMovies(data.movies)
-      })
-    })
+    this.props.handleFetch('signin',headers,'', )
   }
 
   render() {

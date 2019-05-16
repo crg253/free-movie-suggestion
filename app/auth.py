@@ -17,9 +17,9 @@ def verify_password(username, password):
 
 @basic_auth.error_handler
 def basic_auth_error():
-    movies = []
+    nonusermovies = []
     for movie in Movie.query.all():
-        movies.append({"id":movie.movie_id,
+        nonusermovies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
                         "year":movie.year,
@@ -28,7 +28,7 @@ def basic_auth_error():
                         "status":movie.status,
                         'username':movie.username,
                         'saved':False})
-    return jsonify({'movies':movies, 'user':'', 'token':''}), 401
+    return jsonify({'movies':nonusermovies, 'user':'', 'token':''}), 401
 
 @token_auth.verify_token
 def verify_token(token):
@@ -37,9 +37,9 @@ def verify_token(token):
 
 @token_auth.error_handler
 def token_auth_error():
-    movies = []
+    nonusermovies = []
     for movie in Movie.query.all():
-        movies.append({"id":movie.movie_id,
+        nonusermovies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
                         "year":movie.year,
@@ -48,4 +48,4 @@ def token_auth_error():
                         "status":movie.status,
                         'username':movie.username,
                         'saved':False})
-    return jsonify({'movies':movies, 'user':''}), 401
+    return jsonify({'movies':nonusermovies, 'user':''}), 401

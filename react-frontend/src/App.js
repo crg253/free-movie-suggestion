@@ -32,27 +32,30 @@ class App extends Component {
      this.setState({User:newUser});
    }
 
-   handleTokenFetch = (route,slug) => {
+   handleFetch = (route,headers,body) => {
      console.log(route)
      fetch('api/'.concat(route),{
       method:'POST',
-      headers:{
-        'Authorization':"Bearer " +localStorage.getItem('token'),
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify({slug: slug})
+      headers:headers,
+      body: body
     })
     .then(res=>{
         res.json()
         .then(res=>{
               this.setState({User:res.user})
               this.setState({Movies:res.movies})
+              if(res.token !==undefined){
+                localStorage.setItem('token', res.token)
+            }
+          })
         })
-    })
-   }
+      }
 
   componentDidMount(){
-    this.handleTokenFetch('checktoken', '')
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    this.handleFetch('checktoken', headers,'')
   }
 
   render() {
@@ -85,12 +88,7 @@ class App extends Component {
             path='/'
             render={(props)=> <Menu
                                 {...props}
-                                genres={this.state.Genres}
-                                chooseListBy={this.chooseListBy}
-                                randomMovies={randomMovies}
-                                setUser={this.setUser}
-                                user={this.state.User}
-                                handleTokenFetch={this.handleTokenFetch}/>}/>
+                                handleFetch={this.handleFetch}/>}/>
           <Switch>
           <Route
             path='/usermovies'
@@ -110,8 +108,7 @@ class App extends Component {
               path='/signin'
               render = {(props)=><SignIn
                                     {...props}
-                                    setUser={this.setUser}
-                                    setMovies={this.setMovies}/>}/>
+                                    handleFetch={this.handleFetch}/>}/>
 
             <Route
               path='/adduser'
