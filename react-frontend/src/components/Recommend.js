@@ -27,6 +27,14 @@ class Recommend extends Component {
         }});
   }
 
+  handleSuggestMovie = (title, year) =>{
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    let body = JSON.stringify({title: title, year:year});
+    this.props.handleFetch('suggestmovie',headers, body)
+  }
+
 
   render() {
     return (

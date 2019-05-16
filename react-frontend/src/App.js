@@ -81,12 +81,15 @@ class App extends Component {
         }
     }
 
-    console.log('movies are ...')
+    console.log('all approved movies are ...')
     console.log(this.state.Movies)
     console.log('user is ...')
     console.log(this.state.User)
     console.log('SAVED MOVIES are ...')
     console.log(this.state.Movies.filter(movie=>movie.saved ===true))
+    console.log('suggested MOVIES are ...')
+    console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
+
     // let sortedMovies = [...movies].sort(function(a, b) {
     // return a.slug - b.slug;
     // })

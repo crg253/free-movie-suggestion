@@ -39,6 +39,13 @@ def get_non_usermovies():
 
 #def removesuggestion
 
+
+
+
+
+
+
+
 @app.route('/api/suggestmovie', methods=['POST'])
 @token_auth.login_required
 def user():
@@ -47,18 +54,10 @@ def user():
     title = data.get('title')
     year = data.get('year')
     user = User.query.filter_by(username=g.current_user.username).first()
-    movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user.user_id, status="pending")
+    movie = Movie(uniquename=uniquename,name=title, year=year, username=user.username, status="pending")
     db.session.add(movie)
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
-
-
-
-
-
-
-
-
 
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
