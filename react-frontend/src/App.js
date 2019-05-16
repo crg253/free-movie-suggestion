@@ -128,7 +128,7 @@ class App extends Component {
                                     randomMovies={randomMovies}
                                     handleSaveUnsave={this.handleSaveUnsave}
                                     handleGetSavedMovies={this.handleGetSavedMovies}
-                                    handleTokenFetch={this.handleTokenFetch}/>}/>
+                                    handleFetch={this.handleFetch}/>}/>
 
             <Route
               path='/'

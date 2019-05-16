@@ -67,6 +67,8 @@ def add_user():
 
 
 
+
+
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required
 def unsavemovie():
@@ -85,13 +87,6 @@ def savemovie():
     g.current_user.saves.append(movie_to_save)
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
-
-
-
-
-
-
-
 
 @app.route('/api/revoketoken', methods=['POST'])
 @token_auth.login_required

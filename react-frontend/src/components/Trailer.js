@@ -4,6 +4,14 @@ import React, { Component } from 'react';
 class Trailer extends Component {
 
 
+  handleSaveUnsave = (saveunsave, slug) =>{
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    let body = JSON.stringify({slug: slug})
+    this.props.handleFetch(saveunsave, headers, body)
+  }
+
   getSaveButton = (slug) =>{
     let buttonComponent = ''
     let selectedMovie = this.props.movies.filter(movie=>movie.slug===slug)[0]
@@ -11,14 +19,14 @@ class Trailer extends Component {
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.props.handleTokenFetch('unsavemovie',selectedMovie.slug)}
+          onClick = {()=>this.handleSaveUnsave('unsavemovie',selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Unsave</button>
     }else{
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.props.handleTokenFetch('savemovie',selectedMovie.slug)}
+          onClick = {()=>this.handleSaveUnsave('savemovie',selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Save</button>
     }

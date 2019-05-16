@@ -21,7 +21,7 @@ const TrailerPage = (props) => {
             movieslug={props.match.params.movieslug}
             movies={props.movies}
             handleSaveUnsave ={props.handleSaveUnsave}
-            handleTokenFetch={props.handleTokenFetch}/>
+            handleFetch={props.handleFetch}/>
 
         <div id="genres-and-list">
           <Genres
