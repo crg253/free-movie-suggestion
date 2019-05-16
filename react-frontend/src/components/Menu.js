@@ -69,11 +69,11 @@ class Menu extends Component {
                 <h4 className="menu-genre-links">Recommend</h4>
               </Link>
 
-              {this.props.movies.slice(0,1).map(film=>
-                <Link to={'/'+ film.slug}>
+              <div onClick={()=>this.props.chooseListBy("All")}>
+                <Link to={'/movielist'}>
                   <h4 className="menu-genre-links">Movies</h4>
                 </Link>
-              )}
+              </div>
 
           </div>
         </div>

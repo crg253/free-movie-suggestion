@@ -52,6 +52,14 @@ def user():
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
+
+
+
+
+
+
+
+
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
     data=request.get_json(silent=True) or {}
@@ -59,15 +67,7 @@ def add_user():
     newUser.set_password(data.get('password'))
     db.session.add(newUser)
     db.session.commit()
-    return '',201
-
-
-
-
-
-
-
-
+    return jsonify({'':''}),201
 
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required

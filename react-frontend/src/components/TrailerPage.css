@@ -1,5 +1,7 @@
+
 #trailer-and-genres-and-list{
   display:flex;
+  justify-content: center;
   margin: 2% 5% 5% 5%;
 }
 #trailer-and-title-and-save{

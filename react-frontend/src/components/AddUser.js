@@ -17,20 +17,10 @@ class AddUser extends Component {
 
   handleSubmit = (event) =>{
     event.preventDefault();
-    fetch('/api/adduser', {
-     method: 'POST',
-     headers: {'Content-Type':'application/json'},
-     body: JSON.stringify({userName: this.state.name, password:this.state.password})
-    })
-    .then(res=>{
-      console.log(res)
-      console.log(res.status)
-      if(!res.ok){
-        this.setState({Message:"username not available", name:'', password:''})
-      }else{
+    let headers = {'Content-Type':'application/json'}
+    let body = JSON.stringify({userName: this.state.name, password:this.state.password})
 
-      }
-    })
+    this.props.handleFetch('adduser',headers,body)
   }
 
   render() {

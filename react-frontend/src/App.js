@@ -39,14 +39,22 @@ class App extends Component {
       body: body
     })
     .then(res=>{
+      if(res.status===500){
+        console.log('500')
+      }else{
         res.json()
         .then(res=>{
-              this.setState({User:res.user})
-              this.setState({Movies:res.movies})
+              if(res.user !==undefined){
+                this.setState({User:res.user})
+              }
+              if(res.movies !==undefined){
+                this.setState({Movies:res.movies})
+              }
               if(res.token !==undefined){
                 localStorage.setItem('token', res.token)
             }
           })
+          }
         })
       }
 
@@ -79,10 +87,10 @@ class App extends Component {
     console.log(this.state.User)
     console.log('SAVED MOVIES are ...')
     console.log(this.state.Movies.filter(movie=>movie.saved ===true))
-    let sortedMovies = [...movies].sort(function(a, b) {
-    return a.slug - b.slug;
-    })
-    console.log(sortedMovies)
+    // let sortedMovies = [...movies].sort(function(a, b) {
+    // return a.slug - b.slug;
+    // })
+    // console.log(sortedMovies)
 
     return (
       <BrowserRouter>
@@ -92,7 +100,8 @@ class App extends Component {
             render={(props)=> <Menu
                                 {...props}
                                 movies={movies}
-                                handleFetch={this.handleFetch}/>}/>
+                                handleFetch={this.handleFetch}
+                                chooseListBy={this.chooseListBy}/>}/>
           <Switch>
           <Route
             path='/usermovies'
@@ -117,7 +126,9 @@ class App extends Component {
 
             <Route
               path='/adduser'
-              component= {AddUser}/>
+              render = {(props)=><AddUser
+                                    {...props}
+                                    handleFetch={this.handleFetch}/>}/>
 
             <Route
               path='/:movieslug'
