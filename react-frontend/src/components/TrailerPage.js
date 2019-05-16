@@ -29,9 +29,7 @@ const TrailerPage = (props) => {
                 genres={props.genres}
                 chooseListBy={props.chooseListBy}
                 listBy={props.listBy}
-                randomMovies={props.randomMovies}
-                movieslug={props.match.params.movieslug}
-                handleGetSavedMovies= {props.handleGetSavedMovies}/>
+                randomMovies={props.randomMovies}/>
           <MovieList
                 movies={props.movies}
                 userSuggestions={props.userSuggestions}

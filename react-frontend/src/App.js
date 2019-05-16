@@ -6,7 +6,7 @@ import HomePage from './components/HomePage';
 import TrailerPage from './components/TrailerPage';
 import SignIn from './components/SignIn';
 import AddUser from './components/AddUser';
-import User from './components/User';
+import Recommend from './components/Recommend';
 import Menu from './components/Menu';
 import UserMovies from './components/UserMovies'
 
@@ -33,7 +33,6 @@ class App extends Component {
    }
 
    handleFetch = (route,headers,body) => {
-     console.log(route)
      fetch('api/'.concat(route),{
       method:'POST',
       headers:headers,
@@ -80,6 +79,10 @@ class App extends Component {
     console.log(this.state.User)
     console.log('SAVED MOVIES are ...')
     console.log(this.state.Movies.filter(movie=>movie.saved ===true))
+    let sortedMovies = [...movies].sort(function(a, b) {
+    return a.slug - b.slug;
+    })
+    console.log(sortedMovies)
 
     return (
       <BrowserRouter>
@@ -88,6 +91,7 @@ class App extends Component {
             path='/'
             render={(props)=> <Menu
                                 {...props}
+                                movies={movies}
                                 handleFetch={this.handleFetch}/>}/>
           <Switch>
           <Route
@@ -98,11 +102,12 @@ class App extends Component {
                               user={this.state.User}/>}/>
 
             <Route
-              path='/user'
-              render={(props)=><User
+              path='/recommend'
+              render={(props)=><Recommend
                                 {...props}
                                 setUser={this.setUser}
-                                user={this.state.User}/>}/>
+                                user={this.state.User}
+                                handleFetch={this.handleFetch}/>}/>
 
             <Route
               path='/signin'
@@ -126,7 +131,6 @@ class App extends Component {
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
-                                    handleGetSavedMovies={this.handleGetSavedMovies}
                                     handleFetch={this.handleFetch}/>}/>
 
             <Route

@@ -79,12 +79,14 @@ class MovieList extends Component {
       chosenList =
         <div>
         {selectedMovieList.map(film =>
-          <Link key={film.slug} to={'/' + film.slug}>
-            <div className='list-items'>
-              <p>{film.name}</p> <p>{film.year}</p>
-                {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
-            </div>
-          </Link>
+          <div key={film.slug}>
+            <Link to={'/' + film.slug}>
+              <div className='list-items'>
+                <p>{film.name}</p> <p>{film.year}</p>
+                  {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
+              </div>
+            </Link>
+          </div>
       )}
       </div>
     }

@@ -65,6 +65,16 @@ class Menu extends Component {
               {signInLink}
               {signOutLink}
 
+              <Link to={'/recommend'}>
+                <h4 className="menu-genre-links">Recommend</h4>
+              </Link>
+
+              {this.props.movies.slice(0,1).map(film=>
+                <Link to={'/'+ film.slug}>
+                  <h4 className="menu-genre-links">Movies</h4>
+                </Link>
+              )}
+
           </div>
         </div>
       </div>

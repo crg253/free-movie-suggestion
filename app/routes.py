@@ -10,9 +10,9 @@ def slugify(slug):
     return slug
 
 def getusermovies():
-    movies = []
+    usermovies = []
     for movie in Movie.query.all():
-        movies.append({"id":movie.movie_id,
+        usermovies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
                         "year":movie.year,
@@ -21,12 +21,12 @@ def getusermovies():
                         "status":movie.status,
                         'username':movie.username,
                         'saved':True if g.current_user in movie.savers else False })
-    return(movies)
+    return(usermovies)
 
-def getnonusermovies():
-    movies = []
+def get_non_usermovies():
+    non_usermovies = []
     for movie in Movie.query.all():
-        movies.append({"id":movie.movie_id,
+        non_usermovies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
                         "year":movie.year,
@@ -35,7 +35,7 @@ def getnonusermovies():
                         "status":movie.status,
                         'username':movie.username,
                         'saved':False})
-    return(movies)
+    return(non_usermovies)
 
 #def removesuggestion
 
@@ -92,7 +92,7 @@ def savemovie():
 def revoke_token():
     g.current_user.revoke_token()
     db.session.commit()
-    return jsonify({'movies':getnonusermovies(), 'user':''}), 200
+    return jsonify({'movies':get_non_usermovies(), 'user':''}), 200
 
 @app.route('/api/signin', methods=['POST'])
 @basic_auth.login_required
