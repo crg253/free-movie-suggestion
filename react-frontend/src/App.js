@@ -126,7 +126,6 @@ class App extends Component {
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     randomMovies={randomMovies}
-                                    handleSaveUnsave={this.handleSaveUnsave}
                                     handleGetSavedMovies={this.handleGetSavedMovies}
                                     handleFetch={this.handleFetch}/>}/>
 

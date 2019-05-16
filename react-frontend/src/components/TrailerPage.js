@@ -20,7 +20,6 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            handleSaveUnsave ={props.handleSaveUnsave}
             handleFetch={props.handleFetch}/>
 
         <div id="genres-and-list">
@@ -38,7 +37,7 @@ const TrailerPage = (props) => {
                 userSuggestions={props.userSuggestions}
                 sortBy={props.sortBy}
                 listBy={props.listBy}
-                handleSaveUnsave ={props.handleSaveUnsave}/>
+                handleFetch={props.handleFetch}/>
         </div>
       </div>
     </div>

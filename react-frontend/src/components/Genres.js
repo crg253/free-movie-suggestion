@@ -59,17 +59,17 @@ class Genres extends Component {
                         </Link>
                   </div>
                 ))}
+
               <button
                 className="button-nostyle"
-                onClick={()=>{
-                  this.props.chooseListBy("Saved");
-                  this.props.handleGetSavedMovies(this.props.movieslug);}}>
+                onClick={()=>this.props.chooseListBy("Saved")}>
                   <h2
                   style = {{
                     color: this.props.listBy==="Saved" ? 'white': '#9E9E9E'
                   }}
-                   className="select-genre">Saved</h2>
+                  className="select-genre">Saved</h2>
               </button>
+
               <button
                 className="button-nostyle"
                 onClick={()=>this.props.chooseListBy("All")}>
@@ -79,6 +79,7 @@ class Genres extends Component {
                   }}
                   className="select-genre">All Movies</h2>
               </button>
+
               <button
                 className="button-nostyle"
                 onClick={()=>this.props.chooseListBy("User Suggestions")}>
@@ -107,17 +108,17 @@ class Genres extends Component {
                         </Link>
                   </div>//Javascript Comment
                 ))}
-              <div style={{display:'block'}}>
-                <button
-                  className="button-nostyle"
-                  onClick={()=>{this.props.chooseListBy("Saved");
-                                  this.props.handleGetSavedMovies(this.props.movieslug);
-                                  this.changeGenreDisplay();
-                                  this.changeGenreButton();
-                                  }}>
-                      <h2 className="select-genre">Saved</h2>
-                </button>
-              </div>
+
+                <div style={{display:'block'}}>
+                  <button
+                    className="button-nostyle"
+                    onClick={()=>{this.props.chooseListBy("Saved");
+                      this.changeGenreDisplay();
+                      this.changeGenreButton();}}>
+                        <h2 className="select-genre">Saved</h2>
+                  </button>
+                </div>
+
               <div style={{display:'block'}}>
                 <button
                   className="button-nostyle"
@@ -127,6 +128,7 @@ class Genres extends Component {
                       <h2 className="select-genre">All</h2>
                 </button>
               </div>
+
               <div style={{display:'block'}}>
                 <button
                   className="button-nostyle"

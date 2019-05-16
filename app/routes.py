@@ -73,7 +73,6 @@ def add_user():
 @token_auth.login_required
 def unsavemovie():
     data=request.get_json(silent=True) or {}
-    print(data.get('slug'))
     movie_to_unsave = Movie.query.filter_by(uniquename=data.get('slug')).first()
     g.current_user.saves.remove(movie_to_unsave)
     db.session.commit()
