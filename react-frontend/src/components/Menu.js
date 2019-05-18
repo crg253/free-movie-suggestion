@@ -69,9 +69,13 @@ class Menu extends Component {
                 <h4 className="menu-genre-links">Recommend</h4>
               </Link>
 
+              <Link to={'/usermovies'}>
+                <h4 className="menu-genre-links">Your Movies</h4>
+              </Link>
+
               <div onClick={()=>this.props.chooseListBy("All")}>
                 <Link to={'/movielist'}>
-                  <h4 className="menu-genre-links">Movies</h4>
+                  <h4 className="menu-genre-links">All Movies</h4>
                 </Link>
               </div>
 

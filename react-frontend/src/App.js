@@ -65,35 +65,34 @@ class App extends Component {
     this.handleFetch('checktoken', headers,'')
   }
 
-  render() {
-
-    let movies = this.state.Movies.filter(movie=>movie.status==='approved');
-    let userSuggestions = this.state.Movies.filter(movie=>movie.status==='pending');
-
+  getRandomMovies=()=>{
+    let approvedMovies = this.state.Movies.filter(movie=>movie.status==='approved');
     let randomMovies = {
         Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'','Mystery & Suspense':'',Romance:'','Sci-Fi':''
     };
-    if(movies.length>0){
+    if(approvedMovies.length>0){
         for(let i in this.state.Genres){
-        const genreMovies = [...movies].filter(movie =>movie.tags.includes(this.state.Genres[i]));
+        const genreMovies = [...approvedMovies].filter(approvedMovie =>approvedMovie.tags.includes(this.state.Genres[i]));
         const randomMovie = genreMovies[Math.floor(Math.random()*genreMovies.length)];
         randomMovies[this.state.Genres[i]] = randomMovie;
         }
     }
+    return randomMovies
 
-    console.log('all approved movies are ...')
-    console.log(this.state.Movies)
-    console.log('user is ...')
-    console.log(this.state.User)
-    console.log('SAVED MOVIES are ...')
-    console.log(this.state.Movies.filter(movie=>movie.saved ===true))
-    console.log('suggested MOVIES are ...')
-    console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
+  }
 
-    // let sortedMovies = [...movies].sort(function(a, b) {
-    // return a.slug - b.slug;
-    // })
-    // console.log(sortedMovies)
+  render() {
+
+
+    // console.log('all approved movies are ...')
+    // console.log(this.state.Movies)
+    // console.log('user is ...')
+    // console.log(this.state.User)
+    // console.log('SAVED MOVIES are ...')
+    // console.log(this.state.Movies.filter(movie=>movie.saved ===true))
+    // console.log('suggested MOVIES are ...')
+    // console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
+
 
     return (
       <BrowserRouter>
@@ -102,7 +101,7 @@ class App extends Component {
             path='/'
             render={(props)=> <Menu
                                 {...props}
-                                movies={movies}
+                                movies={this.state.Movies}
                                 handleFetch={this.handleFetch}
                                 chooseListBy={this.chooseListBy}/>}/>
           <Switch>
@@ -110,8 +109,9 @@ class App extends Component {
             path='/usermovies'
             render={(props)=><UserMovies
                               {...props}
-                              setUser={this.setUser}
-                              user={this.state.User}/>}/>
+                              user={this.state.User}
+                              handleFetch={this.handleFetch}
+                              movies = {this.state.Movies}/>}/>
 
             <Route
               path='/recommend'
@@ -137,14 +137,13 @@ class App extends Component {
               path='/:movieslug'
               render={(props)=> <TrailerPage
                                     {...props}
-                                    movies={movies}
-                                    userSuggestions={userSuggestions}
+                                    movies = {this.state.Movies}
                                     chooseListBy={this.chooseListBy}
                                     genres={this.state.Genres}
                                     listBy={this.state.ListBy}
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
-                                    randomMovies={randomMovies}
+                                    getRandomMovies={this.getRandomMovies}
                                     handleFetch={this.handleFetch}/>}/>
 
             <Route
@@ -153,7 +152,7 @@ class App extends Component {
                                   {...props}
                                   chooseListBy={this.chooseListBy}
                                   listBy={this.state.ListBy}
-                                  randomMovies={randomMovies}/>}/>
+                                  getRandomMovies={this.getRandomMovies}/>}/>
           </Switch>
         </div>
       </BrowserRouter>

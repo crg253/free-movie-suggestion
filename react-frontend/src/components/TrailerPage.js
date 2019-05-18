@@ -9,6 +9,7 @@ import MovieList from './MovieList';
 const TrailerPage = (props) => {
 
   window.scrollTo(0, 0);
+  let randomMovies = props.getRandomMovies()
 
   return(
     <div>
@@ -29,10 +30,9 @@ const TrailerPage = (props) => {
                 genres={props.genres}
                 chooseListBy={props.chooseListBy}
                 listBy={props.listBy}
-                randomMovies={props.randomMovies}/>
+                randomMovies={randomMovies}/>
           <MovieList
                 movies={props.movies}
-                userSuggestions={props.userSuggestions}
                 sortBy={props.sortBy}
                 listBy={props.listBy}
                 handleFetch={props.handleFetch}/>

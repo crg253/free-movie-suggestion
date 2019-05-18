@@ -40,37 +40,39 @@ class HomePage extends Component {
 
   render() {
 
+    let randomMovies = this.props.getRandomMovies()
+
     let sign = null;
     if(this.props.listBy ==='Action'){
-      sign = <Link to={'/' + this.props.randomMovies['Action'].slug}>
+      sign = <Link to={'/' + randomMovies['Action'].slug}>
               <ActionSign/>
               </Link>
     }else if(this.props.listBy ==='Comedy'){
-      sign = <Link to={'/' + this.props.randomMovies['Comedy'].slug}>
+      sign = <Link to={'/' + randomMovies['Comedy'].slug}>
               <ComedySign/>
               </Link>
     }else if(this.props.listBy ==='Documentary'){
-      sign = <Link to={'/' + this.props.randomMovies['Documentary'].slug}>
+      sign = <Link to={'/' + randomMovies['Documentary'].slug}>
               <DocumentarySign/>
               </Link>
     }else if(this.props.listBy ==='Drama'){
-      sign = <Link to={'/' + this.props.randomMovies['Drama'].slug}>
+      sign = <Link to={'/' + randomMovies['Drama'].slug}>
               <DramaSign/>
               </Link>
     }else if(this.props.listBy ==='Horror'){
-      sign = <Link to={'/' + this.props.randomMovies['Horror'].slug}>
+      sign = <Link to={'/' + randomMovies['Horror'].slug}>
               <HorrorSign/>
               </Link>
     }else if(this.props.listBy ==='Mystery & Suspense'){
-      sign = <Link to={'/' + this.props.randomMovies['Mystery & Suspense'].slug}>
+      sign = <Link to={'/' + randomMovies['Mystery & Suspense'].slug}>
               <MysterySuspenseSign/>
               </Link>
     }else if(this.props.listBy ==='Romance'){
-      sign = <Link to={'/' + this.props.randomMovies['Romance'].slug}>
+      sign = <Link to={'/' + randomMovies['Romance'].slug}>
               <RomanceSign/>
               </Link>
     }else if(this.props.listBy ==='Sci-Fi'){
-      sign = <Link to={'/' + this.props.randomMovies['Sci-Fi'].slug}>
+      sign = <Link to={'/' + randomMovies['Sci-Fi'].slug}>
               <SciFiSign/>
               </Link>
     }

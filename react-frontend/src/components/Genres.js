@@ -103,6 +103,9 @@ class Genres extends Component {
                       this.changeGenreButton();}}>
                         <Link to={'/' + this.props.randomMovies[genre].slug}>
                           <h2
+                            style = {{
+                              color: this.props.listBy===genre ? 'white': '#9E9E9E'
+                            }}
                             id={genre.slice(0,3)}
                             className="select-genre">{genre} </h2>
                         </Link>
@@ -115,7 +118,11 @@ class Genres extends Component {
                     onClick={()=>{this.props.chooseListBy("Saved");
                       this.changeGenreDisplay();
                       this.changeGenreButton();}}>
-                        <h2 className="select-genre">Saved</h2>
+                        <h2
+                          style = {{
+                            color: this.props.listBy==="Saved" ? 'white': '#9E9E9E'
+                          }}
+                          className="select-genre">Saved</h2>
                   </button>
                 </div>
 
@@ -125,7 +132,11 @@ class Genres extends Component {
                   onClick={()=>{this.props.chooseListBy("All");
                     this.changeGenreDisplay();
                     this.changeGenreButton();}}>
-                      <h2 className="select-genre">All</h2>
+                      <h2
+                        style = {{
+                          color: this.props.listBy==="All" ? 'white': '#9E9E9E'
+                        }}
+                        className="select-genre">All</h2>
                 </button>
               </div>
 
@@ -135,7 +146,11 @@ class Genres extends Component {
                   onClick={()=>{this.props.chooseListBy("User Suggestions");
                     this.changeGenreDisplay();
                     this.changeGenreButton();}}>
-                      <h2 className="select-genre">User Suggestions</h2>
+                      <h2
+                        style = {{
+                          color: this.props.listBy==='User Suggestions' ? 'white': '#9E9E9E'
+                        }}
+                        className="select-genre">User Suggestions</h2>
                 </button>
               </div>
             </div>{/* id = mobile-genre-link-list */}

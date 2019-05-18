@@ -20,7 +20,7 @@ class MovieList extends Component {
     }else if(this.props.listBy==="All"){
       selectedMovieList = this.props.movies
     }else if(this.props.listBy==="User Suggestions"){
-      selectedMovieList = this.props.userSuggestions
+      selectedMovieList = this.props.movies.filter(movie=>movie.status==='pending')
     }else{
       selectedMovieList = this.props.movies.filter(movie => movie.tags.includes(this.props.listBy))
     }
@@ -75,6 +75,15 @@ class MovieList extends Component {
         </div>
       )}
       </div>
+    }else if (this.props.listBy==="User Suggestions") {
+      chosenList =
+        <div>
+        {selectedMovieList.map(film =>
+          <div key={film.slug} className='list-items'>
+            <p>{film.name}</p> <p>{film.year}</p> <p>{film.username}</p>
+          </div>
+      )}
+      </div>
     }else{
       chosenList =
         <div>
@@ -95,7 +104,6 @@ class MovieList extends Component {
 
       <div className="list-items-wrapper">
       {chosenList}
-
       </div>
 
     );
