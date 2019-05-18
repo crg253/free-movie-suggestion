@@ -84,14 +84,14 @@ class App extends Component {
   render() {
 
 
-    // console.log('all approved movies are ...')
-    // console.log(this.state.Movies)
-    // console.log('user is ...')
-    // console.log(this.state.User)
-    // console.log('SAVED MOVIES are ...')
-    // console.log(this.state.Movies.filter(movie=>movie.saved ===true))
-    // console.log('suggested MOVIES are ...')
-    // console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
+    console.log('all approved movies are ...')
+    console.log(this.state.Movies.filter(movie=>movie.status==='approved'))
+    console.log('user is ...')
+    console.log(this.state.User)
+    console.log('SAVED MOVIES are ...')
+    console.log(this.state.Movies.filter(movie=>movie.saved ===true))
+    console.log('suggested MOVIES are ...')
+    console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
 
 
     return (

@@ -37,18 +37,21 @@ def get_non_usermovies():
                         'saved':False})
     return(non_usermovies)
 
-#def removesuggestion
-
-
-
-
-
-
-
+@app.route('/api/removesuggestion', methods=['POST'])
+@token_auth.login_required
+def remove_suggestion():
+    data=request.get_json(silent=True) or {}
+    slug = data.get('slug')
+    movie_to_unsuggest = Movie.query.filter_by(uniquename=data.get('slug')).first()
+    user = User.query.filter_by(username=g.current_user.username).first()
+    if movie_to_unsuggest in user.user_movies:
+        db.session.delete(movie_to_unsuggest)
+        db.session.commit()
+    return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
 @app.route('/api/suggestmovie', methods=['POST'])
 @token_auth.login_required
-def user():
+def suggest_movie():
     data=request.get_json(silent=True) or {}
     uniquename = slugify(data.get('title')).lower() +  data.get('year')
     title = data.get('title')

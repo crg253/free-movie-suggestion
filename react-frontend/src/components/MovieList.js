@@ -18,11 +18,13 @@ class MovieList extends Component {
     if(this.props.listBy==="Saved"){
       selectedMovieList= this.props.movies.filter(movie=>movie.saved===true)
     }else if(this.props.listBy==="All"){
-      selectedMovieList = this.props.movies
+      selectedMovieList = this.props.movies.filter(movie=>movie.status==='approved')
     }else if(this.props.listBy==="User Suggestions"){
       selectedMovieList = this.props.movies.filter(movie=>movie.status==='pending')
     }else{
-      selectedMovieList = this.props.movies.filter(movie => movie.tags.includes(this.props.listBy))
+      selectedMovieList = this.props.movies
+      .filter(movie=>movie.status==='approved')
+      .filter(movie => movie.tags.includes(this.props.listBy))
     }
 
     function dropThe(slug) {
