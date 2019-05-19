@@ -72,7 +72,6 @@ class App extends Component {
            this.setState({
               User:res.user, Movies:res.movies,Redirect:<Redirect to="/signin"/>,RedirectBack:''})
           })
-
       }else if (res.status===200){
         res.json()
         .then(res=>{
@@ -138,8 +137,11 @@ class App extends Component {
               path='/recommend'
               render={(props)=><Recommend
                                 {...props}
+                                user={this.state.User}
                                 setUser={this.setUser}
-                                user={this.state.User}/>}/>
+                                setMovies={this.setMovies}
+                                setRedirect={this.setRedirect}
+                                setRedirectBack={this.setRedirectBack}/>}/>
 
             <Route
               path='/signin'

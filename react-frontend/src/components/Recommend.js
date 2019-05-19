@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 
 import './User.css';
 
@@ -28,17 +28,44 @@ class Recommend extends Component {
   }
 
   handleSuggestMovie = (title, year) =>{
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    let body = JSON.stringify({title: title, year:year});
-    this.props.handleFetch('suggestmovie',headers, body)
+    fetch('api/suggestmovie',{
+      method:'POST',
+      headers:{
+         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Content-Type':'application/json'
+       },
+      body: JSON.stringify({title: title, year:year})
+    })
+    .then(res=>{
+      if (res.status===500) {
+        this.setState({
+          SearchValue:'',SearchResultOptions:[], MovieMessage:"Movie already selected."})
+    }
+    else if (res.status===401) {
+      res.json()
+       .then(res=>{
+         this.props.setUser(res.user)
+         this.props.setMovies(res.movies)
+         this.props.setRedirect(<Redirect to='signin'/>)
+         this.props.setRedirectBack('')
+      })
+    }
+    else if (res.status===200){
+      res.json()
+        .then(res=>{
+          this.props.setUser(res.user)
+          this.props.setMovies(res.movies)
+          this.setState({
+            SearchValue:'',SearchResultOptions:[], MovieMessage:"Thank you for suggesting."})
+       })
+     }
+    })
   }
-
 
   render() {
     return (
       <div className='user-pages-body-wrapper'>
+      {this.props.redirect}
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
@@ -63,7 +90,7 @@ class Recommend extends Component {
                 value="Search"/>
         </form>
 
-        <p>{this.state.MovieMessage}</p>
+        <h4>{this.state.MovieMessage}</h4>
 
         {this.state.SearchResultOptions.map(mov=>(
           <div key={"searchresult" + mov.Title+mov.Year}>
