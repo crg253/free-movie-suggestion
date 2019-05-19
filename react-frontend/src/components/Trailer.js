@@ -1,15 +1,37 @@
 import React, { Component } from 'react';
+import { Redirect } from "react-router-dom";
 
 
 class Trailer extends Component {
 
 
   handleSaveUnsave = (saveunsave, slug) =>{
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    let body = JSON.stringify({slug: slug})
-    this.props.handleFetch(saveunsave, headers, body)
+
+    fetch('api/'.concat(saveunsave),{
+      method:'POST',
+      headers: {
+        'Authorization':"Bearer " +localStorage.getItem('token')
+      },
+      body: JSON.stringify({slug: slug})
+    })
+    .then(res=>{
+      if (res.status===401) {
+        res.json()
+         .then(res=>{
+           this.props.setUser(res.user)
+           this.props.setMovies(res.movies)
+           this.props.setRedirect(<Redirect to="/signin"/>)
+           this.props.setRedirectBack('')
+          })
+
+      }else if (res.status===200){
+        res.json()
+         .then(res=>{
+           this.props.setUser(res.user)
+           this.props.setMovies(res.movies)
+          })
+      }
+    })
   }
 
   getSaveButton = (slug) =>{
@@ -37,7 +59,7 @@ class Trailer extends Component {
 
     return (
       <div>
-        {this.props.redirect}
+      {this.props.redirect}
         {this.props.movies.filter(movie=>movie.slug===this.props.movieslug)
         .map(selection=>(
           <div

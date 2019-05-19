@@ -22,12 +22,13 @@ class SignIn extends Component  {
       'Authorization','Basic '+ Buffer.from(this.state.name +":"+this.state.password).toString('base64')
     );
     event.preventDefault();
-    this.props.handleFetch('signin',headers,'', )
+    this.props.handleFetch('signin',headers,'','', this.props.resSetupStates, this.props.resRedirectBack )
   }
 
   render() {
     return (
         <div>
+        {this.props.redirectBack}
           <Link to={'/'}>
             <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
           </Link>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import './App.css';
 import HomePage from './components/HomePage';
@@ -19,8 +19,15 @@ class App extends Component {
     SortBy:'name',
     User:'',
     Redirect:'',
+    RedirectBack:''
   }
 
+  setRedirectBack = (newRedirectBack)=>{
+    this.setState({RedirectBack:newRedirectBack})
+  }
+  setRedirect = (newRedirect) =>{
+    this.setState({Redirect:newRedirect})
+  }
   setMovies = (newMovies) => {
    this.setState({Movies:newMovies})
   }
@@ -49,51 +56,24 @@ class App extends Component {
    return randomMovies
   }
 
-
-
-  //need a redirect and redirect back parameter
-  //CDM token check will have no Redirect
-  //redirect back will come from history object
-  //multiple pages will redirect to signin
-  //signin will always redirect back
-
- resSetupStates =(res)=>{
-   res.json()
-    .then(res=>{
-          if(res.user !==undefined){
-            this.setState({User:res.user})
-          }
-          if(res.movies !==undefined){
-            this.setState({Movies:res.movies})
-          }
-          if(res.token !==undefined){
-            localStorage.setItem('token', res.token)
-        }
-      })
-   }
-
-   handleFetch = (route, head, body, servErrAction, unauthAction, okAction) => {
-     fetch('api/'.concat(route),{
+   handleInitialFetch = () => {
+     fetch('api/checktoken',{
       method:'POST',
-      headers:head,
-      body: body
+      headers: {
+        'Authorization':"Bearer " +localStorage.getItem('token')
+      },
+      body:''
     })
     .then(res=>{
-      if(res.status===500){
-        servErrAction(res)
-      }else if (res.status===401) {
-        unauthAction(res)
-      }else if (res.status===200){
-        okAction(res)
-      }
+      res.json()
+       .then(res=>{
+          this.setState({User:res.user, Movies:res.movies})
+        })
     })
   }
 
   componentDidMount(){
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    this.handleFetch('checktoken', headers,'', '', this.resSetupStates, this.resSetupStates)
+    this.handleInitialFetch()
   }
 
 
@@ -118,7 +98,6 @@ class App extends Component {
             render={(props)=> <Menu
                                 {...props}
                                 movies={this.state.Movies}
-                                handleFetch={this.handleFetch}
                                 chooseListBy={this.chooseListBy}/>}/>
           <Switch>
           <Route
@@ -126,7 +105,6 @@ class App extends Component {
             render={(props)=><UserMovies
                               {...props}
                               user={this.state.User}
-                              handleFetch={this.handleFetch}
                               movies = {this.state.Movies}/>}/>
 
             <Route
@@ -134,20 +112,17 @@ class App extends Component {
               render={(props)=><Recommend
                                 {...props}
                                 setUser={this.setUser}
-                                user={this.state.User}
-                                handleFetch={this.handleFetch}/>}/>
+                                user={this.state.User}/>}/>
 
             <Route
               path='/signin'
               render = {(props)=><SignIn
-                                    {...props}
-                                    handleFetch={this.handleFetch}/>}/>
+                                    {...props}/>}/>
 
             <Route
               path='/adduser'
               render = {(props)=><AddUser
-                                    {...props}
-                                    handleFetch={this.handleFetch}/>}/>
+                                    {...props}/>}/>
 
             <Route
               path='/:movieslug'
@@ -160,8 +135,11 @@ class App extends Component {
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     getRandomMovies={this.getRandomMovies}
-                                    handleFetch={this.handleFetch}
-                                    redirect={this.state.Redirect}/>}/>
+                                    setRedirect={this.setRedirect}
+                                    redirect = {this.state.Redirect}
+                                    setMovies={this.setMovies}
+                                    setUser={this.setUser}/>}
+                                    setRedirectBack={this.setRedirectBack}/>
 
             <Route
               path='/'

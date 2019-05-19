@@ -21,8 +21,11 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            handleFetch={props.handleFetch}
-            redirect={props.redirect}/>
+            setRedirect={props.setRedirect}
+            redirect = {props.redirect}
+            setUser={props.setUser}
+            setMovies={props.setMovies}
+            setRedirectBack={props.setRedirectBack}/>
 
         <div id="genres-and-list">
           <Genres
@@ -35,8 +38,7 @@ const TrailerPage = (props) => {
           <MovieList
                 movies={props.movies}
                 sortBy={props.sortBy}
-                listBy={props.listBy}
-                handleFetch={props.handleFetch}/>
+                listBy={props.listBy}/>
         </div>
       </div>
     </div>
