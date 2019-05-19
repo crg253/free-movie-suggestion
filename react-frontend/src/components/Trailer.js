@@ -37,6 +37,7 @@ class Trailer extends Component {
 
     return (
       <div>
+        {this.props.redirect}
         {this.props.movies.filter(movie=>movie.slug===this.props.movieslug)
         .map(selection=>(
           <div

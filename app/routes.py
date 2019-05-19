@@ -108,7 +108,6 @@ def sign_in():
 def checktoken():
     return jsonify({'user':g.current_user.username, 'movies':getusermovies()}), 200
 
-
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):

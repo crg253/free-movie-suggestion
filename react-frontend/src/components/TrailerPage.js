@@ -21,7 +21,8 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            handleFetch={props.handleFetch}/>
+            handleFetch={props.handleFetch}
+            redirect={props.redirect}/>
 
         <div id="genres-and-list">
           <Genres
