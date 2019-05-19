@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 
 import './User.css';
@@ -22,7 +22,24 @@ class SignIn extends Component  {
       'Authorization','Basic '+ Buffer.from(this.state.name +":"+this.state.password).toString('base64')
     );
     event.preventDefault();
-    this.props.handleFetch('signin',headers,'','', this.props.resSetupStates, this.props.resRedirectBack )
+    fetch('api/signin',{
+      method:'POST',
+      headers: headers
+    })
+    .then(res=>{
+      if (res.status===401) {
+        this.setState({name:'', password:''})
+      }else if (res.status===200){
+        res.json()
+        .then(res=>{
+          localStorage.setItem('token', res.token)
+          this.props.setUser(res.user)
+          this.props.setMovies(res.movies)
+          this.props.setRedirect('')
+          this.props.setRedirectBack(<Redirect to='/'/>)
+         })
+      }
+    })
   }
 
   render() {

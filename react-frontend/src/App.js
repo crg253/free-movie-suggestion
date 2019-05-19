@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch} from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 
 import './App.css';
 import HomePage from './components/HomePage';
@@ -54,6 +54,33 @@ class App extends Component {
        }
    }
    return randomMovies
+  }
+
+  handleSaveUnsave = (saveunsave, slug) =>{
+    fetch('api/'.concat(saveunsave),{
+      method:'POST',
+      headers:{
+         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Content-Type':'application/json'
+       },
+      body: JSON.stringify({slug: slug})
+    })
+    .then(res=>{
+      if (res.status===401) {
+        res.json()
+         .then(res=>{
+           this.setState({
+              User:res.user, Movies:res.movies,Redirect:<Redirect to="/signin"/>,RedirectBack:''})
+          })
+
+      }else if (res.status===200){
+        res.json()
+        .then(res=>{
+          this.setState({
+             User:res.user, Movies:res.movies})
+         })
+      }
+    })
   }
 
    handleInitialFetch = () => {
@@ -117,7 +144,12 @@ class App extends Component {
             <Route
               path='/signin'
               render = {(props)=><SignIn
-                                    {...props}/>}/>
+                                    {...props}
+                                    redirectBack = {this.state.RedirectBack}
+                                    setUser={this.setUser}
+                                    setMovies={this.setMovies}
+                                    setRedirect={this.setRedirect}
+                                    setRedirectBack={this.setRedirectBack}/>}/>
 
             <Route
               path='/adduser'
@@ -135,11 +167,8 @@ class App extends Component {
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     getRandomMovies={this.getRandomMovies}
-                                    setRedirect={this.setRedirect}
                                     redirect = {this.state.Redirect}
-                                    setMovies={this.setMovies}
-                                    setUser={this.setUser}/>}
-                                    setRedirectBack={this.setRedirectBack}/>
+                                    handleSaveUnsave={this.handleSaveUnsave}/>}/>
 
             <Route
               path='/'

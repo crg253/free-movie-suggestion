@@ -21,11 +21,8 @@ const TrailerPage = (props) => {
         <Trailer
             movieslug={props.match.params.movieslug}
             movies={props.movies}
-            setRedirect={props.setRedirect}
             redirect = {props.redirect}
-            setUser={props.setUser}
-            setMovies={props.setMovies}
-            setRedirectBack={props.setRedirectBack}/>
+            handleSaveUnsave={props.handleSaveUnsave}/>
 
         <div id="genres-and-list">
           <Genres

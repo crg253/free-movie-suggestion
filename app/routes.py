@@ -84,6 +84,7 @@ def unsavemovie():
 @token_auth.login_required
 def savemovie():
     data=request.get_json(silent=True) or {}
+    print(data.get('slug'))
     movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
     g.current_user.saves.append(movie_to_save)
     db.session.commit()
