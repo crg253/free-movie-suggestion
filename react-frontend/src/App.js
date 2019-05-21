@@ -17,12 +17,17 @@ class App extends Component {
     Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi' ],
     ListBy:'All',
     SortBy:'name',
+    LastMovie:'safetynotguaranteed2012',
     User:'',
     Redirect:'',
     RedirectBackSlug:'',
     RedirectBack:''
   }
 
+
+  setLastMovie = (slug)=>{
+    this.setState({LastMovie:slug})
+  }
   setRedirectBackSlug = (newSlug)=>{
     this.setState({RedirectBackSlug:newSlug})
   }
@@ -113,12 +118,15 @@ class App extends Component {
 
   render() {
 
-    console.log('user is ...')
-    console.log(this.state.User)
-    console.log('SAVED MOVIES are ...')
-    console.log(this.state.Movies.filter(movie=>movie.saved ===true))
-    console.log('suggested MOVIES are ...')
-    console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
+    console.log('last movie is ...')
+    console.log(this.state.LastMovie)
+
+    // console.log('user is ...')
+    // console.log(this.state.User)
+    // console.log('SAVED MOVIES are ...')
+    // console.log(this.state.Movies.filter(movie=>movie.saved ===true))
+    // console.log('suggested MOVIES are ...')
+    // console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
 
 
 
@@ -133,7 +141,8 @@ class App extends Component {
                                 movies={this.state.Movies}
                                 chooseListBy={this.chooseListBy}
                                 setUser={this.setUser}
-                                setMovies={this.setMovies}/>}/>
+                                setMovies={this.setMovies}
+                                lastMovie = {this.state.LastMovie}/>}/>
           <Switch>
           <Route
             path='/usermovies'
@@ -189,7 +198,8 @@ class App extends Component {
                                     getRandomMovies={this.getRandomMovies}
                                     redirect = {this.state.Redirect}
                                     handleSaveUnsave={this.handleSaveUnsave}
-                                    setRedirectBack={this.setRedirectBack}/>}/>
+                                    setRedirectBack={this.setRedirectBack}
+                                    setLastMovie={this.setLastMovie}/>}/>
 
             <Route
               path='/'
@@ -197,7 +207,8 @@ class App extends Component {
                                   {...props}
                                   chooseListBy={this.chooseListBy}
                                   listBy={this.state.ListBy}
-                                  getRandomMovies={this.getRandomMovies}/>}/>
+                                  getRandomMovies={this.getRandomMovies}
+                                  setLastMovie={this.setLastMovie}/>}/>
           </Switch>
         </div>
       </BrowserRouter>

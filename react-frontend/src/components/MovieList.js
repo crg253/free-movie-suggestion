@@ -54,7 +54,7 @@ class MovieList extends Component {
       chosenList =
         <div>
         {selectedMovieList.map(film =>
-        <div key={'saved'+film.slug}>
+        <div key={'saved'+film.slug} onClick={()=>this.props.setLastMovie(film.slug)}>
           <Link to={'/' + film.slug}>
             <div className='list-items'>
               <p>{film.name}</p> <p>{film.year}</p>
@@ -82,7 +82,7 @@ class MovieList extends Component {
       chosenList =
         <div>
         {selectedMovieList.map(film =>
-          <div key={film.slug}>
+          <div key={film.slug} onClick={()=>this.props.setLastMovie(film.slug)}>
             <Link to={'/' + film.slug}>
               <div className='list-items'>
                 <p>{film.name}</p> <p>{film.year}</p>

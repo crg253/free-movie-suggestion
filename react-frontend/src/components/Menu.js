@@ -58,7 +58,6 @@ class Menu extends Component {
     }
 
 
-
     return (
       <div>
 
@@ -95,6 +94,18 @@ class Menu extends Component {
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/usermovies'}>
                 <h4 className="menu-genre-links">Your Movies</h4>
+              </Link>
+            </div>
+
+            <div onClick={()=>this.changeMenuDisplay()}>
+              <Link to={'/'}>
+                <h4 className="menu-genre-links">HOME</h4>
+              </Link>
+            </div>
+
+            <div onClick={()=>this.changeMenuDisplay()}>
+              <Link to={'/'+ this.props.lastMovie}>
+                <h4 className="menu-genre-links">LIST</h4>
               </Link>
             </div>
 
