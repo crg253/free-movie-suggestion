@@ -129,6 +129,7 @@ class App extends Component {
             path='/'
             render={(props)=> <Menu
                                 {...props}
+                                user={this.state.User}
                                 movies={this.state.Movies}
                                 chooseListBy={this.chooseListBy}
                                 setUser={this.setUser}
@@ -155,7 +156,7 @@ class App extends Component {
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
-                                setRedirectBack={this.setRedirectBack}
+                                setRedirectBackSlug={this.setRedirectBackSlug}
                                 redirect={this.state.Redirect}/>}/>
 
             <Route

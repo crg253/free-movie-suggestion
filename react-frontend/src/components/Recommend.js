@@ -47,7 +47,7 @@ class Recommend extends Component {
          this.props.setUser(res.user)
          this.props.setMovies(res.movies)
          this.props.setRedirect(<Redirect to='signin'/>)
-         this.props.setRedirectBack('')
+         this.props.setRedirectBackSlug('recommend')
       })
     }
     else if (res.status===200){

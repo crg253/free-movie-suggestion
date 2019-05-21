@@ -37,19 +37,28 @@ class Menu extends Component {
 
 
   render() {
-    let signInLink=
-                      <Link to={'/signin'}>
-                        <h4 className="menu-genre-links">Sign In</h4>
-                      </Link>
 
-    let signOutLink= <button
-                        className='button-nostyle'
-                        onClick={()=>{
-                            this.handleSignOut();
-                            this.changeMenuDisplay();}}>
-                        <h4
-                          className="menu-genre-links">Sign Out</h4>
-                        </button>
+
+    let signInOutLink = ''
+    if(this.props.user.length === 0){
+      signInOutLink= <div onClick={()=>this.changeMenuDisplay()}>
+                        <Link to={'/signin'}>
+                          <h4 className="menu-genre-links">Sign In</h4>
+                        </Link>
+                      </div>
+    }else{
+      signInOutLink= <button
+                          className='button-nostyle'
+                          onClick={()=>{
+                              this.handleSignOut();
+                              this.changeMenuDisplay();}}>
+                          <h4
+                            className="menu-genre-links">Sign Out</h4>
+                          </button>
+    }
+
+
+
     return (
       <div>
 
@@ -71,22 +80,23 @@ class Menu extends Component {
 
             <div id="menu-links">
 
-              {signInLink}
-              {signOutLink}
+            <div onClick={()=>this.changeMenuDisplay()}>
+              <h4 id="menu-user">{this.props.user}</h4>
+            </div>
 
+              {signInOutLink}
+
+            <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/recommend'}>
                 <h4 className="menu-genre-links">Recommend</h4>
               </Link>
+            </div>
 
+            <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/usermovies'}>
                 <h4 className="menu-genre-links">Your Movies</h4>
               </Link>
-
-              <div onClick={()=>this.props.chooseListBy("All")}>
-                <Link to={'/movielist'}>
-                  <h4 className="menu-genre-links">All Movies</h4>
-                </Link>
-              </div>
+            </div>
 
           </div>
         </div>
