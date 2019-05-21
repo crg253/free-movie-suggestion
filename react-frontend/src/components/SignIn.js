@@ -42,9 +42,12 @@ class SignIn extends Component  {
     })
   }
 
+  componentDidMount(){
+    this.props.setRedirect('')
+  }
+
   componentWillUnmount(){
     this.props.setRedirectBack('')
-    this.props.setRedirectBackSlug('')
   }
 
   render() {

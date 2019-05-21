@@ -17,7 +17,7 @@ class App extends Component {
     Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi' ],
     ListBy:'All',
     SortBy:'name',
-    LastMovie:'safetynotguaranteed2012',
+    LastMovie:'comingsoon',
     User:'',
     Redirect:'',
     RedirectBackSlug:'',

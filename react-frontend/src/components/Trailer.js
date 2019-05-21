@@ -9,14 +9,17 @@ class Trailer extends Component {
   getSaveButton = (slug) =>{
     let buttonComponent = ''
     let selectedMovie = this.props.movies.filter(movie=>movie.slug===slug)[0]
-    if(selectedMovie.saved===true){
+    if (selectedMovie.slug === "comingsoon"){
+      buttonComponent = ''
+    }
+    else if(selectedMovie.saved===true){
       buttonComponent=
         <button
           className="button-nostyle"
           onClick = {()=>this.props.handleSaveUnsave('unsavemovie',selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Unsave</button>
-    }else{
+    }else if(selectedMovie.saved ===false){
       buttonComponent=
         <button
           className="button-nostyle"
