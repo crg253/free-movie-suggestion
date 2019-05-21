@@ -19,9 +19,13 @@ class App extends Component {
     SortBy:'name',
     User:'',
     Redirect:'',
+    RedirectBackSlug:'',
     RedirectBack:''
   }
 
+  setRedirectBackSlug = (newSlug)=>{
+    this.setState({RedirectBackSlug:newSlug})
+  }
   setRedirectBack = (newRedirectBack)=>{
     this.setState({RedirectBack:newRedirectBack})
   }
@@ -70,7 +74,11 @@ class App extends Component {
         res.json()
          .then(res=>{
            this.setState({
-              User:res.user, Movies:res.movies,Redirect:<Redirect to="/signin"/>,RedirectBack:''})
+              User:res.user,
+              Movies:res.movies,
+              Redirect:<Redirect to="/signin"/>,
+              RedirectBack:'',
+              RedirectBackSlug:slug})
           })
       }else if (res.status===200){
         res.json()
@@ -105,15 +113,13 @@ class App extends Component {
 
   render() {
 
-
-    console.log('all approved movies are ...')
-    console.log(this.state.Movies.filter(movie=>movie.status==='approved'))
     console.log('user is ...')
     console.log(this.state.User)
     console.log('SAVED MOVIES are ...')
     console.log(this.state.Movies.filter(movie=>movie.saved ===true))
     console.log('suggested MOVIES are ...')
     console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
+
 
 
     return (
@@ -124,14 +130,22 @@ class App extends Component {
             render={(props)=> <Menu
                                 {...props}
                                 movies={this.state.Movies}
-                                chooseListBy={this.chooseListBy}/>}/>
+                                chooseListBy={this.chooseListBy}
+                                setUser={this.setUser}
+                                setMovies={this.setMovies}/>}/>
           <Switch>
           <Route
             path='/usermovies'
             render={(props)=><UserMovies
                               {...props}
                               user={this.state.User}
-                              movies = {this.state.Movies}/>}/>
+                              movies = {this.state.Movies}
+                              handleSaveUnsave={this.handleSaveUnsave}
+                              setUser={this.setUser}
+                              setMovies={this.setMovies}
+                              setRedirect={this.setRedirect}
+                              setRedirectBackSlug={this.setRedirectBackSlug}
+                              redirect={this.state.Redirect}/>}/>
 
             <Route
               path='/recommend'
@@ -141,17 +155,20 @@ class App extends Component {
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
-                                setRedirectBack={this.setRedirectBack}/>}/>
+                                setRedirectBack={this.setRedirectBack}
+                                redirect={this.state.Redirect}/>}/>
 
             <Route
               path='/signin'
               render = {(props)=><SignIn
                                     {...props}
                                     redirectBack = {this.state.RedirectBack}
+                                    redirectBackSlug = {this.state.RedirectBackSlug}
                                     setUser={this.setUser}
                                     setMovies={this.setMovies}
                                     setRedirect={this.setRedirect}
-                                    setRedirectBack={this.setRedirectBack}/>}/>
+                                    setRedirectBack={this.setRedirectBack}
+                                    setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
 
             <Route
               path='/adduser'
@@ -170,7 +187,8 @@ class App extends Component {
                                     setSort={this.setSort}
                                     getRandomMovies={this.getRandomMovies}
                                     redirect = {this.state.Redirect}
-                                    handleSaveUnsave={this.handleSaveUnsave}/>}/>
+                                    handleSaveUnsave={this.handleSaveUnsave}
+                                    setRedirectBack={this.setRedirectBack}/>}/>
 
             <Route
               path='/'

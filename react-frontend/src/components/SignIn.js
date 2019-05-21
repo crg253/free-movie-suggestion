@@ -36,10 +36,15 @@ class SignIn extends Component  {
           this.props.setUser(res.user)
           this.props.setMovies(res.movies)
           this.props.setRedirect('')
-          this.props.setRedirectBack(<Redirect to='/'/>)
+          this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackSlug}/>)
          })
       }
     })
+  }
+
+  componentWillUnmount(){
+    this.props.setRedirectBack('')
+    this.props.setRedirectBackSlug('')
   }
 
   render() {

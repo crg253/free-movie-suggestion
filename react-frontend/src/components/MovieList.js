@@ -3,14 +3,6 @@ import { Link } from "react-router-dom";
 
 class MovieList extends Component {
 
-  handleUnsave = (slug) =>{
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    let body = JSON.stringify({slug: slug})
-    this.props.handleFetch('unsavemovie', headers, body)
-  }
-
 
   render() {
 
@@ -71,7 +63,7 @@ class MovieList extends Component {
           </Link>
             <div className='list-unsave-button'>
               <button
-                onClick = {()=>this.handleUnsave(film.slug)}
+                onClick = {()=>this.props.handleSaveUnsave('unsavemovie',film.slug)}
                 >unsave</button>
             </div>
         </div>

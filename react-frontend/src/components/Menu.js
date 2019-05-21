@@ -19,12 +19,21 @@ class Menu extends Component {
     }
   }
 
-  handleSignOut = (event) =>{
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    this.props.handleFetch('revoketoken',headers,'', )
-  }
+  handleSignOut = () =>{
+  fetch('api/revoketoken', {
+    method:'DELETE',
+    headers:{
+      'Authorization':"Bearer " +localStorage.getItem('token')
+    }
+  })
+  .then(res=>{
+    res.json()
+     .then(res=>{
+       this.props.setUser('')
+       this.props.setMovies(res.movies)
+      })
+  })
+}
 
 
   render() {

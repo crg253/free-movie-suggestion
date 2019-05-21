@@ -62,15 +62,6 @@ def suggest_movie():
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
-@app.route('/api/adduser', methods=['POST'])
-def add_user():
-    data=request.get_json(silent=True) or {}
-    newUser = User(username=data.get('userName'))
-    newUser.set_password(data.get('password'))
-    db.session.add(newUser)
-    db.session.commit()
-    return jsonify({'':''}),201
-
 @app.route('/api/unsavemovie', methods=['POST'])
 @token_auth.login_required
 def unsavemovie():
@@ -90,7 +81,7 @@ def savemovie():
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username}), 200
 
-@app.route('/api/revoketoken', methods=['POST'])
+@app.route('/api/revoketoken', methods=['DELETE'])
 @token_auth.login_required
 def revoke_token():
     g.current_user.revoke_token()
@@ -103,6 +94,15 @@ def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
     return jsonify({'user':g.current_user.username,'token':token, 'movies':getusermovies()}), 200
+
+@app.route('/api/adduser', methods=['POST'])
+def add_user():
+    data=request.get_json(silent=True) or {}
+    newUser = User(username=data.get('userName'))
+    newUser.set_password(data.get('password'))
+    db.session.add(newUser)
+    db.session.commit()
+    return jsonify({'':''}),201
 
 @app.route('/api/checktoken', methods=['POST'])
 @token_auth.login_required

@@ -15,13 +15,25 @@ class AddUser extends Component {
     this.setState({password:event.target.value})
   }
 
-  handleSubmit = (event) =>{
-    event.preventDefault();
-    let headers = {'Content-Type':'application/json'}
-    let body = JSON.stringify({userName: this.state.name, password:this.state.password})
+  handleAddUserSubmit = (event) =>{
+  event.preventDefault();
+  fetch('/api/adduser', {
+   method: 'POST',
+   headers: {'Content-Type':'application/json'},
+   body: JSON.stringify({userName: this.state.name, password:this.state.password})
+  })
+  .then(res=>{
+    console.log(res)
+    console.log(res.status)
+    if(!res.ok){
+      this.setState({Message:"Username not available", name:'', password:''})
+    }else{
+      this.setState({Message:"Thank you for signing up.", name:'', password:''})
 
-    this.props.handleFetch('adduser',headers,body)
-  }
+    }
+  })
+}
+
 
   render() {
     return (
@@ -31,7 +43,7 @@ class AddUser extends Component {
         </Link>
         <div className="user-pages-body-wrapper">
           <h1>Create Account</h1>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleAddUserSubmit}>
             <label>
               Name:
               <input
@@ -50,7 +62,7 @@ class AddUser extends Component {
                    type="submit"
                    value="Submit" />
           </form>
-          {this.state.Message}
+          <h4>{this.state.Message}</h4>
           <Link to={'/signin'}><h3>sign in</h3></Link>
         </div>{/* class="user-pages-body-wrapper"*/}
       </div>
