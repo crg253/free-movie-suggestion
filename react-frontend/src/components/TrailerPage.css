@@ -20,6 +20,7 @@ iframe{
 }
 #genres-and-list{
   margin:0 0 0 5%;
+  width: 40%;
 }
 #genre-and-button{
   align-items: center;
@@ -27,6 +28,38 @@ iframe{
 .select-genre{
   margin:0 5px 2px 0;
   font-size: 30px;
+}
+#genre-link-list-wrapper{
+  position:absolute;
+  margin: 0 0 0 -20px;
+  background-color: #1F1F1F;
+  border: 1px solid white;
+  padding:10px 50px 50px 20px;
+}
+#Act{
+  font-family: 'Ceviche One', cursive;
+  font-size: 50px;
+}
+#Com{
+  font-family: 'Luckiest Guy', cursive;
+  margin-top:5px;
+}
+#Dra{
+  font-family: 'Amatic SC', cursive;
+  font-size: 50px;
+
+}
+#Hor{
+  font-family: 'Schoolbell', cursive;
+}
+#Mys{
+  font-family: 'Bangers', cursive;
+}
+#Rom{
+  font-family: 'Sophia', cursive;
+}
+#Sci{
+  font-family: 'Gugi', cursive;
 }
 #get-genres-button{
   margin-left: 10px;
@@ -36,13 +69,7 @@ iframe{
   border-bottom:1px solid white;
   transform:rotate(45deg);
 }
-#desk-genre-link-list{
-  display:flex;
-  flex-wrap: wrap;
-}
-#mobile-genre-link-list{
-  display:none;
-}
+
 #sort-by-wrapper{
   margin:15px 0 0 0;
 }
@@ -106,31 +133,6 @@ iframe{
     font-size: 30px;
     margin:0 0 2px 0;
 
-  }
-  #Act{
-    font-family: 'Ceviche One', cursive;
-    font-size: 50px;
-  }
-  #Com{
-    font-family: 'Luckiest Guy', cursive;
-    margin-top:5px;
-  }
-  #Dra{
-    font-family: 'Amatic SC', cursive;
-    font-size: 50px;
-
-  }
-  #Hor{
-    font-family: 'Schoolbell', cursive;
-  }
-  #Mys{
-    font-family: 'Bangers', cursive;
-  }
-  #Rom{
-    font-family: 'Sophia', cursive;
-  }
-  #Sci{
-    font-family: 'Gugi', cursive;
   }
 
   #sort-by-wrapper{
