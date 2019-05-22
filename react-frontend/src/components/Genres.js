@@ -32,16 +32,19 @@ class Genres extends Component {
             </button>
           </div>{/* id= genre-and-button */}
 
+          {/************** GENRE DROP DOWN LIST *****************/}
+
 
           <div id="genre-link-list-wrapper" style={{display:this.state.displayGenres}}>
 
               <div id="desk-genre-link-list">
-                {this.props.genres.filter(g=>g!==this.props.listBy).map(genre=>(
+                {this.props.genres.map(genre=>(
                   <div
                     key={"desk-genre-link-list"+genre}
                     onClick={()=>{
                       this.props.chooseListBy(genre);
-                      this.changeGenreDisplay();}}>
+                      this.changeGenreDisplay();
+                      this.props.setLastMovie(this.props.randomMovies[genre].slug);}}>
                         <Link to={'/' + this.props.randomMovies[genre].slug}>
                           <h2
                             style = {{
@@ -56,7 +59,8 @@ class Genres extends Component {
                 <div style={{display:'block'}}>
                   <button
                     className="button-nostyle"
-                    onClick={()=>{this.props.chooseListBy("Saved");
+                    onClick={()=>{
+                      this.props.chooseListBy("Saved");
                       this.changeGenreDisplay();}}>
                         <h2
                           style = {{

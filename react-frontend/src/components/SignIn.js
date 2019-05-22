@@ -35,8 +35,12 @@ class SignIn extends Component  {
           localStorage.setItem('token', res.token)
           this.props.setUser(res.user)
           this.props.setMovies(res.movies)
-          this.props.setRedirect('')
-          this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackSlug}/>)
+          if(this.props.redirectBackSlug.length >0){
+            console.log('redirect to redirectBackSlug')
+            this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackSlug}/>)
+          }else{
+            this.setState({name:'', password:'',Message:"Now signed in as "+ res.user})
+          }
          })
       }
     })
@@ -48,9 +52,11 @@ class SignIn extends Component  {
 
   componentWillUnmount(){
     this.props.setRedirectBack('')
+    this.props.setRedirectBackSlug('')
   }
 
   render() {
+
     return (
         <div>
         {this.props.redirectBack}
@@ -81,7 +87,7 @@ class SignIn extends Component  {
                      type="submit"
                      value="Submit" />
             </form>
-            {this.state.Message}
+            <h4>{this.state.Message}</h4>
             <Link to={'/adduser'}><h3>create account</h3></Link>
           </div>{/*class="user-pages-body-wrapper"*/}
         </div>

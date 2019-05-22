@@ -81,9 +81,9 @@ class App extends Component {
            this.setState({
               User:res.user,
               Movies:res.movies,
-              Redirect:<Redirect to="/signin"/>,
+              RedirectBackSlug:slug,
               RedirectBack:'',
-              RedirectBackSlug:slug})
+              Redirect:<Redirect to="/signin"/>})
           })
       }else if (res.status===200){
         res.json()
@@ -118,9 +118,8 @@ class App extends Component {
 
   render() {
 
-    console.log('last movie is ...')
-    console.log(this.state.LastMovie)
-
+    // console.log('last movie is ...')
+    // console.log(this.state.LastMovie)
     // console.log('user is ...')
     // console.log(this.state.User)
     // console.log('SAVED MOVIES are ...')
@@ -154,8 +153,10 @@ class App extends Component {
                               setUser={this.setUser}
                               setMovies={this.setMovies}
                               setRedirect={this.setRedirect}
-                              setRedirectBackSlug={this.setRedirectBackSlug}
-                              redirect={this.state.Redirect}/>}/>
+                              redirect={this.state.Redirect}
+                              setLastMovie={this.setLastMovie}
+                              setRedirectBack={this.setRedirectBack}
+                              setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
 
             <Route
               path='/recommend'
@@ -165,19 +166,20 @@ class App extends Component {
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
-                                setRedirectBackSlug={this.setRedirectBackSlug}
-                                redirect={this.state.Redirect}/>}/>
+                                redirect={this.state.Redirect}
+                                setRedirectBack={this.setRedirectBack}
+                                setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
 
             <Route
               path='/signin'
               render = {(props)=><SignIn
                                     {...props}
                                     redirectBack = {this.state.RedirectBack}
-                                    redirectBackSlug = {this.state.RedirectBackSlug}
                                     setUser={this.setUser}
                                     setMovies={this.setMovies}
                                     setRedirect={this.setRedirect}
                                     setRedirectBack={this.setRedirectBack}
+                                    redirectBackSlug={this.state.RedirectBackSlug}
                                     setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
 
             <Route

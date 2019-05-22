@@ -116,13 +116,20 @@ iframe{
     height: 7px;
   }
   #genres-and-list{
+    width: 90%;
     margin:5% 0 5% 0;
   }
   #genre-and-button{
     justify-content: center;
   }
-  #desk-genre-link-list{
-    display: none;
+
+  #genre-link-list-wrapper{
+    position: relative;
+    margin: 0;
+    background-color: #1F1F1F;
+    border: none;
+    padding:0;
+    text-align: center;
   }
   #mobile-genre-link-list{
     display:inline;
