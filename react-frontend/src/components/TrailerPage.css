@@ -1,65 +1,32 @@
-
+/* TrailerPage.js */
 #trailer-and-genres-and-list{
   display:flex;
   justify-content: center;
-  margin: 2% 5% 5% 5%;
+  margin: 7vh 7.5vw 7vh 7.5vw;
 }
-#trailer-and-title-and-save{
+#genres-and-list{
+  margin:0 0 0 5vw;
+  width: 40vw;
 }
+
+/* Trailer.js */
 iframe{
-  width:45vw;
-  height: 25.28vw;
+  width:40vw;
+  height: 22.47vw;
 }
 #title-and-save-button{
   text-align: center;
   margin: 0 0 25px 0;
 }
-#save-button{
-  width:20px;
-  height:20px;
-}
-#genres-and-list{
-  margin:0 0 0 5%;
-  width: 40%;
-}
+
+/* Genres.js */
 #genre-and-button{
   align-items: center;
 }
-.select-genre{
-  margin:0 5px 2px 0;
-  font-size: 30px;
-}
-#genre-link-list-wrapper{
-  position:absolute;
-  margin: 0 0 0 -20px;
-  background-color: #1F1F1F;
-  border: 1px solid white;
-  padding:10px 50px 50px 20px;
-}
-#Act{
-  font-family: 'Ceviche One', cursive;
-  font-size: 50px;
-}
-#Com{
-  font-family: 'Luckiest Guy', cursive;
-  margin-top:5px;
-}
-#Dra{
-  font-family: 'Amatic SC', cursive;
-  font-size: 50px;
-
-}
-#Hor{
-  font-family: 'Schoolbell', cursive;
-}
-#Mys{
-  font-family: 'Bangers', cursive;
-}
-#Rom{
-  font-family: 'Sophia', cursive;
-}
-#Sci{
-  font-family: 'Gugi', cursive;
+.selected-genre{
+  font-size: 40px;
+  margin:0;
+  line-height: 0.75;
 }
 #get-genres-button{
   margin-left: 10px;
@@ -69,21 +36,19 @@ iframe{
   border-bottom:1px solid white;
   transform:rotate(45deg);
 }
+.genre-list-item{
+  font-size: 20px;
+  margin: 7px 5px 0 0;
+}
 
-#sort-by-wrapper{
-  margin:15px 0 0 0;
-}
-.sort-selector{
-  display: inline;
-  margin-right: 2px;
-}
+/* MovieList.js */
 .list-items-wrapper{
   margin-top: 15px;
 }
 .list-items{
   display:flex;
   flex-flow: wrap;
-  padding:5px;
+  padding:5px 5px 5px 0;
 }
 .list-items p{
   padding: 0;
@@ -92,6 +57,20 @@ iframe{
 .list-unsave-button button{
   margin-left: 10px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* PORTRAIT */
