@@ -22,6 +22,7 @@ iframe{
 /* Genres.js */
 #genre-and-button{
   align-items: center;
+  display:flex;
 }
 .selected-genre{
   font-size: 40px;
@@ -57,12 +58,12 @@ iframe{
   font-size: 40px;
 }
 #get-genres-button{
-  margin-left: 10px;
-  width:15px;
-  height: 15px;
-  border-right:1px solid white;
-  border-bottom:1px solid white;
-  transform:rotate(45deg);
+  display:none;
+}
+#desktop-genres-list{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .genre-list-item{
   color: gray;
@@ -71,11 +72,9 @@ iframe{
 }
 #sort-by-wrapper{
   display: flex;
-
 }
 .sort-selector{
   margin-right:5px;
-
 }
 
 /* MovieList.js */
@@ -93,4 +92,54 @@ iframe{
 }
 .list-unsave-button button{
   margin-left: 10px;
+}
+
+/* PORTRAIT */
+@media only screen and (orientation:portrait){
+  /* TrailerPage.js */
+  #trailer-and-genres-and-list{
+    display:inline;
+    margin: 0;
+  }
+  #genres-and-list{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80vw;
+  }
+  /* Trailer.js */
+  iframe{
+    width:95vw;
+    height: 53.37vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #title-and-save-button{
+    text-align: center;
+    margin: 0 0 25px 0;
+  }
+  /* Genres.js */
+  #genre-and-button{
+    justify-content: center;
+  }
+  #get-genres-button{
+    display: inline;
+    margin-left: 10px;
+    width:15px;
+    height: 15px;
+    border-right:1px solid white;
+    border-bottom:1px solid white;
+    transform:rotate(45deg);
+  }
+  #desktop-genres-list{
+    display:none;
+  }
+  #sort-by-wrapper{
+    justify-content: center;
+  }
+  /* MovieList.js */
+  .list-items{
+    justify-content: center;
+  }
+
 }

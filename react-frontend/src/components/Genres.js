@@ -3,25 +3,38 @@ import { Link } from "react-router-dom";
 
 
 class Genres extends Component {
+    state={
+      MobileGenresDisplay:'none',
+    }
 
+    changeMobileGenresDisplay = () =>{
+      if(this.state.MobileGenresDisplay==="inline"){
+        this.setState({MobileGenresDisplay:"none"})
+      }else{
+        this.setState({MobileGenresDisplay:'inline'})
+      }
+    }
 
   render() {
 
     return (
       <div>
 
-        {/* Main Genre */}
-        <h2
-          className="selected-genre"
-          id={this.props.listBy.slice(0,3)}>{this.props.listBy}</h2>
 
+        <div id="genre-and-button" >
+          <h2 className="selected-genre" id={this.props.listBy.slice(0,3)}>{this.props.listBy}</h2>
+
+          {/* Button for getting mobile list of genres*/}
+          <button
+            className="button-nostyle"
+            id='get-genres-button'
+            onClick={()=>{this.changeMobileGenresDisplay();}}>
+          </button>
+        </div>{/* id= genre-and-button */}
 
 
         {/* Desktop List of Genres*/}
-        <div style={{
-            marginTop:"10px",
-            display:'flex',
-            flexWrap:"wrap"}}>
+        <div id="desktop-genres-list">
 
           {this.props.genres.map(genre=>(
             <div
@@ -56,7 +69,67 @@ class Genres extends Component {
         </div>
         {/* END -- Desktop List of Genres*/}
 
+        {/* START -- mobile-genre-link-list */}
+        <div style={{display:this.state.MobileGenresDisplay}}>
+          {this.props.genres.map(genre=>(
+            <div
+              key={"mobile-genre-link-list"+genre}
+              onClick={()=>{
+                this.props.chooseListBy(genre);
+                this.changeMobileGenresDisplay();}}>
+                  <Link to={'/' + this.props.randomMovies[genre].slug}>
+                    <h2
+                      style = {{
+                        color: this.props.listBy===genre ? 'white': '#9E9E9E'
+                      }}
+                      id={genre.slice(0,3)}
+                      className="select-genre">{genre} </h2>
+                  </Link>
+            </div>//Javascript Comment
+          ))}
 
+            <div style={{display:'block'}}>
+              <button
+                className="button-nostyle"
+                onClick={()=>{this.props.chooseListBy("Saved");
+                  this.changeGenreDisplay();
+                  this.changeGenreButton();}}>
+                    <h2
+                      style = {{
+                        color: this.props.listBy==="Saved" ? 'white': '#9E9E9E'
+                      }}
+                      className="select-genre">Saved</h2>
+              </button>
+            </div>
+
+            <div style={{display:'block'}}>
+              <button
+                className="button-nostyle"
+                onClick={()=>{this.props.chooseListBy("All");
+                  this.changeGenreDisplay();
+                  this.changeGenreButton();}}>
+                    <h2
+                      style = {{
+                        color: this.props.listBy==="All" ? 'white': '#9E9E9E'
+                      }}
+                      className="select-genre">All</h2>
+              </button>
+            </div>
+
+            <div style={{display:'block'}}>
+              <button
+                className="button-nostyle"
+                onClick={()=>{this.props.chooseListBy("User Suggestions");
+                  this.changeGenreDisplay();
+                  this.changeGenreButton();}}>
+                    <h2
+                      style = {{
+                        color: this.props.listBy==='User Suggestions' ? 'white': '#9E9E9E'
+                      }}
+                      className="select-genre">User Suggestions</h2>
+              </button>
+            </div>
+        </div>{/* id = mobile-genre-link-list */}
 
 
         {/* sort-by-wrapper  */}
