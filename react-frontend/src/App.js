@@ -14,7 +14,7 @@ class App extends Component {
 
   state = {
     Movies:[],
-    Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi' ],
+    Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi & Fantasy' ],
     ListBy:'All',
     SortBy:'name',
     LastMovie:'comingsoon',
@@ -53,7 +53,7 @@ class App extends Component {
   getRandomMovies=()=>{
    let approvedMovies = this.state.Movies.filter(movie=>movie.status==='approved');
    let randomMovies = {
-       Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'','Mystery & Suspense':'',Romance:'','Sci-Fi':''
+       Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'','Mystery & Suspense':'',Romance:'','Sci-Fi & Fantasy':''
    };
    if(approvedMovies.length>0){
        for(let i in this.state.Genres){

@@ -85,9 +85,9 @@ class HomePage extends Component {
                   <RomanceSign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Sci-Fi'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Sci-Fi'].slug)}>
-                <Link to={'/' + randomMovies['Sci-Fi'].slug}>
+    }else if(this.props.listBy ==='Sci-Fi & Fantasy'){
+      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Sci-Fi & Fantasy'].slug)}>
+                <Link to={'/' + randomMovies['Sci-Fi & Fantasy'].slug}>
                   <SciFiSign/>
                 </Link>
               </g>
@@ -104,7 +104,7 @@ class HomePage extends Component {
         <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Documentary');}}>
           <Link to={'/'}><DocumentarySVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Sci-Fi');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Sci-Fi & Fantasy');}}>
           <Link to={'/'}><SciFiSVG/></Link></g>
 
         <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Horror');}}>

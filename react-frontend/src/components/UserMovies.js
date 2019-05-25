@@ -36,6 +36,36 @@ class UserMovies extends Component {
     })
   }
 
+  handleUnsave = (slug) =>{
+    fetch('api/unsavemovie',{
+      method:'POST',
+      headers:{
+         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Content-Type':'application/json'
+       },
+      body: JSON.stringify({slug: slug})
+    })
+    .then(res=>{
+      if (res.status===401) {
+        res.json()
+         .then(res=>{
+           this.props.setUser(res.user)
+           this.props.setMovies(res.movies)
+           this.props.setRedirectBack('')
+           this.props.setRedirectBackSlug('usermovies')
+           this.props.setRedirect(<Redirect to='signin'/>)
+        })
+      }
+      else if (res.status===200){
+        res.json()
+          .then(res=>{
+            this.props.setUser(res.user)
+            this.props.setMovies(res.movies)
+         })
+       }
+    })
+  }
+
 
   render() {
     return (
@@ -64,7 +94,7 @@ class UserMovies extends Component {
       <div key={'usersaved'+film.slug}>
             <h4>{film.name}</h4>
             <button
-              onClick = {()=>this.props.handleSaveUnsave('unsavemovie',film.slug)}
+              onClick = {()=>this.handleUnsave(film.slug)}
               >unsave</button>
       </div>
       )}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 
 import './TrailerPage.css';
@@ -6,43 +6,50 @@ import Trailer from './Trailer';
 import Genres from './Genres';
 import MovieList from './MovieList';
 
-const TrailerPage = (props) => {
+class TrailerPage extends Component {
 
-  window.scrollTo(0, 0);
-  let randomMovies = props.getRandomMovies()
+  componentDidMount(){
+    this.props.setLastMovie(this.props.match.params.movieslug)
+  }
 
-  return(
-    <div>
-      <Link to={'/'}>
-        <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
-      </Link>
+  render() {
 
-      <div id="trailer-and-genres-and-list">
-        <Trailer
-            movieslug={props.match.params.movieslug}
-            movies={props.movies}
-            redirect = {props.redirect}
-            handleSaveUnsave={props.handleSaveUnsave}/>
+    window.scrollTo(0, 0);
+    let randomMovies = this.props.getRandomMovies()
 
-        <div id="genres-and-list">
-          <Genres
-                setSort={props.setSort}
-                sortBy={props.sortBy}
-                genres={props.genres}
-                chooseListBy={props.chooseListBy}
-                listBy={props.listBy}
-                randomMovies={randomMovies}
-                setLastMovie = {props.setLastMovie}/>
-          <MovieList
-                movies={props.movies}
-                sortBy={props.sortBy}
-                listBy={props.listBy}
-                handleSaveUnsave={props.handleSaveUnsave}
-                setLastMovie = {props.setLastMovie}/>
+    return (
+      <div>
+        <Link to={'/'}>
+          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+        </Link>
+
+        <div id="trailer-and-genres-and-list">
+          <Trailer
+              movieslug={this.props.match.params.movieslug}
+              movies={this.props.movies}
+              redirect = {this.props.redirect}
+              handleSaveUnsave={this.props.handleSaveUnsave}/>
+
+          <div id="genres-and-list">
+            <Genres
+                  setSort={this.props.setSort}
+                  sortBy={this.props.sortBy}
+                  genres={this.props.genres}
+                  chooseListBy={this.props.chooseListBy}
+                  listBy={this.props.listBy}
+                  randomMovies={randomMovies}
+                  setLastMovie = {this.props.setLastMovie}/>
+            <MovieList
+                  movies={this.props.movies}
+                  sortBy={this.props.sortBy}
+                  listBy={this.props.listBy}
+                  handleSaveUnsave={this.props.handleSaveUnsave}
+                  setLastMovie = {this.props.setLastMovie}/>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default TrailerPage;

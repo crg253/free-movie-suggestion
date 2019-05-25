@@ -2,17 +2,17 @@
 #trailer-and-genres-and-list{
   display:flex;
   justify-content: center;
-  margin: 7vh 7.5vw 7vh 7.5vw;
+  margin: 7vh 3vw 7vh 5vw;
 }
 #genres-and-list{
   margin:0 0 0 5vw;
-  width: 40vw;
+  width: 44.5vw;
 }
 
 /* Trailer.js */
 iframe{
-  width:40vw;
-  height: 22.47vw;
+  width:42.5vw;
+  height: 23.88vw;
 }
 #title-and-save-button{
   text-align: center;
@@ -28,6 +28,34 @@ iframe{
   margin:0;
   line-height: 0.75;
 }
+#Act{
+  font-family: 'Ceviche One', cursive;
+  font-size: 55px;
+  margin-top: -7px;
+}
+#Com{
+  font-family: 'Luckiest Guy', cursive;
+  margin-top: 5px;
+}
+#Dra{
+  font-family: 'Amatic SC', cursive;
+  font-size: 45px;
+}
+#Hor{
+  font-family: 'Schoolbell', cursive;
+  margin-top: 5px;
+}
+#Mys{
+  font-family: 'Bangers', cursive;
+}
+#Rom{
+  font-family: 'Sophia', cursive;
+  margin-top: -5px;
+}
+#Sci{
+  font-family: 'Gugi', cursive;
+  font-size: 40px;
+}
 #get-genres-button{
   margin-left: 10px;
   width:15px;
@@ -37,13 +65,22 @@ iframe{
   transform:rotate(45deg);
 }
 .genre-list-item{
-  font-size: 20px;
+  color: gray;
+  font-size: 18px;
   margin: 7px 5px 0 0;
+}
+#sort-by-wrapper{
+  display: flex;
+
+}
+.sort-selector{
+  margin-right:5px;
+
 }
 
 /* MovieList.js */
 .list-items-wrapper{
-  margin-top: 15px;
+  margin-top: 5px;
 }
 .list-items{
   display:flex;
@@ -56,112 +93,4 @@ iframe{
 }
 .list-unsave-button button{
   margin-left: 10px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* PORTRAIT */
-@media only screen and (orientation:portrait){
-  #trailer-and-genres-and-list{
-    width:90vw;
-    height: 50.63vw;
-    display:block;
-    margin: 2% 0 0 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  iframe{
-    width:90vw;
-    height: 50.63vw;
-  }
-  #trailer-title{
-    margin-bottom: 2px;
-  }
-  #get-genres-button{
-    width:7px;
-    height: 7px;
-  }
-  #genres-and-list{
-    width: 90%;
-    margin:5% 0 5% 0;
-  }
-  #genre-and-button{
-    justify-content: center;
-  }
-
-  #genre-link-list-wrapper{
-    position: relative;
-    margin: 0;
-    background-color: #1F1F1F;
-    border: none;
-    padding:0;
-    text-align: center;
-  }
-  #mobile-genre-link-list{
-    display:inline;
-    text-align: center;
-    align-items: center;
-  }
-  .select-genre{
-    font-size: 30px;
-    margin:0 0 2px 0;
-
-  }
-
-  #sort-by-wrapper{
-    text-align: center;
-  }
-  #selected-list{
-    margin:3px 5% 10% 5%;
-    font-size: 15px;
-    text-align: center;
-  }
-  .list-items{
-    justify-content: center;
-  }
-  .list-unsave-button{
-    text-align: center;
-  }
-
-}
-
-/* SMALL LANDSCAPE */
-@media only screen and (orientation:landscape) and (max-width : 800px) {
-  #trailer-and-genres-and-list{
-    width:90vw;
-    height: 50.63vw;
-    display:block;
-    margin: 2% 0 0 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  iframe{
-    width:90vw;
-    height: 50.63vw;
-  }
-  #genres-and-list{
-    margin:5% 0 5% 0;
-  }
-  #sort-by-wrapper{
-    margin:3px 0 0 0;
-    display:flex;
-    justify-content: center;
-  }
-  #selected-list{
-    margin:3px 2% 10% 2%;
-    text-align: center;
-  }
 }

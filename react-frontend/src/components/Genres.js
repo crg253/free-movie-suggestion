@@ -3,45 +3,83 @@ import { Link } from "react-router-dom";
 
 
 class Genres extends Component {
-  state={
-    GenreListDisplay:'none'
-  }
 
-  changeGenreListDisplay = () =>{
-    if(this.state.GenreListDisplay==='none'){
-      this.setState({GenreListDisplay:'flex'})
-    }else{
-      this.setState({GenreListDisplay:'none'})
-    }
-  }
 
   render() {
 
     return (
       <div>
 
-        <div id="genre-and-button" style={{display:'flex'}}>
-          <h2 className="selected-genre">{this.props.listBy}</h2>
-          <button
-            id="get-genres-button"
-            class="button-nostyle"
-            onClick = {()=>this.changeGenreListDisplay()}></button>
-        </div>{/* id= genre-and-button */}
+        {/* Main Genre */}
+        <h2
+          className="selected-genre"
+          id={this.props.listBy.slice(0,3)}>{this.props.listBy}</h2>
 
+
+
+        {/* Desktop List of Genres*/}
         <div style={{
             marginTop:"10px",
-            flexWrap:"wrap",
-            display:this.state.GenreListDisplay}}>
+            display:'flex',
+            flexWrap:"wrap"}}>
 
           {this.props.genres.map(genre=>(
-              <h3 className="genre-list-item">{genre}</h3>
+            <div
+              key={"desk-genre-link-list"+genre}
+              onClick={()=>{
+                this.props.chooseListBy(genre);
+                this.props.setLastMovie(this.props.randomMovies[genre].slug)}}>
+                <Link to={'/' + this.props.randomMovies[genre].slug}>
+                  <p className="genre-list-item">{genre} </p>
+                </Link>
+            </div>
           ))}
-          <h3 className="genre-list-item">Saved</h3>
-          <h3 className="genre-list-item">ALL</h3>
-          <h3 className="genre-list-item">User Suggestions</h3>
-      </div>
 
-      </div>//Big main container
+          <button
+            className="button-nostyle"
+            onClick={()=>this.props.chooseListBy("Saved")}>
+              <p className="genre-list-item">Saved</p>
+          </button>
+
+          <button
+            className="button-nostyle"
+            onClick={()=>this.props.chooseListBy("All")}>
+              <p className="genre-list-item">All</p>
+          </button>
+
+          <button
+            className="button-nostyle"
+            onClick={()=>this.props.chooseListBy("User Suggestions")}>
+              <p className="genre-list-item">User Suggestions</p>
+          </button>
+
+        </div>
+        {/* END -- Desktop List of Genres*/}
+
+
+
+
+        {/* sort-by-wrapper  */}
+        <div id="sort-by-wrapper">
+          <p className='sort-selector'>sort by </p>
+
+          <button
+            style = {{
+              fontSize:'16px',
+              color: this.props.sortBy==='name' ? '#00FFFF': 'white'
+            }}
+            className='sort-selector button-nostyle'
+            onClick = {()=>this.props.setSort("name")}>TITLE</button>
+          <button
+            style = {{
+              fontSize:'16px',
+              color: this.props.sortBy==='year' ? '#00FFFF': 'white'
+            }}
+            className='sort-selector button-nostyle'
+            onClick = {()=>this.props.setSort("year")}>YEAR</button>
+        </div>{/* END -- sort-by wrapper */}
+
+      </div>//END -- Big main container
     );
   }
 }
