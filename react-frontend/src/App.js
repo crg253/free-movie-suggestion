@@ -141,7 +141,9 @@ class App extends Component {
                                 chooseListBy={this.chooseListBy}
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
-                                lastMovie = {this.state.LastMovie}/>}/>
+                                lastMovie = {this.state.LastMovie}
+                                genres={this.state.Genres}
+                                getRandomMovies={this.getRandomMovies}/>}/>
           <Switch>
           <Route
             path='/usermovies'

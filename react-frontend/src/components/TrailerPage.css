@@ -6,13 +6,13 @@
 }
 #genres-and-list{
   margin:0 0 0 5vw;
-  width: 44.5vw;
+  width: 42vw;
 }
 
 /* Trailer.js */
 iframe{
-  width:42.5vw;
-  height: 23.88vw;
+  width:45vw;
+  height: 25.28vw;
 }
 #title-and-save-button{
   text-align: center;
@@ -20,6 +20,7 @@ iframe{
 }
 
 /* Genres.js */
+
 #genre-and-button{
   align-items: center;
   display:flex;
@@ -73,7 +74,7 @@ iframe{
 }
 .genre-list-item{
   color: gray;
-  font-size: 24px;
+  font-size: 30px;
   margin: 7px 5px 0 0;
 }
 #sort-by-wrapper{
@@ -125,6 +126,9 @@ iframe{
     margin: 0 0 25px 0;
   }
   /* Genres.js */
+  #main-genres-wrapper{
+    text-align: center;
+  }
   #genre-and-button{
     justify-content: center;
   }

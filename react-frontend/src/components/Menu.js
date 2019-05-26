@@ -43,7 +43,7 @@ class Menu extends Component {
     if(this.props.user.length === 0){
       signInOutLink= <div onClick={()=>this.changeMenuDisplay()}>
                         <Link to={'/signin'}>
-                          <h4 className="menu-genre-links">Sign In</h4>
+                          <h4 className="menu-links">Sign In</h4>
                         </Link>
                       </div>
     }else{
@@ -53,10 +53,11 @@ class Menu extends Component {
                               this.handleSignOut();
                               this.changeMenuDisplay();}}>
                           <h4
-                            className="menu-genre-links">Sign Out</h4>
+                            className="menu-links">Sign Out</h4>
                           </button>
     }
 
+    let randomMovies = this.props.getRandomMovies()
 
     return (
       <div>
@@ -87,27 +88,58 @@ class Menu extends Component {
 
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/recommend'}>
-                <h4 className="menu-genre-links">Recommend</h4>
+                <h4 className="menu-links">Recommend</h4>
               </Link>
             </div>
 
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/usermovies'}>
-                <h4 className="menu-genre-links">Your Movies</h4>
+                <h4 className="menu-links">Your Movies</h4>
               </Link>
             </div>
 
-            <div onClick={()=>this.changeMenuDisplay()}>
-              <Link to={'/'}>
-                <h4 className="menu-genre-links">HOME</h4>
-              </Link>
+            <div>
+              <button
+                className="button-nostyle"
+                onClick={()=>{this.props.chooseListBy("Saved");
+                  this.changeMenuDisplay();}}>
+                    <h2 className="menu-links">Saved</h2>
+              </button>
             </div>
 
-            <div onClick={()=>this.changeMenuDisplay()}>
-              <Link to={'/'+ this.props.lastMovie}>
-                <h4 className="menu-genre-links">LIST</h4>
-              </Link>
+            <div>
+              <button
+                className="button-nostyle"
+                onClick={()=>{this.props.chooseListBy("All");
+                  this.changeMenuDisplay();}}>
+                    <h2 className="menu-genre-links">All</h2>
+              </button>
             </div>
+
+            <div>
+            {this.props.genres.map(genre=>(
+              <div
+                key={"mobile-genre-link-list"+genre}
+                onClick={()=>{
+                  this.props.chooseListBy(genre);
+                  this.changeMenuDisplay();}}>
+                    <Link to={'/' + randomMovies[genre].slug}>
+                      <h2 className="menu-genre-links">{genre} </h2>
+                    </Link>
+              </div>//Javascript Comment
+            ))}
+            </div>
+
+            <div>
+              <button
+                className="button-nostyle"
+                onClick={()=>{this.props.chooseListBy("User Suggestions");
+                this.changeMenuDisplay();}}>
+                    <h2 className="menu-genre-links">User Suggestions</h2>
+              </button>
+            </div>
+
+
 
           </div>
         </div>

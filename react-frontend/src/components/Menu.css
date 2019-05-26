@@ -1,5 +1,5 @@
 #menu-button{
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
 }
@@ -11,7 +11,7 @@
 }
 
 #close-menu-button{
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
 }
@@ -24,7 +24,7 @@
 }
 
 #open-menu{
-  position:fixed;
+  position:absolute;
   right:0;
   top:0;
   background-color: #1F1F1F;
@@ -44,11 +44,17 @@
   font-size: 24px;
   color:white;
 }
-.menu-genre-links{
+.menu-links{
   padding:2px 0 2px 0;
   margin:0;
   font-size: 20px;
   color:white;
+}
+.menu-genre-links{
+  padding:2px 0 2px 0;
+  margin:0;
+  font-size: 20px;
+  color:grey;
 }
 
 /* PORTRAIT */
