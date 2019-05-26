@@ -58,7 +58,13 @@ iframe{
   font-size: 40px;
 }
 #get-genres-button{
-  display:none;
+  display: inline;
+  margin-left: 10px;
+  width:15px;
+  height: 15px;
+  border-right:1px solid white;
+  border-bottom:1px solid white;
+  transform:rotate(45deg);
 }
 #desktop-genres-list{
   margin-top: 10px;
@@ -67,7 +73,7 @@ iframe{
 }
 .genre-list-item{
   color: gray;
-  font-size: 18px;
+  font-size: 24px;
   margin: 7px 5px 0 0;
 }
 #sort-by-wrapper{
@@ -121,15 +127,6 @@ iframe{
   /* Genres.js */
   #genre-and-button{
     justify-content: center;
-  }
-  #get-genres-button{
-    display: inline;
-    margin-left: 10px;
-    width:15px;
-    height: 15px;
-    border-right:1px solid white;
-    border-bottom:1px solid white;
-    transform:rotate(45deg);
   }
   #desktop-genres-list{
     display:none;
