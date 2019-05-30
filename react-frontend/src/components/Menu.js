@@ -57,8 +57,6 @@ class Menu extends Component {
                           </button>
     }
 
-    let randomMovies = this.props.getRandomMovies()
-
     return (
       <div>
 
@@ -90,44 +88,6 @@ class Menu extends Component {
               <Link to={'/recommend'}>
                 <h4 className="menu-links">Recommend</h4>
               </Link>
-            </div>
-
-            <div onClick={()=>this.changeMenuDisplay()}>
-              <Link to={'/usermovies'}>
-                <h4 className="menu-links">Your Movies</h4>
-              </Link>
-            </div>
-
-            <div>
-              <button
-                className="button-nostyle"
-                onClick={()=>{this.props.chooseListBy("Saved");
-                  this.changeMenuDisplay();}}>
-                    <h2 className="menu-links">Saved</h2>
-              </button>
-            </div>
-
-            <div>
-              <button
-                className="button-nostyle"
-                onClick={()=>{this.props.chooseListBy("All");
-                  this.changeMenuDisplay();}}>
-                    <h2 className="menu-genre-links">All</h2>
-              </button>
-            </div>
-
-            <div>
-            {this.props.genres.map(genre=>(
-              <div
-                key={"mobile-genre-link-list"+genre}
-                onClick={()=>{
-                  this.props.chooseListBy(genre);
-                  this.changeMenuDisplay();}}>
-                    <Link to={'/' + randomMovies[genre].slug}>
-                      <h2 className="menu-genre-links">{genre} </h2>
-                    </Link>
-              </div>//Javascript Comment
-            ))}
             </div>
 
             <div>

@@ -41,6 +41,7 @@ class HomePage extends Component {
   render() {
 
     let randomMovies = this.props.getRandomMovies()
+    console.log(randomMovies)
 
     let sign = null;
     if(this.props.listBy ==='Action'){

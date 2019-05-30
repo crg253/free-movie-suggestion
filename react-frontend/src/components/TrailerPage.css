@@ -58,13 +58,22 @@ iframe{
   font-family: 'Gugi', cursive;
   font-size: 40px;
 }
-#get-genres-button{
+#back-genres-button{
   display: inline;
-  margin-left: 10px;
+  margin-left: 20px;
   width:15px;
   height: 15px;
-  border-right:1px solid white;
   border-bottom:1px solid white;
+  border-left:1px solid white;
+  transform:rotate(45deg);
+}
+#forward-genres-button{
+  display: inline;
+  margin-left: 5px;
+  width:15px;
+  height: 15px;
+  border-top:1px solid white;
+  border-right:1px solid white;
   transform:rotate(45deg);
 }
 #desktop-genres-list{

@@ -14,7 +14,7 @@ class App extends Component {
 
   state = {
     Movies:[],
-    Genres:['Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi & Fantasy' ],
+    Genres:['All','Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi & Fantasy','Saved'],
     ListBy:'All',
     SortBy:'name',
     LastMovie:'comingsoon',
@@ -50,20 +50,30 @@ class App extends Component {
    this.setState({User:newUser});
   }
 
+
   getRandomMovies=()=>{
    let approvedMovies = this.state.Movies.filter(movie=>movie.status==='approved');
    let randomMovies = {
        Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'','Mystery & Suspense':'',Romance:'','Sci-Fi & Fantasy':''
    };
    if(approvedMovies.length>0){
-       for(let i in this.state.Genres){
-       const genreMovies = [...approvedMovies].filter(approvedMovie =>approvedMovie.tags.includes(this.state.Genres[i]));
-       const randomMovie = genreMovies[Math.floor(Math.random()*genreMovies.length)];
-       randomMovies[this.state.Genres[i]] = randomMovie;
-       }
+       for(let gen in randomMovies){
+         const genreMovies = [...approvedMovies].filter(approvedMovie =>approvedMovie.tags.includes(gen));
+         const randomMovie = genreMovies[Math.floor(Math.random()*genreMovies.length)];
+         randomMovies[gen] = randomMovie;
+         }
    }
+   let savedMovies=[...approvedMovies].filter(approvedMovie=>approvedMovie.saved===true)
+   let comingSoon=[...this.state.Movies].filter(movie=>movie.status==='neither')[0]
+   if(savedMovies.length>0){
+     randomMovies['Saved']=savedMovies[Math.floor(Math.random()*savedMovies.length)]
+   }else{
+     randomMovies['Saved']=comingSoon
+   }
+   randomMovies['All']= comingSoon
    return randomMovies
   }
+
 
   handleSaveUnsave = (saveunsave, slug) =>{
     fetch('api/'.concat(saveunsave),{
@@ -118,6 +128,7 @@ class App extends Component {
 
   render() {
 
+
     // console.log('last movie is ...')
     // console.log(this.state.LastMovie)
     // console.log('user is ...')
@@ -126,8 +137,6 @@ class App extends Component {
     // console.log(this.state.Movies.filter(movie=>movie.saved ===true))
     // console.log('suggested MOVIES are ...')
     // console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
-
-
 
     return (
       <BrowserRouter>
@@ -203,7 +212,8 @@ class App extends Component {
                                     redirect = {this.state.Redirect}
                                     handleSaveUnsave={this.handleSaveUnsave}
                                     setRedirectBack={this.setRedirectBack}
-                                    setLastMovie={this.setLastMovie}/>}/>
+                                    setLastMovie={this.setLastMovie}
+                                    user = {this.state.User}/>}/>
 
             <Route
               path='/'

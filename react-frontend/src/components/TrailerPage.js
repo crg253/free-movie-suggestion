@@ -15,7 +15,6 @@ class TrailerPage extends Component {
   render() {
 
     window.scrollTo(0, 0);
-    let randomMovies = this.props.getRandomMovies()
 
     return (
       <div>
@@ -37,8 +36,9 @@ class TrailerPage extends Component {
                   genres={this.props.genres}
                   chooseListBy={this.props.chooseListBy}
                   listBy={this.props.listBy}
-                  randomMovies={randomMovies}
-                  setLastMovie = {this.props.setLastMovie}/>
+                  getRandomMovies={this.props.getRandomMovies}
+                  setLastMovie = {this.props.setLastMovie}
+                  user={this.props.user}/>
             <MovieList
                   movies={this.props.movies}
                   sortBy={this.props.sortBy}
