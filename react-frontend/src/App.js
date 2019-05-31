@@ -14,7 +14,7 @@ class App extends Component {
 
   state = {
     Movies:[],
-    Genres:['All','Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi & Fantasy','Saved'],
+    ScrollGenres:['All','Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi & Fantasy','Saved'],
     ListBy:'All',
     SortBy:'name',
     LastMovie:'comingsoon',
@@ -151,7 +151,7 @@ class App extends Component {
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
                                 lastMovie = {this.state.LastMovie}
-                                genres={this.state.Genres}
+                                scrollGenres={this.state.ScrollGenres}
                                 getRandomMovies={this.getRandomMovies}/>}/>
           <Switch>
           <Route
@@ -204,7 +204,7 @@ class App extends Component {
                                     {...props}
                                     movies = {this.state.Movies}
                                     chooseListBy={this.chooseListBy}
-                                    genres={this.state.Genres}
+                                    scrollGenres={this.state.ScrollGenres}
                                     listBy={this.state.ListBy}
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}

@@ -4,33 +4,68 @@ import { Link } from "react-router-dom";
 
 class Genres extends Component {
   state={
-    GenreIndex:''
+    GenreIndex:'0',
+    IndexUp:'0',
+    IndexDown:'0'
+  }
+  subtractGenreIndex=()=>{
+    this.setState({
+      IndexUp:this.state.GenreIndex,
+      GenreIndex:this.state.GenreIndex-1,
+      IndexDown:this.state.IndexDown-1})
   }
   addGenreIndex=()=>{
-    if(this.state.GenreIndex===6){
-      this.setState({GenreIndex:-1})
-    }else{
-      this.setState({GenreIndex:this.state.GenreIndex+1})
-    }
+      this.setState({
+        IndexDown:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex+1,
+        IndexUp:this.state.IndexUp+1})
   }
 
+
   componentDidMount(){
-    let i = this.props.genres.indexOf(this.props.listBy)
-    this.setState({GenreIndex:i})
+    let i = this.props.scrollGenres.indexOf(this.props.listBy)
+    this.setState({
+      GenreIndex:i,
+      IndexUp:i+1,
+      IndexDown:i-1})
   }
 
   render() {
 
-    //Set up list of genres so you can scroll with arrows
-    let scrollGenres = ["All"]
-    scrollGenres.push.apply(scrollGenres, [...this.props.genres])
-    if(this.props.user.length >0){
-      scrollGenres.push("Saved")
+    console.log(this.state.IndexDown)
+    console.log(this.state.GenreIndex)
+    console.log(this.state.IndexUp)
+
+    let randomMovies = this.props.getRandomMovies()
+    let goUpButton=''
+    let goDownButton=''
+    if(randomMovies['All']!==undefined){
+      goDownButton =
+        <Link
+          to={'/' + randomMovies[this.props.scrollGenres[this.state.IndexDown]].slug}
+          onClick={()=>{
+            this.props.chooseListBy(this.props.scrollGenres[this.state.IndexDown]);
+            this.subtractGenreIndex();}}>
+        <button
+          className="button-nostyle"
+          id='back-genres-button'>
+        </button>
+        </Link>
+      goUpButton=
+        <Link
+          to={'/' + randomMovies[this.props.scrollGenres[this.state.IndexUp]].slug}
+          onClick={()=>{
+            this.props.chooseListBy(this.props.scrollGenres[this.state.IndexUp]);
+            this.addGenreIndex();}}>
+        <button
+          className="button-nostyle"
+          id='forward-genres-button'>
+        </button>
+        </Link>
+
     }
 
-    //
-    let scrollRandomMovies = this.props.getRandomMovies()
-    //console.log(randomMovies)
+
 
     return (
       <div id="main-genres-wrapper">
@@ -40,24 +75,8 @@ class Genres extends Component {
           <h2
             className="selected-genre"
             id={this.props.listBy.slice(0,3)}>{this.props.listBy}</h2>
-
-          <button
-            className="button-nostyle"
-            id='back-genres-button'>
-          </button>
-
-          {/*
-          <Link
-            to={'/' + scrollRandomMovies[scrollGenres[this.state.GenreIndex+1]].slug}
-            onClick={()=>{
-              this.props.chooseListBy(scrollGenres[this.state.GenreIndex+1]);
-              this.addGenreIndex();}}>
-          <button
-            className="button-nostyle"
-            id='forward-genres-button'>
-          </button>
-          </Link>
-*/}
+            {goDownButton}
+            {goUpButton}
         </div>{/* id= genre-and-button */}
 
         {/* sort-by-wrapper  */}

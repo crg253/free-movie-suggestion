@@ -16,6 +16,7 @@ class TrailerPage extends Component {
 
     window.scrollTo(0, 0);
 
+
     return (
       <div>
         <Link to={'/'}>
@@ -33,12 +34,13 @@ class TrailerPage extends Component {
             <Genres
                   setSort={this.props.setSort}
                   sortBy={this.props.sortBy}
-                  genres={this.props.genres}
+                  scrollGenres={this.props.scrollGenres}
                   chooseListBy={this.props.chooseListBy}
                   listBy={this.props.listBy}
                   getRandomMovies={this.props.getRandomMovies}
                   setLastMovie = {this.props.setLastMovie}
-                  user={this.props.user}/>
+                  user={this.props.user}
+                  movies={this.props.movies}/>
             <MovieList
                   movies={this.props.movies}
                   sortBy={this.props.sortBy}
