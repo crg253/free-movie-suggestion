@@ -21,7 +21,10 @@ class App extends Component {
     User:'',
     Redirect:'',
     RedirectBackSlug:'',
-    RedirectBack:''
+    RedirectBack:'',
+    GenreIndex:'0',
+    IndexUp:'0',
+    IndexDown:'0'
   }
 
 
@@ -49,7 +52,49 @@ class App extends Component {
   setUser = (newUser) =>{
    this.setState({User:newUser});
   }
+  setIndexes = (down,index,up)=>{
+    this.setState({IndexDown:down,GenreIndex:index,IndexUp:up,})
+  }
 
+  subtractGenreIndex=()=>{
+    if(this.state.GenreIndex===0){
+      this.setState({
+        IndexUp:this.state.GenreIndex,
+        GenreIndex:9,
+        IndexDown:this.state.IndexDown-1})
+    }
+    else if(this.state.GenreIndex===1){
+      this.setState({
+        IndexUp:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex-1,
+        IndexDown:9})
+    }else{
+      this.setState({
+        IndexUp:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex-1,
+        IndexDown:this.state.IndexDown-1})
+    }
+  }
+
+  addGenreIndex=()=>{
+    if(this.state.GenreIndex===9){
+      this.setState({
+        IndexDown:this.state.GenreIndex,
+        GenreIndex:0,
+        IndexUp:this.state.IndexUp+1})
+    }
+    else if (this.state.GenreIndex===8){
+      this.setState({
+        IndexDown:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex+1,
+        IndexUp:0})
+    }else{
+      this.setState({
+        IndexDown:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex+1,
+        IndexUp:this.state.IndexUp+1})
+    }
+  }
 
   getRandomMovies=()=>{
    let approvedMovies = this.state.Movies.filter(movie=>movie.status==='approved');
@@ -152,7 +197,8 @@ class App extends Component {
                                 setMovies={this.setMovies}
                                 lastMovie = {this.state.LastMovie}
                                 scrollGenres={this.state.ScrollGenres}
-                                getRandomMovies={this.getRandomMovies}/>}/>
+                                getRandomMovies={this.getRandomMovies}
+                                setIndexes={this.setIndexes}/>}/>
           <Switch>
           <Route
             path='/usermovies'
@@ -213,7 +259,13 @@ class App extends Component {
                                     handleSaveUnsave={this.handleSaveUnsave}
                                     setRedirectBack={this.setRedirectBack}
                                     setLastMovie={this.setLastMovie}
-                                    user = {this.state.User}/>}/>
+                                    user = {this.state.User}
+                                    genreIndex={this.state.GenreIndex}
+                                    indexUp={this.state.IndexUp}
+                                    indexDown={this.state.IndexDown}
+                                    subtractGenreIndex={this.subtractGenreIndex}
+                                    addGenreIndex={this.addGenreIndex}
+                                    setIndexes={this.setIndexes}/>}/>
 
             <Route
               path='/'

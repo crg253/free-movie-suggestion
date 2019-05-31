@@ -40,7 +40,13 @@ class TrailerPage extends Component {
                   getRandomMovies={this.props.getRandomMovies}
                   setLastMovie = {this.props.setLastMovie}
                   user={this.props.user}
-                  movies={this.props.movies}/>
+                  movies={this.props.movies}
+                  genreIndex={this.props.genreIndex}
+                  indexUp={this.props.indexUp}
+                  indexDown={this.props.indexDown}
+                  subtractGenreIndex={this.props.subtractGenreIndex}
+                  addGenreIndex={this.props.addGenreIndex}
+                  setIndexes={this.props.setIndexes}/>
             <MovieList
                   movies={this.props.movies}
                   sortBy={this.props.sortBy}

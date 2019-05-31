@@ -63,7 +63,8 @@ class Menu extends Component {
       savedMovieLink=
       <div onClick={()=>{
           this.changeMenuDisplay();
-          this.props.chooseListBy('Saved')}}>
+          this.props.chooseListBy('Saved');
+          this.props.setIndexes(8,9,0)}}>
         <Link to={'/'+ randomMovies['Saved'].slug}>
           <h4 className="menu-links">SAVED</h4>
         </Link>
