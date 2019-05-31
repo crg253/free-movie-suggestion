@@ -129,8 +129,8 @@ class App extends Component {
   render() {
 
 
-    // console.log('last movie is ...')
-    // console.log(this.state.LastMovie)
+    //console.log('last movie is ...')
+    //console.log(this.state.LastMovie)
     // console.log('user is ...')
     // console.log(this.state.User)
     // console.log('SAVED MOVIES are ...')

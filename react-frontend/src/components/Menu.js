@@ -38,6 +38,7 @@ class Menu extends Component {
 
   render() {
 
+    let randomMovies= this.props.getRandomMovies()
 
     let signInOutLink = ''
     if(this.props.user.length === 0){
@@ -55,6 +56,19 @@ class Menu extends Component {
                           <h4
                             className="menu-links">Sign Out</h4>
                           </button>
+    }
+
+    let savedMovieLink =''
+    if (this.props.movies.length>0){
+      savedMovieLink=
+      <div onClick={()=>{
+          this.changeMenuDisplay();
+          this.props.chooseListBy('Saved')}}>
+        <Link to={'/'+ randomMovies['Saved'].slug}>
+          <h4 className="menu-links">SAVED</h4>
+        </Link>
+      </div>
+
     }
 
     return (
@@ -93,12 +107,18 @@ class Menu extends Component {
             <div>
               <button
                 className="button-nostyle"
-                onClick={()=>{this.props.chooseListBy("User Suggestions");
-                this.changeMenuDisplay();}}>
+                onClick={()=>{this.changeMenuDisplay();}}>
                     <h2 className="menu-genre-links">User Suggestions</h2>
               </button>
             </div>
 
+            <div onClick={()=>this.changeMenuDisplay()}>
+              <Link to={'/'+this.props.lastMovie}>
+                <h4 className="menu-links">LIST</h4>
+              </Link>
+            </div>
+
+            {savedMovieLink}
 
 
           </div>

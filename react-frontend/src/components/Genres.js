@@ -8,6 +8,7 @@ class Genres extends Component {
     IndexUp:'0',
     IndexDown:'0'
   }
+
   subtractGenreIndex=()=>{
     if(this.state.GenreIndex===0){
       this.setState({
@@ -27,6 +28,7 @@ class Genres extends Component {
         IndexDown:this.state.IndexDown-1})
     }
   }
+
   addGenreIndex=()=>{
     if(this.state.GenreIndex===9){
       this.setState({
@@ -64,10 +66,6 @@ class Genres extends Component {
 
   render() {
 
-    console.log(this.state.IndexDown)
-    console.log(this.state.GenreIndex)
-    console.log(this.state.IndexUp)
-
     let randomMovies = this.props.getRandomMovies()
     let goUpButton=''
     let goDownButton=''
@@ -77,7 +75,8 @@ class Genres extends Component {
           to={'/' + randomMovies[this.props.scrollGenres[this.state.IndexDown]].slug}
           onClick={()=>{
             this.props.chooseListBy(this.props.scrollGenres[this.state.IndexDown]);
-            this.subtractGenreIndex();}}>
+            this.subtractGenreIndex();
+            this.props.setLastMovie(randomMovies[this.props.scrollGenres[this.state.IndexDown]].slug);}}>
         <button
           className="button-nostyle"
           id='back-genres-button'>
@@ -88,15 +87,18 @@ class Genres extends Component {
           to={'/' + randomMovies[this.props.scrollGenres[this.state.IndexUp]].slug}
           onClick={()=>{
             this.props.chooseListBy(this.props.scrollGenres[this.state.IndexUp]);
-            this.addGenreIndex();}}>
+            this.addGenreIndex();
+            this.props.setLastMovie(randomMovies[this.props.scrollGenres[this.state.IndexUp]].slug);}}>
         <button
           className="button-nostyle"
           id='forward-genres-button'>
         </button>
         </Link>
-
     }
 
+    console.log(this.state.IndexDown);
+    console.log(this.state.GenreIndex);
+    console.log(this.state.IndexUp)
 
 
     return (
