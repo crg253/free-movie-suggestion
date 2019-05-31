@@ -9,25 +9,57 @@ class Genres extends Component {
     IndexDown:'0'
   }
   subtractGenreIndex=()=>{
-    this.setState({
-      IndexUp:this.state.GenreIndex,
-      GenreIndex:this.state.GenreIndex-1,
-      IndexDown:this.state.IndexDown-1})
+    if(this.state.GenreIndex===0){
+      this.setState({
+        IndexUp:this.state.GenreIndex,
+        GenreIndex:9,
+        IndexDown:this.state.IndexDown-1})
+    }
+    else if(this.state.GenreIndex===1){
+      this.setState({
+        IndexUp:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex-1,
+        IndexDown:9})
+    }else{
+      this.setState({
+        IndexUp:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex-1,
+        IndexDown:this.state.IndexDown-1})
+    }
   }
   addGenreIndex=()=>{
+    if(this.state.GenreIndex===9){
+      this.setState({
+        IndexDown:this.state.GenreIndex,
+        GenreIndex:0,
+        IndexUp:this.state.IndexUp+1})
+    }
+    else if (this.state.GenreIndex===8){
+      this.setState({
+        IndexDown:this.state.GenreIndex,
+        GenreIndex:this.state.GenreIndex+1,
+        IndexUp:0})
+    }else{
       this.setState({
         IndexDown:this.state.GenreIndex,
         GenreIndex:this.state.GenreIndex+1,
         IndexUp:this.state.IndexUp+1})
+    }
   }
-
 
   componentDidMount(){
     let i = this.props.scrollGenres.indexOf(this.props.listBy)
-    this.setState({
-      GenreIndex:i,
-      IndexUp:i+1,
-      IndexDown:i-1})
+    if (i===0){
+      this.setState({
+        GenreIndex:i,
+        IndexUp:1,
+        IndexDown:9})
+    }else{
+      this.setState({
+        GenreIndex:i,
+        IndexUp:i+1,
+        IndexDown:i-1})
+    }
   }
 
   render() {
