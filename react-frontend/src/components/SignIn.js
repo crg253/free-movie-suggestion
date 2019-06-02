@@ -22,7 +22,7 @@ class SignIn extends Component  {
       'Authorization','Basic '+ Buffer.from(this.state.name +":"+this.state.password).toString('base64')
     );
     event.preventDefault();
-    fetch('api/signin',{
+    fetch('/api/signin',{
       method:'POST',
       headers: headers
     })
@@ -36,8 +36,7 @@ class SignIn extends Component  {
           this.props.setUser(res.user)
           this.props.setMovies(res.movies)
           if(this.props.redirectBackSlug.length >0){
-            console.log('redirect to redirectBackSlug')
-            this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackSlug}/>)
+            this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackGenre + '/'+ this.props.redirectBackSlug}/>)
           }else{
             this.setState({name:'', password:'',Message:"Now signed in as "+ res.user})
           }

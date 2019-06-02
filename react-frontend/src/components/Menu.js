@@ -20,7 +20,7 @@ class Menu extends Component {
   }
 
   handleSignOut = () =>{
-  fetch('api/revoketoken', {
+  fetch('/api/revoketoken', {
     method:'DELETE',
     headers:{
       'Authorization':"Bearer " +localStorage.getItem('token')
@@ -58,18 +58,31 @@ class Menu extends Component {
                           </button>
     }
 
+    let allMoviesLink=''
+    if (this.props.movies.length>0){
+      allMoviesLink=
+      <div onClick={()=>{
+                    this.changeMenuDisplay();
+                    this.props.setIndexes(9,0,1);
+                    this.props.setLastMovie(randomMovies['All'].slug)
+                    }}>
+        <Link to={'/all/'+ randomMovies['All'].slug}>
+          <h4 className="menu-links">ALL</h4>
+        </Link>
+      </div>
+    }
+
     let savedMovieLink =''
     if (this.props.movies.length>0){
       savedMovieLink=
       <div onClick={()=>{
-          this.changeMenuDisplay();
-          this.props.chooseListBy('Saved');
-          this.props.setIndexes(8,9,0)}}>
-        <Link to={'/'+ randomMovies['Saved'].slug}>
+                    this.changeMenuDisplay();
+                    this.props.setIndexes(8,9,0);
+                    this.props.setLastMovie(randomMovies['Saved'].slug)}}>
+        <Link to={'/saved/'+ randomMovies['Saved'].slug}>
           <h4 className="menu-links">SAVED</h4>
         </Link>
       </div>
-
     }
 
     return (
@@ -113,12 +126,7 @@ class Menu extends Component {
               </button>
             </div>
 
-            <div onClick={()=>this.changeMenuDisplay()}>
-              <Link to={'/'+this.props.lastMovie}>
-                <h4 className="menu-links">LIST</h4>
-              </Link>
-            </div>
-
+            {allMoviesLink}
             {savedMovieLink}
 
 

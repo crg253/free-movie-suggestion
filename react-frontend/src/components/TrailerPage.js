@@ -10,12 +10,16 @@ class TrailerPage extends Component {
 
   componentDidMount(){
     this.props.setLastMovie(this.props.match.params.movieslug)
+    this.props.setSelectedGenre('')
   }
 
   render() {
 
     window.scrollTo(0, 0);
-
+    let genreslug= this.props.match.params.genreslug
+    let upperGenre = this.props.changeGenreCase('toUpper',genreslug)
+    //console.log(genreslug)
+    //console.log(upperGenre);
 
     return (
       <div>
@@ -26,17 +30,19 @@ class TrailerPage extends Component {
         <div id="trailer-and-genres-and-list">
           <Trailer
               movieslug={this.props.match.params.movieslug}
+              genreslug={genreslug}
               movies={this.props.movies}
               redirect = {this.props.redirect}
               handleSaveUnsave={this.props.handleSaveUnsave}/>
 
           <div id="genres-and-list">
             <Genres
+                  genreslug= {genreslug}
+                  upperGenre={upperGenre}
+                  changeGenreCase={this.props.changeGenreCase}
                   setSort={this.props.setSort}
                   sortBy={this.props.sortBy}
                   scrollGenres={this.props.scrollGenres}
-                  chooseListBy={this.props.chooseListBy}
-                  listBy={this.props.listBy}
                   getRandomMovies={this.props.getRandomMovies}
                   setLastMovie = {this.props.setLastMovie}
                   user={this.props.user}
@@ -46,11 +52,13 @@ class TrailerPage extends Component {
                   indexDown={this.props.indexDown}
                   subtractGenreIndex={this.props.subtractGenreIndex}
                   addGenreIndex={this.props.addGenreIndex}
-                  setIndexes={this.props.setIndexes}/>
+                  setIndexes={this.props.setIndexes}
+                  />
             <MovieList
+                  genreslug= {genreslug}
+                  upperGenre={upperGenre}
                   movies={this.props.movies}
                   sortBy={this.props.sortBy}
-                  listBy={this.props.listBy}
                   handleSaveUnsave={this.props.handleSaveUnsave}
                   setLastMovie = {this.props.setLastMovie}/>
           </div>

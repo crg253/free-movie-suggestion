@@ -7,16 +7,16 @@ class MovieList extends Component {
   render() {
 
     let selectedMovieList = []
-    if(this.props.listBy==="Saved"){
+    if(this.props.upperGenre==="Saved"){
       selectedMovieList= this.props.movies.filter(movie=>movie.saved===true)
-    }else if(this.props.listBy==="All"){
+    }else if(this.props.upperGenre==="All"){
       selectedMovieList = this.props.movies.filter(movie=>movie.status==='approved')
-    }else if(this.props.listBy==="User Suggestions"){
+    }else if(this.props.upperGenre==="User Suggestions"){
       selectedMovieList = this.props.movies.filter(movie=>movie.status==='pending')
     }else{
       selectedMovieList = this.props.movies
       .filter(movie=>movie.status==='approved')
-      .filter(movie => movie.tags.includes(this.props.listBy))
+      .filter(movie => movie.tags.includes(this.props.upperGenre))
     }
 
     function dropThe(slug) {
@@ -50,12 +50,12 @@ class MovieList extends Component {
     }
 
     let chosenList = ''
-    if(this.props.listBy==="Saved"){
+    if(this.props.upperGenre==="Saved"){
       chosenList =
         <div>
         {selectedMovieList.map(film =>
         <div key={'saved'+film.slug} onClick={()=>this.props.setLastMovie(film.slug)}>
-          <Link to={'/' + film.slug}>
+          <Link to={'/'+this.props.genreslug + '/' + film.slug}>
             <div className='list-items'>
               <p>{film.name}</p> <p>{film.year}</p>
                 {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
@@ -69,21 +69,12 @@ class MovieList extends Component {
         </div>
       )}
       </div>
-    }else if (this.props.listBy==="User Suggestions") {
-      chosenList =
-        <div>
-        {selectedMovieList.map(film =>
-          <div key={film.slug} className='list-items'>
-            <p>{film.name}</p> <p>{film.year}</p> <p>{film.username}</p>
-          </div>
-      )}
-      </div>
     }else{
       chosenList =
         <div>
         {selectedMovieList.map(film =>
           <div key={film.slug} onClick={()=>this.props.setLastMovie(film.slug)}>
-            <Link to={'/' + film.slug}>
+            <Link to={'/' +this.props.genreslug +'/' + film.slug}>
               <div className='list-items'>
                 <p>{film.name}</p> <p>{film.year}</p>
                   {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}

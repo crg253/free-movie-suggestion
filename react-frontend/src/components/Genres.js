@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 class Genres extends Component {
 
   componentDidMount(){
-    let i = this.props.scrollGenres.indexOf(this.props.listBy)
+    let i = this.props.scrollGenres.indexOf(this.props.upperGenre)
     if (i===0){
       this.props.setIndexes(9,i,1)
+    }else if (i===9) {
+      this.props.setIndexes(8,i,0)
     }else{
       this.props.setIndexes(i-1,i,i+1)
     }
@@ -21,9 +23,11 @@ class Genres extends Component {
     if(randomMovies['All']!==undefined){
       goDownButton =
         <Link
-          to={'/' + randomMovies[this.props.scrollGenres[this.props.indexDown]].slug}
+          to={'/' +
+              this.props.changeGenreCase('toLower',this.props.scrollGenres[this.props.indexDown]) +
+              '/' +
+              randomMovies[this.props.scrollGenres[this.props.indexDown]].slug}
           onClick={()=>{
-            this.props.chooseListBy(this.props.scrollGenres[this.props.indexDown]);
             this.props.subtractGenreIndex();
             this.props.setLastMovie(randomMovies[this.props.scrollGenres[this.props.indexDown]].slug);}}>
         <button
@@ -33,9 +37,11 @@ class Genres extends Component {
         </Link>
       goUpButton=
         <Link
-          to={'/' + randomMovies[this.props.scrollGenres[this.props.indexUp]].slug}
+          to={'/' +
+              this.props.changeGenreCase('toLower', this.props.scrollGenres[this.props.indexUp]) +
+              '/' +
+              randomMovies[this.props.scrollGenres[this.props.indexUp]].slug}
           onClick={()=>{
-            this.props.chooseListBy(this.props.scrollGenres[this.props.indexUp]);
             this.props.addGenreIndex();
             this.props.setLastMovie(randomMovies[this.props.scrollGenres[this.props.indexUp]].slug);}}>
         <button
@@ -45,9 +51,10 @@ class Genres extends Component {
         </Link>
     }
 
-    console.log(this.props.indexDown);
-    console.log(this.props.genreIndex);
-    console.log(this.props.indexUp)
+    //console.log(this.props.genreslug)
+    // console.log(this.props.indexDown);
+    // console.log(this.props.genreIndex);
+    // console.log(this.props.indexUp)
 
 
     return (
@@ -57,7 +64,8 @@ class Genres extends Component {
           id="genre-and-button" >
           <h2
             className="selected-genre"
-            id={this.props.listBy.slice(0,3)}>{this.props.listBy}</h2>
+            id={this.props.upperGenre.slice(0,3)}>
+              {this.props.upperGenre}</h2>
             {goDownButton}
             {goUpButton}
         </div>{/* id= genre-and-button */}

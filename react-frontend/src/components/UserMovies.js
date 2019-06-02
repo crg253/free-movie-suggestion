@@ -7,7 +7,7 @@ class UserMovies extends Component {
 
 
   handleRemoveSuggestion = (slug) =>{
-    fetch('api/removesuggestion',{
+    fetch('/api/removesuggestion',{
       method:'POST',
       headers:{
          'Authorization':"Bearer " +localStorage.getItem('token'),
@@ -37,7 +37,7 @@ class UserMovies extends Component {
   }
 
   handleUnsave = (slug) =>{
-    fetch('api/unsavemovie',{
+    fetch('/api/unsavemovie',{
       method:'POST',
       headers:{
          'Authorization':"Bearer " +localStorage.getItem('token'),

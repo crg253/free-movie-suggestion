@@ -43,51 +43,51 @@ class HomePage extends Component {
     let randomMovies = this.props.getRandomMovies()
 
     let sign = null;
-    if(this.props.listBy ==='Action'){
+    if(this.props.selectedGenre ==='Action'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Action'].slug)}>
-                <Link to={'/' + randomMovies['Action'].slug}>
+                <Link to={'/action/' + randomMovies['Action'].slug}>
                   <ActionSign />
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Comedy'){
+    }else if(this.props.selectedGenre ==='Comedy'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Comedy'].slug)}>
-                <Link to={'/' + randomMovies['Comedy'].slug}>
+                <Link to={'/comedy/' + randomMovies['Comedy'].slug}>
                   <ComedySign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Documentary'){
+    }else if(this.props.selectedGenre ==='Documentary'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Documentary'].slug)}>
-                <Link to={'/' + randomMovies['Documentary'].slug}>
+                <Link to={'/documentary/'+ randomMovies['Documentary'].slug}>
                   <DocumentarySign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Drama'){
+    }else if(this.props.selectedGenre ==='Drama'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Drama'].slug)}>
-                <Link to={'/' + randomMovies['Drama'].slug}>
+                <Link to={'/drama/'+ randomMovies['Drama'].slug}>
                   <DramaSign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Horror'){
+    }else if(this.props.selectedGenre ==='Horror'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Horror'].slug)}>
-                <Link to={'/' + randomMovies['Horror'].slug}>
+                <Link to={'/horror/'+ randomMovies['Horror'].slug}>
                   <HorrorSign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Mystery & Suspense'){
+    }else if(this.props.selectedGenre ==='Mystery & Suspense'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Mystery & Suspense'].slug)}>
-                <Link to={'/' + randomMovies['Mystery & Suspense'].slug}>
+                <Link to={'/mysteryandsuspense/'+ randomMovies['Mystery & Suspense'].slug}>
                   <MysterySuspenseSign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Romance'){
+    }else if(this.props.selectedGenre ==='Romance'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Romance'].slug)}>
-                <Link to={'/' + randomMovies['Romance'].slug}>
+                <Link to={'/romance/'+ randomMovies['Romance'].slug}>
                   <RomanceSign/>
                 </Link>
               </g>
-    }else if(this.props.listBy ==='Sci-Fi & Fantasy'){
+    }else if(this.props.selectedGenre ==='Sci-Fi & Fantasy'){
       sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Sci-Fi & Fantasy'].slug)}>
-                <Link to={'/' + randomMovies['Sci-Fi & Fantasy'].slug}>
+                <Link to={'/scifiandfantasy/'+ randomMovies['Sci-Fi & Fantasy'].slug}>
                   <SciFiSign/>
                 </Link>
               </g>
@@ -101,28 +101,28 @@ class HomePage extends Component {
         <GradientsSVG/>
         <SkyAndGroundSVG/>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Documentary');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Documentary');}}>
           <Link to={'/'}><DocumentarySVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Sci-Fi & Fantasy');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Sci-Fi & Fantasy');}}>
           <Link to={'/'}><SciFiSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Horror');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Horror');}}>
           <Link to={'/'}><HorrorSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Action');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Action');}}>
           <Link to={'/'}><ActionSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Romance');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Romance');}}>
           <Link to={'/'}><RomanceSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Drama');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Drama');}}>
           <Link to={'/'}><DramaSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Comedy');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Comedy');}}>
           <Link to={'/'}><ComedySVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.chooseListBy('Mystery & Suspense');}}>
+        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Mystery & Suspense');}}>
           <Link to={'/'}><MysterySuspenseSVG/></Link></g>
 
         {sign}

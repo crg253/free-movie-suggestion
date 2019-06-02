@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from "react-router-dom";
 
 
 class Trailer extends Component {
@@ -16,14 +15,14 @@ class Trailer extends Component {
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.props.handleSaveUnsave('unsavemovie',selectedMovie.slug)}
+          onClick = {()=>this.props.handleSaveUnsave('unsavemovie',this.props.genreslug,selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Unsave</button>
     }else if(selectedMovie.saved ===false){
       buttonComponent=
         <button
           className="button-nostyle"
-          onClick = {()=>this.props.handleSaveUnsave('savemovie',selectedMovie.slug)}
+          onClick = {()=>this.props.handleSaveUnsave('savemovie',this.props.genreslug,selectedMovie.slug)}
           style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
               Save</button>
     }

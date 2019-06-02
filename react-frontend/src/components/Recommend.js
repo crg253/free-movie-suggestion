@@ -28,7 +28,7 @@ class Recommend extends Component {
   }
 
   handleSuggestMovie = (title, year) =>{
-    fetch('api/suggestmovie',{
+    fetch('/api/suggestmovie',{
       method:'POST',
       headers:{
          'Authorization':"Bearer " +localStorage.getItem('token'),

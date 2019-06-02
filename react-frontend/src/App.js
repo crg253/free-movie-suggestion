@@ -14,25 +14,42 @@ class App extends Component {
 
   state = {
     Movies:[],
-    ScrollGenres:['All','Action', 'Comedy', 'Documentary', 'Drama', 'Horror', 'Mystery & Suspense', 'Romance', 'Sci-Fi & Fantasy','Saved'],
-    ListBy:'All',
+    SelectedGenre:'',
     SortBy:'name',
     LastMovie:'comingsoon',
     User:'',
     Redirect:'',
+    RedirectBackGenre:'',
     RedirectBackSlug:'',
     RedirectBack:'',
+    ScrollGenres:['All',
+                  'Action',
+                  'Comedy',
+                  'Documentary',
+                  'Drama',
+                  'Horror',
+                  'Mystery & Suspense',
+                  'Romance',
+                  'Sci-Fi & Fantasy',
+                  'Saved'],
     GenreIndex:'0',
     IndexUp:'0',
     IndexDown:'0'
   }
 
 
+
+  setSelectedGenre = (genre)=>{
+    this.setState({SelectedGenre:genre})
+  }
   setLastMovie = (slug)=>{
     this.setState({LastMovie:slug})
   }
   setRedirectBackSlug = (newSlug)=>{
     this.setState({RedirectBackSlug:newSlug})
+  }
+  setRedirectBackGenre = (newGenre)=>{
+    this.setState({RedirectBackGenre:newGenre})
   }
   setRedirectBack = (newRedirectBack)=>{
     this.setState({RedirectBack:newRedirectBack})
@@ -43,9 +60,6 @@ class App extends Component {
   setMovies = (newMovies) => {
    this.setState({Movies:newMovies})
   }
-  chooseListBy = (choice) => {
-   this.setState({ListBy:choice});
-  }
   setSort = (sortParam) =>{
    this.setState({SortBy:sortParam})
   }
@@ -54,6 +68,28 @@ class App extends Component {
   }
   setIndexes = (down,index,up)=>{
     this.setState({IndexDown:down,GenreIndex:index,IndexUp:up,})
+  }
+
+  changeGenreCase =(toUpperOrLower, genreName)=>{
+    if(toUpperOrLower === 'toLower'){
+      if(genreName === 'Mystery & Suspense'){
+         return 'mysteryandsuspense'
+       }else if (genreName === 'Sci-Fi & Fantasy' ){
+         return 'scifiandfantasy'
+       }else{
+         return genreName.toLowerCase()
+       }
+    }else if (toUpperOrLower==='toUpper') {
+      if(genreName === 'mysteryandsuspense'){
+        return 'Mystery & Suspense'
+      }else if (genreName === 'scifiandfantasy') {
+        return 'Sci-Fi & Fantasy'
+      }else{
+        let upperGenreName = genreName[0].toUpperCase()
+        upperGenreName = upperGenreName.concat(genreName.slice(1,))
+        return upperGenreName
+      }
+    }
   }
 
   subtractGenreIndex=()=>{
@@ -120,8 +156,8 @@ class App extends Component {
   }
 
 
-  handleSaveUnsave = (saveunsave, slug) =>{
-    fetch('api/'.concat(saveunsave),{
+  handleSaveUnsave = (saveunsave, genre, slug) =>{
+    fetch('/api/'.concat(saveunsave),{
       method:'POST',
       headers:{
          'Authorization':"Bearer " +localStorage.getItem('token'),
@@ -136,6 +172,7 @@ class App extends Component {
            this.setState({
               User:res.user,
               Movies:res.movies,
+              RedirectBackGenre:genre,
               RedirectBackSlug:slug,
               RedirectBack:'',
               Redirect:<Redirect to="/signin"/>})
@@ -151,7 +188,7 @@ class App extends Component {
   }
 
    handleInitialFetch = () => {
-     fetch('api/checktoken',{
+     fetch('/api/checktoken',{
       method:'POST',
       headers: {
         'Authorization':"Bearer " +localStorage.getItem('token')
@@ -174,6 +211,13 @@ class App extends Component {
   render() {
 
 
+    // console.log(this.changeGenreCase('toLower', 'Mystery & Suspense'))
+    // console.log(this.changeGenreCase('toLower', 'Sci-Fi & Fantasy'))
+    // console.log(this.changeGenreCase('toLower', 'Drama'))
+    // console.log(this.changeGenreCase('toUpper', 'mysteryandsuspense'))
+    // console.log(this.changeGenreCase('toUpper', 'scifiandfantasy'))
+    // console.log(this.changeGenreCase('toUpper', 'drama'))
+
     //console.log('last movie is ...')
     //console.log(this.state.LastMovie)
     // console.log('user is ...')
@@ -192,10 +236,10 @@ class App extends Component {
                                 {...props}
                                 user={this.state.User}
                                 movies={this.state.Movies}
-                                chooseListBy={this.chooseListBy}
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
                                 lastMovie = {this.state.LastMovie}
+                                setLastMovie={this.setLastMovie}
                                 scrollGenres={this.state.ScrollGenres}
                                 getRandomMovies={this.getRandomMovies}
                                 setIndexes={this.setIndexes}/>}/>
@@ -237,7 +281,9 @@ class App extends Component {
                                     setRedirect={this.setRedirect}
                                     setRedirectBack={this.setRedirectBack}
                                     redirectBackSlug={this.state.RedirectBackSlug}
-                                    setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
+                                    setRedirectBackSlug={this.setRedirectBackSlug}
+                                    redirectBackGenre={this.state.RedirectBackGenre}
+                                    setRedirectBackGenre={this.setRedirectBackGenre}/>}/>
 
             <Route
               path='/adduser'
@@ -245,13 +291,11 @@ class App extends Component {
                                     {...props}/>}/>
 
             <Route
-              path='/:movieslug'
+              path='/:genreslug/:movieslug'
               render={(props)=> <TrailerPage
                                     {...props}
                                     movies = {this.state.Movies}
-                                    chooseListBy={this.chooseListBy}
                                     scrollGenres={this.state.ScrollGenres}
-                                    listBy={this.state.ListBy}
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     getRandomMovies={this.getRandomMovies}
@@ -265,14 +309,16 @@ class App extends Component {
                                     indexDown={this.state.IndexDown}
                                     subtractGenreIndex={this.subtractGenreIndex}
                                     addGenreIndex={this.addGenreIndex}
-                                    setIndexes={this.setIndexes}/>}/>
+                                    setIndexes={this.setIndexes}
+                                    changeGenreCase={this.changeGenreCase}
+                                    setSelectedGenre = {this.setSelectedGenre}/>}/>
 
             <Route
               path='/'
               render={(props)=> <HomePage
                                   {...props}
-                                  chooseListBy={this.chooseListBy}
-                                  listBy={this.state.ListBy}
+                                  setSelectedGenre = {this.setSelectedGenre}
+                                  selectedGenre= {this.state.SelectedGenre}
                                   getRandomMovies={this.getRandomMovies}
                                   setLastMovie={this.setLastMovie}/>}/>
           </Switch>
