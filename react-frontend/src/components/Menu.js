@@ -32,13 +32,20 @@ class Menu extends Component {
        this.props.setUser('')
        this.props.setMovies(res.movies)
       })
-  })
-}
+    })
+  }
 
 
   render() {
 
-    let randomMovies= this.props.getRandomMovies()
+    let currentUserLink = ''
+    if(this.props.user.length >0){
+      currentUserLink =   <div onClick={()=>this.changeMenuDisplay()}>
+                            <Link to={'/usermovies'}>
+                              <h4 id="menu-user">{this.props.user + "'s Movies"}</h4>
+                            </Link>
+                          </div>
+    }
 
     let signInOutLink = ''
     if(this.props.user.length === 0){
@@ -56,33 +63,6 @@ class Menu extends Component {
                           <h4
                             className="menu-links">Sign Out</h4>
                           </button>
-    }
-
-    let allMoviesLink=''
-    if (this.props.movies.length>0){
-      allMoviesLink=
-      <div onClick={()=>{
-                    this.changeMenuDisplay();
-                    this.props.setIndexes(9,0,1);
-                    this.props.setLastMovie(randomMovies['All'].slug)
-                    }}>
-        <Link to={'/all/'+ randomMovies['All'].slug}>
-          <h4 className="menu-links">ALL</h4>
-        </Link>
-      </div>
-    }
-
-    let savedMovieLink =''
-    if (this.props.movies.length>0){
-      savedMovieLink=
-      <div onClick={()=>{
-                    this.changeMenuDisplay();
-                    this.props.setIndexes(8,9,0);
-                    this.props.setLastMovie(randomMovies['Saved'].slug)}}>
-        <Link to={'/saved/'+ randomMovies['Saved'].slug}>
-          <h4 className="menu-links">SAVED</h4>
-        </Link>
-      </div>
     }
 
     return (
@@ -106,11 +86,8 @@ class Menu extends Component {
 
             <div id="menu-links">
 
-            <div onClick={()=>this.changeMenuDisplay()}>
-              <h4 id="menu-user">{this.props.user}</h4>
-            </div>
-
-              {signInOutLink}
+            {currentUserLink}
+            {signInOutLink}
 
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/recommend'}>
@@ -118,16 +95,11 @@ class Menu extends Component {
               </Link>
             </div>
 
-            <div>
-              <button
-                className="button-nostyle"
-                onClick={()=>{this.changeMenuDisplay();}}>
-                    <h2 className="menu-genre-links">User Suggestions</h2>
-              </button>
+            <div onClick={()=>this.changeMenuDisplay()}>
+              <Link to={'/usersuggestions'}>
+                <h4 className="menu-links">User Suggestions</h4>
+              </Link>
             </div>
-
-            {allMoviesLink}
-            {savedMovieLink}
 
 
           </div>

@@ -11,8 +11,6 @@ class MovieList extends Component {
       selectedMovieList= this.props.movies.filter(movie=>movie.saved===true)
     }else if(this.props.upperGenre==="All"){
       selectedMovieList = this.props.movies.filter(movie=>movie.status==='approved')
-    }else if(this.props.upperGenre==="User Suggestions"){
-      selectedMovieList = this.props.movies.filter(movie=>movie.status==='pending')
     }else{
       selectedMovieList = this.props.movies
       .filter(movie=>movie.status==='approved')
@@ -54,7 +52,7 @@ class MovieList extends Component {
       chosenList =
         <div>
         {selectedMovieList.map(film =>
-        <div key={'saved'+film.slug} onClick={()=>this.props.setLastMovie(film.slug)}>
+        <div key={'saved'+film.slug}>
           <Link to={'/'+this.props.genreslug + '/' + film.slug}>
             <div className='list-items'>
               <p>{film.name}</p> <p>{film.year}</p>
@@ -63,7 +61,7 @@ class MovieList extends Component {
           </Link>
             <div className='list-unsave-button'>
               <button
-                onClick = {()=>this.props.handleSaveUnsave('unsavemovie',film.slug)}
+                onClick = {()=>this.props.handleSaveUnsave('unsavemovie',this.props.genreslug,film.slug)}
                 >unsave</button>
             </div>
         </div>
@@ -73,7 +71,7 @@ class MovieList extends Component {
       chosenList =
         <div>
         {selectedMovieList.map(film =>
-          <div key={film.slug} onClick={()=>this.props.setLastMovie(film.slug)}>
+          <div key={film.slug}>
             <Link to={'/' +this.props.genreslug +'/' + film.slug}>
               <div className='list-items'>
                 <p>{film.name}</p> <p>{film.year}</p>

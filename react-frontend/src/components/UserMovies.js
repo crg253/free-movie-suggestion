@@ -69,36 +69,44 @@ class UserMovies extends Component {
 
   render() {
     return (
-      <div style={{textAlign:"center"}}>
-      {this.props.redirect}
+      <div >
+        {this.props.redirect}
 
-      <Link to={'/'}>
-        <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
-      </Link>
-      <h1>{this.props.user}</h1>
+        <Link to={'/'}>
+          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+        </Link>
 
-      <h2>Your Suggestions</h2>
-      {this.props.movies.filter(movie=>movie.username===this.props.user)
-      .map(film=>
-          <div key={'usersuggestion'+film.slug}>
-            <h4>{film.name}</h4>
-            <button
-              onClick = {()=>this.handleRemoveSuggestion(film.slug)}
-              >remove</button>
-          </div>
-          )}
+        <div style={{
+                display:'flex',
+                flexWrap:'wrap',
+                justifyContent:'space-between',
+                margin:'40px 4vw 0 4vw'}}>
 
-      <h2>Your Saves</h2>
-      {this.props.movies.filter(movie=>movie.saved===true)
-      .map(film =>
-      <div key={'usersaved'+film.slug}>
-            <h4>{film.name}</h4>
-            <button
-              onClick = {()=>this.handleUnsave(film.slug)}
-              >unsave</button>
-      </div>
-      )}
 
+            {this.props.movies.filter(movie=>movie.saved===true)
+            .map(film=>
+              <div key={'usersuggestion'+film.slug}>
+                  <iframe
+                      style={{
+                        width:'300px',
+                        height:'168.54px',
+                        margin:'0 5px 0 5px'
+                      }}
+                      title={film.name}
+                      src={film.video}
+                      allowFullScreen></iframe>
+
+                  <div style={{
+                              display:'flex',
+                              alignItems:'center',
+                              justifyContent:'center'}}>
+                  <p>{film.name}</p>
+                  <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
+                  </div>
+              </div>
+              )}
+
+        </div>
       </div>
     );
   }

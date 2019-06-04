@@ -8,11 +8,6 @@ import MovieList from './MovieList';
 
 class TrailerPage extends Component {
 
-  componentDidMount(){
-    this.props.setLastMovie(this.props.match.params.movieslug)
-    this.props.setSelectedGenre('')
-  }
-
   render() {
 
     window.scrollTo(0, 0);
@@ -33,7 +28,8 @@ class TrailerPage extends Component {
               genreslug={genreslug}
               movies={this.props.movies}
               redirect = {this.props.redirect}
-              handleSaveUnsave={this.props.handleSaveUnsave}/>
+              handleSaveUnsave={this.props.handleSaveUnsave}
+          />
 
           <div id="genres-and-list">
             <Genres
@@ -44,7 +40,6 @@ class TrailerPage extends Component {
                   sortBy={this.props.sortBy}
                   scrollGenres={this.props.scrollGenres}
                   getRandomMovies={this.props.getRandomMovies}
-                  setLastMovie = {this.props.setLastMovie}
                   user={this.props.user}
                   movies={this.props.movies}
                   genreIndex={this.props.genreIndex}
@@ -53,14 +48,14 @@ class TrailerPage extends Component {
                   subtractGenreIndex={this.props.subtractGenreIndex}
                   addGenreIndex={this.props.addGenreIndex}
                   setIndexes={this.props.setIndexes}
-                  />
+            />
             <MovieList
                   genreslug= {genreslug}
                   upperGenre={upperGenre}
                   movies={this.props.movies}
                   sortBy={this.props.sortBy}
                   handleSaveUnsave={this.props.handleSaveUnsave}
-                  setLastMovie = {this.props.setLastMovie}/>
+            />
           </div>
         </div>
       </div>

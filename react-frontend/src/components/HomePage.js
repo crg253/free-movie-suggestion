@@ -28,15 +28,15 @@ class HomePage extends Component {
   state={
     Instructions:'*Click on Character to See Genre'
   }
-
   updateInstructions = () =>{
     this.setState({Instructions:'*Click on Screen for Random Movie'})
   }
-
   componentDidUpdate() {
     window.scrollTo(0, 0);
   }
-
+  componentWillUnmount(){
+    this.props.setSelectedGenre('')
+  }
 
   render() {
 
@@ -44,49 +44,49 @@ class HomePage extends Component {
 
     let sign = null;
     if(this.props.selectedGenre ==='Action'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Action'].slug)}>
+      sign =  <g>
                 <Link to={'/action/' + randomMovies['Action'].slug}>
                   <ActionSign />
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Comedy'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Comedy'].slug)}>
+      sign =  <g>
                 <Link to={'/comedy/' + randomMovies['Comedy'].slug}>
                   <ComedySign/>
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Documentary'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Documentary'].slug)}>
+      sign =  <g>
                 <Link to={'/documentary/'+ randomMovies['Documentary'].slug}>
                   <DocumentarySign/>
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Drama'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Drama'].slug)}>
+      sign =  <g>
                 <Link to={'/drama/'+ randomMovies['Drama'].slug}>
                   <DramaSign/>
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Horror'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Horror'].slug)}>
+      sign =  <g>
                 <Link to={'/horror/'+ randomMovies['Horror'].slug}>
                   <HorrorSign/>
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Mystery & Suspense'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Mystery & Suspense'].slug)}>
+      sign =  <g>
                 <Link to={'/mysteryandsuspense/'+ randomMovies['Mystery & Suspense'].slug}>
                   <MysterySuspenseSign/>
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Romance'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Romance'].slug)}>
+      sign =  <g>
                 <Link to={'/romance/'+ randomMovies['Romance'].slug}>
                   <RomanceSign/>
                 </Link>
               </g>
     }else if(this.props.selectedGenre ==='Sci-Fi & Fantasy'){
-      sign =  <g onClick={()=>this.props.setLastMovie(randomMovies['Sci-Fi & Fantasy'].slug)}>
+      sign =  <g>
                 <Link to={'/scifiandfantasy/'+ randomMovies['Sci-Fi & Fantasy'].slug}>
                   <SciFiSign/>
                 </Link>

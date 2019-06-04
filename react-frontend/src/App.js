@@ -8,7 +8,8 @@ import SignIn from './components/SignIn';
 import AddUser from './components/AddUser';
 import Recommend from './components/Recommend';
 import Menu from './components/Menu';
-import UserMovies from './components/UserMovies'
+import UserMovies from './components/UserMovies';
+import UserSuggestions from './components/UserSuggestions'
 
 class App extends Component {
 
@@ -16,7 +17,6 @@ class App extends Component {
     Movies:[],
     SelectedGenre:'',
     SortBy:'name',
-    LastMovie:'comingsoon',
     User:'',
     Redirect:'',
     RedirectBackGenre:'',
@@ -30,8 +30,7 @@ class App extends Component {
                   'Horror',
                   'Mystery & Suspense',
                   'Romance',
-                  'Sci-Fi & Fantasy',
-                  'Saved'],
+                  'Sci-Fi & Fantasy'],
     GenreIndex:'0',
     IndexUp:'0',
     IndexDown:'0'
@@ -41,9 +40,6 @@ class App extends Component {
 
   setSelectedGenre = (genre)=>{
     this.setState({SelectedGenre:genre})
-  }
-  setLastMovie = (slug)=>{
-    this.setState({LastMovie:slug})
   }
   setRedirectBackSlug = (newSlug)=>{
     this.setState({RedirectBackSlug:newSlug})
@@ -96,14 +92,14 @@ class App extends Component {
     if(this.state.GenreIndex===0){
       this.setState({
         IndexUp:this.state.GenreIndex,
-        GenreIndex:9,
+        GenreIndex:8,
         IndexDown:this.state.IndexDown-1})
     }
     else if(this.state.GenreIndex===1){
       this.setState({
         IndexUp:this.state.GenreIndex,
         GenreIndex:this.state.GenreIndex-1,
-        IndexDown:9})
+        IndexDown:8})
     }else{
       this.setState({
         IndexUp:this.state.GenreIndex,
@@ -113,13 +109,13 @@ class App extends Component {
   }
 
   addGenreIndex=()=>{
-    if(this.state.GenreIndex===9){
+    if(this.state.GenreIndex===8){
       this.setState({
         IndexDown:this.state.GenreIndex,
         GenreIndex:0,
         IndexUp:this.state.IndexUp+1})
     }
-    else if (this.state.GenreIndex===8){
+    else if (this.state.GenreIndex===7){
       this.setState({
         IndexDown:this.state.GenreIndex,
         GenreIndex:this.state.GenreIndex+1,
@@ -218,8 +214,6 @@ class App extends Component {
     // console.log(this.changeGenreCase('toUpper', 'scifiandfantasy'))
     // console.log(this.changeGenreCase('toUpper', 'drama'))
 
-    //console.log('last movie is ...')
-    //console.log(this.state.LastMovie)
     // console.log('user is ...')
     // console.log(this.state.User)
     // console.log('SAVED MOVIES are ...')
@@ -238,9 +232,6 @@ class App extends Component {
                                 movies={this.state.Movies}
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}
-                                lastMovie = {this.state.LastMovie}
-                                setLastMovie={this.setLastMovie}
-                                scrollGenres={this.state.ScrollGenres}
                                 getRandomMovies={this.getRandomMovies}
                                 setIndexes={this.setIndexes}/>}/>
           <Switch>
@@ -255,9 +246,14 @@ class App extends Component {
                               setMovies={this.setMovies}
                               setRedirect={this.setRedirect}
                               redirect={this.state.Redirect}
-                              setLastMovie={this.setLastMovie}
                               setRedirectBack={this.setRedirectBack}
                               setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
+
+            <Route
+              path='/usersuggestions'
+              render={(props)=><UserSuggestions
+                                {...props}
+                                movies = {this.state.Movies}/>}/>
 
             <Route
               path='/recommend'
@@ -302,7 +298,6 @@ class App extends Component {
                                     redirect = {this.state.Redirect}
                                     handleSaveUnsave={this.handleSaveUnsave}
                                     setRedirectBack={this.setRedirectBack}
-                                    setLastMovie={this.setLastMovie}
                                     user = {this.state.User}
                                     genreIndex={this.state.GenreIndex}
                                     indexUp={this.state.IndexUp}
@@ -319,8 +314,7 @@ class App extends Component {
                                   {...props}
                                   setSelectedGenre = {this.setSelectedGenre}
                                   selectedGenre= {this.state.SelectedGenre}
-                                  getRandomMovies={this.getRandomMovies}
-                                  setLastMovie={this.setLastMovie}/>}/>
+                                  getRandomMovies={this.getRandomMovies}/>}/>
           </Switch>
         </div>
       </BrowserRouter>

@@ -7,9 +7,9 @@ class Genres extends Component {
   componentDidMount(){
     let i = this.props.scrollGenres.indexOf(this.props.upperGenre)
     if (i===0){
-      this.props.setIndexes(9,i,1)
-    }else if (i===9) {
-      this.props.setIndexes(8,i,0)
+      this.props.setIndexes(8,i,1)
+    }else if (i===8) {
+      this.props.setIndexes(7,i,0)
     }else{
       this.props.setIndexes(i-1,i,i+1)
     }
@@ -28,8 +28,7 @@ class Genres extends Component {
               '/' +
               randomMovies[this.props.scrollGenres[this.props.indexDown]].slug}
           onClick={()=>{
-            this.props.subtractGenreIndex();
-            this.props.setLastMovie(randomMovies[this.props.scrollGenres[this.props.indexDown]].slug);}}>
+            this.props.subtractGenreIndex();}}>
         <button
           className="button-nostyle"
           id='back-genres-button'>
@@ -42,8 +41,7 @@ class Genres extends Component {
               '/' +
               randomMovies[this.props.scrollGenres[this.props.indexUp]].slug}
           onClick={()=>{
-            this.props.addGenreIndex();
-            this.props.setLastMovie(randomMovies[this.props.scrollGenres[this.props.indexUp]].slug);}}>
+            this.props.addGenreIndex();}}>
         <button
           className="button-nostyle"
           id='forward-genres-button'>
@@ -51,10 +49,10 @@ class Genres extends Component {
         </Link>
     }
 
-    //console.log(this.props.genreslug)
-    // console.log(this.props.indexDown);
-    // console.log(this.props.genreIndex);
-    // console.log(this.props.indexUp)
+    console.log(this.props.genreslug)
+    console.log(this.props.indexDown);
+    console.log(this.props.genreIndex);
+    console.log(this.props.indexUp)
 
 
     return (
