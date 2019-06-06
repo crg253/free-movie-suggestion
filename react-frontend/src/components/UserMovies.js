@@ -79,8 +79,7 @@ class UserMovies extends Component {
         <div style={{
                 display:'flex',
                 flexWrap:'wrap',
-                justifyContent:'space-between',
-                margin:'40px 4vw 0 4vw'}}>
+                margin:'40px 2.5vw 0 2.5vw'}}>
 
 
             {this.props.movies.filter(movie=>movie.saved===true)
@@ -88,9 +87,9 @@ class UserMovies extends Component {
               <div key={'usersuggestion'+film.slug}>
                   <iframe
                       style={{
-                        width:'300px',
-                        height:'168.54px',
-                        margin:'0 5px 0 5px'
+                        width:'26vw',
+                        height:'14.6vw',
+                        margin:'0 2.5vw 0 2.5vw'
                       }}
                       title={film.name}
                       src={film.video}
@@ -102,6 +101,9 @@ class UserMovies extends Component {
                               justifyContent:'center'}}>
                   <p>{film.name}</p>
                   <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
+                  </div>
+                  <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
+                  <button onClick={()=>this.handleUnsave(film.slug)} >remove</button>
                   </div>
               </div>
               )}
