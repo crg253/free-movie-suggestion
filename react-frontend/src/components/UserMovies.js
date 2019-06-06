@@ -87,8 +87,8 @@ class UserMovies extends Component {
               <div key={'usersuggestion'+film.slug}>
                   <iframe
                       style={{
-                        width:'26vw',
-                        height:'14.6vw',
+                        width:'26.2vw',
+                        height:'14.72vw',
                         margin:'0 2.5vw 0 2.5vw'
                       }}
                       title={film.name}
@@ -103,12 +103,47 @@ class UserMovies extends Component {
                   <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
                   </div>
                   <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
-                  <button onClick={()=>this.handleUnsave(film.slug)} >remove</button>
+                  <button onClick={()=>this.handleUnsave(film.slug)} >unsave</button>
                   </div>
               </div>
               )}
-
         </div>
+
+
+        <div style={{
+                display:'flex',
+                flexWrap:'wrap',
+                margin:'40px 2.5vw 0 2.5vw'}}>
+
+
+            {this.props.movies.filter(movie=>movie.username===this.props.user)
+            .map(film=>
+              <div key={'usersuggestion'+film.slug}>
+                  <div
+                      style={{
+                        width:'26.2vw',
+                        height:'14.72vw',
+                        margin:'0 2.5vw 0 2.5vw',
+                        backgroundColor:'white'
+                      }}
+                    ></div>
+
+                  <div style={{
+                              display:'flex',
+                              alignItems:'center',
+                              justifyContent:'center'}}>
+                  <p>{film.name}</p>
+                  <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
+                  </div>
+                  <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
+                  <button>unsuggest</button>
+                  </div>
+              </div>
+              )}
+        </div>
+
+
+
       </div>
     );
   }
