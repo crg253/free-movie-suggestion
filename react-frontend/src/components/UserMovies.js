@@ -68,6 +68,36 @@ class UserMovies extends Component {
 
 
   render() {
+
+    function dropThe(slug) {
+      if (slug.slice(0,3)==="the"){
+        return slug.slice(3,)
+      }else{
+        return slug
+      }
+    }
+
+    function compareSlug(a,b) {
+    if (dropThe(a.slug) < dropThe(b.slug))
+      return -1;
+    if (dropThe(a.slug) > dropThe(b.slug))
+      return 1;
+    return 0;
+    }
+
+    let userSaves = this.props.movies.filter(movie=>movie.saved===true)
+    userSaves.sort(compareSlug)
+
+    let userSuggestionsTrailers = this.props.movies
+                    .filter(movie=>movie.username===this.props.user)
+                    .filter(film=>film.video != null)
+    userSuggestionsTrailers.sort(compareSlug)
+
+    let userSuggestionsNoTrailers = this.props.movies
+                    .filter(movie=>movie.username===this.props.user)
+                    .filter(film=>film.video === null)
+    userSuggestionsNoTrailers.sort(compareSlug)
+
     return (
       <div >
         {this.props.redirect}
@@ -76,19 +106,22 @@ class UserMovies extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
 
+        <h2 style={{textAlign:'center'}}>Saved</h2>
+
         <div style={{
                 display:'flex',
                 flexWrap:'wrap',
                 margin:'40px 2.5vw 0 2.5vw'}}>
 
 
-            {this.props.movies.filter(movie=>movie.saved===true)
-            .map(film=>
-              <div key={'usersuggestion'+film.slug}>
+
+            {userSaves.map(film=>
+              <div key={'usersave'+film.slug}>
                   <iframe
                       style={{
-                        width:'26.2vw',
-                        height:'14.72vw',
+                        border:'0',
+                        width:'26.6vw',
+                        height:'14.94vw',
                         margin:'0 2.5vw 0 2.5vw'
                       }}
                       title={film.name}
@@ -109,24 +142,50 @@ class UserMovies extends Component {
               )}
         </div>
 
+        <h2 style={{textAlign:'center'}}>Suggestions</h2>
 
         <div style={{
                 display:'flex',
                 flexWrap:'wrap',
                 margin:'40px 2.5vw 0 2.5vw'}}>
 
+                {userSuggestionsTrailers.map(film=>
+                  <div key={'usersuggestion'+film.slug}>
+                      <iframe
+                          style={{
+                            border:'0',
+                            width:'26.6vw',
+                            height:'14.94vw',
+                            margin:'0 2.5vw 0 2.5vw'
+                          }}
+                          title={film.name}
+                          src={film.video}
+                          allowFullScreen></iframe>
 
-            {this.props.movies.filter(movie=>movie.username===this.props.user)
-            .map(film=>
+                      <div style={{
+                                  display:'flex',
+                                  alignItems:'center',
+                                  justifyContent:'center'}}>
+                      <p>{film.name}</p>
+                      <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
+                      </div>
+                      <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
+                      <button onClick={()=>this.handleRemoveSuggestion(film.slug)} >unsuggest</button>
+                      </div>
+                  </div>
+                  )}
+
+            {userSuggestionsNoTrailers.map(film=>
               <div key={'usersuggestion'+film.slug}>
                   <div
                       style={{
-                        width:'26.2vw',
-                        height:'14.72vw',
+                        width:'26.6vw',
+                        height:'14.94vw',
                         margin:'0 2.5vw 0 2.5vw',
-                        backgroundColor:'white'
+                        backgroundColor:'grey',
+                        textAlign:'center'
                       }}
-                    ></div>
+                    ><p style={{padding:'3vw 0 0 0'}}>Coming</p> <p>Soon</p></div>
 
                   <div style={{
                               display:'flex',
@@ -136,7 +195,7 @@ class UserMovies extends Component {
                   <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
                   </div>
                   <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
-                  <button>unsuggest</button>
+                  <button onClick={()=>this.handleRemoveSuggestion(film.slug)}>unsuggest</button>
                   </div>
               </div>
               )}
