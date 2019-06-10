@@ -106,7 +106,7 @@ class UserMovies extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <h2 style={{textAlign:'center'}}>Saved</h2>
+        <h2 style={{textAlign:'center'}}>Your Saved Movies</h2>
 
         <div style={{
                 display:'flex',
@@ -142,7 +142,7 @@ class UserMovies extends Component {
               )}
         </div>
 
-        <h2 style={{textAlign:'center'}}>Suggestions</h2>
+        <h2 style={{textAlign:'center'}}>Your Suggestions</h2>
 
         <div style={{
                 display:'flex',
