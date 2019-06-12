@@ -29,6 +29,7 @@ class TrailerPage extends Component {
               movies={this.props.movies}
               redirect = {this.props.redirect}
               handleSaveUnsave={this.props.handleSaveUnsave}
+              getSaveButton = {this.props.getSaveButton}
           />
 
           <div id="genres-and-list">

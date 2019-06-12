@@ -183,6 +183,31 @@ class App extends Component {
     })
   }
 
+  getSaveButton = (genreSlug, movieSlug) =>{
+    let buttonComponent = ''
+    let allMovies = [...this.state.Movies]
+    let selectedMovie = allMovies.filter(movie=>movie.slug===movieSlug)[0]
+    if (selectedMovie.slug === "comingsoon"){
+      buttonComponent = ''
+    }
+    else if(selectedMovie.saved===true){
+      buttonComponent=
+        <button
+          className="button-nostyle"
+          onClick = {()=>this.handleSaveUnsave('unsavemovie', genreSlug, movieSlug)}
+          style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
+              Unsave</button>
+    }else if(selectedMovie.saved ===false){
+      buttonComponent=
+        <button
+          className="button-nostyle"
+          onClick = {()=>this.handleSaveUnsave('savemovie', genreSlug, movieSlug)}
+          style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
+              Save</button>
+    }
+    return buttonComponent
+  }
+
    handleInitialFetch = () => {
      fetch('/api/checktoken',{
       method:'POST',
@@ -253,6 +278,11 @@ class App extends Component {
               path='/usersuggestions'
               render={(props)=><UserSuggestions
                                 {...props}
+                                setUser={this.setUser}
+                                setMovies={this.setMovies}
+                                setRedirectBack={this.setRedirectBack}
+                                setRedirectBackSlug={this.setRedirectBackSlug}
+                                setRedirect={this.setRedirect}
                                 movies = {this.state.Movies}/>}/>
 
             <Route
@@ -306,7 +336,8 @@ class App extends Component {
                                     addGenreIndex={this.addGenreIndex}
                                     setIndexes={this.setIndexes}
                                     changeGenreCase={this.changeGenreCase}
-                                    setSelectedGenre = {this.setSelectedGenre}/>}/>
+                                    setSelectedGenre = {this.setSelectedGenre}
+                                    getSaveButton= {this.getSaveButton}/>}/>
 
             <Route
               path='/'
