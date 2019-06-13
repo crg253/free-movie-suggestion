@@ -25,37 +25,33 @@ class TrailerPage extends Component {
               movieslug={this.props.match.params.movieslug}
               genreslug={genreslug}
               movies={this.props.movies}
-              redirect = {this.props.redirect}
               setUser={this.props.setUser}
               setMovies={this.props.setMovies}
+              redirect = {this.props.redirect}
+              setRedirect={this.props.setRedirect}
               setRedirectBack={this.props.setRedirectBack}
               setRedirectBackSlug={this.props.setRedirectBackSlug}
               setRedirectBackGenre={this.props.setRedirectBackGenre}
-              setRedirect={this.props.setRedirect}
           />
 
           <div id="genres-and-list">
             <Genres
-                  genreslug= {genreslug}
+                  getRandomMovies={this.props.getRandomMovies}
                   upperGenre={upperGenre}
                   changeGenreCase={this.props.changeGenreCase}
                   setSort={this.props.setSort}
                   sortBy={this.props.sortBy}
                   scrollGenres={this.props.scrollGenres}
-                  getRandomMovies={this.props.getRandomMovies}
-                  user={this.props.user}
-                  movies={this.props.movies}
-                  genreIndex={this.props.genreIndex}
+                  setIndexes={this.props.setIndexes}
                   indexUp={this.props.indexUp}
                   indexDown={this.props.indexDown}
                   subtractGenreIndex={this.props.subtractGenreIndex}
                   addGenreIndex={this.props.addGenreIndex}
-                  setIndexes={this.props.setIndexes}
             />
             <MovieList
+                  movies={this.props.movies}
                   genreslug= {genreslug}
                   upperGenre={upperGenre}
-                  movies={this.props.movies}
                   sortBy={this.props.sortBy}
             />
           </div>

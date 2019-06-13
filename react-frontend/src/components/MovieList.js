@@ -7,9 +7,7 @@ class MovieList extends Component {
   render() {
 
     let selectedMovieList = []
-    if(this.props.upperGenre==="Saved"){
-      selectedMovieList= this.props.movies.filter(movie=>movie.saved===true)
-    }else if(this.props.upperGenre==="All"){
+    if(this.props.upperGenre==="All"){
       selectedMovieList = this.props.movies.filter(movie=>movie.status==='approved')
     }else{
       selectedMovieList = this.props.movies

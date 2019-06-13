@@ -180,11 +180,9 @@ class App extends Component {
             render={(props)=> <Menu
                                 {...props}
                                 user={this.state.User}
-                                movies={this.state.Movies}
                                 setUser={this.setUser}
-                                setMovies={this.setMovies}
-                                getRandomMovies={this.getRandomMovies}
-                                setIndexes={this.setIndexes}/>}/>
+                                setMovies={this.setMovies}/>}/>
+                                
           <Switch>
           <Route
             path='/usermovies'
@@ -248,13 +246,11 @@ class App extends Component {
                                     {...props}
                                     movies = {this.state.Movies}
                                     getRandomMovies={this.getRandomMovies}
-                                    user = {this.state.User}
-                                    
+
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
 
                                     scrollGenres={this.state.ScrollGenres}
-                                    genreIndex={this.state.GenreIndex}
                                     indexUp={this.state.IndexUp}
                                     indexDown={this.state.IndexDown}
                                     subtractGenreIndex={this.subtractGenreIndex}
@@ -262,8 +258,6 @@ class App extends Component {
                                     setIndexes={this.setIndexes}
 
                                     changeGenreCase={this.changeGenreCase}
-                                    setSelectedGenre = {this.setSelectedGenre}
-                                    getSaveButton= {this.getSaveButton}
                                     setUser={this.setUser}
                                     setMovies={this.setMovies}
 
