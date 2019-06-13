@@ -56,6 +56,7 @@ class TrailerPage extends Component {
             />
           </div>
         </div>
+        <div class='footer'></div>
       </div>
     );
   }

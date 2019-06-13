@@ -45,16 +45,16 @@ class Trailer extends Component {
     else if(selectedMovie.saved===true){
       buttonComponent=
         <button
-          className="button-nostyle"
+          className="button-nostyle save-unsave-button"
           onClick = {()=>this.handleSaveUnsave('unsavemovie', genreSlug, movieSlug)}
-          style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
+        >
               Unsave</button>
     }else if(selectedMovie.saved ===false){
       buttonComponent=
         <button
-          className="button-nostyle"
+          className="button-nostyle save-unsave-button"
           onClick = {()=>this.handleSaveUnsave('savemovie', genreSlug, movieSlug)}
-          style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
+          >
               Save</button>
     }
     return buttonComponent
@@ -75,8 +75,6 @@ class Trailer extends Component {
 
             <div id="title-and-save-button">
               <h2 id="trailer-title" >{selection.name} {selection.year}</h2>
-
-              <p>Recommended by {selection.username}</p>
 
               {this.getSaveButton(this.props.genreslug, this.props.movieslug)}
 

@@ -18,6 +18,10 @@ iframe{
   text-align: center;
   margin: 0 0 25px 0;
 }
+.save-unsave-button{
+  font-size: 18px;
+  color:#DCDCDC;
+}
 
 /* Genres.js */
 
@@ -134,12 +138,27 @@ iframe{
     text-align: center;
     margin: 0 0 25px 0;
   }
+  #trailer-title{
+    margin:5px 5vw 5px 5vw;
+  }
+  .save-unsave-button{
+    font-size: 18px;
+    color:#DCDCDC;
+    margin:0;
+  }
   /* Genres.js */
   #main-genres-wrapper{
     text-align: center;
   }
   #genre-and-button{
+    display:inline;
     justify-content: center;
+  }
+  #back-genres-button{
+    margin: 10px 0 0 0;
+  }
+  #forward-genres-button{
+    margin: 10px 0 0 5px;
   }
   #desktop-genres-list{
     display:none;
@@ -152,4 +171,62 @@ iframe{
     justify-content: center;
   }
 
+}
+
+/* SMALL LANDSCAPE */
+@media only screen and (max-width: 900px) and (orientation:landscape){
+  /* TrailerPage.js */
+  #trailer-and-genres-and-list{
+    display:inline;
+    margin: 0;
+  }
+  #genres-and-list{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80vw;
+  }
+  /* Trailer.js */
+  iframe{
+    width:75vw;
+    height: 42.13vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #title-and-save-button{
+    text-align: center;
+    margin: 0 0 25px 0;
+  }
+  #trailer-title{
+    margin:5px 5vw 5px 5vw;
+  }
+  .save-unsave-button{
+    font-size: 18px;
+    color:#DCDCDC;
+    margin:0;
+  }
+  /* Genres.js */
+  #main-genres-wrapper{
+    text-align: center;
+  }
+  #genre-and-button{
+    display:inline;
+    justify-content: center;
+  }
+  #back-genres-button{
+    margin: 10px 0 0 0;
+  }
+  #forward-genres-button{
+    margin: 10px 0 0 5px;
+  }
+  #desktop-genres-list{
+    display:none;
+  }
+  #sort-by-wrapper{
+    justify-content: center;
+  }
+  /* MovieList.js */
+  .list-items{
+    justify-content: center;
+  }
 }
