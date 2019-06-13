@@ -247,22 +247,26 @@ class App extends Component {
               render={(props)=> <TrailerPage
                                     {...props}
                                     movies = {this.state.Movies}
-                                    scrollGenres={this.state.ScrollGenres}
-                                    sortBy={this.state.SortBy}
-                                    setSort={this.setSort}
                                     getRandomMovies={this.getRandomMovies}
                                     user = {this.state.User}
+                                    
+                                    sortBy={this.state.SortBy}
+                                    setSort={this.setSort}
+
+                                    scrollGenres={this.state.ScrollGenres}
                                     genreIndex={this.state.GenreIndex}
                                     indexUp={this.state.IndexUp}
                                     indexDown={this.state.IndexDown}
                                     subtractGenreIndex={this.subtractGenreIndex}
                                     addGenreIndex={this.addGenreIndex}
                                     setIndexes={this.setIndexes}
+
                                     changeGenreCase={this.changeGenreCase}
                                     setSelectedGenre = {this.setSelectedGenre}
                                     getSaveButton= {this.getSaveButton}
                                     setUser={this.setUser}
                                     setMovies={this.setMovies}
+
                                     setRedirectBack={this.setRedirectBack}
                                     setRedirectBackSlug={this.setRedirectBackSlug}
                                     setRedirectBackGenre={this.setRedirectBackGenre}
