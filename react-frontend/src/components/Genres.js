@@ -49,12 +49,6 @@ class Genres extends Component {
         </Link>
     }
 
-    console.log(this.props.genreslug)
-    console.log(this.props.indexDown);
-    console.log(this.props.genreIndex);
-    console.log(this.props.indexUp)
-
-
     return (
       <div id="main-genres-wrapper">
 

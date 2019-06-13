@@ -13,8 +13,6 @@ class TrailerPage extends Component {
     window.scrollTo(0, 0);
     let genreslug= this.props.match.params.genreslug
     let upperGenre = this.props.changeGenreCase('toUpper',genreslug)
-    //console.log(genreslug)
-    //console.log(upperGenre);
 
     return (
       <div>
@@ -28,8 +26,12 @@ class TrailerPage extends Component {
               genreslug={genreslug}
               movies={this.props.movies}
               redirect = {this.props.redirect}
-              handleSaveUnsave={this.props.handleSaveUnsave}
-              getSaveButton = {this.props.getSaveButton}
+              setUser={this.props.setUser}
+              setMovies={this.props.setMovies}
+              setRedirectBack={this.props.setRedirectBack}
+              setRedirectBackSlug={this.props.setRedirectBackSlug}
+              setRedirectBackGenre={this.props.setRedirectBackGenre}
+              setRedirect={this.props.setRedirect}
           />
 
           <div id="genres-and-list">
@@ -55,7 +57,6 @@ class TrailerPage extends Component {
                   upperGenre={upperGenre}
                   movies={this.props.movies}
                   sortBy={this.props.sortBy}
-                  handleSaveUnsave={this.props.handleSaveUnsave}
             />
           </div>
         </div>

@@ -36,8 +36,6 @@ class App extends Component {
     IndexDown:'0'
   }
 
-
-
   setSelectedGenre = (genre)=>{
     this.setState({SelectedGenre:genre})
   }
@@ -151,63 +149,6 @@ class App extends Component {
    return randomMovies
   }
 
-
-  handleSaveUnsave = (saveunsave, genre, slug) =>{
-    fetch('/api/'.concat(saveunsave),{
-      method:'POST',
-      headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
-         'Content-Type':'application/json'
-       },
-      body: JSON.stringify({slug: slug})
-    })
-    .then(res=>{
-      if (res.status===401) {
-        res.json()
-         .then(res=>{
-           this.setState({
-              User:res.user,
-              Movies:res.movies,
-              RedirectBackGenre:genre,
-              RedirectBackSlug:slug,
-              RedirectBack:'',
-              Redirect:<Redirect to="/signin"/>})
-          })
-      }else if (res.status===200){
-        res.json()
-        .then(res=>{
-          this.setState({
-             User:res.user, Movies:res.movies})
-         })
-      }
-    })
-  }
-
-  getSaveButton = (genreSlug, movieSlug) =>{
-    let buttonComponent = ''
-    let allMovies = [...this.state.Movies]
-    let selectedMovie = allMovies.filter(movie=>movie.slug===movieSlug)[0]
-    if (selectedMovie.slug === "comingsoon"){
-      buttonComponent = ''
-    }
-    else if(selectedMovie.saved===true){
-      buttonComponent=
-        <button
-          className="button-nostyle"
-          onClick = {()=>this.handleSaveUnsave('unsavemovie', genreSlug, movieSlug)}
-          style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
-              Unsave</button>
-    }else if(selectedMovie.saved ===false){
-      buttonComponent=
-        <button
-          className="button-nostyle"
-          onClick = {()=>this.handleSaveUnsave('savemovie', genreSlug, movieSlug)}
-          style={{ fontSize:"18px",topBorder:"10px",color:"#DCDCDC"}}>
-              Save</button>
-    }
-    return buttonComponent
-  }
-
    handleInitialFetch = () => {
      fetch('/api/checktoken',{
       method:'POST',
@@ -231,21 +172,6 @@ class App extends Component {
 
   render() {
 
-
-    // console.log(this.changeGenreCase('toLower', 'Mystery & Suspense'))
-    // console.log(this.changeGenreCase('toLower', 'Sci-Fi & Fantasy'))
-    // console.log(this.changeGenreCase('toLower', 'Drama'))
-    // console.log(this.changeGenreCase('toUpper', 'mysteryandsuspense'))
-    // console.log(this.changeGenreCase('toUpper', 'scifiandfantasy'))
-    // console.log(this.changeGenreCase('toUpper', 'drama'))
-
-    // console.log('user is ...')
-    // console.log(this.state.User)
-    // console.log('SAVED MOVIES are ...')
-    // console.log(this.state.Movies.filter(movie=>movie.saved ===true))
-    // console.log('suggested MOVIES are ...')
-    // console.log(this.state.Movies.filter(movie=>movie.username === this.state.User))
-
     return (
       <BrowserRouter>
         <div>
@@ -266,7 +192,6 @@ class App extends Component {
                               {...props}
                               user={this.state.User}
                               movies = {this.state.Movies}
-                              handleSaveUnsave={this.handleSaveUnsave}
                               setUser={this.setUser}
                               setMovies={this.setMovies}
                               setRedirect={this.setRedirect}
@@ -283,6 +208,7 @@ class App extends Component {
                                 setRedirectBack={this.setRedirectBack}
                                 setRedirectBackSlug={this.setRedirectBackSlug}
                                 setRedirect={this.setRedirect}
+                                redirect={this.state.Redirect}
                                 movies = {this.state.Movies}/>}/>
 
             <Route
@@ -325,9 +251,6 @@ class App extends Component {
                                     sortBy={this.state.SortBy}
                                     setSort={this.setSort}
                                     getRandomMovies={this.getRandomMovies}
-                                    redirect = {this.state.Redirect}
-                                    handleSaveUnsave={this.handleSaveUnsave}
-                                    setRedirectBack={this.setRedirectBack}
                                     user = {this.state.User}
                                     genreIndex={this.state.GenreIndex}
                                     indexUp={this.state.IndexUp}
@@ -337,7 +260,14 @@ class App extends Component {
                                     setIndexes={this.setIndexes}
                                     changeGenreCase={this.changeGenreCase}
                                     setSelectedGenre = {this.setSelectedGenre}
-                                    getSaveButton= {this.getSaveButton}/>}/>
+                                    getSaveButton= {this.getSaveButton}
+                                    setUser={this.setUser}
+                                    setMovies={this.setMovies}
+                                    setRedirectBack={this.setRedirectBack}
+                                    setRedirectBackSlug={this.setRedirectBackSlug}
+                                    setRedirectBackGenre={this.setRedirectBackGenre}
+                                    setRedirect={this.setRedirect}
+                                    redirect={this.state.Redirect}/>}/>
 
             <Route
               path='/'

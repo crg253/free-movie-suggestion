@@ -21,7 +21,7 @@ class UserSuggestions extends Component {
            this.props.setMovies(res.movies)
            this.props.setRedirectBack('')
            this.props.setRedirectBackSlug('usersuggestions')
-           this.props.setRedirect(<Redirect to='signin'/>)
+           this.props.setRedirect(<Redirect to='/signin'/>)
           })
       }else if (res.status===200){
         res.json()
@@ -85,6 +85,8 @@ class UserSuggestions extends Component {
 
     return (
       <div>
+        {this.props.redirect}
+
         <Link to={'/'}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>

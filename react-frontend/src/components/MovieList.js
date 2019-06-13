@@ -47,41 +47,19 @@ class MovieList extends Component {
       selectedMovieList.sort(compareSlug);
     }
 
-    let chosenList = ''
-    if(this.props.upperGenre==="Saved"){
-      chosenList =
+      let chosenList =
         <div>
-        {selectedMovieList.map(film =>
-        <div key={'saved'+film.slug}>
-          <Link to={'/'+this.props.genreslug + '/' + film.slug}>
-            <div className='list-items'>
-              <p>{film.name}</p> <p>{film.year}</p>
-                {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
+          {selectedMovieList.map(film =>
+            <div key={film.slug}>
+              <Link to={'/' +this.props.genreslug +'/' + film.slug}>
+                <div className='list-items'>
+                  <p>{film.name}</p> <p>{film.year}</p>
+                    {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
+                </div>
+              </Link>
             </div>
-          </Link>
-            <div className='list-unsave-button'>
-              <button
-                onClick = {()=>this.props.handleSaveUnsave('unsavemovie',this.props.genreslug,film.slug)}
-                >unsave</button>
-            </div>
+          )}
         </div>
-      )}
-      </div>
-    }else{
-      chosenList =
-        <div>
-        {selectedMovieList.map(film =>
-          <div key={film.slug}>
-            <Link to={'/' +this.props.genreslug +'/' + film.slug}>
-              <div className='list-items'>
-                <p>{film.name}</p> <p>{film.year}</p>
-                  {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
-              </div>
-            </Link>
-          </div>
-      )}
-      </div>
-    }
 
     return (
 

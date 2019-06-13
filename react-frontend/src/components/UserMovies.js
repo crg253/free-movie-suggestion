@@ -23,7 +23,7 @@ class UserMovies extends Component {
          this.props.setMovies(res.movies)
          this.props.setRedirectBack('')
          this.props.setRedirectBackSlug('usermovies')
-         this.props.setRedirect(<Redirect to='signin'/>)
+         this.props.setRedirect(<Redirect to='/signin'/>)
       })
     }
     else if (res.status===200){
@@ -53,7 +53,7 @@ class UserMovies extends Component {
            this.props.setMovies(res.movies)
            this.props.setRedirectBack('')
            this.props.setRedirectBackSlug('usermovies')
-           this.props.setRedirect(<Redirect to='signin'/>)
+           this.props.setRedirect(<Redirect to='/signin'/>)
         })
       }
       else if (res.status===200){

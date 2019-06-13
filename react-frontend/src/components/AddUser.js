@@ -23,8 +23,6 @@ class AddUser extends Component {
    body: JSON.stringify({userName: this.state.name, password:this.state.password})
   })
   .then(res=>{
-    console.log(res)
-    console.log(res.status)
     if(!res.ok){
       this.setState({Message:"Username not available", name:'', password:''})
     }else{
