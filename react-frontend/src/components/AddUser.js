@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 
-import './User.css';
+import './UserForm.css';
 class AddUser extends Component {
   state={
     name:'',

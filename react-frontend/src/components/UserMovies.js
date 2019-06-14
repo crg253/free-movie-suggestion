@@ -120,7 +120,7 @@ class UserMovies extends Component {
                   <p>{film.name}</p>
                   <p className="film-year-style">{film.year}</p>
                 </div>
-                <div className='unsave-or-unsuggest-button-wrapper'>
+                <div className='save-unsave-or-unsuggest-button-wrapper'>
                   <button
                     onClick={()=>this.handleUnsave(film.slug)}
                   >
@@ -133,7 +133,7 @@ class UserMovies extends Component {
 
         <h2 className="user-movies-title">Your Suggestions</h2>
 
-        <div id="all-suggested-wrapper">
+        <div className="all-suggested-wrapper">
           {userSuggestionsTrailers.map(film=>
             <div key={'usersuggestion'+film.slug}>
                 <iframe
@@ -145,7 +145,7 @@ class UserMovies extends Component {
                   <p>{film.name}</p>
                   <p className='film-year-style'>{film.year}</p>
                 </div>
-                <div className='unsave-or-unsuggest-button-wrapper'>
+                <div className='save-unsave-or-unsuggest-button-wrapper'>
                   <button
                     onClick={()=>this.handleRemoveSuggestion(film.slug)}
                   >
@@ -157,7 +157,7 @@ class UserMovies extends Component {
 
           {userSuggestionsNoTrailers.map(film=>
             <div key={'usersuggestion'+film.slug}>
-                <div id="suggested-movie-tile">
+                <div className="suggested-movie-tile">
                   <p id='tile-title-style'>Coming</p>
                   <p>Soon</p>
                 </div>
@@ -166,7 +166,7 @@ class UserMovies extends Component {
                   <p>{film.name}</p>
                   <p className='film-year-style'>{film.year}</p>
                 </div>
-                <div className="unsave-or-unsuggest-button-wrapper">
+                <div className="save-unsave-or-unsuggest-button-wrapper">
                   <button
                     onClick={()=>this.handleRemoveSuggestion(film.slug)}
                   >
@@ -176,6 +176,8 @@ class UserMovies extends Component {
             </div>
           )}
         </div>
+        <div className='footer'></div>
+
       </div>
     );
   }

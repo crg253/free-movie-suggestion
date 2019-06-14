@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from "react-router-dom";
 
+import './UserMovies.css';
+
+
 class UserSuggestions extends Component {
 
 
@@ -91,75 +94,44 @@ class UserSuggestions extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <div style={{
-                display:'flex',
-                flexWrap:'wrap',
-                margin:'40px 2.5vw 0 2.5vw'}}>
+        <div className="all-suggested-wrapper">
+          {allUserSuggestionsTrailers.map(film=>
+            <div
+              key={'usersuggestion'+film.slug}
+              >
+                <iframe
+                    className='saved-or-suggested-video'
+                    title={film.name}
+                    src={film.video}
+                    allowFullScreen></iframe>
 
-                {allUserSuggestionsTrailers.map(film=>
-                  <div
-                    key={'usersuggestion'+film.slug}
-                    >
-                      <iframe
-                          style={{
-                            border:'0',
-                            width:'26.6vw',
-                            height:'14.94vw',
-                            margin:'0 2.5vw 0 2.5vw'
-                          }}
-                          title={film.name}
-                          src={film.video}
-                          allowFullScreen></iframe>
-
-                      <div style={{
-                                  display:'flex',
-                                  alignItems:'center',
-                                  justifyContent:'center',
-                                  margin:'5px'}}>
-                        <p style={{margin:'0'}}>{film.name}</p>
-                        <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
-                      </div>
-                      <p style={{
-                        margin:'5px',
-                        textAlign:'center',
-                        }}>suggested by {film.username}</p>
-                      <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
-                      {this.getUserMovSaveButton(film.slug)}
-                      </div>
-                  </div>
-                  )}
+                <div className='saved-or-suggested-title-year'>
+                  <p>{film.name}</p>
+                  <p className='film-year-style'>{film.year}</p>
+                </div>
+                <p className='suggested-by-title'>suggested by {film.username}</p>
+                <div className='save-unsave-or-unsuggest-button-wrapper'>
+                  {this.getUserMovSaveButton(film.slug)}
+                </div>
+            </div>
+            )}
 
             {allUserSuggestionsNoTrailers.map(film=>
-              <div
-                key={'usersuggestion'+film.slug}
-                >
-                  <div
-                      style={{
-                        borderTop:'1px solid #1F1F1F',
-                        width:'26.6vw',
-                        height:'14.94vw',
-                        margin:'0 2.5vw 0 2.5vw',
-                        backgroundColor:'grey',
-                        textAlign:'center'
-                      }}
-                    >
-                    <p style={{padding:'3vw 0 0 0'}}>Coming</p> <p>Soon</p></div>
-
-                  <div style={{
-                              display:'flex',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              margin:'5px'}}>
-                  <p style={{margin:'0'}}>{film.name}</p>
-                  <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
+              <div key={'usersuggestion'+film.slug}>
+                  <div className='suggested-movie-tile'>
+                    <p className='tile-title-style'>Coming</p>
+                    <p>Soon</p>
                   </div>
-                  <p style={{textAlign:'center', margin:'5px 5px 40px 5px'}}>suggested by {film.username}</p>
 
-                  <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
+                  <div className='saved-or-suggested-title-year'>
+                    <p>{film.name}</p>
+                    <p className='film-year-style'>{film.year}</p>
                   </div>
+                  <p className='suggested-by-title'>suggested by {film.username}</p>
               </div>
               )}
         </div>
+        <div className='footer'></div>
 
       </div>
     );
