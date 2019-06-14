@@ -1,0 +1,102 @@
+.user-movies-title{
+  text-align: center;
+}
+#saved-movies-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 40px 2.5vw 0 2.5vw;
+}
+.saved-or-suggested-video{
+  border:0;
+  width: 26.6vw;
+  height: 14.94vw;
+  margin: 0 2.5vw 0 2.5vw;
+}
+.saved-or-suggested-title-year{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.film-year-style{
+  margin:0 0 0 10px;
+}
+.unsave-or-unsuggest-button-wrapper{
+  text-align: center;
+  margin: 0 0 25px 0;
+}
+#all-suggested-wrapper{
+  display:flex;
+  flex-wrap: wrap;
+  margin: 40px 2.5vw 0 2.5vw;
+}
+#suggested-movie-tile{
+  border-top: 1px solid #1F1F1F;
+  width:26.6vw;
+  height:14.94vw;
+  margin:0 2.5vw 0 2.5vw;
+  background-color:grey;
+  text-align:center;
+}
+#tile-title-style{
+  padding:3vw 0 0 0;
+}
+
+/* PORTRAIT */
+@media only screen and (orientation:portrait){
+  #saved-movies-wrapper{
+    display: inline;
+  }
+  .saved-or-suggested-video{
+    border:0;
+    width:95vw;
+    height: 53.37vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .saved-or-suggested-title-year{
+    line-height: 0.01
+  }
+  #all-suggested-wrapper{
+    display:inline;
+  }
+  #suggested-movie-tile{
+    border-top: 1px solid #1F1F1F;
+    width:95vw;
+    height: 53.37vw;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:grey;
+    text-align:center;
+  }
+}
+
+/* SMALL LANDSCAPE */
+@media only screen and (max-width: 900px) and (orientation:landscape){
+  #saved-movies-wrapper{
+    display: inline;
+  }
+  .saved-or-suggested-video{
+    border:0;
+    width:75vw;
+    height: 42.13vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .saved-or-suggested-title-year{
+    line-height: 0.01
+  }
+  #all-suggested-wrapper{
+    display:inline;
+  }
+  #suggested-movie-tile{
+    border-top: 1px solid #1F1F1F;
+    width:75vw;
+    height: 42.13vw;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:grey;
+    text-align:center;
+  }
+}

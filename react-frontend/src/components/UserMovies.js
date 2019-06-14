@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 
-import './User.css';
+import './UserMovies.css';
 
 class UserMovies extends Component {
 
@@ -106,103 +106,76 @@ class UserMovies extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <h2 style={{textAlign:'center'}}>Your Saved Movies</h2>
-
-        <div style={{
-                display:'flex',
-                flexWrap:'wrap',
-                margin:'40px 2.5vw 0 2.5vw'}}>
-
-
-
-            {userSaves.map(film=>
-              <div key={'usersave'+film.slug}>
-                  <iframe
-                      style={{
-                        border:'0',
-                        width:'26.6vw',
-                        height:'14.94vw',
-                        margin:'0 2.5vw 0 2.5vw'
-                      }}
-                      title={film.name}
-                      src={film.video}
-                      allowFullScreen></iframe>
-
-                  <div style={{
-                              display:'flex',
-                              alignItems:'center',
-                              justifyContent:'center'}}>
+        <h2 className="user-movies-title">Your Saved Movies</h2>
+        <div id="saved-movies-wrapper">
+          {userSaves.map(film=>
+            <div key={'usersave'+film.slug}>
+                <iframe className="saved-or-suggested-video"
+                        title={film.name}
+                        src={film.video}
+                        allowFullScreen
+                >
+                </iframe>
+                <div className="saved-or-suggested-title-year">
                   <p>{film.name}</p>
-                  <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
-                  </div>
-                  <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
-                  <button onClick={()=>this.handleUnsave(film.slug)} >unsave</button>
-                  </div>
-              </div>
-              )}
-        </div>
+                  <p className="film-year-style">{film.year}</p>
+                </div>
+                <div className='unsave-or-unsuggest-button-wrapper'>
+                  <button
+                    onClick={()=>this.handleUnsave(film.slug)}
+                  >
+                  unsave
+                  </button>
+                </div>
+            </div>
+          )}
+      </div>
 
-        <h2 style={{textAlign:'center'}}>Your Suggestions</h2>
+        <h2 className="user-movies-title">Your Suggestions</h2>
 
-        <div style={{
-                display:'flex',
-                flexWrap:'wrap',
-                margin:'40px 2.5vw 0 2.5vw'}}>
-
-                {userSuggestionsTrailers.map(film=>
-                  <div key={'usersuggestion'+film.slug}>
-                      <iframe
-                          style={{
-                            border:'0',
-                            width:'26.6vw',
-                            height:'14.94vw',
-                            margin:'0 2.5vw 0 2.5vw'
-                          }}
-                          title={film.name}
-                          src={film.video}
-                          allowFullScreen></iframe>
-
-                      <div style={{
-                                  display:'flex',
-                                  alignItems:'center',
-                                  justifyContent:'center'}}>
-                      <p>{film.name}</p>
-                      <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
-                      </div>
-                      <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
-                      <button onClick={()=>this.handleRemoveSuggestion(film.slug)} >unsuggest</button>
-                      </div>
-                  </div>
-                  )}
-
-            {userSuggestionsNoTrailers.map(film=>
-              <div key={'usersuggestion'+film.slug}>
-                  <div
-                      style={{
-                        width:'26.6vw',
-                        height:'14.94vw',
-                        margin:'0 2.5vw 0 2.5vw',
-                        backgroundColor:'grey',
-                        textAlign:'center'
-                      }}
-                    ><p style={{padding:'3vw 0 0 0'}}>Coming</p> <p>Soon</p></div>
-
-                  <div style={{
-                              display:'flex',
-                              alignItems:'center',
-                              justifyContent:'center'}}>
+        <div id="all-suggested-wrapper">
+          {userSuggestionsTrailers.map(film=>
+            <div key={'usersuggestion'+film.slug}>
+                <iframe
+                    className="saved-or-suggested-video"
+                    title={film.name}
+                    src={film.video}
+                    allowFullScreen></iframe>
+                <div className="saved-or-suggested-title-year">
                   <p>{film.name}</p>
-                  <p style={{margin:'0 0 0 10px'}}>{film.year}</p>
-                  </div>
-                  <div style={{textAlign:'center', margin:'0 0 5px 0'}}>
-                  <button onClick={()=>this.handleRemoveSuggestion(film.slug)}>unsuggest</button>
-                  </div>
-              </div>
-              )}
+                  <p className='film-year-style'>{film.year}</p>
+                </div>
+                <div className='unsave-or-unsuggest-button-wrapper'>
+                  <button
+                    onClick={()=>this.handleRemoveSuggestion(film.slug)}
+                  >
+                  unsuggest
+                  </button>
+                </div>
+            </div>
+          )}
+
+          {userSuggestionsNoTrailers.map(film=>
+            <div key={'usersuggestion'+film.slug}>
+                <div id="suggested-movie-tile">
+                  <p id='tile-title-style'>Coming</p>
+                  <p>Soon</p>
+                </div>
+
+                <div className='saved-or-suggested-title-year'>
+                  <p>{film.name}</p>
+                  <p className='film-year-style'>{film.year}</p>
+                </div>
+                <div className="unsave-or-unsuggest-button-wrapper">
+                  <button
+                    onClick={()=>this.handleRemoveSuggestion(film.slug)}
+                  >
+                  unsuggest
+                  </button>
+                </div>
+            </div>
+          )}
         </div>
-
-
-
       </div>
     );
   }

@@ -45,24 +45,19 @@ class MovieList extends Component {
       selectedMovieList.sort(compareSlug);
     }
 
-      let chosenList =
-        <div>
-          {selectedMovieList.map(film =>
-            <div key={film.slug}>
-              <Link to={'/' +this.props.genreslug +'/' + film.slug}>
-                <div className='list-items'>
-                  <p>{film.name}</p> <p>{film.year}</p>
-                    {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
-                </div>
-              </Link>
-            </div>
-          )}
-        </div>
-
     return (
 
       <div className="list-items-wrapper">
-      {chosenList}
+      {selectedMovieList.map(film =>
+        <div key={film.slug}>
+          <Link to={'/' +this.props.genreslug +'/' + film.slug}>
+            <div className='list-items'>
+              <p>{film.name}</p> <p>{film.year}</p>
+                {film.tags.map(tag=><p key={film.slug + tag}>{tag}</p>)}
+            </div>
+          </Link>
+        </div>
+      )}
       </div>
 
     );

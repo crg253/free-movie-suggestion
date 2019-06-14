@@ -135,7 +135,7 @@ class UserSuggestions extends Component {
                 >
                   <div
                       style={{
-                        borderTop:'1px solid black',
+                        borderTop:'1px solid #1F1F1F',
                         width:'26.6vw',
                         height:'14.94vw',
                         margin:'0 2.5vw 0 2.5vw',

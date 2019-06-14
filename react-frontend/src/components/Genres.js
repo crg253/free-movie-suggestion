@@ -68,14 +68,12 @@ class Genres extends Component {
 
           <button
             style = {{
-              fontSize:'16px',
               color: this.props.sortBy==='name' ? '#00FFFF': 'white'
             }}
             className='sort-selector button-nostyle'
             onClick = {()=>this.props.setSort("name")}>TITLE</button>
           <button
             style = {{
-              fontSize:'16px',
               color: this.props.sortBy==='year' ? '#00FFFF': 'white'
             }}
             className='sort-selector button-nostyle'
