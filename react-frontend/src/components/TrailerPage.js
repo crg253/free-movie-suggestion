@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import './TrailerPage.css';
 import Trailer from './Trailer';
@@ -17,10 +17,10 @@ class TrailerPage extends Component {
     return (
       <div>
         <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <div id="trailer-and-genres-and-list">
+        <div id='trailer-and-genres-and-list'>
           <Trailer
               movieslug={this.props.match.params.movieslug}
               genreslug={genreslug}
@@ -29,7 +29,7 @@ class TrailerPage extends Component {
               redirect={this.props.redirect}
           />
 
-          <div id="genres-and-list">
+          <div id='genres-and-list'>
             <Genres
                   getRandomMovies={this.props.getRandomMovies}
                   upperGenre={upperGenre}

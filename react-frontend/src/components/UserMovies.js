@@ -10,7 +10,7 @@ class UserMovies extends Component {
     fetch('/api/removesuggestion',{
       method:'POST',
       headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Authorization':'Bearer ' +localStorage.getItem('token'),
          'Content-Type':'application/json'
        },
       body: JSON.stringify({slug:slug})
@@ -58,22 +58,22 @@ class UserMovies extends Component {
         {this.props.redirect}
 
         <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <h2 className="user-movies-title">Your Saved Movies</h2>
-        <div id="saved-movies-wrapper">
+        <h2 className='user-movies-title'>Your Saved Movies</h2>
+        <div id='saved-movies-wrapper'>
           {userSaves.map(film=>
             <div key={'usersave'+film.slug}>
-                <iframe className="saved-or-suggested-video"
+                <iframe className='saved-or-suggested-video'
                         title={film.name}
                         src={film.video}
                         allowFullScreen
                 >
                 </iframe>
-                <div className="saved-or-suggested-title-year">
+                <div className='saved-or-suggested-title-year'>
                   <p>{film.name}</p>
-                  <p className="film-year-style">{film.year}</p>
+                  <p className='film-year-style'>{film.year}</p>
                 </div>
                 <div className='save-unsave-or-unsuggest-button-wrapper'>
                   <button
@@ -86,17 +86,17 @@ class UserMovies extends Component {
           )}
       </div>
 
-        <h2 className="user-movies-title">Your Suggestions</h2>
+        <h2 className='user-movies-title'>Your Suggestions</h2>
 
-        <div className="all-suggested-wrapper">
+        <div className='all-suggested-wrapper'>
           {userSuggestionsTrailers.map(film=>
             <div key={'usersuggestion'+film.slug}>
                 <iframe
-                    className="saved-or-suggested-video"
+                    className='saved-or-suggested-video'
                     title={film.name}
                     src={film.video}
                     allowFullScreen></iframe>
-                <div className="saved-or-suggested-title-year">
+                <div className='saved-or-suggested-title-year'>
                   <p>{film.name}</p>
                   <p className='film-year-style'>{film.year}</p>
                 </div>
@@ -112,7 +112,7 @@ class UserMovies extends Component {
 
           {userSuggestionsNoTrailers.map(film=>
             <div key={'usersuggestion'+film.slug}>
-                <div className="suggested-movie-tile">
+                <div className='suggested-movie-tile'>
                   <p id='tile-title-style'>Coming</p>
                   <p>Soon</p>
                 </div>
@@ -121,7 +121,7 @@ class UserMovies extends Component {
                   <p>{film.name}</p>
                   <p className='film-year-style'>{film.year}</p>
                 </div>
-                <div className="save-unsave-or-unsuggest-button-wrapper">
+                <div className='save-unsave-or-unsuggest-button-wrapper'>
                   <button
                     onClick={()=>this.handleRemoveSuggestion(film.slug)}
                   >

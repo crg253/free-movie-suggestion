@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect } from 'react-router-dom';
 
 
 import './UserForm.css';
 class SignIn extends Component  {
   state={
-    name:'',
-    password:'',
+    Name:"",
+    Password:"",
     Message:""
   }
   handleNameChange = (event) =>{
-    this.setState({name:event.target.value});
+    this.setState({Name:event.target.value});
   }
   handlePasswordChange = (event) =>{
-    this.setState({password:event.target.value})
+    this.setState({Password:event.target.value})
   }
 
   handleSignInSubmit = (event) =>{
     let headers = new Headers();
     headers.set(
-      'Authorization','Basic '+ Buffer.from(this.state.name +":"+this.state.password).toString('base64')
+      'Authorization','Basic '+ Buffer.from(this.state.Name +':'+this.state.Password).toString('base64')
     );
     event.preventDefault();
     fetch('/api/signin',{
@@ -28,7 +28,7 @@ class SignIn extends Component  {
     })
     .then(res=>{
       if (res.status===401) {
-        this.setState({name:'', password:''})
+        this.setState({Name:"", Password:""})
       }else if (res.status===200){
         res.json()
         .then(res=>{
@@ -40,7 +40,7 @@ class SignIn extends Component  {
           }else if(this.props.redirectBackSlug.length>0){
             this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackSlug}/>)
           }else{
-            this.setState({name:'', password:'',Message:"Now signed in as "+ res.user})
+            this.setState({Name:"", Password:"",Message:"Now signed in as "+ res.user})
           }
          })
       }
@@ -63,31 +63,31 @@ class SignIn extends Component  {
         <div>
         {this.props.redirectBack}
           <Link to={'/'}>
-            <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+            <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
           </Link>
-          <div className="user-pages-body-wrapper">
+          <div className='user-pages-body-wrapper'>
           <h1>Sign In</h1>
             <form onSubmit={this.handleSignInSubmit}>
 
               <label>
                 Name:
                 <input
-                        type="text"
-                        value={this.state.name}
+                        type='text'
+                        value={this.state.Name}
                         onChange={this.handleNameChange} />
               </label>
 
               <label>
                 Password:
                 <input
-                       type="text"
-                       value={this.state.password}
+                       type='text'
+                       value={this.state.Password}
                        onChange={this.handlePasswordChange}/>
               </label>
 
               <input
-                     type="submit"
-                     value="Submit" />
+                     type='submit'
+                     value='Submit' />
             </form>
             <h4>{this.state.Message}</h4>
             <Link to={'/adduser'}><h3>create account</h3></Link>

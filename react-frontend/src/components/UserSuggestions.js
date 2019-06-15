@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect } from 'react-router-dom';
 
 import './UserMovies.css';
 
@@ -7,7 +7,7 @@ import './UserMovies.css';
 class UserSuggestions extends Component {
 
 
-  getUserMovSaveButton = (movieSlug) =>{
+  getSuggSaveButton = (movieSlug) =>{
     let buttonComponent = ''
     let selectedMovie = this.props.movies.filter(movie=>movie.slug===movieSlug)[0]
     if(selectedMovie.saved===true){
@@ -39,7 +39,7 @@ class UserSuggestions extends Component {
     let allUserSuggestionsNoTrailers = this.props.movies
                                       .filter(movie=>movie.username!=='crg253')
                                       .filter(film=>film.video === null)
-                                      
+
     allUserSuggestionsNoTrailers.sort(this.props.compareSlug)
 
 
@@ -50,10 +50,10 @@ class UserSuggestions extends Component {
         {this.props.redirect}
 
         <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <div className="all-suggested-wrapper">
+        <div className='all-suggested-wrapper'>
           {allUserSuggestionsTrailers.map(film=>
             <div
               key={'usersuggestion'+film.slug}
@@ -70,7 +70,7 @@ class UserSuggestions extends Component {
                 </div>
                 <p className='suggested-by-title'>suggested by {film.username}</p>
                 <div className='save-unsave-or-unsuggest-button-wrapper'>
-                  {this.getUserMovSaveButton(film.slug)}
+                  {this.getSuggSaveButton(film.slug)}
                 </div>
             </div>
             )}

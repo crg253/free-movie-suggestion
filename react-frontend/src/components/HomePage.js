@@ -26,10 +26,11 @@ import SciFiSign from './SVG/SciFiSign';
 class HomePage extends Component {
 
   state={
-    Instructions:'*Click on Character to See Genre'
+    Instructions:"*Click on Character to See Genre"
   }
+
   updateInstructions = () =>{
-    this.setState({Instructions:'*Click on Screen for Random Movie'})
+    this.setState({Instructions:"*Click on Screen for Random Movie"})
   }
   componentDidUpdate() {
     window.scrollTo(0, 0);

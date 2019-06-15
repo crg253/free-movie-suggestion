@@ -64,8 +64,9 @@ class App extends Component {
     this.setState({IndexDown:down,GenreIndex:index,IndexUp:up,})
   }
 
+  //Sort Helper Functions
   dropThe = (slug) => {
-    if (slug.slice(0,3)==="the"){
+    if (slug.slice(0,3)==='the'){
       return slug.slice(3,)
     }else{
       return slug
@@ -92,7 +93,7 @@ class App extends Component {
     fetch('/api/'.concat(saveunsave),{
       method:'POST',
       headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Authorization':'Bearer ' +localStorage.getItem('token'),
          'Content-Type':'application/json'
        },
       body: JSON.stringify({slug: slug})
@@ -196,13 +197,7 @@ class App extends Component {
          randomMovies[gen] = randomMovie;
          }
    }
-   let savedMovies=[...approvedMovies].filter(approvedMovie=>approvedMovie.saved===true)
    let comingSoon=[...this.state.Movies].filter(movie=>movie.status==='neither')[0]
-   if(savedMovies.length>0){
-     randomMovies['Saved']=savedMovies[Math.floor(Math.random()*savedMovies.length)]
-   }else{
-     randomMovies['Saved']=comingSoon
-   }
    randomMovies['All']= comingSoon
    return randomMovies
   }
@@ -211,7 +206,7 @@ class App extends Component {
      fetch('/api/checktoken',{
       method:'POST',
       headers: {
-        'Authorization':"Bearer " +localStorage.getItem('token')
+        'Authorization':'Bearer ' +localStorage.getItem('token')
       },
       body:''
     })

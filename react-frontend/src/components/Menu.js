@@ -10,12 +10,12 @@ class Menu extends Component {
   }
 
   changeMenuDisplay = () =>{
-    if(this.state.displayButton==="inline"){
-      this.setState({displayButton:"none"})
-      this.setState({displayMenu:"inline"})
+    if(this.state.displayButton==='inline'){
+      this.setState({displayButton:'none'})
+      this.setState({displayMenu:'inline'})
     }else{
       this.setState({displayButton:'inline'})
-      this.setState({displayMenu:"none"})
+      this.setState({displayMenu:'none'})
     }
   }
 
@@ -23,7 +23,7 @@ class Menu extends Component {
   fetch('/api/revoketoken', {
     method:'DELETE',
     headers:{
-      'Authorization':"Bearer " +localStorage.getItem('token')
+      'Authorization':'Bearer ' +localStorage.getItem('token')
     }
   })
   .then(res=>{
@@ -42,7 +42,7 @@ class Menu extends Component {
     if(this.props.user.length >0){
       currentUserLink =   <div onClick={()=>this.changeMenuDisplay()}>
                             <Link to={'/usermovies'}>
-                              <h4 id="menu-user">{this.props.user + "'s Movies"}</h4>
+                              <h4 id='menu-user'>{this.props.user + "'s Movies"}</h4>
                             </Link>
                           </div>
     }
@@ -51,7 +51,7 @@ class Menu extends Component {
     if(this.props.user.length === 0){
       signInOutLink= <div onClick={()=>this.changeMenuDisplay()}>
                         <Link to={'/signin'}>
-                          <h4 className="menu-links">Sign In</h4>
+                          <h4 className='menu-links'>Sign In</h4>
                         </Link>
                       </div>
     }else{
@@ -61,7 +61,7 @@ class Menu extends Component {
                               this.handleSignOut();
                               this.changeMenuDisplay();}}>
                           <h4
-                            className="menu-links">Sign Out</h4>
+                            className='menu-links'>Sign Out</h4>
                           </button>
     }
 
@@ -69,35 +69,35 @@ class Menu extends Component {
       <div>
 
         <button
-          id="menu-button"
-          className="button-nostyle"
+          id='menu-button'
+          className='button-nostyle'
           style={{display:this.state.displayButton}}
           onClick={()=>this.changeMenuDisplay()}></button>
 
         <div
-          id="open-menu"
+          id='open-menu'
           style={{display:this.state.displayMenu}}>
 
           <button
-            id="close-menu-button"
-            className="button-nostyle"
+            id='close-menu-button'
+            className='button-nostyle'
             onClick={()=>this.changeMenuDisplay()}>X</button>
 
 
-            <div id="menu-links">
+            <div id='menu-links'>
 
             {currentUserLink}
             {signInOutLink}
 
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/recommend'}>
-                <h4 className="menu-links">Recommend</h4>
+                <h4 className='menu-links'>Recommend</h4>
               </Link>
             </div>
 
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/usersuggestions'}>
-                <h4 className="menu-links">User Suggestions</h4>
+                <h4 className='menu-links'>User Suggestions</h4>
               </Link>
             </div>
 

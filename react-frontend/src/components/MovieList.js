@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 class MovieList extends Component {
 
@@ -7,7 +7,7 @@ class MovieList extends Component {
   render() {
 
     let selectedMovieList = []
-    if(this.props.upperGenre==="All"){
+    if(this.props.upperGenre==='All'){
       selectedMovieList = this.props.movies
                     .filter(movie=>movie.status==='approved')
     }else{
@@ -16,7 +16,7 @@ class MovieList extends Component {
                     .filter(movie => movie.tags.includes(this.props.upperGenre))
     }
 
-    if(this.props.sortBy==="year"){
+    if(this.props.sortBy==='year'){
       selectedMovieList.sort(this.props.compareYear);
     }else{
       selectedMovieList.sort(this.props.compareSlug);
@@ -24,7 +24,7 @@ class MovieList extends Component {
 
     return (
 
-      <div className="list-items-wrapper">
+      <div className='list-items-wrapper'>
       {selectedMovieList.map(film =>
         <div key={film.slug}>
           <Link to={'/' +this.props.genreslug +'/' + film.slug}>

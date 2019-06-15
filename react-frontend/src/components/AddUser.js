@@ -1,37 +1,36 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import './UserForm.css';
 class AddUser extends Component {
   state={
-    name:'',
-    password:'',
-    email:'',
-    Message:''
+    Name:"",
+    Password:"",
+    Email:"",
+    Message:""
   }
   handleNameChange = (event) =>{
-    this.setState({name:event.target.value});
+    this.setState({Name:event.target.value});
   }
   handlePasswordChange = (event) =>{
-    this.setState({password:event.target.value})
+    this.setState({Password:event.target.value})
   }
   handleEmailChange = (event) =>{
-    this.setState({email:event.target.value})
+    this.setState({Email:event.target.value})
   }
 
   handleAddUserSubmit = (event) =>{
     event.preventDefault();
-    //validate email, if it's good then send
     fetch('/api/adduser', {
      method: 'POST',
      headers: {'Content-Type':'application/json'},
-     body: JSON.stringify({userName: this.state.name, password:this.state.password})
+     body: JSON.stringify({userName: this.state.Name, password:this.state.Password})
     })
     .then(res=>{
       if(!res.ok){
-        this.setState({Message:"Username not available", name:'', password:''})
+        this.setState({Message:"Username not available", Name:"", Password:""})
       }else{
-        this.setState({Message:"Thank you for signing up.", name:'', password:''})
+        this.setState({Message:"Thank you for signing up.", Name:"", Password:""})
 
       }
     })
@@ -42,17 +41,17 @@ class AddUser extends Component {
     return (
       <div>
         <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div className="user-pages-body-wrapper">
+        <div className='user-pages-body-wrapper'>
           <h1>Create Account</h1>
           <form onSubmit={this.handleAddUserSubmit}>
 
             <label>
               Name:
               <input
-                 type="text"
-                 value={this.state.name}
+                 type='text'
+                 value={this.state.Name}
                  onChange={this.handleNameChange}
               />
             </label>
@@ -60,8 +59,8 @@ class AddUser extends Component {
             <label>
               Password:
               <input
-                 type="text"
-                 value={this.state.password}
+                 type='text'
+                 value={this.state.Password}
                  onChange={this.handlePasswordChange}
               />
             </label>
@@ -69,14 +68,14 @@ class AddUser extends Component {
             <label>
               Email:
               <input
-                 type="text"
-                 value={this.state.email}
+                 type='text'
+                 value={this.state.Email}
                  onChange={this.handleEmailChange}
               />
             </label>
             <input
-                 type="submit"
-                 value="Submit" />
+                 type='submit'
+                 value='Submit' />
             </form>
 
 

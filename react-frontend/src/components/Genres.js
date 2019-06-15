@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 
 class Genres extends Component {
@@ -30,7 +30,7 @@ class Genres extends Component {
           onClick={()=>{
             this.props.subtractGenreIndex();}}>
         <button
-          className="button-nostyle"
+          className='button-nostyle'
           id='back-genres-button'>
         </button>
         </Link>
@@ -43,19 +43,19 @@ class Genres extends Component {
           onClick={()=>{
             this.props.addGenreIndex();}}>
         <button
-          className="button-nostyle"
+          className='button-nostyle'
           id='forward-genres-button'>
         </button>
         </Link>
     }
 
     return (
-      <div id="main-genres-wrapper">
+      <div id='main-genres-wrapper'>
 
         <div
-          id="genre-and-button" >
+          id='genre-and-button'>
           <h2
-            className="selected-genre"
+            className='selected-genre'
             id={this.props.upperGenre.slice(0,3)}>
               {this.props.upperGenre}</h2>
             {goDownButton}
@@ -63,7 +63,7 @@ class Genres extends Component {
         </div>{/* id= genre-and-button */}
 
         {/* sort-by-wrapper  */}
-        <div id="sort-by-wrapper">
+        <div id='sort-by-wrapper'>
           <p className='sort-selector'>sort by </p>
 
           <button
@@ -71,13 +71,13 @@ class Genres extends Component {
               color: this.props.sortBy==='name' ? '#00FFFF': 'white'
             }}
             className='sort-selector button-nostyle'
-            onClick = {()=>this.props.setSort("name")}>TITLE</button>
+            onClick = {()=>this.props.setSort('name')}>TITLE</button>
           <button
             style = {{
               color: this.props.sortBy==='year' ? '#00FFFF': 'white'
             }}
             className='sort-selector button-nostyle'
-            onClick = {()=>this.props.setSort("year")}>YEAR</button>
+            onClick = {()=>this.props.setSort('year')}>YEAR</button>
         </div>{/* END -- sort-by wrapper */}
 
       </div>//END -- Big main container

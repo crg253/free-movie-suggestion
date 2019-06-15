@@ -7,9 +7,9 @@ class Recommend extends Component {
 
   //UserMovies should be in global state
   state={
-    SearchValue:'',
+    SearchValue:"",
     SearchResultOptions:[],
-    MovieMessage:'',
+    MovieMessage:"",
   }
 
   handleSearchValueChange = (event) =>{
@@ -17,9 +17,9 @@ class Recommend extends Component {
   }
 
   handleSearchSubmit = (event) =>{
-    this.setState({MovieMessage:''})
+    this.setState({MovieMessage:""})
     event.preventDefault();
-    fetch('http://www.omdbapi.com/?s='+this.state.SearchValue+'&apikey=e0bc91cd')
+    fetch("http://www.omdbapi.com/?s="+this.state.SearchValue+"&apikey=e0bc91cd")
     .then(res=>res.json())
     .then(res=>{
         if(res.Search !== undefined){
@@ -31,7 +31,7 @@ class Recommend extends Component {
     fetch('/api/suggestmovie',{
       method:'POST',
       headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Authorization':'Bearer ' +localStorage.getItem('token'),
          'Content-Type':'application/json'
        },
       body: JSON.stringify({title: title, year:year})
@@ -39,7 +39,7 @@ class Recommend extends Component {
     .then(res=>{
       if (res.status===500) {
         this.setState({
-          SearchValue:'',SearchResultOptions:[], MovieMessage:"Movie already selected."})
+          SearchValue:"",SearchResultOptions:[], MovieMessage:"Movie already selected."})
     }
     else if (res.status===401) {
       res.json()
@@ -57,7 +57,7 @@ class Recommend extends Component {
           this.props.setUser(res.user)
           this.props.setMovies(res.movies)
           this.setState({
-            SearchValue:'',SearchResultOptions:[], MovieMessage:"Thank you for suggesting."})
+            SearchValue:"",SearchResultOptions:[], MovieMessage:"Thank you for suggesting."})
        })
      }
     })
@@ -68,7 +68,7 @@ class Recommend extends Component {
       <div className='user-pages-body-wrapper'>
       {this.props.redirect}
         <Link to={'/'}>
-          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
+          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
         </Link>
 
         <h1>Hi {this.props.user} !</h1>
@@ -77,24 +77,24 @@ class Recommend extends Component {
             Search the OMDb to find a movie to suggest.
             <input
                   style={{
-                    marginTop:"20px"
+                    marginTop:'20px'
                   }}
-                  type="text"
+                  type='text'
                   value={this.state.SearchValue}
                   onChange={this.handleSearchValueChange}/>
           </label>
           <input
                 style={{
-                  marginTop:"20px"
+                  marginTop:'20px'
                 }}
-                type="submit"
-                value="Search"/>
+                type='submit'
+                value='Search'/>
         </form>
 
         <h4>{this.state.MovieMessage}</h4>
 
         {this.state.SearchResultOptions.map(mov=>(
-          <div key={"searchresult" + mov.Title+mov.Year}>
+          <div key={'searchresult' + mov.Title+mov.Year}>
           <p>{mov.Title} {mov.Year}</p>
           <button onClick={()=>this.handleSuggestMovie(mov.Title, mov.Year)}>Add</button>
           </div>
