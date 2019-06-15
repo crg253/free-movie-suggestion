@@ -5,36 +5,6 @@ import { Redirect } from "react-router-dom";
 class Trailer extends Component {
 
 
-  handleSaveUnsave = (saveunsave, genre, slug) =>{
-    fetch('/api/'.concat(saveunsave),{
-      method:'POST',
-      headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
-         'Content-Type':'application/json'
-       },
-      body: JSON.stringify({slug: slug})
-    })
-    .then(res=>{
-      if (res.status===401) {
-        res.json()
-         .then(res=>{
-           this.props.setUser(res.user)
-           this.props.setMovies(res.movies)
-           this.props.setRedirectBack('')
-           this.props.setRedirectBackGenre(genre)
-           this.props.setRedirectBackSlug(slug)
-           this.props.setRedirect(<Redirect to='/signin'/>)
-          })
-      }else if (res.status===200){
-        res.json()
-        .then(res=>{
-          this.props.setUser(res.user)
-          this.props.setMovies(res.movies)
-         })
-      }
-    })
-  }
-
   getSaveButton = (genreSlug, movieSlug) =>{
     let buttonComponent = ''
     let allMovies = [...this.props.movies]
@@ -46,14 +16,14 @@ class Trailer extends Component {
       buttonComponent=
         <button
           className="button-nostyle save-unsave-button"
-          onClick = {()=>this.handleSaveUnsave('unsavemovie', genreSlug, movieSlug)}
+          onClick = {()=>this.props.handleSaveUnsave('unsavemovie',movieSlug, genreSlug, movieSlug)}
         >
               Unsave</button>
     }else if(selectedMovie.saved ===false){
       buttonComponent=
         <button
           className="button-nostyle save-unsave-button"
-          onClick = {()=>this.handleSaveUnsave('savemovie', genreSlug, movieSlug)}
+          onClick = {()=>this.props.handleSaveUnsave('savemovie',movieSlug, genreSlug, movieSlug)}
           >
               Save</button>
     }

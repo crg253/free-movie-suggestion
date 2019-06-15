@@ -36,67 +36,22 @@ class UserMovies extends Component {
     })
   }
 
-  handleUnsave = (slug) =>{
-    fetch('/api/unsavemovie',{
-      method:'POST',
-      headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
-         'Content-Type':'application/json'
-       },
-      body: JSON.stringify({slug: slug})
-    })
-    .then(res=>{
-      if (res.status===401) {
-        res.json()
-         .then(res=>{
-           this.props.setUser(res.user)
-           this.props.setMovies(res.movies)
-           this.props.setRedirectBack('')
-           this.props.setRedirectBackSlug('usermovies')
-           this.props.setRedirect(<Redirect to='/signin'/>)
-        })
-      }
-      else if (res.status===200){
-        res.json()
-          .then(res=>{
-            this.props.setUser(res.user)
-            this.props.setMovies(res.movies)
-         })
-       }
-    })
-  }
-
 
   render() {
 
-    function dropThe(slug) {
-      if (slug.slice(0,3)==="the"){
-        return slug.slice(3,)
-      }else{
-        return slug
-      }
-    }
-
-    function compareSlug(a,b) {
-    if (dropThe(a.slug) < dropThe(b.slug))
-      return -1;
-    if (dropThe(a.slug) > dropThe(b.slug))
-      return 1;
-    return 0;
-    }
 
     let userSaves = this.props.movies.filter(movie=>movie.saved===true)
-    userSaves.sort(compareSlug)
+    userSaves.sort(this.props.compareSlug)
 
     let userSuggestionsTrailers = this.props.movies
                     .filter(movie=>movie.username===this.props.user)
                     .filter(film=>film.video != null)
-    userSuggestionsTrailers.sort(compareSlug)
+    userSuggestionsTrailers.sort(this.props.compareSlug)
 
     let userSuggestionsNoTrailers = this.props.movies
                     .filter(movie=>movie.username===this.props.user)
                     .filter(film=>film.video === null)
-    userSuggestionsNoTrailers.sort(compareSlug)
+    userSuggestionsNoTrailers.sort(this.props.compareSlug)
 
     return (
       <div >
@@ -122,7 +77,7 @@ class UserMovies extends Component {
                 </div>
                 <div className='save-unsave-or-unsuggest-button-wrapper'>
                   <button
-                    onClick={()=>this.handleUnsave(film.slug)}
+                    onClick={()=>this.props.handleSaveUnsave('unsavemovie',film.slug,'','usermovies')}
                   >
                   unsave
                   </button>

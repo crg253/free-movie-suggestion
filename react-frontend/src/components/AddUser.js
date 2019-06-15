@@ -6,6 +6,7 @@ class AddUser extends Component {
   state={
     name:'',
     password:'',
+    email:'',
     Message:''
   }
   handleNameChange = (event) =>{
@@ -14,22 +15,26 @@ class AddUser extends Component {
   handlePasswordChange = (event) =>{
     this.setState({password:event.target.value})
   }
+  handleEmailChange = (event) =>{
+    this.setState({email:event.target.value})
+  }
 
   handleAddUserSubmit = (event) =>{
-  event.preventDefault();
-  fetch('/api/adduser', {
-   method: 'POST',
-   headers: {'Content-Type':'application/json'},
-   body: JSON.stringify({userName: this.state.name, password:this.state.password})
-  })
-  .then(res=>{
-    if(!res.ok){
-      this.setState({Message:"Username not available", name:'', password:''})
-    }else{
-      this.setState({Message:"Thank you for signing up.", name:'', password:''})
+    event.preventDefault();
+    //validate email, if it's good then send
+    fetch('/api/adduser', {
+     method: 'POST',
+     headers: {'Content-Type':'application/json'},
+     body: JSON.stringify({userName: this.state.name, password:this.state.password})
+    })
+    .then(res=>{
+      if(!res.ok){
+        this.setState({Message:"Username not available", name:'', password:''})
+      }else{
+        this.setState({Message:"Thank you for signing up.", name:'', password:''})
 
-    }
-  })
+      }
+    })
 }
 
 
@@ -42,24 +47,39 @@ class AddUser extends Component {
         <div className="user-pages-body-wrapper">
           <h1>Create Account</h1>
           <form onSubmit={this.handleAddUserSubmit}>
+
             <label>
               Name:
               <input
-                     type="text"
-                     value={this.state.name}
-                     onChange={this.handleNameChange} />
+                 type="text"
+                 value={this.state.name}
+                 onChange={this.handleNameChange}
+              />
             </label>
+
             <label>
               Password:
               <input
-                     type="text"
-                     value={this.state.password}
-                     onChange={this.handlePasswordChange}/>
+                 type="text"
+                 value={this.state.password}
+                 onChange={this.handlePasswordChange}
+              />
+            </label>
+
+            <label>
+              Email:
+              <input
+                 type="text"
+                 value={this.state.email}
+                 onChange={this.handleEmailChange}
+              />
             </label>
             <input
-                   type="submit"
-                   value="Submit" />
-          </form>
+                 type="submit"
+                 value="Submit" />
+            </form>
+
+
           <h4>{this.state.Message}</h4>
           <Link to={'/signin'}><h3>sign in</h3></Link>
         </div>{/* class="user-pages-body-wrapper"*/}

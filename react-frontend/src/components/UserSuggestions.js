@@ -7,81 +7,40 @@ import './UserMovies.css';
 class UserSuggestions extends Component {
 
 
-  handleSaveUnsaveUserMov = (saveunsave, slug) =>{
-    fetch('/api/'.concat(saveunsave),{
-      method:'POST',
-      headers:{
-         'Authorization':"Bearer " +localStorage.getItem('token'),
-         'Content-Type':'application/json'
-       },
-      body: JSON.stringify({slug: slug})
-    })
-    .then(res=>{
-      if (res.status===401) {
-        res.json()
-         .then(res=>{
-           this.props.setUser(res.user)
-           this.props.setMovies(res.movies)
-           this.props.setRedirectBack('')
-           this.props.setRedirectBackSlug('usersuggestions')
-           this.props.setRedirect(<Redirect to='/signin'/>)
-          })
-      }else if (res.status===200){
-        res.json()
-        .then(res=>{
-          this.props.setUser(res.user)
-          this.props.setMovies(res.movies)
-         })
-      }
-    })
-  }
-
   getUserMovSaveButton = (movieSlug) =>{
     let buttonComponent = ''
     let selectedMovie = this.props.movies.filter(movie=>movie.slug===movieSlug)[0]
     if(selectedMovie.saved===true){
       buttonComponent=
         <button
-          onClick = {()=>this.handleSaveUnsaveUserMov('unsavemovie', movieSlug)}
+          onClick = {()=>this.props.handleSaveUnsave('unsavemovie', movieSlug, '','usersuggestions')}
         >
               Unsave</button>
     }else if(selectedMovie.saved ===false){
       buttonComponent=
         <button
-          onClick = {()=>this.handleSaveUnsaveUserMov('savemovie', movieSlug)}
+          onClick = {()=>this.props.handleSaveUnsave('savemovie', movieSlug, '', 'usersuggestions')}
           >
               Save</button>
     }
     return buttonComponent
   }
 
+
   render() {
 
-    function dropThe(slug) {
-      if (slug.slice(0,3)==="the"){
-        return slug.slice(3,)
-      }else{
-        return slug
-      }
-    }
-
-    function compareSlug(a,b) {
-    if (dropThe(a.slug) < dropThe(b.slug))
-      return -1;
-    if (dropThe(a.slug) > dropThe(b.slug))
-      return 1;
-    return 0;
-    }
 
     let allUserSuggestionsTrailers = this.props.movies
-                    .filter(movie=>movie.username!=='crg253')
-                    .filter(film=>film.video != null)
-    allUserSuggestionsTrailers.sort(compareSlug)
+                                      .filter(movie=>movie.username!=='crg253')
+                                      .filter(film=>film.video != null)
+
+    allUserSuggestionsTrailers.sort(this.props.compareSlug)
 
     let allUserSuggestionsNoTrailers = this.props.movies
-                    .filter(movie=>movie.username!=='crg253')
-                    .filter(film=>film.video === null)
-    allUserSuggestionsNoTrailers.sort(compareSlug)
+                                      .filter(movie=>movie.username!=='crg253')
+                                      .filter(film=>film.video === null)
+                                      
+    allUserSuggestionsNoTrailers.sort(this.props.compareSlug)
 
 
 

@@ -64,6 +64,64 @@ class App extends Component {
     this.setState({IndexDown:down,GenreIndex:index,IndexUp:up,})
   }
 
+  dropThe = (slug) => {
+    if (slug.slice(0,3)==="the"){
+      return slug.slice(3,)
+    }else{
+      return slug
+    }
+  }
+
+  compareSlug = (a,b) => {
+  if (this.dropThe(a.slug) < this.dropThe(b.slug))
+    return -1;
+  if (this.dropThe(a.slug) > this.dropThe(b.slug))
+    return 1;
+  return 0;
+  }
+
+  compareYear = (a,b) => {
+  if (a.year < b.year)
+    return -1;
+  if (a.year > b.year)
+    return 1;
+  return 0;
+  }
+
+  handleSaveUnsave = (saveunsave, slug, redirectBackGenre, redirectBackSlug) =>{
+    fetch('/api/'.concat(saveunsave),{
+      method:'POST',
+      headers:{
+         'Authorization':"Bearer " +localStorage.getItem('token'),
+         'Content-Type':'application/json'
+       },
+      body: JSON.stringify({slug: slug})
+    })
+    .then(res=>{
+      if (res.status===401) {
+        res.json()
+         .then(res=>{
+           this.setState({
+             User:res.user,
+             Movies:res.movies,
+             RedirectBack:'',
+             RedirectBackGenre:redirectBackGenre,
+             RedirectBackSlug:redirectBackSlug,
+             Redirect:<Redirect to='/signin'/>
+           })
+        })
+      }else if (res.status===200){
+        res.json()
+        .then(res=>{
+          this.setState({
+            User:res.user,
+            Movies:res.movies
+          })
+        })
+      }
+    })
+  }
+
   changeGenreCase =(toUpperOrLower, genreName)=>{
     if(toUpperOrLower === 'toLower'){
       if(genreName === 'Mystery & Suspense'){
@@ -182,7 +240,7 @@ class App extends Component {
                                 user={this.state.User}
                                 setUser={this.setUser}
                                 setMovies={this.setMovies}/>}/>
-                                
+
           <Switch>
           <Route
             path='/usermovies'
@@ -190,24 +248,20 @@ class App extends Component {
                               {...props}
                               user={this.state.User}
                               movies = {this.state.Movies}
-                              setUser={this.setUser}
-                              setMovies={this.setMovies}
-                              setRedirect={this.setRedirect}
+                              handleSaveUnsave={this.handleSaveUnsave}
                               redirect={this.state.Redirect}
-                              setRedirectBack={this.setRedirectBack}
-                              setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
+                              compareSlug={this.compareSlug}
+                    />}/>
 
             <Route
               path='/usersuggestions'
               render={(props)=><UserSuggestions
                                 {...props}
-                                setUser={this.setUser}
-                                setMovies={this.setMovies}
-                                setRedirectBack={this.setRedirectBack}
-                                setRedirectBackSlug={this.setRedirectBackSlug}
-                                setRedirect={this.setRedirect}
                                 redirect={this.state.Redirect}
-                                movies = {this.state.Movies}/>}/>
+                                movies = {this.state.Movies}
+                                handleSaveUnsave={this.handleSaveUnsave}
+                                compareSlug={this.compareSlug}
+                    />}/>
 
             <Route
               path='/recommend'
@@ -245,6 +299,7 @@ class App extends Component {
               render={(props)=> <TrailerPage
                                     {...props}
                                     movies = {this.state.Movies}
+                                    changeGenreCase={this.changeGenreCase}
                                     getRandomMovies={this.getRandomMovies}
 
                                     sortBy={this.state.SortBy}
@@ -257,15 +312,12 @@ class App extends Component {
                                     addGenreIndex={this.addGenreIndex}
                                     setIndexes={this.setIndexes}
 
-                                    changeGenreCase={this.changeGenreCase}
-                                    setUser={this.setUser}
-                                    setMovies={this.setMovies}
+                                    redirect={this.state.Redirect}
+                                    handleSaveUnsave={this.handleSaveUnsave}
 
-                                    setRedirectBack={this.setRedirectBack}
-                                    setRedirectBackSlug={this.setRedirectBackSlug}
-                                    setRedirectBackGenre={this.setRedirectBackGenre}
-                                    setRedirect={this.setRedirect}
-                                    redirect={this.state.Redirect}/>}/>
+                                    compareSlug = {this.compareSlug}
+                                    compareYear = {this.compareYear}
+                      />}/>
 
             <Route
               path='/'

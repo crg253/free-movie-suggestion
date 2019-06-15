@@ -8,41 +8,18 @@ class MovieList extends Component {
 
     let selectedMovieList = []
     if(this.props.upperGenre==="All"){
-      selectedMovieList = this.props.movies.filter(movie=>movie.status==='approved')
+      selectedMovieList = this.props.movies
+                    .filter(movie=>movie.status==='approved')
     }else{
       selectedMovieList = this.props.movies
-      .filter(movie=>movie.status==='approved')
-      .filter(movie => movie.tags.includes(this.props.upperGenre))
-    }
-
-    function dropThe(slug) {
-      if (slug.slice(0,3)==="the"){
-        return slug.slice(3,)
-      }else{
-        return slug
-      }
-    }
-
-    function compareYear(a,b) {
-    if (a.year < b.year)
-      return -1;
-    if (a.year > b.year)
-      return 1;
-    return 0;
-    }
-
-    function compareSlug(a,b) {
-    if (dropThe(a.slug) < dropThe(b.slug))
-      return -1;
-    if (dropThe(a.slug) > dropThe(b.slug))
-      return 1;
-    return 0;
+                    .filter(movie=>movie.status==='approved')
+                    .filter(movie => movie.tags.includes(this.props.upperGenre))
     }
 
     if(this.props.sortBy==="year"){
-      selectedMovieList.sort(compareYear);
+      selectedMovieList.sort(this.props.compareYear);
     }else{
-      selectedMovieList.sort(compareSlug);
+      selectedMovieList.sort(this.props.compareSlug);
     }
 
     return (

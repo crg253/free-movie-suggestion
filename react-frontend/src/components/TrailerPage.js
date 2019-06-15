@@ -25,13 +25,8 @@ class TrailerPage extends Component {
               movieslug={this.props.match.params.movieslug}
               genreslug={genreslug}
               movies={this.props.movies}
-              setUser={this.props.setUser}
-              setMovies={this.props.setMovies}
-              redirect = {this.props.redirect}
-              setRedirect={this.props.setRedirect}
-              setRedirectBack={this.props.setRedirectBack}
-              setRedirectBackSlug={this.props.setRedirectBackSlug}
-              setRedirectBackGenre={this.props.setRedirectBackGenre}
+              handleSaveUnsave={this.props.handleSaveUnsave}
+              redirect={this.props.redirect}
           />
 
           <div id="genres-and-list">
@@ -53,10 +48,13 @@ class TrailerPage extends Component {
                   genreslug= {genreslug}
                   upperGenre={upperGenre}
                   sortBy={this.props.sortBy}
+                  compareSlug = {this.props.compareSlug}
+                  compareYear = {this.props.compareYear}
+
             />
           </div>
         </div>
-        <div class='footer'></div>
+        <div className='footer'></div>
       </div>
     );
   }
