@@ -54,7 +54,7 @@ class TrailerPage extends Component {
             />
           </div>
         </div>
-        <div className='footer'></div>
+        <div id='trailer-page-footer'></div>
       </div>
     );
   }

@@ -1,0 +1,27 @@
+#about-body{
+  text-align: center;
+  margin-top:10vh;
+}
+#about-paragraph{
+  margin: 0 15vw 0 15vw;
+}
+
+/* PORTRAIT */
+@media only screen and (orientation:portrait){
+  #about-body{
+    margin-top:0;
+  }
+  #about-footer{
+    height:7vh;
+  }
+}
+
+/* SMALL LANDSCAPE */
+@media only screen and (max-width: 900px) and (orientation:landscape){
+  #about-body{
+    margin-top:0;
+  }
+  #about-footer{
+    height:15vh;
+  }
+}

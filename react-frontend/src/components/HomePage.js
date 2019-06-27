@@ -32,6 +32,10 @@ class HomePage extends Component {
   updateInstructions = () =>{
     this.setState({Instructions:"*Click on Screen for Random Movie"})
   }
+
+  componentDidMount(){
+    this.props.setRedirect('')
+  }
   componentDidUpdate() {
     window.scrollTo(0, 0);
   }
@@ -130,7 +134,7 @@ class HomePage extends Component {
       </svg>
 
       <p id='instructions'>{this.state.Instructions}</p>
-
+      <div id='home-footer'></div>
       </div>
 
 

@@ -8,3 +8,11 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JSONIFY_PRETTYPRINT_REGULAR = True
+
+    MAIL_SERVER ='mail.privateemail.com'
+    MAIL_PORT = 465
+    MAIL_USERNAME = 'admin@freemoviesuggestion.com'
+    #Remove Password
+    MAIL_PASSWORD = ''
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True

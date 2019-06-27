@@ -2,21 +2,36 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import './UserForm.css';
-class AddUser extends Component {
+
+class CreateAccount extends Component {
   state={
     Name:"",
     Password:"",
     Email:"",
-    Message:""
+    ErrorMessage:"",
+    Message:"",
   }
+
   handleNameChange = (event) =>{
-    this.setState({Name:event.target.value});
+    this.setState({
+      Name:event.target.value,
+      ErrorMessage:"",
+      Message:"",
+    });
   }
   handlePasswordChange = (event) =>{
-    this.setState({Password:event.target.value})
+    this.setState({
+      Password:event.target.value,
+      ErrorMessage:"",
+      Message:"",
+    })
   }
   handleEmailChange = (event) =>{
-    this.setState({Email:event.target.value})
+    this.setState({
+      Email:event.target.value,
+      ErrorMessage:"",
+      Message:"",
+    })
   }
 
   handleAddUserSubmit = (event) =>{
@@ -31,14 +46,21 @@ class AddUser extends Component {
     })
     .then(res=>{
       if(!res.ok){
-        this.setState({Message:"Username not available", Name:"", Password:"",Email:""})
+        this.setState({
+          ErrorMessage:<p style={{fontSize:'18px',color:'red'}}>Sorry, username not available.</p>,
+          Name:"",
+          Password:"",
+          Email:""})
       }else{
-        this.setState({Message:"Thank you for signing up.", Name:"", Password:"",Email:""})
+        this.setState({
+          Message:<p style={{fontSize:'18px',color:'white'}}>Thank you for creating an account.</p>,
+          Name:"",
+          Password:"",
+          Email:""})
 
       }
     })
 }
-
 
   render() {
     return (
@@ -48,46 +70,52 @@ class AddUser extends Component {
         </Link>
         <div className='user-pages-body-wrapper'>
           <h1>Create Account</h1>
-          <form onSubmit={this.handleAddUserSubmit}>
 
-            <label>
-              Name:
+          <form
+            onSubmit={this.handleAddUserSubmit}>
+
               <input
                  type='text'
+                 placeholder='Username'
                  value={this.state.Name}
                  onChange={this.handleNameChange}
               />
-            </label>
 
-            <label>
-              Password:
               <input
                  type='text'
+                 placeholder='Password'
                  value={this.state.Password}
                  onChange={this.handlePasswordChange}
               />
-            </label>
 
-            <label>
-              Email:
               <input
                  type='text'
+                 placeholder='Email'
                  value={this.state.Email}
                  onChange={this.handleEmailChange}
               />
-            </label>
             <input
+
                  type='submit'
-                 value='Submit' />
+                 value='Submit'
+                 className='form-submit-button'
+              />
+
+             {this.state.ErrorMessage}
+             {this.state.Message}
+
             </form>
 
-
-          <h4>{this.state.Message}</h4>
-          <Link to={'/signin'}><h3>sign in</h3></Link>
+          <Link to={'/signin'}>
+            <h1>/sign
+              <span style={{color:'#a9a9a9'}}>in</span>
+            </h1>
+          </Link>
         </div>{/* class="user-pages-body-wrapper"*/}
+        <div className='form-footer'></div>
       </div>
     );
   }
 }
 
-export default AddUser;
+export default CreateAccount;

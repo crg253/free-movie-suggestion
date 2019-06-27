@@ -1,16 +1,14 @@
 a{
   outline: none;
 }
-
 svg{
   width:80%;
   margin:2% 10% 2% 10%;
 }
-
 #instructions{
   text-align: center;
+  font-size: 20px;
 }
-
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
@@ -19,6 +17,16 @@ svg{
     margin:2% 2.5% 2% 2.5%;
   }
 }
+
+/* SMALL LANDSCAPE */
+@media only screen and (max-width: 900px) and (orientation:landscape){
+  #home-footer{
+    height:15vh;
+  }
+}
+
+
+
 
 /* SVG CLASSES */
 .cls-1 {

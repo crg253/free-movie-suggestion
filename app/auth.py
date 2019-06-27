@@ -31,7 +31,7 @@ def verify_password(username, password):
 
 @basic_auth.error_handler
 def basic_auth_error():
-    return jsonify({'movies':get_non_usermovies(), 'user':'', 'token':''}), 401
+    return jsonify({'movies':get_non_usermovies(), 'user':'', 'email':'', 'token':''}), 401
 
 @token_auth.verify_token
 def verify_token(token):
@@ -40,4 +40,4 @@ def verify_token(token):
 
 @token_auth.error_handler
 def token_auth_error():
-    return jsonify({'movies':get_non_usermovies(), 'user':''}), 401
+    return jsonify({'movies':get_non_usermovies(), 'user':'', 'email':''}), 401

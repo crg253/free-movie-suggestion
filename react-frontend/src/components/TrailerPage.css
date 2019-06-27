@@ -2,11 +2,14 @@
 #trailer-and-genres-and-list{
   display:flex;
   justify-content: center;
-  margin: 7vh 3vw 7vh 5vw;
+  margin: 7vh 3vw 0 5vw;
 }
 #genres-and-list{
   margin:0 0 0 5vw;
   width: 42vw;
+}
+#trailer-page-footer{
+  height: 7vh;
 }
 
 /* Trailer.js */
@@ -185,6 +188,9 @@ iframe{
     margin-left: auto;
     margin-right: auto;
     width: 80vw;
+  }
+  #trailer-page-footer{
+    height: 15vh;
   }
   /* Trailer.js */
   iframe{

@@ -45,6 +45,7 @@ class Recommend extends Component {
       res.json()
        .then(res=>{
          this.props.setUser(res.user)
+         this.props.setEmail(res.email)
          this.props.setMovies(res.movies)
          this.props.setRedirectBack('')
          this.props.setRedirectBackSlug('recommend')
@@ -55,6 +56,7 @@ class Recommend extends Component {
       res.json()
         .then(res=>{
           this.props.setUser(res.user)
+          this.props.setEmail(res.email)
           this.props.setMovies(res.movies)
           this.setState({
             SearchValue:"",SearchResultOptions:[], MovieMessage:"Thank you for suggesting."})
@@ -65,28 +67,25 @@ class Recommend extends Component {
 
   render() {
     return (
-      <div className='user-pages-body-wrapper'>
+      <div>
       {this.props.redirect}
         <Link to={'/'}>
           <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <h1>Hi {this.props.user} !</h1>
+        <div className='user-pages-body-wrapper'>
+        <h1 >Hi {this.props.user} !</h1>
         <form onSubmit={this.handleSearchSubmit}>
           <label>
             Search the OMDb to find a movie to suggest.
             <input
-                  style={{
-                    marginTop:'20px'
-                  }}
+                  style={{marginTop:'20px'}}
                   type='text'
                   value={this.state.SearchValue}
                   onChange={this.handleSearchValueChange}/>
           </label>
           <input
-                style={{
-                  marginTop:'20px'
-                }}
+                className='form-submit-button'
                 type='submit'
                 value='Search'/>
         </form>
@@ -96,10 +95,13 @@ class Recommend extends Component {
         {this.state.SearchResultOptions.map(mov=>(
           <div key={'searchresult' + mov.Title+mov.Year}>
           <p>{mov.Title} {mov.Year}</p>
-          <button onClick={()=>this.handleSuggestMovie(mov.Title, mov.Year)}>Add</button>
+          <button onClick={()=>this.handleSuggestMovie(mov.Title, mov.Year)}>
+            Add
+          </button>
           </div>
         ))}
-
+        </div>
+        <div className='form-footer'></div>
       </div>
     );
   }

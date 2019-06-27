@@ -35,20 +35,20 @@
 #open-menu a{
   display: block;
 }
-#menu-links{
-  margin: 40px 20px 20px 20px;
+#menu-links-wrapper{
+  margin: 50px 30px 30px 30px;
 }
-#menu-user{
-  padding:2px 0 2px 0;
+.menu-links{
+  padding:0 0 7px 0;
   margin:0;
   font-size: 24px;
   color:white;
 }
-.menu-links{
+.dim-menu-links{
   padding:2px 0 2px 0;
   margin:0;
   font-size: 20px;
-  color:white;
+  color:grey;
 }
 .menu-genre-links{
   padding:2px 0 2px 0;

@@ -20,6 +20,7 @@ class UserMovies extends Component {
       res.json()
        .then(res=>{
          this.props.setUser(res.user)
+         this.props.setEmail(res.email)
          this.props.setMovies(res.movies)
          this.props.setRedirectBack('')
          this.props.setRedirectBackSlug('usermovies')
@@ -30,6 +31,7 @@ class UserMovies extends Component {
       res.json()
         .then(res=>{
           this.props.setUser(res.user)
+          this.props.setEmail(res.email)
           this.props.setMovies(res.movies)
        })
      }
@@ -131,8 +133,7 @@ class UserMovies extends Component {
             </div>
           )}
         </div>
-        <div className='footer'></div>
-
+        <div className='user-movies-footer'></div>
       </div>
     );
   }

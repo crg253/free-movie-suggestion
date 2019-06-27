@@ -44,6 +44,9 @@
 #tile-title-style{
   padding:3vw 0 0 0;
 }
+.user-movies-footer{
+  height: 7vh;
+}
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
@@ -102,5 +105,8 @@
     margin-right: auto;
     background-color:grey;
     text-align:center;
+  }
+  .user-movies-footer{
+    height: 15vh;
   }
 }

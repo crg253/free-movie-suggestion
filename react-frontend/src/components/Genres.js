@@ -18,6 +18,7 @@ class Genres extends Component {
   render() {
 
     let randomMovies = this.props.getRandomMovies()
+
     let goUpButton=''
     let goDownButton=''
     if(randomMovies['All']!==undefined){
@@ -68,13 +69,13 @@ class Genres extends Component {
 
           <button
             style = {{
-              color: this.props.sortBy==='name' ? '#00FFFF': 'white'
+              color: this.props.sortBy==='name' ? 'white': 'grey'
             }}
             className='sort-selector button-nostyle'
             onClick = {()=>this.props.setSort('name')}>TITLE</button>
           <button
             style = {{
-              color: this.props.sortBy==='year' ? '#00FFFF': 'white'
+              color: this.props.sortBy==='year' ? 'white': 'grey'
             }}
             className='sort-selector button-nostyle'
             onClick = {()=>this.props.setSort('year')}>YEAR</button>

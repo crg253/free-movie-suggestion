@@ -5,11 +5,16 @@ import './App.css';
 import HomePage from './components/HomePage';
 import TrailerPage from './components/TrailerPage';
 import SignIn from './components/SignIn';
-import AddUser from './components/AddUser';
+import CreateAccount from './components/CreateAccount';
 import Recommend from './components/Recommend';
 import Menu from './components/Menu';
 import UserMovies from './components/UserMovies';
-import UserSuggestions from './components/UserSuggestions'
+import UserSuggestions from './components/UserSuggestions';
+import ResetPassword from './components/ResetPassword';
+import EditAccount from './components/EditAccount';
+import DeleteAccount from './components/DeleteAccount';
+import About from './components/About';
+
 
 class App extends Component {
 
@@ -18,6 +23,7 @@ class App extends Component {
     SelectedGenre:'',
     SortBy:'name',
     User:'',
+    Email:'',
     Redirect:'',
     RedirectBackGenre:'',
     RedirectBackSlug:'',
@@ -59,6 +65,9 @@ class App extends Component {
   }
   setUser = (newUser) =>{
    this.setState({User:newUser});
+  }
+  setEmail = (newEmail) =>{
+    this.setState({Email:newEmail});
   }
   setIndexes = (down,index,up)=>{
     this.setState({IndexDown:down,GenreIndex:index,IndexUp:up,})
@@ -104,6 +113,7 @@ class App extends Component {
          .then(res=>{
            this.setState({
              User:res.user,
+             Email:res.email,
              Movies:res.movies,
              RedirectBack:'',
              RedirectBackGenre:redirectBackGenre,
@@ -116,6 +126,7 @@ class App extends Component {
         .then(res=>{
           this.setState({
             User:res.user,
+            Email:res.email,
             Movies:res.movies
           })
         })
@@ -213,7 +224,7 @@ class App extends Component {
     .then(res=>{
       res.json()
        .then(res=>{
-          this.setState({User:res.user, Movies:res.movies})
+          this.setState({User:res.user, Movies:res.movies, Email:res.email})
         })
     })
   }
@@ -234,7 +245,10 @@ class App extends Component {
                                 {...props}
                                 user={this.state.User}
                                 setUser={this.setUser}
-                                setMovies={this.setMovies}/>}/>
+                                setEmail={this.setEmail}
+                                setMovies={this.setMovies}
+                                setRedirect={this.setRedirect}
+                                />}/>
 
           <Switch>
           <Route
@@ -242,7 +256,10 @@ class App extends Component {
             render={(props)=><UserMovies
                               {...props}
                               user={this.state.User}
+                              setUser={this.setUser}
+                              setEmail={this.setEmail}
                               movies = {this.state.Movies}
+                              setMovies={this.setMovies}
                               handleSaveUnsave={this.handleSaveUnsave}
                               redirect={this.state.Redirect}
                               compareSlug={this.compareSlug}
@@ -264,6 +281,7 @@ class App extends Component {
                                 {...props}
                                 user={this.state.User}
                                 setUser={this.setUser}
+                                setEmail={this.setEmail}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
                                 redirect={this.state.Redirect}
@@ -274,8 +292,10 @@ class App extends Component {
               path='/signin'
               render = {(props)=><SignIn
                                     {...props}
+                                    user={this.state.User}
                                     redirectBack = {this.state.RedirectBack}
                                     setUser={this.setUser}
+                                    setEmail={this.setEmail}
                                     setMovies={this.setMovies}
                                     setRedirect={this.setRedirect}
                                     setRedirectBack={this.setRedirectBack}
@@ -285,8 +305,43 @@ class App extends Component {
                                     setRedirectBackGenre={this.setRedirectBackGenre}/>}/>
 
             <Route
-              path='/adduser'
-              render = {(props)=><AddUser
+              path='/editaccount'
+              render = {(props)=><EditAccount
+                                    {...props}
+                                    user={this.state.User}
+                                    email={this.state.Email}
+                                    setUser={this.setUser}
+                                    setEmail={this.setEmail}
+                                    setMovies={this.setMovies}
+                                    redirect={this.state.Redirect}
+                                    setRedirect={this.setRedirect}
+                                    setRedirectBack={this.setRedirectBack}
+                                    setRedirectBackSlug={this.setRedirectBackSlug}
+                                    />}/>
+
+            <Route
+              path='/deleteaccount'
+              render = {(props)=><DeleteAccount
+                                    {...props}
+                                    setUser={this.setUser}
+                                    setEmail={this.setEmail}
+                                    setMovies={this.setMovies}
+                                    redirect={this.state.Redirect}
+                                    />}/>
+
+            <Route
+              path='/createaccount'
+              render = {(props)=><CreateAccount
+                                    {...props}/>}/>
+
+            <Route
+              path='/resetpassword'
+              render = {(props)=><ResetPassword
+                                    {...props}/>}/>
+
+            <Route
+              path='/about'
+              render = {(props)=><About
                                     {...props}/>}/>
 
             <Route
@@ -320,7 +375,9 @@ class App extends Component {
                                   {...props}
                                   setSelectedGenre = {this.setSelectedGenre}
                                   selectedGenre= {this.state.SelectedGenre}
-                                  getRandomMovies={this.getRandomMovies}/>}/>
+                                  getRandomMovies={this.getRandomMovies}
+                                  setRedirect={this.setRedirect}
+                                  />}/>
           </Switch>
         </div>
       </BrowserRouter>

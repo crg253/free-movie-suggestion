@@ -90,7 +90,7 @@ class UserSuggestions extends Component {
               </div>
               )}
         </div>
-        <div className='footer'></div>
+        <div className='user-movies-footer'></div>
 
       </div>
     );

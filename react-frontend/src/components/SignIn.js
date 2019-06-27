@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
-
 import './UserForm.css';
+import './SignIn.css';
+
 class SignIn extends Component  {
   state={
     Name:"",
     Password:"",
-    Message:""
+    MessageLink:"",
+    ErrorMessage:"",
   }
+
   handleNameChange = (event) =>{
-    this.setState({Name:event.target.value});
+    this.setState({
+      Name:event.target.value,
+      MessageLink:"",
+      ErrorMessage:"",
+    });
   }
   handlePasswordChange = (event) =>{
-    this.setState({Password:event.target.value})
+    this.setState({
+      Password:event.target.value,
+      MessageLink:"",
+      ErrorMessage:"",
+
+    })
   }
 
   handleSignInSubmit = (event) =>{
@@ -28,19 +40,28 @@ class SignIn extends Component  {
     })
     .then(res=>{
       if (res.status===401) {
-        this.setState({Name:"", Password:""})
+        this.setState({
+          Name:"",
+          Password:"",
+          ErrorMessage:<p style={{fontSize:'18px',color:'red'}}>Incorrect username or password</p>
+        })
       }else if (res.status===200){
         res.json()
         .then(res=>{
           localStorage.setItem('token', res.token)
           this.props.setUser(res.user)
+          this.props.setEmail(res.email)
           this.props.setMovies(res.movies)
           if(this.props.redirectBackGenre.length >0){
             this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackGenre + '/'+ this.props.redirectBackSlug}/>)
           }else if(this.props.redirectBackSlug.length>0){
             this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackSlug}/>)
           }else{
-            this.setState({Name:"", Password:"",Message:"Now signed in as "+ res.user})
+            this.setState({
+              Name:"",
+              Password:"",
+              MessageLink:<p style={{fontSize:'18px',color:'white'}}>Now signed in as {res.user}</p>,
+            })
           }
          })
       }
@@ -58,7 +79,6 @@ class SignIn extends Component  {
   }
 
   render() {
-
     return (
         <div>
         {this.props.redirectBack}
@@ -69,29 +89,45 @@ class SignIn extends Component  {
           <h1>Sign In</h1>
             <form onSubmit={this.handleSignInSubmit}>
 
-              <label>
-                Name:
-                <input
-                        type='text'
-                        value={this.state.Name}
-                        onChange={this.handleNameChange} />
-              </label>
-
-              <label>
-                Password:
-                <input
-                       type='text'
-                       value={this.state.Password}
-                       onChange={this.handlePasswordChange}/>
-              </label>
+              <input
+                type='text'
+                placeholder='Name'
+                value={this.state.Name}
+                onChange={this.handleNameChange}
+              />
 
               <input
-                     type='submit'
-                     value='Submit' />
+                 type='text'
+                 placeholder='Password'
+                 value={this.state.Password}
+                 onChange={this.handlePasswordChange}
+               />
+
+              <input
+                 type='submit'
+                 value='Submit'
+                 className='form-submit-button'
+              />
+
+             {this.state.ErrorMessage}
+             {this.state.MessageLink}
             </form>
-            <h4>{this.state.Message}</h4>
-            <Link to={'/adduser'}><h3>create account</h3></Link>
+
+            <div id='forgotpassword-createaccount-links'>
+
+              <Link to={'/resetpassword'}>
+                <h1 id='resetpassword-link'>forgot password?</h1>
+              </Link>
+
+              <Link to={'/createaccount'}>
+                  <h1 id='createaccount-link'>
+                    /create
+                    <span id='account-word-style'>account</span>
+                  </h1>
+              </Link>
+            </div>
           </div>{/*class="user-pages-body-wrapper"*/}
+          <div className='form-footer'></div>
         </div>
     );
   }
