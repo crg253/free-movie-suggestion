@@ -1,5 +1,7 @@
-#python
+#flask
+
 venv
 __pycache__/
 *.pyc
 *.db
+config.py
