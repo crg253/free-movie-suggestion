@@ -126,7 +126,7 @@ class Menu extends Component {
 
             <div onClick={()=>this.changeMenuDisplay()}>
               <Link to={'/about'}>
-                <h2 className='menu-links'>About</h2>
+                <h2 className='menu-links'>About/Contact</h2>
               </Link>
             </div>
 

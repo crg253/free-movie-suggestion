@@ -163,3 +163,4 @@ def checktoken():
 @app.route('/<path:path>')
 def catch_all(path):
     return ('Change to render_template index')
+    #return render_template('index.html')

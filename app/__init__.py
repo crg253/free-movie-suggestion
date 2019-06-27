@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
 
+# app = Flask(__name__,
+#     static_folder='../react-frontend/build/static',
+#     template_folder="../react-frontend/build")
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)

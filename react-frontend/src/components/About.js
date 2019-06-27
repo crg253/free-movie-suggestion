@@ -30,7 +30,8 @@ class About extends Component {
           I would really appreciate any input that you are able to give...
           Ok well, thanks for checking it out.
           Have fun and please let me know if you have any problems with the site.</p>
-          <p>- Craig</p>
+          <h3>- Craig</h3>
+          <h3>crg253@protonmail.com</h3>
         </div>
         <div id='about-footer'></div>
 
