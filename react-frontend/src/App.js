@@ -248,22 +248,26 @@ class App extends Component {
                                 setEmail={this.setEmail}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
-                                />}/>
+                              />
+                    }
+          />
 
           <Switch>
-          <Route
-            path='/usermovies'
-            render={(props)=><UserMovies
-                              {...props}
-                              user={this.state.User}
-                              setUser={this.setUser}
-                              setEmail={this.setEmail}
-                              movies = {this.state.Movies}
-                              setMovies={this.setMovies}
-                              handleSaveUnsave={this.handleSaveUnsave}
-                              redirect={this.state.Redirect}
-                              compareSlug={this.compareSlug}
-                    />}/>
+            <Route
+              path='/usermovies'
+              render={(props)=><UserMovies
+                                {...props}
+                                user={this.state.User}
+                                setUser={this.setUser}
+                                setEmail={this.setEmail}
+                                movies = {this.state.Movies}
+                                setMovies={this.setMovies}
+                                handleSaveUnsave={this.handleSaveUnsave}
+                                redirect={this.state.Redirect}
+                                compareSlug={this.compareSlug}
+                               />
+                      }
+            />
 
             <Route
               path='/usersuggestions'
@@ -273,7 +277,9 @@ class App extends Component {
                                 movies = {this.state.Movies}
                                 handleSaveUnsave={this.handleSaveUnsave}
                                 compareSlug={this.compareSlug}
-                    />}/>
+                               />
+                      }
+            />
 
             <Route
               path='/recommend'
@@ -286,7 +292,10 @@ class App extends Component {
                                 setRedirect={this.setRedirect}
                                 redirect={this.state.Redirect}
                                 setRedirectBack={this.setRedirectBack}
-                                setRedirectBackSlug={this.setRedirectBackSlug}/>}/>
+                                setRedirectBackSlug={this.setRedirectBackSlug}
+                               />
+                     }
+            />
 
             <Route
               path='/signin'
@@ -302,7 +311,10 @@ class App extends Component {
                                     redirectBackSlug={this.state.RedirectBackSlug}
                                     setRedirectBackSlug={this.setRedirectBackSlug}
                                     redirectBackGenre={this.state.RedirectBackGenre}
-                                    setRedirectBackGenre={this.setRedirectBackGenre}/>}/>
+                                    setRedirectBackGenre={this.setRedirectBackGenre}
+                                   />
+                       }
+            />
 
             <Route
               path='/editaccount'
@@ -317,7 +329,9 @@ class App extends Component {
                                     setRedirect={this.setRedirect}
                                     setRedirectBack={this.setRedirectBack}
                                     setRedirectBackSlug={this.setRedirectBackSlug}
-                                    />}/>
+                                   />
+                       }
+            />
 
             <Route
               path='/deleteaccount'
@@ -327,22 +341,24 @@ class App extends Component {
                                     setEmail={this.setEmail}
                                     setMovies={this.setMovies}
                                     redirect={this.state.Redirect}
-                                    />}/>
+                                 />
+                       }
+            />
 
             <Route
               path='/createaccount'
-              render = {(props)=><CreateAccount
-                                    {...props}/>}/>
+              render = {(props)=><CreateAccount {...props}/>}
+            />
 
             <Route
               path='/resetpassword'
-              render = {(props)=><ResetPassword
-                                    {...props}/>}/>
+              render = {(props)=><ResetPassword {...props}/>}
+            />
 
             <Route
               path='/about'
-              render = {(props)=><About
-                                    {...props}/>}/>
+              render = {(props)=><About {...props}/>}
+            />
 
             <Route
               path='/:genreslug/:movieslug'
@@ -367,7 +383,9 @@ class App extends Component {
 
                                     compareSlug = {this.compareSlug}
                                     compareYear = {this.compareYear}
-                      />}/>
+                                />
+                    }
+            />
 
             <Route
               path='/'
@@ -377,7 +395,9 @@ class App extends Component {
                                   selectedGenre= {this.state.SelectedGenre}
                                   getRandomMovies={this.getRandomMovies}
                                   setRedirect={this.setRedirect}
-                                  />}/>
+                                />
+                     }
+            />
           </Switch>
         </div>
       </BrowserRouter>

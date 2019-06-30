@@ -1,8 +1,8 @@
-"""First migration.
+"""first migration
 
-Revision ID: e080dd1f66e6
+Revision ID: de93225155d0
 Revises: 
-Create Date: 2019-06-26 17:40:20.474959
+Create Date: 2019-06-27 00:11:09.677968
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e080dd1f66e6'
+revision = 'de93225155d0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -43,8 +43,8 @@ def upgrade():
     sa.Column('year', sa.Integer(), nullable=True),
     sa.Column('video_link', sa.String(length=1000), nullable=True),
     sa.Column('status', sa.String(length=20), nullable=True),
-    sa.Column('username', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['username'], ['user.username'], ),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.user_id'], ),
     sa.PrimaryKeyConstraint('movie_id'),
     sa.UniqueConstraint('uniquename')
     )

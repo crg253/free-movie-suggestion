@@ -22,7 +22,7 @@ def getusermovies():
                         "video":movie.video_link,
                         "tags":[x.name for x in movie.tags],
                         "status":movie.status,
-                        'username':movie.username,
+                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
                         'saved':True if g.current_user in movie.savers else False })
     return(usermovies)
 
@@ -36,7 +36,7 @@ def get_non_usermovies():
                         "video":movie.video_link,
                         "tags":[x.name for x in movie.tags],
                         "status":movie.status,
-                        'username':movie.username,
+                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
                         'saved':False})
     return(non_usermovies)
 
@@ -59,8 +59,8 @@ def suggest_movie():
     uniquename = slugify(data.get('title')).lower() +  data.get('year')
     title = data.get('title')
     year = data.get('year')
-    user = User.query.filter_by(username=g.current_user.username).first()
-    movie = Movie(uniquename=uniquename,name=title, year=year, username=user.username, status="pending")
+    user_id = g.current_user.user_id
+    movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user_id, status="pending")
     db.session.add(movie)
     db.session.commit()
     return jsonify({'movies':getusermovies(), 'user':g.current_user.username, 'email':g.current_user.email,}), 200
@@ -86,10 +86,10 @@ def savemovie():
 @app.route('/api/deleteaccount', methods=['DELETE'])
 @basic_auth.login_required
 def delete_account():
-    movies=Movie.query.filter_by(username=g.current_user.username)
+    movies=Movie.query.filter_by(user_id=g.current_user.user_id)
     for m in movies:
         db.session.delete(m)
-    user=User.query.filter_by(username=g.current_user.username).first()
+    user=User.query.filter_by(user_id=g.current_user.user_id).first()
     db.session.delete(user)
     db.session.commit()
     return jsonify({'movies':get_non_usermovies(), 'user':'', 'email':''}), 200

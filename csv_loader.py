@@ -29,7 +29,7 @@ def add_tags(movie, tag_names):
 
 def load_movie(row):
     slug = slugify(row[0].lower() +row[1])
-    movie = Movie(username='crg253', status="approved", uniquename=slug, name=row[0], year=row[1], video_link=row[2])
+    movie = Movie(user_id=1, status="approved", uniquename=slug, name=row[0], year=row[1], video_link=row[2])
     db.session.add(movie)
     add_tags(movie, row[3:])
 

@@ -1,11 +1,7 @@
 from flask import g, request, jsonify
-from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from app.models import User
-from app import app, db
+from app import app, db, basic_auth, token_auth
 from app.models import Movie, Tag, User
-
-basic_auth = HTTPBasicAuth()
-token_auth = HTTPTokenAuth()
 
 def get_non_usermovies():
     non_usermovies = []
@@ -17,7 +13,7 @@ def get_non_usermovies():
                         "video":movie.video_link,
                         "tags":[x.name for x in movie.tags],
                         "status":movie.status,
-                        'username':movie.username,
+                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
                         'saved':False})
     return(non_usermovies)
 
