@@ -51,7 +51,8 @@ class SignIn extends Component  {
           localStorage.setItem('token', res.token)
           this.props.setUser(res.user)
           this.props.setEmail(res.email)
-          this.props.setMovies(res.movies)
+          this.props.handleGetMovies(res.user)
+
           if(this.props.redirectBackGenre.length >0){
             this.props.setRedirectBack(<Redirect to={'/'+ this.props.redirectBackGenre + '/'+ this.props.redirectBackSlug}/>)
           }else if(this.props.redirectBackSlug.length>0){
@@ -63,6 +64,7 @@ class SignIn extends Component  {
               MessageLink:<p style={{fontSize:'18px',color:'white'}}>Now signed in as {res.user}</p>,
             })
           }
+
          })
       }
     })

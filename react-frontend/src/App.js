@@ -114,21 +114,21 @@ class App extends Component {
            this.setState({
              User:res.user,
              Email:res.email,
-             Movies:res.movies,
              RedirectBack:'',
              RedirectBackGenre:redirectBackGenre,
              RedirectBackSlug:redirectBackSlug,
              Redirect:<Redirect to='/signin'/>
            })
+           this.handleGetMovies(res.user)
         })
       }else if (res.status===200){
         res.json()
         .then(res=>{
           this.setState({
             User:res.user,
-            Email:res.email,
-            Movies:res.movies
+            Email:res.email
           })
+          this.handleGetMovies(res.user)
         })
       }
     })
@@ -248,13 +248,24 @@ class App extends Component {
       }
     })
     .then(res=>{
-      res.json()
-       .then(res=>{
-          this.setState({User:res.user,Email:res.email})
-          this.handleGetMovies(res.user)
+      if (res.status===401) {
+        console.log("%cInitial token check...401 no good", "color: red")
+        this.setState({User:'', Email:''})
+        this.handleGetMovies('')
+      }
+      else if (res.status===200){
+        console.log("%cInitial token check...200 GOOD", "color: green")
+        res.json()
+          .then(res=>{
+            this.setState({User:res.user, Email:res.email})
+            this.handleGetMovies(res.user)
         })
+      }
     })
   }
+
+
+
 
   componentDidMount(){
     this.handleInitialFetch();
@@ -263,8 +274,14 @@ class App extends Component {
 
   render() {
 
+    console.log("%cstate", "color: purple")
+    console.log('User is ..')
     console.log(this.state.User)
-    console.log(this.state.Movies)
+    let savMovies = this.state.Movies.filter(movie=>movie.saved===true)
+    console.log('Saved Movies are ...')
+    console.log(savMovies)
+    let crgMovies = this.state.Movies.filter(movie=>movie.status==='approved')
+    console.log(crgMovies.length + ' approved movies')
 
     return (
       <BrowserRouter>
@@ -278,6 +295,7 @@ class App extends Component {
                                 setEmail={this.setEmail}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
+                                handleGetMovies = {this.handleGetMovies}
                               />
                     }
           />
@@ -295,6 +313,7 @@ class App extends Component {
                                 handleSaveUnsave={this.handleSaveUnsave}
                                 redirect={this.state.Redirect}
                                 compareSlug={this.compareSlug}
+                                handleGetMovies = {this.handleGetMovies}
                                />
                       }
             />
@@ -323,6 +342,7 @@ class App extends Component {
                                 redirect={this.state.Redirect}
                                 setRedirectBack={this.setRedirectBack}
                                 setRedirectBackSlug={this.setRedirectBackSlug}
+                                handleGetMovies = {this.handleGetMovies}
                                />
                      }
             />
@@ -335,6 +355,7 @@ class App extends Component {
                                 redirectBack = {this.state.RedirectBack}
                                 setUser={this.setUser}
                                 setEmail={this.setEmail}
+                                handleGetMovies = {this.handleGetMovies}
                                 setMovies={this.setMovies}
                                 setRedirect={this.setRedirect}
                                 setRedirectBack={this.setRedirectBack}
@@ -359,6 +380,7 @@ class App extends Component {
                                   setRedirect={this.setRedirect}
                                   setRedirectBack={this.setRedirectBack}
                                   setRedirectBackSlug={this.setRedirectBackSlug}
+                                  handleGetMovies = {this.handleGetMovies}
                                  />
                        }
             />
@@ -371,6 +393,7 @@ class App extends Component {
                                     setEmail={this.setEmail}
                                     setMovies={this.setMovies}
                                     redirect={this.state.Redirect}
+                                    handleGetMovies = {this.handleGetMovies}
                                  />
                        }
             />

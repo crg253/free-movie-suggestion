@@ -21,7 +21,7 @@ class UserMovies extends Component {
        .then(res=>{
          this.props.setUser(res.user)
          this.props.setEmail(res.email)
-         this.props.setMovies(res.movies)
+         this.props.handleGetMovies(res.user)
          this.props.setRedirectBack('')
          this.props.setRedirectBackSlug('usermovies')
          this.props.setRedirect(<Redirect to='/signin'/>)
@@ -32,7 +32,7 @@ class UserMovies extends Component {
         .then(res=>{
           this.props.setUser(res.user)
           this.props.setEmail(res.email)
-          this.props.setMovies(res.movies)
+          this.props.handleGetMovies(res.user)
        })
      }
     })

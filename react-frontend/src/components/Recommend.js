@@ -46,7 +46,7 @@ class Recommend extends Component {
        .then(res=>{
          this.props.setUser(res.user)
          this.props.setEmail(res.email)
-         this.props.setMovies(res.movies)
+         this.props.handleGetMovies(res.user)
          this.props.setRedirectBack('')
          this.props.setRedirectBackSlug('recommend')
          this.props.setRedirect(<Redirect to='/signin'/>)
@@ -57,7 +57,7 @@ class Recommend extends Component {
         .then(res=>{
           this.props.setUser(res.user)
           this.props.setEmail(res.email)
-          this.props.setMovies(res.movies)
+          this.props.handleGetMovies(res.user)
           this.setState({
             SearchValue:"",SearchResultOptions:[], MovieMessage:"Thank you for suggesting."})
        })

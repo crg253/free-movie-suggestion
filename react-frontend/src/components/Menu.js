@@ -31,7 +31,7 @@ class Menu extends Component {
      .then(res=>{
        this.props.setUser('')
        this.props.setEmail('')
-       this.props.setMovies(res.movies)
+       this.props.handleGetMovies(res.user)
        this.props.setRedirect(<Redirect to={'/'}/>)
       })
     })

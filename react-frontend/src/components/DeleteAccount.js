@@ -54,7 +54,7 @@ class DeleteAccount extends Component {
         .then(res=>{
           this.props.setUser(res.user)
           this.props.setEmail(res.email)
-          this.props.setMovies(res.movies)
+          this.props.handleGetMovies(res.user)
           this.setState({
             Name:'',
             Email:'',

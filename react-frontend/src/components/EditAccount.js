@@ -45,27 +45,19 @@ class EditAccount extends Component {
     })
     .then(res=>{
       if (res.status===401) {
-      res.json()
-       .then(res=>{
-         this.props.setUser(res.user)
-         this.props.setEmail(res.email)
-         this.props.setMovies(res.movies)
+         this.props.setUser('')
+         this.props.setEmail('')
+         this.props.handleGetMovies('')
          this.props.setRedirectBack('')
-         this.props.setRedirectBackSlug('recommend')
+         this.props.setRedirectBackSlug('editaccount')
          this.props.setRedirect(<Redirect to='/signin'/>)
-         this.setState({
-           NewName:'',
-           NewEmail:'',
-           NewPassword:''
-         })
-      })
     }
     else if (res.status===200){
       res.json()
         .then(res=>{
           this.props.setUser(res.user)
           this.props.setEmail(res.email)
-          this.props.setMovies(res.movies)
+          this.props.handleGetMovies(res.user)
           this.setState({
             NewName:'',
             NewEmail:'',
