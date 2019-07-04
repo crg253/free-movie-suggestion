@@ -94,7 +94,7 @@ class CreateAccount extends Component {
                  value={this.state.Email}
                  onChange={this.handleEmailChange}
               />
-            <input
+              <input
 
                  type='submit'
                  value='Submit'
@@ -104,7 +104,7 @@ class CreateAccount extends Component {
              {this.state.ErrorMessage}
              {this.state.Message}
 
-            </form>
+          </form>
 
           <Link to={'/signin'}>
             <h1>/sign

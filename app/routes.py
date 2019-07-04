@@ -12,34 +12,6 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
-def getusermovies():
-    usermovies = []
-    for movie in Movie.query.all():
-        usermovies.append({"id":movie.movie_id,
-                        "slug":movie.uniquename,
-                        "name":movie.name,
-                        "year":movie.year,
-                        "video":movie.video_link,
-                        "tags":[x.name for x in movie.tags],
-                        "status":movie.status,
-                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
-                        'saved':True if g.current_user in movie.savers else False })
-    return(usermovies)
-
-def get_non_usermovies():
-    non_usermovies = []
-    for movie in Movie.query.all():
-        non_usermovies.append({"id":movie.movie_id,
-                        "slug":movie.uniquename,
-                        "name":movie.name,
-                        "year":movie.year,
-                        "video":movie.video_link,
-                        "tags":[x.name for x in movie.tags],
-                        "status":movie.status,
-                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
-                        'saved':False})
-    return(non_usermovies)
-
 @app.route('/api/removesuggestion', methods=['POST'])
 @token_auth.login_required
 def remove_suggestion():
@@ -141,7 +113,7 @@ def resetpassword():
 def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
-    return jsonify({'user':g.current_user.username, 'email':g.current_user.email,'token':token, 'movies':getusermovies()}), 200
+    return jsonify({'user':g.current_user.username, 'email':g.current_user.email,'token':token}), 200
 
 @app.route('/api/adduser', methods=['POST'])
 def add_user():
@@ -154,10 +126,27 @@ def add_user():
     db.session.commit()
     return jsonify({'':''}),201
 
+@app.route('/api/get_movies', methods=['POST'])
+def get_movies():
+    data=request.get_json(silent=True) or {}
+    user = User(username=data.get('user'))
+    movies = []
+    for movie in Movie.query.all():
+        movies.append({"id":movie.movie_id,
+                        "slug":movie.uniquename,
+                        "name":movie.name,
+                        "year":movie.year,
+                        "video":movie.video_link,
+                        "tags":[x.name for x in movie.tags],
+                        "status":movie.status,
+                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
+                        'saved':True if user in movie.savers else False })
+    return jsonify({'movies':movies}), 200
+
 @app.route('/api/checktoken', methods=['POST'])
 @token_auth.login_required
 def checktoken():
-    return jsonify({'user':g.current_user.username, 'email':g.current_user.email, 'movies':getusermovies()}), 200
+    return jsonify({'user':g.current_user.username, 'email':g.current_user.email}), 200
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

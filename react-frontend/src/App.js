@@ -198,43 +198,73 @@ class App extends Component {
 
   getRandomMovies=()=>{
    let approvedMovies = this.state.Movies.filter(movie=>movie.status==='approved');
+
    let randomMovies = {
-       Action:'',Comedy:'',Documentary:'',Drama:'',Horror:'','Mystery & Suspense':'',Romance:'','Sci-Fi & Fantasy':''
-   };
+                      Action:'',
+                      Comedy:'',
+                      Documentary:'',
+                      Drama:'',
+                      Horror:'',
+                      'Mystery & Suspense':'',
+                      Romance:'',
+                      'Sci-Fi & Fantasy':''
+                      };
    if(approvedMovies.length>0){
        for(let gen in randomMovies){
-         const genreMovies = [...approvedMovies].filter(approvedMovie =>approvedMovie.tags.includes(gen));
+         const genreMovies = [...approvedMovies].filter(
+                              approvedMovie =>approvedMovie.tags.includes(gen));
          const randomMovie = genreMovies[Math.floor(Math.random()*genreMovies.length)];
          randomMovies[gen] = randomMovie;
-         }
+       }
    }
-   let comingSoon=[...this.state.Movies].filter(movie=>movie.status==='neither')[0]
+   let comingSoon = [...this.state.Movies]
+                    .filter(
+                    movie=>
+                    movie.status==='neither'
+                    )[0]
    randomMovies['All']= comingSoon
    return randomMovies
   }
+
+  handleGetMovies = (user) => {
+    fetch('/api/get_movies',{
+     method:'POST',
+     headers: {'Content-Type':'application/json'},
+     body: JSON.stringify({user:user})
+   })
+   .then(res=>{
+     res.json()
+      .then(res=>{
+         this.setState({Movies:res.movies})
+       })
+   })
+ }
 
    handleInitialFetch = () => {
      fetch('/api/checktoken',{
       method:'POST',
       headers: {
         'Authorization':'Bearer ' +localStorage.getItem('token')
-      },
-      body:''
+      }
     })
     .then(res=>{
       res.json()
        .then(res=>{
-          this.setState({User:res.user, Movies:res.movies, Email:res.email})
+          this.setState({User:res.user,Email:res.email})
+          this.handleGetMovies(res.user)
         })
     })
   }
 
   componentDidMount(){
-    this.handleInitialFetch()
+    this.handleInitialFetch();
   }
 
 
   render() {
+
+    console.log(this.state.User)
+    console.log(this.state.Movies)
 
     return (
       <BrowserRouter>
@@ -300,36 +330,36 @@ class App extends Component {
             <Route
               path='/signin'
               render = {(props)=><SignIn
-                                    {...props}
-                                    user={this.state.User}
-                                    redirectBack = {this.state.RedirectBack}
-                                    setUser={this.setUser}
-                                    setEmail={this.setEmail}
-                                    setMovies={this.setMovies}
-                                    setRedirect={this.setRedirect}
-                                    setRedirectBack={this.setRedirectBack}
-                                    redirectBackSlug={this.state.RedirectBackSlug}
-                                    setRedirectBackSlug={this.setRedirectBackSlug}
-                                    redirectBackGenre={this.state.RedirectBackGenre}
-                                    setRedirectBackGenre={this.setRedirectBackGenre}
-                                   />
+                                {...props}
+                                user={this.state.User}
+                                redirectBack = {this.state.RedirectBack}
+                                setUser={this.setUser}
+                                setEmail={this.setEmail}
+                                setMovies={this.setMovies}
+                                setRedirect={this.setRedirect}
+                                setRedirectBack={this.setRedirectBack}
+                                redirectBackSlug={this.state.RedirectBackSlug}
+                                setRedirectBackSlug={this.setRedirectBackSlug}
+                                redirectBackGenre={this.state.RedirectBackGenre}
+                                setRedirectBackGenre={this.setRedirectBackGenre}
+                                 />
                        }
             />
 
             <Route
               path='/editaccount'
               render = {(props)=><EditAccount
-                                    {...props}
-                                    user={this.state.User}
-                                    email={this.state.Email}
-                                    setUser={this.setUser}
-                                    setEmail={this.setEmail}
-                                    setMovies={this.setMovies}
-                                    redirect={this.state.Redirect}
-                                    setRedirect={this.setRedirect}
-                                    setRedirectBack={this.setRedirectBack}
-                                    setRedirectBackSlug={this.setRedirectBackSlug}
-                                   />
+                                  {...props}
+                                  user={this.state.User}
+                                  email={this.state.Email}
+                                  setUser={this.setUser}
+                                  setEmail={this.setEmail}
+                                  setMovies={this.setMovies}
+                                  redirect={this.state.Redirect}
+                                  setRedirect={this.setRedirect}
+                                  setRedirectBack={this.setRedirectBack}
+                                  setRedirectBackSlug={this.setRedirectBackSlug}
+                                 />
                        }
             />
 

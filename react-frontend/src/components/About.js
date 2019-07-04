@@ -34,7 +34,6 @@ class About extends Component {
           <h3>crg253@protonmail.com</h3>
         </div>
         <div id='about-footer'></div>
-
       </div>
     );
   }

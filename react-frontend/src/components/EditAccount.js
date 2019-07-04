@@ -89,39 +89,37 @@ class EditAccount extends Component {
         </Link>
 
         <div className='user-pages-body-wrapper'>
-        <h1>Edit Account</h1>
-
-
+          <h1>Edit Account</h1>
           <div >
-          <form onSubmit = {this.handleUpdateAccount}
-                style={{textAlign:'center'}}>
-              <input
-                 type='text'
-                 placeholder={this.props.user}
-                 value={this.state.NewName}
-                 onChange={this.handleNewNameChange}
-              />
-              <input
-                 type='text'
-                 placeholder={this.props.email}
-                 value={this.state.NewEmail}
-                 onChange={this.handleNewEmailChange}
-              />
-              <input
-                 type='text'
-                 placeholder='New Password'
-                 value={this.state.NewPassword}
-                 onChange={this.handleNewPasswordChange}
-              />
-            <input
-                 type='submit'
-                 value='Update'
-                 className='form-submit-button'
-             />
-            </form>
-            {this.state.Message}
+            <form onSubmit = {this.handleUpdateAccount}
+                  style={{textAlign:'center'}}>
+                <input
+                   type='text'
+                   placeholder={this.props.user}
+                   value={this.state.NewName}
+                   onChange={this.handleNewNameChange}
+                />
+                <input
+                   type='text'
+                   placeholder={this.props.email}
+                   value={this.state.NewEmail}
+                   onChange={this.handleNewEmailChange}
+                />
+                <input
+                   type='text'
+                   placeholder='New Password'
+                   value={this.state.NewPassword}
+                   onChange={this.handleNewPasswordChange}
+                />
+                <input
+                   type='submit'
+                   value='Update'
+                   className='form-submit-button'
+               />
+              </form>
+              {this.state.Message}
+            </div>
           </div>
-        </div>
         <div className='form-footer'></div>
       </div>
     );

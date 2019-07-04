@@ -80,7 +80,12 @@ class HomePage extends Component {
               </g>
     }else if(this.props.selectedGenre ==='Mystery & Suspense'){
       sign =  <g>
-                <Link to={'/mysteryandsuspense/'+ randomMovies['Mystery & Suspense'].slug}>
+                <Link to={
+                          '/mysteryandsuspense/'
+                          +
+                          randomMovies['Mystery & Suspense'].slug
+                         }
+                >
                   <MysterySuspenseSign/>
                 </Link>
               </g>
@@ -92,49 +97,63 @@ class HomePage extends Component {
               </g>
     }else if(this.props.selectedGenre ==='Sci-Fi & Fantasy'){
       sign =  <g>
-                <Link to={'/scifiandfantasy/'+ randomMovies['Sci-Fi & Fantasy'].slug}>
+                <Link to={
+                          '/scifiandfantasy/'
+                          +
+                          randomMovies['Sci-Fi & Fantasy'].slug
+                         }
+                >
                   <SciFiSign/>
                 </Link>
               </g>
     }
+
     return (
       <div id='home-page-container'>
-      <Link to={'/'}>
-        <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
-      </Link>
-      <svg viewBox='0 0 1920 911'>
-        <GradientsSVG/>
-        <SkyAndGroundSVG/>
+        <Link to={'/'}>
+          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
+        </Link>
+        <svg viewBox='0 0 1920 911'>
+          <GradientsSVG/>
+          <SkyAndGroundSVG/>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Documentary');}}>
-          <Link to={'/'}><DocumentarySVG/></Link></g>
+          <g onClick={()=>{
+                          this.updateInstructions();
+                          this.props.setSelectedGenre('Documentary');
+                          }
+                      }
+          >
+            <Link to={'/'}>
+              <DocumentarySVG/>
+            </Link>
+          </g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Sci-Fi & Fantasy');}}>
-          <Link to={'/'}><SciFiSVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Sci-Fi & Fantasy');}}>
+            <Link to={'/'}><SciFiSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Horror');}}>
-          <Link to={'/'}><HorrorSVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Horror');}}>
+            <Link to={'/'}><HorrorSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Action');}}>
-          <Link to={'/'}><ActionSVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Action');}}>
+            <Link to={'/'}><ActionSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Romance');}}>
-          <Link to={'/'}><RomanceSVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Romance');}}>
+            <Link to={'/'}><RomanceSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Drama');}}>
-          <Link to={'/'}><DramaSVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Drama');}}>
+            <Link to={'/'}><DramaSVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Comedy');}}>
-          <Link to={'/'}><ComedySVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Comedy');}}>
+            <Link to={'/'}><ComedySVG/></Link></g>
 
-        <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Mystery & Suspense');}}>
-          <Link to={'/'}><MysterySuspenseSVG/></Link></g>
+          <g onClick={()=>{this.updateInstructions();this.props.setSelectedGenre('Mystery & Suspense');}}>
+            <Link to={'/'}><MysterySuspenseSVG/></Link></g>
 
-        {sign}
-      </svg>
+          {sign}
+        </svg>
 
-      <p id='instructions'>{this.state.Instructions}</p>
-      <div id='home-footer'></div>
+        <p id='instructions'>{this.state.Instructions}</p>
+        <div id='home-footer'></div>
       </div>
 
 

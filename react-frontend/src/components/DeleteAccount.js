@@ -95,7 +95,7 @@ class DeleteAccount extends Component {
                  value={this.state.Password}
                  onChange={this.handlePasswordChange}
               />
-            <input
+              <input
                  type='submit'
                  value='Delete'
                  style={{backgroundColor:'#B22222'}}
