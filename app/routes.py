@@ -65,23 +65,7 @@ def delete_account():
     user=User.query.filter_by(user_id=g.current_user.user_id).first()
     db.session.delete(user)
     db.session.commit()
-    return jsonify({'user':'', 'email':''}), 200
-
-@app.route('/api/revoketoken', methods=['DELETE'])
-@token_auth.login_required
-def revoke_token():
-    g.current_user.revoke_token()
-    db.session.commit()
-    return jsonify({'user':'', 'email':''}), 200
-
-
-
-
-
-
-
-
-
+    return '',200
 
 @app.route('/api/updateaccount', methods=['POST'])
 @token_auth.login_required
@@ -141,14 +125,15 @@ def add_user():
 def get_movies():
     data=request.get_json(silent=True) or {}
     user = User.query.filter_by(username=data.get('user')).first()
+    print(user)
+    print('saving')
+    print(user.saves)
     movies = []
     for movie in Movie.query.all():
-        if len(movie.savers)>0:
-            print(movie.uniquename)
-            print('saved by...')
+        if user in movie.savers:
+            print(movie)
+            print("saved by")
             print(movie.savers)
-        if movie.user_id != 1:
-            print(movie.uniquename + ' recommended by...' + str(movie.user_id))
         movies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,

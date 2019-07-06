@@ -20,21 +20,11 @@ class Menu extends Component {
   }
 
   handleSignOut = () =>{
-  fetch('/api/revoketoken', {
-    method:'DELETE',
-    headers:{
-      'Authorization':'Bearer ' +localStorage.getItem('token')
-    }
-  })
-  .then(res=>{
-    res.json()
-     .then(res=>{
-       this.props.setUser('')
-       this.props.setEmail('')
-       this.props.handleGetMovies(res.user)
-       this.props.setRedirect(<Redirect to={'/'}/>)
-      })
-    })
+    localStorage.removeItem('token')
+    this.props.setUser('')
+    this.props.setEmail('')
+    this.props.handleGetMovies('')
+    this.props.setRedirect(<Redirect to={'/'}/>)
   }
 
 

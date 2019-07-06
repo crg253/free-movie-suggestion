@@ -109,18 +109,15 @@ class App extends Component {
     })
     .then(res=>{
       if (res.status===401) {
-        res.json()
-         .then(res=>{
-           this.setState({
-             User:res.user,
-             Email:res.email,
-             RedirectBack:'',
-             RedirectBackGenre:redirectBackGenre,
-             RedirectBackSlug:redirectBackSlug,
-             Redirect:<Redirect to='/signin'/>
-           })
-           this.handleGetMovies(res.user)
-        })
+         this.setState({
+           User:'',
+           Email:'',
+           RedirectBack:'',
+           RedirectBackGenre:redirectBackGenre,
+           RedirectBackSlug:redirectBackSlug,
+           Redirect:<Redirect to='/signin'/>
+         })
+         this.handleGetMovies('')
       }else if (res.status===200){
         res.json()
         .then(res=>{
@@ -314,6 +311,9 @@ class App extends Component {
                                 redirect={this.state.Redirect}
                                 compareSlug={this.compareSlug}
                                 handleGetMovies = {this.handleGetMovies}
+                                setRedirectBack={this.setRedirectBack}
+                                setRedirectBackSlug={this.setRedirectBackSlug}
+                                setRedirect={this.setRedirect}
                                />
                       }
             />

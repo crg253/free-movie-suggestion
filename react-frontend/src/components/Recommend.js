@@ -42,15 +42,12 @@ class Recommend extends Component {
           SearchValue:"",SearchResultOptions:[], MovieMessage:"Movie already selected."})
     }
     else if (res.status===401) {
-      res.json()
-       .then(res=>{
-         this.props.setUser(res.user)
-         this.props.setEmail(res.email)
-         this.props.handleGetMovies(res.user)
-         this.props.setRedirectBack('')
-         this.props.setRedirectBackSlug('recommend')
-         this.props.setRedirect(<Redirect to='/signin'/>)
-      })
+     this.props.setUser('')
+     this.props.setEmail('')
+     this.props.handleGetMovies('')
+     this.props.setRedirectBack('')
+     this.props.setRedirectBackSlug('recommend')
+     this.props.setRedirect(<Redirect to='/signin'/>)
     }
     else if (res.status===200){
       res.json()

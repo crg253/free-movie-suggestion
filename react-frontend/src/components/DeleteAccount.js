@@ -40,29 +40,23 @@ class DeleteAccount extends Component {
     })
     .then(res=>{
       if (res.status===401) {
-      res.json()
-       .then(res=>{
-         this.setState({
-           Name:'',
-           Password:'',
-           ErrorMessage:<p style={{fontSize:'18px',color:'red'}}>Incorrect username or password</p>
-         })
-      })
-    }
-    else if (res.status===200){
-      res.json()
-        .then(res=>{
-          this.props.setUser(res.user)
-          this.props.setEmail(res.email)
-          this.props.handleGetMovies(res.user)
-          this.setState({
-            Name:'',
-            Email:'',
-            Password:'',
-            Message:<p style={{fontSize:'18px'}}>Account Deleted</p>
-          })
+       this.setState({
+         Name:'',
+         Password:'',
+         ErrorMessage:<p style={{fontSize:'18px',color:'red'}}>Incorrect username or password</p>
        })
-     }
+      }
+      else if (res.status===200){
+        this.props.setUser('')
+        this.props.setEmail('')
+        this.props.handleGetMovies('')
+        this.setState({
+          Name:'',
+          Email:'',
+          Password:'',
+          Message:<p style={{fontSize:'18px'}}>Account Deleted</p>
+        })
+       }
     })
   }
 
