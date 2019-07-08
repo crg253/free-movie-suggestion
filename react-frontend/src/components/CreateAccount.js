@@ -1,118 +1,125 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from "react";
+import {Link} from "react-router-dom";
 
-import './UserForm.css';
+import "./UserForm.css";
 
 class CreateAccount extends Component {
-  state={
-    Name:"",
-    Password:"",
-    Email:"",
-    ErrorMessage:"",
-    Message:"",
-  }
+  state = {
+    Name: "",
+    Password: "",
+    Email: "",
+    ErrorMessage: "",
+    Message: ""
+  };
 
-  handleNameChange = (event) =>{
+  handleNameChange = event => {
     this.setState({
-      Name:event.target.value,
-      ErrorMessage:"",
-      Message:"",
+      Name: event.target.value,
+      ErrorMessage: "",
+      Message: ""
     });
-  }
-  handlePasswordChange = (event) =>{
+  };
+  handlePasswordChange = event => {
     this.setState({
-      Password:event.target.value,
-      ErrorMessage:"",
-      Message:"",
-    })
-  }
-  handleEmailChange = (event) =>{
+      Password: event.target.value,
+      ErrorMessage: "",
+      Message: ""
+    });
+  };
+  handleEmailChange = event => {
     this.setState({
-      Email:event.target.value,
-      ErrorMessage:"",
-      Message:"",
-    })
-  }
+      Email: event.target.value,
+      ErrorMessage: "",
+      Message: ""
+    });
+  };
 
-  handleAddUserSubmit = (event) =>{
+  handleAddUserSubmit = event => {
     event.preventDefault();
-    fetch('/api/adduser', {
-     method: 'POST',
-     headers: {'Content-Type':'application/json'},
-     body: JSON.stringify({
-              userName: this.state.Name,
-              password:this.state.Password,
-              email:this.state.Email})
-    })
-    .then(res=>{
-      if(!res.ok){
+    fetch("/api/adduser", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        userName: this.state.Name,
+        password: this.state.Password,
+        email: this.state.Email
+      })
+    }).then(res => {
+      if (!res.ok) {
         this.setState({
-          ErrorMessage:<p style={{fontSize:'18px',color:'red'}}>Sorry, username not available.</p>,
-          Name:"",
-          Password:"",
-          Email:""})
-      }else{
+          ErrorMessage: (
+            <p style={{fontSize: "18px", color: "red"}}>
+              Sorry, username not available.
+            </p>
+          ),
+          Name: "",
+          Password: "",
+          Email: ""
+        });
+      } else {
         this.setState({
-          Message:<p style={{fontSize:'18px',color:'white'}}>Thank you for creating an account.</p>,
-          Name:"",
-          Password:"",
-          Email:""})
-
+          Message: (
+            <p style={{fontSize: "18px", color: "white"}}>
+              Thank you for creating an account.
+            </p>
+          ),
+          Name: "",
+          Password: "",
+          Email: ""
+        });
       }
-    })
-}
+    });
+  };
 
   render() {
     return (
       <div>
-        <Link to={'/'}>
-          <h1 id='main-title'>FREE MOVIE SUGGESTION</h1>
+        <Link to={"/"}>
+          <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div className='user-pages-body-wrapper'>
+        <div className="user-pages-body-wrapper">
           <h1>Create Account</h1>
 
-          <form
-            onSubmit={this.handleAddUserSubmit}>
+          <form onSubmit={this.handleAddUserSubmit}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={this.state.Name}
+              onChange={this.handleNameChange}
+            />
 
-              <input
-                 type='text'
-                 placeholder='Username'
-                 value={this.state.Name}
-                 onChange={this.handleNameChange}
-              />
+            <input
+              type="text"
+              placeholder="Password"
+              value={this.state.Password}
+              onChange={this.handlePasswordChange}
+            />
 
-              <input
-                 type='text'
-                 placeholder='Password'
-                 value={this.state.Password}
-                 onChange={this.handlePasswordChange}
-              />
+            <input
+              type="text"
+              placeholder="Email"
+              value={this.state.Email}
+              onChange={this.handleEmailChange}
+            />
+            <input
+              type="submit"
+              value="Submit"
+              className="form-submit-button"
+            />
 
-              <input
-                 type='text'
-                 placeholder='Email'
-                 value={this.state.Email}
-                 onChange={this.handleEmailChange}
-              />
-              <input
-
-                 type='submit'
-                 value='Submit'
-                 className='form-submit-button'
-              />
-
-             {this.state.ErrorMessage}
-             {this.state.Message}
-
+            {this.state.ErrorMessage}
+            {this.state.Message}
           </form>
 
-          <Link to={'/signin'}>
-            <h1>/sign
-              <span style={{color:'#a9a9a9'}}>in</span>
+          <Link to={"/signin"}>
+            <h1>
+              /sign
+              <span style={{color: "#a9a9a9"}}>in</span>
             </h1>
           </Link>
-        </div>{/* class="user-pages-body-wrapper"*/}
-        <div className='form-footer'></div>
+        </div>
+        {/* class="user-pages-body-wrapper"*/}
+        <div className="form-footer" />
       </div>
     );
   }
