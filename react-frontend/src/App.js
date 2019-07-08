@@ -246,12 +246,10 @@ class App extends Component {
     })
     .then(res=>{
       if (res.status===401) {
-        console.log("%cInitial token check...401 no good", "color: red")
         this.setState({User:'', Email:''})
         this.handleGetMovies('')
       }
       else if (res.status===200){
-        console.log("%cInitial token check...200 GOOD", "color: green")
         res.json()
           .then(res=>{
             this.setState({User:res.user, Email:res.email})
@@ -270,15 +268,6 @@ class App extends Component {
 
 
   render() {
-
-    console.log("%cstate", "color: purple")
-    console.log('User is ..')
-    console.log(this.state.User)
-    let savMovies = this.state.Movies.filter(movie=>movie.saved===true)
-    console.log('Saved Movies are ...')
-    console.log(savMovies)
-    let crgMovies = this.state.Movies.filter(movie=>movie.status==='approved')
-    console.log(crgMovies.length + ' approved movies')
 
     return (
       <BrowserRouter>

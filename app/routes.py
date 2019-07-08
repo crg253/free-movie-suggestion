@@ -19,7 +19,7 @@ def remove_suggestion():
     slug = data.get('slug')
     movie_to_unsuggest = Movie.query.filter_by(uniquename=data.get('slug')).first()
     user = User.query.filter_by(username=g.current_user.username).first()
-    if movie_to_unsuggest in user.user_movies:
+    if movie_to_unsuggest in user.recommendations:
         db.session.delete(movie_to_unsuggest)
         db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
@@ -32,7 +32,7 @@ def suggest_movie():
     title = data.get('title')
     year = data.get('year')
     user_id = g.current_user.user_id
-    movie = Movie(uniquename=uniquename,name=title, year=year, user_id=user_id, status="pending")
+    movie = Movie(uniquename=uniquename,name=title, year=year, recommended_by=user_id, status="pending")
     db.session.add(movie)
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
@@ -52,7 +52,6 @@ def savemovie():
     data=request.get_json(silent=True) or {}
     movie_to_save = Movie.query.filter_by(uniquename=data.get('slug')).first()
     g.current_user.saves.append(movie_to_save)
-    print(g.current_user.saves)
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email}), 200
 
@@ -125,15 +124,23 @@ def add_user():
 def get_movies():
     data=request.get_json(silent=True) or {}
     user = User.query.filter_by(username=data.get('user')).first()
-    print(user)
-    print('saving')
-    print(user.saves)
+    if user != None:
+        print(user)
+        print('saving')
+        print(user.saves)
+        print('recommendations')
+        print(user.recommendations)
     movies = []
     for movie in Movie.query.all():
-        if user in movie.savers:
-            print(movie)
-            print("saved by")
-            print(movie.savers)
+        if user != None:
+            if user in movie.savers:
+                print(movie)
+                print("saved by")
+                print(movie.savers)
+            if user.user_id == movie.recommended_by:
+                print(movie)
+                print('recommended_by')
+                print(movie.user)
         movies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
@@ -141,7 +148,7 @@ def get_movies():
                         "video":movie.video_link,
                         "tags":[x.name for x in movie.tags],
                         "status":movie.status,
-                        'username':User.query.filter_by(user_id=movie.user_id).first().username,
+                        'recommendedBy':User.query.filter_by(user_id=movie.recommended_by).first().username,
                         'saved':True if user in movie.savers else False })
     return jsonify({'movies':movies}), 200
 
