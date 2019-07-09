@@ -33,6 +33,9 @@ class CreateAccount extends Component {
       Message: ""
     });
   };
+  isDisabled = () => {
+      return this.state.Name.length === 0 || this.state.Password.length < 6;
+  }
 
   handleAddUserSubmit = event => {
     event.preventDefault();
@@ -59,7 +62,7 @@ class CreateAccount extends Component {
       } else {
         this.setState({
           Message: (
-            <p style={{fontSize: "18px", color: "white"}}>
+            <p style={{fontSize: "18px", color: "green"}}>
               Thank you for creating an account.
             </p>
           ),
@@ -105,6 +108,7 @@ class CreateAccount extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
+              disabled={this.isDisabled()}
             />
 
             {this.state.ErrorMessage}

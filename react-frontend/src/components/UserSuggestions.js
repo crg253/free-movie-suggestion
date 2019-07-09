@@ -45,13 +45,13 @@ class UserSuggestions extends Component {
 
   render() {
     let allUserSuggestionsTrailers = this.props.movies
-      .filter(movie => movie.recommendedBy !== "crg253")
+      .filter(movie => movie.recommender !== "crg253")
       .filter(film => film.video != null);
 
     allUserSuggestionsTrailers.sort(this.props.compareSlug);
 
     let allUserSuggestionsNoTrailers = this.props.movies
-      .filter(movie => movie.recommendedBy !== "crg253")
+      .filter(movie => movie.recommender !== "crg253")
       .filter(film => film.video === null);
 
     allUserSuggestionsNoTrailers.sort(this.props.compareSlug);
@@ -79,7 +79,7 @@ class UserSuggestions extends Component {
                 <p className="film-year-style">{film.year}</p>
               </div>
               <p className="suggested-by-title">
-                suggested by {film.recommendedBy}
+                suggested by {film.recommender}
               </p>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 {this.getSuggSaveButton(film.slug)}
@@ -99,7 +99,7 @@ class UserSuggestions extends Component {
                 <p className="film-year-style">{film.year}</p>
               </div>
               <p className="suggested-by-title">
-                suggested by {film.recommendedBy}
+                suggested by {film.recommender}
               </p>
             </div>
           ))}

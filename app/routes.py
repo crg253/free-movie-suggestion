@@ -58,11 +58,10 @@ def savemovie():
 @app.route('/api/deleteaccount', methods=['DELETE'])
 @basic_auth.login_required
 def delete_account():
-    movies=Movie.query.filter_by(user_id=g.current_user.user_id)
+    movies=Movie.query.filter_by(recommender=g.current_user)
     for m in movies:
         db.session.delete(m)
-    user=User.query.filter_by(user_id=g.current_user.user_id).first()
-    db.session.delete(user)
+    db.session.delete(g.current_user)
     db.session.commit()
     return '',200
 
@@ -89,8 +88,8 @@ def resetpassword():
     if user == None:
         abort(401)
     else:
-        chars = string.ascii_letters+string.digits+string.punctuation
-        password = "".join(random.sample(chars, 8))
+        chars = string.ascii_letters+string.digits+ "@#$%&*"
+        password = "".join(random.sample(chars, 6))
         user.set_password(password)
         db.session.commit()
         msg = Message(
@@ -140,7 +139,7 @@ def get_movies():
             if user.user_id == movie.recommended_by:
                 print(movie)
                 print('recommended_by')
-                print(movie.user)
+                print(movie.recommender)
         movies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
@@ -148,7 +147,7 @@ def get_movies():
                         "video":movie.video_link,
                         "tags":[x.name for x in movie.tags],
                         "status":movie.status,
-                        'recommendedBy':User.query.filter_by(user_id=movie.recommended_by).first().username,
+                        'recommender':movie.recommender.username,
                         'saved':True if user in movie.savers else False })
     return jsonify({'movies':movies}), 200
 

@@ -36,6 +36,10 @@ input::-webkit-input-placeholder {
   font-size: 16px;
   cursor: pointer;
 }
+.form-submit-button:disabled,
+.form-submit-button[disabled]{
+  opacity: 0.5;
+}
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
