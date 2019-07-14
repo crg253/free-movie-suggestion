@@ -155,9 +155,3 @@ def get_movies():
 @token_auth.login_required
 def checktoken():
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email}), 200
-
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return ('Change to render_template index')
-    #return render_template('index.html')

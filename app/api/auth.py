@@ -1,7 +1,10 @@
 from flask import g, abort
 from app.models import User
-from app import app, db, basic_auth, token_auth
+from app import app, db
 
+
+basic_auth = HTTPBasicAuth()
+token_auth = HTTPTokenAuth()
 
 @basic_auth.verify_password
 def verify_password(username, password):
