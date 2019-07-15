@@ -85,7 +85,6 @@ def resetpassword():
     data=request.get_json(silent=True) or {}
     email=data.get('email')
     user = User.query.filter_by(email = email).first()
-    print(user)
     if user == None:
         abort(401)
     else:
@@ -124,23 +123,8 @@ def add_user():
 def get_movies():
     data=request.get_json(silent=True) or {}
     user = User.query.filter_by(username=data.get('user')).first()
-    if user != None:
-        print(user)
-        print('user.saves')
-        print(user.saves)
-        print('user.recommendations')
-        print(user.recommendations)
     movies = []
     for movie in Movie.query.all():
-        if user != None:
-            if user in movie.savers:
-                print(movie)
-                print("movie.savers")
-                print(movie.savers)
-            if user.user_id == movie.recommender_id:
-                print(movie)
-                print('movie.recommended_by')
-                print(movie.recommended_by)
         movies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,

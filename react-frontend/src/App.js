@@ -265,7 +265,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.Movies)
     return (
       <BrowserRouter>
         <div>
