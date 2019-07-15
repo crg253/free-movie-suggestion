@@ -1,8 +1,9 @@
 from flask import jsonify, render_template, request, g, abort
-from app import app, db, mail
-from app.models import Movie, Tag, User
-from app.auth import basic_auth, token_auth
 from flask_mail import Message
+from app import db, mail
+from app.models import Movie, Tag, User
+from app.api import bp
+from app.api.auth import basic_auth, token_auth
 import string
 import random
 
@@ -12,7 +13,7 @@ def slugify(slug):
         slug = slug.replace(item, '')
     return slug
 
-@app.route('/api/removesuggestion', methods=['POST'])
+@bp.route('/removesuggestion', methods=['POST'])
 @token_auth.login_required
 def remove_suggestion():
     data=request.get_json(silent=True) or {}
@@ -24,7 +25,7 @@ def remove_suggestion():
         db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
 
-@app.route('/api/suggestmovie', methods=['POST'])
+@bp.route('/suggestmovie', methods=['POST'])
 @token_auth.login_required
 def suggest_movie():
     data=request.get_json(silent=True) or {}
@@ -37,7 +38,7 @@ def suggest_movie():
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
 
-@app.route('/api/unsavemovie', methods=['POST'])
+@bp.route('/unsavemovie', methods=['POST'])
 @token_auth.login_required
 def unsavemovie():
     data=request.get_json(silent=True) or {}
@@ -46,7 +47,7 @@ def unsavemovie():
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
 
-@app.route('/api/savemovie', methods=['POST'])
+@bp.route('/savemovie', methods=['POST'])
 @token_auth.login_required
 def savemovie():
     data=request.get_json(silent=True) or {}
@@ -55,7 +56,7 @@ def savemovie():
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email}), 200
 
-@app.route('/api/deleteaccount', methods=['DELETE'])
+@bp.route('/deleteaccount', methods=['DELETE'])
 @basic_auth.login_required
 def delete_account():
     movies=Movie.query.filter_by(recommender=g.current_user)
@@ -65,7 +66,7 @@ def delete_account():
     db.session.commit()
     return '',200
 
-@app.route('/api/updateaccount', methods=['POST'])
+@bp.route('/updateaccount', methods=['POST'])
 @token_auth.login_required
 def update_account():
     data=request.get_json(silent=True) or {}
@@ -79,7 +80,7 @@ def update_account():
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
 
-@app.route('/api/resetpassword', methods=['POST'])
+@bp.route('/resetpassword', methods=['POST'])
 def resetpassword():
     data=request.get_json(silent=True) or {}
     email=data.get('email')
@@ -101,14 +102,14 @@ def resetpassword():
         mail.send(msg)
         return '',200
 
-@app.route('/api/signin', methods=['POST'])
+@bp.route('/signin', methods=['POST'])
 @basic_auth.login_required
 def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,'token':token}), 200
 
-@app.route('/api/adduser', methods=['POST'])
+@bp.route('/adduser', methods=['POST'])
 def add_user():
     data=request.get_json(silent=True) or {}
     newUser = User(username=data.get('userName'))
@@ -119,7 +120,7 @@ def add_user():
     db.session.commit()
     return '',200
 
-@app.route('/api/get_movies', methods=['POST'])
+@bp.route('/get_movies', methods=['POST'])
 def get_movies():
     data=request.get_json(silent=True) or {}
     user = User.query.filter_by(username=data.get('user')).first()
@@ -151,7 +152,7 @@ def get_movies():
                         'saved':True if user in movie.savers else False })
     return jsonify({'movies':movies}), 200
 
-@app.route('/api/checktoken', methods=['POST'])
+@bp.route('/checktoken', methods=['POST'])
 @token_auth.login_required
 def checktoken():
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email}), 200

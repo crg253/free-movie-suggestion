@@ -1,6 +1,7 @@
 from flask import g, abort
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from app.models import User
-from app import app, db
+from app import db
 
 
 basic_auth = HTTPBasicAuth()
