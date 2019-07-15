@@ -35,12 +35,12 @@ class UserMovies extends Component {
     userSaves.sort(this.props.compareSlug);
 
     let userSuggestionsTrailers = this.props.movies
-      .filter(movie => movie.recommender === this.props.user)
+      .filter(movie => movie.recommendedBy === this.props.user)
       .filter(film => film.video != null);
     userSuggestionsTrailers.sort(this.props.compareSlug);
 
     let userSuggestionsNoTrailers = this.props.movies
-      .filter(movie => movie.recommender === this.props.user)
+      .filter(movie => movie.recommendedBy === this.props.user)
       .filter(film => film.video === null);
     userSuggestionsNoTrailers.sort(this.props.compareSlug);
 

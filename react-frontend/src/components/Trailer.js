@@ -2,6 +2,18 @@ import React, {Component} from "react";
 import {Redirect} from "react-router-dom";
 
 class Trailer extends Component {
+
+  getTitleAndYear = (title, year) =>{
+    if (title !== "Coming Soon"){
+      return  <h2 id="trailer-title">
+                {title} {year}
+              </h2>
+    } else {
+      return ''
+    }
+  }
+
+
   getSaveButton = (genreSlug, movieSlug) => {
     let buttonComponent = "";
     let allMovies = [...this.props.movies];
@@ -62,10 +74,7 @@ class Trailer extends Component {
               />
 
               <div id="title-and-save-button">
-                <h2 id="trailer-title">
-                  {selection.name} {selection.year}
-                </h2>
-
+                {this.getTitleAndYear(selection.name, selection.year)}
                 {this.getSaveButton(this.props.genreslug, this.props.movieslug)}
               </div>
             </div>

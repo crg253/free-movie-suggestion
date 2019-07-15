@@ -4,7 +4,7 @@ from app.models import Movie, Tag
 import re
 
 '''
-Add approved movies for recommended_by = 1
+Add approved movies for recommender_id = 1
 '''
 
 def slugify(slug):
@@ -29,7 +29,7 @@ def add_tags(movie, tag_names):
 
 def load_movie(row):
     slug = slugify(row[0].lower() +row[1])
-    movie = Movie(recommended_by=1, status="approved", uniquename=slug, name=row[0], year=row[1], video_link=row[2])
+    movie = Movie(recommender_id=1, status="approved", uniquename=slug, name=row[0], year=row[1], video_link=row[2])
     db.session.add(movie)
     add_tags(movie, row[3:])
 

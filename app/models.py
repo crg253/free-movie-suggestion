@@ -23,7 +23,7 @@ class Movie(db.Model):
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('movies', lazy=True))
     status = db.Column(db.String(20), nullable=False)
-    recommended_by = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    recommender_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     savers = db.relationship('User', secondary=savers, lazy='subquery',
         backref=db.backref('saves', lazy=True))
 
@@ -35,10 +35,10 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    password_hash = db.Column(db.String(128), nullable=False)
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
-    recommendations = db.relationship('Movie', backref="recommender", lazy=True)
+    recommendations = db.relationship('Movie', backref="recommended_by", lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

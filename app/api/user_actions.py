@@ -33,7 +33,7 @@ def suggest_movie():
     title = data.get('title')
     year = data.get('year')
     user_id = g.current_user.user_id
-    movie = Movie(uniquename=uniquename,name=title, year=year, recommended_by=user_id, status="pending")
+    movie = Movie(uniquename=uniquename,name=title, year=year, recommender_id=user_id, status="pending")
     db.session.add(movie)
     db.session.commit()
     return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
@@ -59,7 +59,7 @@ def savemovie():
 @bp.route('/deleteaccount', methods=['DELETE'])
 @basic_auth.login_required
 def delete_account():
-    movies=Movie.query.filter_by(recommender=g.current_user)
+    movies=Movie.query.filter_by(recommended_by=g.current_user)
     for m in movies:
         db.session.delete(m)
     db.session.delete(g.current_user)
@@ -126,21 +126,21 @@ def get_movies():
     user = User.query.filter_by(username=data.get('user')).first()
     if user != None:
         print(user)
-        print('saving')
+        print('user.saves')
         print(user.saves)
-        print('recommendations')
+        print('user.recommendations')
         print(user.recommendations)
     movies = []
     for movie in Movie.query.all():
         if user != None:
             if user in movie.savers:
                 print(movie)
-                print("saved by")
+                print("movie.savers")
                 print(movie.savers)
-            if user.user_id == movie.recommended_by:
+            if user.user_id == movie.recommender_id:
                 print(movie)
-                print('recommended_by')
-                print(movie.recommender)
+                print('movie.recommended_by')
+                print(movie.recommended_by)
         movies.append({"id":movie.movie_id,
                         "slug":movie.uniquename,
                         "name":movie.name,
@@ -148,7 +148,7 @@ def get_movies():
                         "video":movie.video_link,
                         "tags":[x.name for x in movie.tags],
                         "status":movie.status,
-                        'recommender':movie.recommender.username,
+                        'recommendedBy':movie.recommended_by.username,
                         'saved':True if user in movie.savers else False })
     return jsonify({'movies':movies}), 200
 
