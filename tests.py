@@ -26,25 +26,93 @@ class UserModelCase(unittest.TestCase):
 
     # TEST DB RELATIONSHIPS
 
-    def test_movie_recommender_id_column(self):
-        # test movie.recommender_id one-to-many relationship
+    def test_movie_recommender_id_property_creates_one_to_many(self):
         monkey = User(username = 'monkey')
         monkey.set_password('monkeypassword')
-        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=0, status='pending', recommender_id=1)
+        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
         db.session.add(monkey)
         db.session.add(movie_1)
         db.session.commit()
-        self.assertTrue(movie_1.recommended_by==monkey)
+        #check user.recommendations array contains whole movie object
         self.assertTrue(movie_1 in monkey.recommendations)
+        #full circle, check movie.recommended_by contains whole user object
+        self.assertTrue(movie_1.recommended_by==monkey)
 
-    # test tags many-to-many
+    # MOVIE TAGS MANY MANY
+
+    def test_movie_tags_array_creates_many_to_many(self):
+        monkey = User(username = 'monkey')
+        monkey.set_password('monkeypassword')
+        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
+        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=1)
+        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=1)
+        action = Tag(name = 'Action')
+        comedy = Tag(name = 'Comedy')
+        documentary = Tag(name = 'Documentarty')
+        db.session.add(movie_1)
+        db.session.add(movie_2)
+        db.session.add(movie_3)
+        db.session.add(action)
+        db.session.add(comedy)
+        db.session.add(documentary)
+        movie_1.tags.append(action)
+        movie_1.tags.append(comedy)
+        movie_2.tags.append(comedy)
+        movie_2.tags.append(documentary)
+        movie_3.tags.append(documentary)
+        movie_3.tags.append(action)
+        db.session.commit()
+        #check the tag.movies array
+        self.assertTrue(movie_1 in action.movies)
+        self.assertTrue(movie_1 in comedy.movies)
+        self.assertTrue(movie_2 in comedy.movies)
+        self.assertTrue(movie_2 in documentary.movies)
+        self.assertTrue(movie_3 in documentary.movies)
+        self.assertTrue(movie_3 in action.movies)
+
+    def test_tag_movies_array_creates_many_to_many(self):
+        monkey = User(username = 'monkey')
+        monkey.set_password('monkeypassword')
+        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
+        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=1)
+        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=1)
+        action = Tag(name = 'Action')
+        comedy = Tag(name = 'Comedy')
+        documentary = Tag(name = 'Documentarty')
+        db.session.add(movie_1)
+        db.session.add(movie_2)
+        db.session.add(movie_3)
+        db.session.add(action)
+        db.session.add(comedy)
+        db.session.add(documentary)
+        action.movies.append(movie_1)
+        action.movies.append(movie_2)
+        comedy.movies.append(movie_2)
+        comedy.movies.append(movie_3)
+        documentary.movies.append(movie_3)
+        documentary.movies.append(movie_1)
+        db.session.commit()
+        #check movie.tags array
+        self.assertTrue(action in movie_1.tags)
+        self.assertTrue(documentary in movie_1.tags)
+        self.assertTrue(action in movie_2.tags)
+        self.assertTrue(comedy in movie_2.tags)
+        self.assertTrue(comedy in movie_3.tags)
+        self.assertTrue(documentary in movie_3.tags)
+
+
+
+
+
     # test saves many-to-many
 
-    # TEST API ROUTES
+    # TEST CATCH ALL ROUTE
 
     def test_main_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
+
+    # TEST API ROUTES
 
     # test add user
     # test sign in
