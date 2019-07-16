@@ -49,6 +49,7 @@ class UserModelCase(unittest.TestCase):
         action = Tag(name = 'Action')
         comedy = Tag(name = 'Comedy')
         documentary = Tag(name = 'Documentarty')
+        db.session.add(monkey)
         db.session.add(movie_1)
         db.session.add(movie_2)
         db.session.add(movie_3)
@@ -79,6 +80,7 @@ class UserModelCase(unittest.TestCase):
         action = Tag(name = 'Action')
         comedy = Tag(name = 'Comedy')
         documentary = Tag(name = 'Documentarty')
+        db.session.add(monkey)
         db.session.add(movie_1)
         db.session.add(movie_2)
         db.session.add(movie_3)
@@ -100,6 +102,39 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(comedy in movie_3.tags)
         self.assertTrue(documentary in movie_3.tags)
 
+    # SAVED MOVIES MANY MANY
+    
+    def test_movie_savers_array_creates_many_to_many(self):
+        monkey = User(username = 'monkey')
+        monkey.set_password('monkeypassword')
+        bella = User(username = 'bella')
+        bella.set_password('bellapassword')
+        hazel = User(username = 'hazel')
+        hazel.set_password('hazelpassword')
+        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
+        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=2)
+        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=3)
+        db.session.add(monkey)
+        db.session.add(bella)
+        db.session.add(hazel)
+        db.session.add(movie_1)
+        db.session.add(movie_2)
+        db.session.add(movie_3)
+        #include owner to movie.savers
+        movie_1.savers.append(monkey)
+        movie_1.savers.append(bella)
+        movie_2.savers.append(bella)
+        movie_2.savers.append(hazel)
+        movie_3.savers.append(hazel)
+        movie_3.savers.append(monkey)
+        db.session.commit()
+        #check user.saves array
+        self.assertTrue(movie_1 in monkey.saves)
+        self.assertTrue(movie_3 in monkey.saves)
+        self.assertTrue(movie_1 in bella.saves)
+        self.assertTrue(movie_2 in bella.saves)
+        self.assertTrue(movie_2 in hazel.saves)
+        self.assertTrue(movie_3 in hazel.saves)
 
 
 
