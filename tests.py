@@ -26,13 +26,35 @@ class UserModelCase(unittest.TestCase):
 
     ''' Test DB Relationships '''
 
-    def test_movie_recommender_id_property_creates_one_to_many(self):
+    def create_users_movies_and_tags(self):
         monkey = User(username = 'monkey')
         monkey.set_password('monkeypassword')
+        bella = User(username = 'bella')
+        bella.set_password('bellapassword')
+        hazel = User(username = 'hazel')
+        hazel.set_password('hazelpassword')
         movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
+        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=2)
+        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=3)
+        action = Tag(name = 'Action')
+        comedy = Tag(name = 'Comedy')
+        documentary = Tag(name = 'Documentarty')
         db.session.add(monkey)
+        db.session.add(bella)
+        db.session.add(hazel)
         db.session.add(movie_1)
+        db.session.add(movie_2)
+        db.session.add(movie_3)
+        db.session.add(action)
+        db.session.add(comedy)
+        db.session.add(documentary)
         db.session.commit()
+        return monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary
+
+    # Movie Recommender One-to_Many
+
+    def test_movie_recommender_id_property_creates_one_to_many(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
         # check user.recommendations array contains whole movie object
         self.assertTrue(movie_1 in monkey.recommendations)
         # full circle, check movie.recommended_by contains whole user object
@@ -41,21 +63,7 @@ class UserModelCase(unittest.TestCase):
     # Movie Tags Many-to-Many
 
     def test_movie_tags_array_creates_many_to_many(self):
-        monkey = User(username = 'monkey')
-        monkey.set_password('monkeypassword')
-        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
-        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=1)
-        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=1)
-        action = Tag(name = 'Action')
-        comedy = Tag(name = 'Comedy')
-        documentary = Tag(name = 'Documentarty')
-        db.session.add(monkey)
-        db.session.add(movie_1)
-        db.session.add(movie_2)
-        db.session.add(movie_3)
-        db.session.add(action)
-        db.session.add(comedy)
-        db.session.add(documentary)
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
         movie_1.tags.append(action)
         movie_1.tags.append(comedy)
         movie_2.tags.append(comedy)
@@ -72,21 +80,7 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(movie_3 in action.movies)
 
     def test_tag_movies_array_creates_many_to_many(self):
-        monkey = User(username = 'monkey')
-        monkey.set_password('monkeypassword')
-        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
-        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=1)
-        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=1)
-        action = Tag(name = 'Action')
-        comedy = Tag(name = 'Comedy')
-        documentary = Tag(name = 'Documentarty')
-        db.session.add(monkey)
-        db.session.add(movie_1)
-        db.session.add(movie_2)
-        db.session.add(movie_3)
-        db.session.add(action)
-        db.session.add(comedy)
-        db.session.add(documentary)
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
         action.movies.append(movie_1)
         action.movies.append(movie_2)
         comedy.movies.append(movie_2)
@@ -105,21 +99,7 @@ class UserModelCase(unittest.TestCase):
     # Saved Movies Many-to-Many
 
     def test_movie_savers_array_creates_many_to_many(self):
-        monkey = User(username = 'monkey')
-        monkey.set_password('monkeypassword')
-        bella = User(username = 'bella')
-        bella.set_password('bellapassword')
-        hazel = User(username = 'hazel')
-        hazel.set_password('hazelpassword')
-        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
-        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=2)
-        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=3)
-        db.session.add(monkey)
-        db.session.add(bella)
-        db.session.add(hazel)
-        db.session.add(movie_1)
-        db.session.add(movie_2)
-        db.session.add(movie_3)
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
         # include owner to movie.savers
         movie_1.savers.append(monkey)
         movie_1.savers.append(bella)
@@ -137,21 +117,7 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(movie_3 in hazel.saves)
 
     def test_user_saves_array_creates_many_to_many(self):
-        monkey = User(username = 'monkey')
-        monkey.set_password('monkeypassword')
-        bella = User(username = 'bella')
-        bella.set_password('bellapassword')
-        hazel = User(username = 'hazel')
-        hazel.set_password('hazelpassword')
-        movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
-        movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=2)
-        movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=3)
-        db.session.add(monkey)
-        db.session.add(bella)
-        db.session.add(hazel)
-        db.session.add(movie_1)
-        db.session.add(movie_2)
-        db.session.add(movie_3)
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
         # include movie that is recommended by user
         monkey.saves.append(movie_1)
         monkey.saves.append(movie_2)
