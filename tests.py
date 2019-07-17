@@ -5,6 +5,7 @@ from config import Config
 from app.api.auth import verify_password, verify_token
 import base64
 import os
+import json
 
 
 class TestConfig(Config):
@@ -25,8 +26,6 @@ class UserModelCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
-
-    ''' Test DB Relationships '''
 
     def create_users_movies_and_tags(self):
         # create three users
@@ -58,6 +57,8 @@ class UserModelCase(unittest.TestCase):
         db.session.add(documentary)
         db.session.commit()
         return monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary
+
+    ''' Test DB Relationships '''
 
     # Movie Recommender One-to_Many
 
@@ -145,8 +146,8 @@ class UserModelCase(unittest.TestCase):
     ''' Test Catch All Route '''
 
     def test_main_page(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
+        res = self.client.get('/')
+        self.assertEqual(res.status_code, 200)
 
     ''' Test Auth '''
 
@@ -157,8 +158,9 @@ class UserModelCase(unittest.TestCase):
         self.assertFalse(verify_password('monkey','bellapassword'))
         self.assertFalse(verify_password('bella','monkeypassword'))
 
-
     def test_verify_token(self):
+        #only checks that token exists, not that it belongs to user
+        #test_check_token will verify that token returns correct user
         monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
         self.assertTrue(verify_token(monkey.token))
         self.assertTrue(verify_token(bella.token))
@@ -169,17 +171,54 @@ class UserModelCase(unittest.TestCase):
 
     ''' Test API Routes'''
 
-    # test add user
+    def test_check_token(self):
+        monkey = self.create_users_movies_and_tags()[0]
+        headers = {'Authorization': 'Bearer ' + monkey.token}
+        res = self.client.post('/api/checktoken', headers=headers)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json['user'], 'monkey')
+        self.assertEqual(res.json['email'], None)
+
+    def test_get_movies_no_user(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        monkey.saves.append(movie_2)
+        bella.saves.append(movie_3)
+        hazel.saves.append(movie_1)
+        db.session.commit()
+        data = json.dumps({'user': ''})
+        res = self.client.post('/api/get_movies', data=data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        for movie in res.json['movies']:
+            self.assertTrue(movie['saved']==False)
+
+    def test_get_movies_user(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        monkey.saves.append(movie_2)
+        bella.saves.append(movie_3)
+        hazel.saves.append(movie_1)
+        db.session.commit()
+        data = json.dumps({'user': monkey.username})
+        res = self.client.post('/api/get_movies', data=data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        for movie in res.json['movies']:
+            if movie['slug']=='movie_2':
+                self.assertTrue(movie['saved']==True)
+            else:
+                self.assertTrue(movie['saved']==False)
+
+
+
+
+    # test_add_user
     # test sign in
     # test reset password
     # test update account
     # test delete account
-    # test suggest movie
-    # test unsuggest movie
     # test save movie
     # test unsave movie
-    # test check token
-    # test get movies
+    # test suggest movie
+    # test unsuggest movie
+
 
 
 if __name__ == '__main__':
