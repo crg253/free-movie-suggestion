@@ -7,7 +7,6 @@ import base64
 import os
 import json
 
-
 class TestConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
@@ -185,8 +184,8 @@ class UserModelCase(unittest.TestCase):
         bella.saves.append(movie_3)
         hazel.saves.append(movie_1)
         db.session.commit()
-        data = json.dumps({'user': ''})
-        res = self.client.post('/api/get_movies', data=data, content_type='application/json')
+        j_data = json.dumps({'user': ''})
+        res = self.client.post('/api/get_movies', data=j_data, content_type='application/json')
         self.assertEqual(res.status_code, 200)
         for movie in res.json['movies']:
             self.assertTrue(movie['saved']==False)
@@ -197,8 +196,8 @@ class UserModelCase(unittest.TestCase):
         bella.saves.append(movie_3)
         hazel.saves.append(movie_1)
         db.session.commit()
-        data = json.dumps({'user': monkey.username})
-        res = self.client.post('/api/get_movies', data=data, content_type='application/json')
+        j_data = json.dumps({'user': monkey.username})
+        res = self.client.post('/api/get_movies', data=j_data, content_type='application/json')
         self.assertEqual(res.status_code, 200)
         for movie in res.json['movies']:
             if movie['slug']=='movie_2':
@@ -206,18 +205,29 @@ class UserModelCase(unittest.TestCase):
             else:
                 self.assertTrue(movie['saved']==False)
 
+    def test_add_user(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        self.assertFalse('laura' in [u.username for u in User.query.all()])
+        j_data = json.dumps({'userName':'laura', 'password':'laurapassword', 'email':''})
+        res = self.client.post('/api/adduser', data=j_data, content_type='application/json')
+        self.assertTrue('laura' in [u.username for u in User.query.all()])
+
+    def test_sign_in(self):
+        monkey = self.create_users_movies_and_tags()[0]
+        headers = {'Authorization': 'Basic bW9ua2V5Om1vbmtleXBhc3N3b3Jk'}
+        res = self.client.post('/api/signin', headers=headers)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json['user'], 'monkey')
+        self.assertTrue(res.json['token'] != None)
 
 
-
-    # test_add_user
-    # test sign in
-    # test reset password
-    # test update account
-    # test delete account
-    # test save movie
-    # test unsave movie
-    # test suggest movie
-    # test unsuggest movie
+    # test_reset_password
+    # test_update_account
+    # test_delete_account
+    # test_save_movie
+    # test_unsave_movie
+    # test_suggest_movie
+    # test_unsuggest_movie
 
 
 
