@@ -2,7 +2,9 @@ import unittest
 from app import create_app, db
 from app.models import Movie, Tag, User
 from config import Config
-
+from app.api.auth import verify_password, verify_token
+import base64
+import os
 
 
 class TestConfig(Config):
@@ -27,15 +29,21 @@ class UserModelCase(unittest.TestCase):
     ''' Test DB Relationships '''
 
     def create_users_movies_and_tags(self):
+        # create three users
         monkey = User(username = 'monkey')
         monkey.set_password('monkeypassword')
+        monkey.get_token()
         bella = User(username = 'bella')
         bella.set_password('bellapassword')
+        bella.get_token()
         hazel = User(username = 'hazel')
         hazel.set_password('hazelpassword')
+        hazel.get_token()
+        # each user creates one movie
         movie_1 = Movie(uniquename="movie_1",name="Movie 1", year=2019,status='pending', recommender_id=1)
         movie_2 = Movie(uniquename="movie_2",name="Movie 2", year=2019,status='pending', recommender_id=2)
         movie_3 = Movie(uniquename="movie_3",name="Movie 3", year=2019,status='pending', recommender_id=3)
+        # create three tags
         action = Tag(name = 'Action')
         comedy = Tag(name = 'Comedy')
         documentary = Tag(name = 'Documentarty')
@@ -139,6 +147,25 @@ class UserModelCase(unittest.TestCase):
     def test_main_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
+
+    ''' Test Auth '''
+
+    def test_verify_password(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        self.assertTrue(verify_password('monkey','monkeypassword'))
+        self.assertTrue(verify_password('bella','bellapassword'))
+        self.assertFalse(verify_password('monkey','bellapassword'))
+        self.assertFalse(verify_password('bella','monkeypassword'))
+
+
+    def test_verify_token(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        self.assertTrue(verify_token(monkey.token))
+        self.assertTrue(verify_token(bella.token))
+        self.assertTrue(verify_token(hazel.token))
+        self.assertFalse(verify_token(base64.b64encode(os.urandom(24)).decode('utf-8')))
+        self.assertFalse(verify_token(base64.b64encode(os.urandom(24)).decode('utf-8')))
+        self.assertFalse(verify_token(base64.b64encode(os.urandom(24)).decode('utf-8')))
 
     ''' Test API Routes'''
 
