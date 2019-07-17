@@ -220,14 +220,46 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(res.json['user'], 'monkey')
         self.assertTrue(res.json['token'] != None)
 
+    def test_update_account_change_username(self):
+        monkey = self.create_users_movies_and_tags()[0]
+        headers = {'Authorization': 'Bearer ' + monkey.token}
+        j_data = json.dumps({'newUserName':'monkeycat', 'newEmail':None, 'newPassword':None})
+        res = self.client.post('/api/updateaccount', headers=headers, data=j_data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        #username will have changed
+        self.assertEqual(monkey.username, 'monkeycat')
+        self.assertEqual(res.json['user'], 'monkeycat')
+        #email will not have changed.. still None
+        self.assertEqual(monkey.email, None)
+        self.assertEqual(res.json['email'], None)
+        #password will not have changed
+        self.assertTrue(monkey.check_password('monkeypassword'))
 
-    # test_reset_password
-    # test_update_account
-    # test_delete_account
+
+    #def test_update_account_change_email
+    #def test_update_account_change_password
+
+    def test_delete_account(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        headers = {'Authorization': 'Basic bW9ua2V5Om1vbmtleXBhc3N3b3Jk'}
+        res = self.client.delete('/api/deleteaccount', headers=headers)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(len(Movie.query.all()) == 2)
+        self.assertTrue(movie_2 in Movie.query.all())
+        self.assertTrue(movie_3 in Movie.query.all())
+        self.assertTrue(len(User.query.all()) == 2)
+        self.assertTrue(bella in User.query.all())
+        self.assertTrue(hazel in User.query.all())
+
+
+
+
     # test_save_movie
     # test_unsave_movie
     # test_suggest_movie
     # test_unsuggest_movie
+    # test_reset_password
+
 
 
 
