@@ -139,4 +139,6 @@ def remove_suggestion():
     if movie_to_unsuggest in user.recommendations:
         db.session.delete(movie_to_unsuggest)
         db.session.commit()
-    return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
+        return jsonify({'user':g.current_user.username, 'email':g.current_user.email,}), 200
+    else:
+        return '',401

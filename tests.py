@@ -220,6 +220,8 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(res.json['user'], 'monkey')
         self.assertTrue(res.json['token'] != None)
 
+    # test_reset_password
+
     def test_update_account_change_username(self):
         monkey = self.create_users_movies_and_tags()[0]
         headers = {'Authorization': 'Bearer ' + monkey.token}
@@ -235,9 +237,8 @@ class UserModelCase(unittest.TestCase):
         #password will not have changed
         self.assertTrue(monkey.check_password('monkeypassword'))
 
-
-    #def test_update_account_change_email
-    #def test_update_account_change_password
+    # test_update_account_change_email
+    # test_update_account_change_password
 
     def test_delete_account(self):
         monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
@@ -251,17 +252,89 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(bella in User.query.all())
         self.assertTrue(hazel in User.query.all())
 
+    def test_save_movie(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        headers = {'Authorization': 'Bearer ' + monkey.token}
+        j_data = json.dumps({'slug':'movie_1'})
+        res = self.client.post('/api/savemovie', headers=headers, data=j_data, content_type='application/json')
+        self.assertTrue(monkey in movie_1.savers)
+        self.assertTrue(movie_1 in monkey.saves)
+        self.assertFalse(monkey in movie_2.savers)
+        self.assertFalse(movie_2 in monkey.saves)
+        self.assertTrue(len(movie_1.savers) == 1)
+        self.assertTrue(len(movie_2.savers) == 0)
+        self.assertTrue(len(movie_3.savers) == 0)
+        headers = {'Authorization': 'Bearer ' + bella.token}
+        j_data = json.dumps({'slug':'movie_1'})
+        res = self.client.post('/api/savemovie', headers=headers, data=j_data, content_type='application/json')
+        headers = {'Authorization': 'Bearer ' + bella.token}
+        j_data = json.dumps({'slug':'movie_2'})
+        res = self.client.post('/api/savemovie', headers=headers, data=j_data, content_type='application/json')
+        self.assertTrue(monkey in movie_1.savers and bella in movie_1.savers)
+        self.assertTrue(movie_1 in monkey.saves)
+        self.assertTrue(movie_1 in bella.saves)
+        self.assertTrue(bella in movie_2.savers)
+        self.assertTrue(movie_2 in bella.saves)
+        self.assertTrue(len(movie_1.savers) == 2)
+        self.assertTrue(len(movie_2.savers) == 1)
+        self.assertTrue(len(movie_3.savers) == 0)
 
+    def test_unsave_movie(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        movie_1.savers.append(monkey)
+        movie_1.savers.append(bella)
+        movie_2.savers.append(bella)
+        movie_2.savers.append(hazel)
+        movie_3.savers.append(hazel)
+        movie_3.savers.append(monkey)
+        db.session.commit()
+        #remove movie_1 from monkey.saves
+        self.assertTrue(movie_1 in monkey.saves)
+        headers = {'Authorization': 'Bearer ' + monkey.token}
+        j_data = json.dumps({'slug':'movie_1'})
+        res = self.client.post('/api/unsavemovie', headers=headers, data=j_data, content_type='application/json')
+        self.assertFalse(movie_1 in monkey.saves)
+        #remove movie_3 from monkey.saves
+        self.assertTrue(movie_3 in monkey.saves)
+        headers = {'Authorization': 'Bearer ' + monkey.token}
+        j_data = json.dumps({'slug':'movie_3'})
+        res = self.client.post('/api/unsavemovie', headers=headers, data=j_data, content_type='application/json')
+        self.assertFalse(movie_3 in monkey.saves)
+        #remove movie_1 from bella.saves
+        self.assertTrue(movie_1 in bella.saves)
+        headers = {'Authorization': 'Bearer ' + bella.token}
+        j_data = json.dumps({'slug':'movie_1'})
+        res = self.client.post('/api/unsavemovie', headers=headers, data=j_data, content_type='application/json')
+        self.assertFalse(movie_1 in bella.saves)
+        self.assertTrue(len(movie_1.savers) == 0)
+        self.assertTrue(len(movie_2.savers) == 2)
+        self.assertTrue(len(movie_3.savers) == 1)
 
+    def test_suggest_movie(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        #add movie_4 w recommender_id = 3 (hazel)
+        self.assertTrue(len(hazel.recommendations)==1)
+        headers = {'Authorization': 'Bearer ' + hazel.token}
+        j_data = json.dumps({'title':'Movie 4', 'year':'2019'})
+        res = self.client.post('/api/suggestmovie', headers=headers, data=j_data, content_type='application/json')
+        movie_4 = Movie.query.filter_by(name='Movie 4').first()
+        self.assertTrue(movie_4 in hazel.recommendations)
+        self.assertTrue(len(hazel.recommendations)==2)
 
-    # test_save_movie
-    # test_unsave_movie
-    # test_suggest_movie
-    # test_unsuggest_movie
-    # test_reset_password
-
-
-
+    def test_unsuggest_movie(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+        #remove movie_2 recommended by bella
+        self.assertTrue(len(bella.recommendations)==1)
+        headers = {'Authorization': 'Bearer ' + bella.token}
+        j_data = json.dumps({'slug':'movie_2'})
+        res = self.client.post('/api/removesuggestion', headers=headers, data=j_data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(len(bella.recommendations)==0)
+        #try to remove movie not recommended by person
+        headers = {'Authorization': 'Bearer ' + bella.token}
+        j_data = json.dumps({'slug':'movie_3'})
+        res = self.client.post('/api/removesuggestion', headers=headers, data=j_data, content_type='application/json')
+        self.assertEqual(res.status_code, 401)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
