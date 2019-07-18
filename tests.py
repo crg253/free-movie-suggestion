@@ -222,23 +222,64 @@ class UserModelCase(unittest.TestCase):
 
     # test_reset_password
 
-    def test_update_account_change_username(self):
-        monkey = self.create_users_movies_and_tags()[0]
+    def test_update_account(self):
+        monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
+
+        #1. change just monkey username
         headers = {'Authorization': 'Bearer ' + monkey.token}
         j_data = json.dumps({'newUserName':'monkeycat', 'newEmail':None, 'newPassword':None})
         res = self.client.post('/api/updateaccount', headers=headers, data=j_data, content_type='application/json')
         self.assertEqual(res.status_code, 200)
-        #username will have changed
+        #username should have changed
         self.assertEqual(monkey.username, 'monkeycat')
         self.assertEqual(res.json['user'], 'monkeycat')
-        #email will not have changed.. still None
+        #email is same
         self.assertEqual(monkey.email, None)
         self.assertEqual(res.json['email'], None)
-        #password will not have changed
+        #password is same
         self.assertTrue(monkey.check_password('monkeypassword'))
 
-    # test_update_account_change_email
-    # test_update_account_change_password
+        #2.change bella username and email
+        headers = {'Authorization': 'Bearer ' + bella.token}
+        j_data = json.dumps({'newUserName':'belladog', 'newEmail':'bella@dog.com', 'newPassword':None})
+        res = self.client.post('/api/updateaccount', headers=headers, data=j_data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        #username should have changed
+        self.assertEqual(bella.username, 'belladog')
+        self.assertEqual(res.json['user'], 'belladog')
+        #email should have changed
+        self.assertEqual(bella.email, 'bella@dog.com')
+        self.assertEqual(res.json['email'], 'bella@dog.com')
+        #password is same
+        self.assertTrue(bella.check_password('bellapassword'))
+
+        #3.change hazel username, email, and password
+        headers = {'Authorization': 'Bearer ' + hazel.token}
+        j_data = json.dumps({'newUserName':'hazeldog', 'newEmail':'hazel@dog.com', 'newPassword':'hazelnewpassword'})
+        res = self.client.post('/api/updateaccount', headers=headers, data=j_data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        #username should have changed
+        self.assertEqual(hazel.username, 'hazeldog')
+        self.assertEqual(res.json['user'], 'hazeldog')
+        #email should have changed
+        self.assertEqual(hazel.email, 'hazel@dog.com')
+        self.assertEqual(res.json['email'], 'hazel@dog.com')
+        #password should have changed
+        self.assertTrue(hazel.check_password('hazelnewpassword'))
+
+        #4. submit to hazel again, but w no changes
+        headers = {'Authorization': 'Bearer ' + hazel.token}
+        j_data = json.dumps({'newUserName':None, 'newEmail':None, 'newPassword':None})
+        res = self.client.post('/api/updateaccount', headers=headers, data=j_data, content_type='application/json')
+        self.assertEqual(res.status_code, 200)
+        #username should be same
+        self.assertEqual(hazel.username, 'hazeldog')
+        self.assertEqual(res.json['user'], 'hazeldog')
+        #email should be same
+        self.assertEqual(hazel.email, 'hazel@dog.com')
+        self.assertEqual(res.json['email'], 'hazel@dog.com')
+        #password should be same
+        self.assertTrue(hazel.check_password('hazelnewpassword'))
 
     def test_delete_account(self):
         monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = self.create_users_movies_and_tags()
