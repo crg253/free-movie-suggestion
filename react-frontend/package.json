@@ -5,11 +5,14 @@
   "dependencies": {
     "axios": "^0.18.0",
     "braces": "^3.0.2",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.8"
+    "react-scripts": "^3.0.1",
+    "react-test-renderer": "^16.8.6"
   },
   "scripts": {
     "start": "react-scripts start",

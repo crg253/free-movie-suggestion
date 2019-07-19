@@ -388,8 +388,7 @@ class UserModelCase(unittest.TestCase):
         csv_loader.load_movies('movies.csv')
         self.assertTrue(len(user_1.recommendations)==95)
         for m in Movie.query.all():
-            self.assertTrue(m.recommended_by==user_1) 
-
+            self.assertTrue(m.recommended_by==user_1)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
