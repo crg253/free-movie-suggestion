@@ -284,6 +284,91 @@ class App extends Component {
           />
 
           <Switch>
+
+            <Route path="/about" render={props => <About {...props} />} />
+
+            <Route
+              path="/createaccount"
+              render={props => <CreateAccount {...props} />}
+            />
+
+            <Route
+              path="/deleteaccount"
+              render={props => (
+                <DeleteAccount
+                  {...props}
+                  setUser={this.setUser}
+                  setEmail={this.setEmail}
+                  setMovies={this.setMovies}
+                  redirect={this.state.Redirect}
+                  handleGetMovies={this.handleGetMovies}
+                />
+              )}
+            />
+
+            <Route
+              path="/editaccount"
+              render={props => (
+                <EditAccount
+                  {...props}
+                  user={this.state.User}
+                  email={this.state.Email}
+                  setUser={this.setUser}
+                  setEmail={this.setEmail}
+                  setMovies={this.setMovies}
+                  redirect={this.state.Redirect}
+                  setRedirect={this.setRedirect}
+                  setRedirectBack={this.setRedirectBack}
+                  setRedirectBackSlug={this.setRedirectBackSlug}
+                  handleGetMovies={this.handleGetMovies}
+                />
+              )}
+            />
+
+            <Route
+              path="/recommend"
+              render={props => (
+                <Recommend
+                  {...props}
+                  user={this.state.User}
+                  setUser={this.setUser}
+                  setEmail={this.setEmail}
+                  setMovies={this.setMovies}
+                  setRedirect={this.setRedirect}
+                  redirect={this.state.Redirect}
+                  setRedirectBack={this.setRedirectBack}
+                  setRedirectBackSlug={this.setRedirectBackSlug}
+                  handleGetMovies={this.handleGetMovies}
+                />
+              )}
+            />
+
+            <Route
+              path="/resetpassword"
+              render={props => <ResetPassword {...props} />}
+            />
+
+            <Route
+              path="/signin"
+              render={props => (
+                <SignIn
+                  {...props}
+                  user={this.state.User}
+                  redirectBack={this.state.RedirectBack}
+                  setUser={this.setUser}
+                  setEmail={this.setEmail}
+                  handleGetMovies={this.handleGetMovies}
+                  setMovies={this.setMovies}
+                  setRedirect={this.setRedirect}
+                  setRedirectBack={this.setRedirectBack}
+                  redirectBackSlug={this.state.RedirectBackSlug}
+                  setRedirectBackSlug={this.setRedirectBackSlug}
+                  redirectBackGenre={this.state.RedirectBackGenre}
+                  setRedirectBackGenre={this.setRedirectBackGenre}
+                />
+              )}
+            />
+
             <Route
               path="/usermovies"
               render={props => (
@@ -317,90 +402,6 @@ class App extends Component {
                 />
               )}
             />
-
-            <Route
-              path="/recommend"
-              render={props => (
-                <Recommend
-                  {...props}
-                  user={this.state.User}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
-                  setMovies={this.setMovies}
-                  setRedirect={this.setRedirect}
-                  redirect={this.state.Redirect}
-                  setRedirectBack={this.setRedirectBack}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleGetMovies={this.handleGetMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/signin"
-              render={props => (
-                <SignIn
-                  {...props}
-                  user={this.state.User}
-                  redirectBack={this.state.RedirectBack}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
-                  handleGetMovies={this.handleGetMovies}
-                  setMovies={this.setMovies}
-                  setRedirect={this.setRedirect}
-                  setRedirectBack={this.setRedirectBack}
-                  redirectBackSlug={this.state.RedirectBackSlug}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  redirectBackGenre={this.state.RedirectBackGenre}
-                  setRedirectBackGenre={this.setRedirectBackGenre}
-                />
-              )}
-            />
-
-            <Route
-              path="/editaccount"
-              render={props => (
-                <EditAccount
-                  {...props}
-                  user={this.state.User}
-                  email={this.state.Email}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
-                  setMovies={this.setMovies}
-                  redirect={this.state.Redirect}
-                  setRedirect={this.setRedirect}
-                  setRedirectBack={this.setRedirectBack}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleGetMovies={this.handleGetMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/deleteaccount"
-              render={props => (
-                <DeleteAccount
-                  {...props}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
-                  setMovies={this.setMovies}
-                  redirect={this.state.Redirect}
-                  handleGetMovies={this.handleGetMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/createaccount"
-              render={props => <CreateAccount {...props} />}
-            />
-
-            <Route
-              path="/resetpassword"
-              render={props => <ResetPassword {...props} />}
-            />
-
-            <Route path="/about" render={props => <About {...props} />} />
 
             <Route
               path="/:genreslug/:movieslug"

@@ -143,6 +143,18 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(bella in movie_3.savers)
         self.assertTrue(hazel in movie_3.savers)
 
+    ''' Test csv_loader'''
+
+    def test_csv_loader(self):
+        user_1 = User(username = 'user_1')
+        user_1.set_password('user1password')
+        db.session.add(user_1)
+        db.session.commit()
+        csv_loader.load_movies('movies.csv')
+        self.assertTrue(len(user_1.recommendations)==95)
+        for m in Movie.query.all():
+            self.assertTrue(m.recommended_by==user_1)
+
     ''' Test Catch All Route '''
 
     def test_main_page(self):
@@ -378,17 +390,6 @@ class UserModelCase(unittest.TestCase):
         res = self.client.post('/api/removesuggestion', headers=headers, data=j_data, content_type='application/json')
         self.assertEqual(res.status_code, 401)
 
-    ''' Test csv_loader'''
-
-    def test_csv_loader(self):
-        user_1 = User(username = 'user_1')
-        user_1.set_password('user1password')
-        db.session.add(user_1)
-        db.session.commit()
-        csv_loader.load_movies('movies.csv')
-        self.assertTrue(len(user_1.recommendations)==95)
-        for m in Movie.query.all():
-            self.assertTrue(m.recommended_by==user_1)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
