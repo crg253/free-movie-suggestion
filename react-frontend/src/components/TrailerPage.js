@@ -8,7 +8,7 @@ import MovieList from "./MovieList";
 
 class TrailerPage extends Component {
   render() {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     let genreslug = this.props.match.params.genreslug;
     let upperGenre = this.props.changeGenreCase("toUpper", genreslug);
 

@@ -35,9 +35,9 @@ class HomePage extends Component {
   componentDidMount() {
     this.props.setRedirect("");
   }
-  componentDidUpdate() {
-    window.scrollTo(0, 0);
-  }
+  // componentDidUpdate() {
+  //   window.scrollTo(0, 0);
+  // }
   componentWillUnmount() {
     this.props.setSelectedGenre("");
   }
