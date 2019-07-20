@@ -198,7 +198,7 @@ class App extends Component {
 
   getRandomMovies = () => {
     let approvedMovies = this.state.Movies.filter(
-      movie => movie.status === "approved"
+      movie => movie.recommendedBy === "crg253"
     );
     let randomMovies = {
       Action: "",
@@ -222,7 +222,7 @@ class App extends Component {
       }
     }
     let comingSoon = [...this.state.Movies].filter(
-      movie => movie.status === "neither"
+      movie => movie.slug === "comingsoon"
     )[0];
 
     randomMovies["All"] = comingSoon;

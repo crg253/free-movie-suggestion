@@ -3,15 +3,12 @@ import {Link} from "react-router-dom";
 
 class MovieList extends Component {
   render() {
-    let selectedMovieList = [];
-    if (this.props.upperGenre === "All") {
-      selectedMovieList = this.props.movies.filter(
-        movie => movie.status === "approved"
-      );
-    } else {
-      selectedMovieList = this.props.movies
-        .filter(movie => movie.status === "approved")
-        .filter(movie => movie.tags.includes(this.props.upperGenre));
+    let selectedMovieList = this.props.movies
+      .filter(movie => movie.recommendedBy === "crg253")
+      .filter(movie => movie.slug !== 'comingsoon');
+    if (this.props.upperGenre !== "All") {
+      selectedMovieList = selectedMovieList
+      .filter(movie => movie.tags.includes(this.props.upperGenre));
     }
 
     if (this.props.sortBy === "year") {
