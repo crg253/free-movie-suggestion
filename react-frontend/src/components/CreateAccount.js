@@ -85,6 +85,7 @@ class CreateAccount extends Component {
 
           <form onSubmit={this.handleAddUserSubmit}>
             <input
+              id = 'create-account-username-input'
               type="text"
               placeholder="Username"
               value={this.state.Name}
@@ -92,6 +93,7 @@ class CreateAccount extends Component {
             />
 
             <input
+              id = 'create-account-password-input'
               type="text"
               placeholder="Password"
               value={this.state.Password}
@@ -99,6 +101,7 @@ class CreateAccount extends Component {
             />
 
             <input
+              id = 'create-account-email-input'
               type="text"
               placeholder="Email"
               value={this.state.Email}
