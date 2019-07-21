@@ -284,7 +284,6 @@ class App extends Component {
           />
 
           <Switch>
-
             <Route path="/about" render={props => <About {...props} />} />
 
             <Route
