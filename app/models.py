@@ -4,15 +4,22 @@ import base64
 from datetime import datetime, timedelta
 import os
 
-tags = db.Table('tags',
-    db.Column('movie_id', db.Integer, db.ForeignKey('movie.movie_id'), primary_key=True),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.tag_id'), primary_key=True)
+tags = db.Table(
+    "tags",
+    db.Column(
+        "movie_id", db.Integer, db.ForeignKey("movie.movie_id"), primary_key=True
+    ),
+    db.Column("tag_id", db.Integer, db.ForeignKey("tag.tag_id"), primary_key=True),
 )
 
-savers = db.Table('savers',
-    db.Column('movie_id', db.Integer, db.ForeignKey('movie.movie_id'), primary_key=True),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+savers = db.Table(
+    "savers",
+    db.Column(
+        "movie_id", db.Integer, db.ForeignKey("movie.movie_id"), primary_key=True
+    ),
+    db.Column("user_id", db.Integer, db.ForeignKey("user.user_id"), primary_key=True),
 )
+
 
 class Movie(db.Model):
     movie_id = db.Column(db.Integer, primary_key=True)
@@ -20,16 +27,25 @@ class Movie(db.Model):
     name = db.Column(db.String(200), nullable=False)
     year = db.Column(db.Integer, nullable=False)
     video_link = db.Column(db.String(1000))
-    tags = db.relationship('Tag', secondary=tags, lazy='subquery',
-        backref=db.backref('movies', lazy=True))
+    tags = db.relationship(
+        "Tag", secondary=tags, lazy="subquery", backref=db.backref("movies", lazy=True)
+    )
     status = db.Column(db.String(20), nullable=False)
-    recommender_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    savers = db.relationship('User', secondary=savers, lazy='subquery',
-        backref=db.backref('saves', lazy=True))
+    recommender_id = db.Column(
+        db.Integer, db.ForeignKey("user.user_id"), nullable=False
+    )
+    savers = db.relationship(
+        "User",
+        secondary=savers,
+        lazy="subquery",
+        backref=db.backref("saves", lazy=True),
+    )
+
 
 class Tag(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True, nullable=False)
+
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -38,7 +54,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
-    recommendations = db.relationship('Movie', backref="recommended_by", lazy=True)
+    recommendations = db.relationship("Movie", backref="recommended_by", lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -50,7 +66,7 @@ class User(db.Model):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
             return self.token
-        self.token =  base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.token = base64.b64encode(os.urandom(24)).decode("utf-8")
         self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
         return self.token
