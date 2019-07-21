@@ -44,21 +44,18 @@ class UserModelCase(unittest.TestCase):
             uniquename="movie_1",
             name="Movie 1",
             year=2019,
-            status="pending",
             recommender_id=1,
         )
         movie_2 = Movie(
             uniquename="movie_2",
             name="Movie 2",
             year=2019,
-            status="pending",
             recommender_id=2,
         )
         movie_3 = Movie(
             uniquename="movie_3",
             name="Movie 3",
             year=2019,
-            status="pending",
             recommender_id=3,
         )
         # create three tags

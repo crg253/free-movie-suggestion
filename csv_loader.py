@@ -33,7 +33,6 @@ def load_movie(row):
     slug = slugify(row[0].lower() + row[1])
     movie = Movie(
         recommender_id=1,
-        status="approved",
         uniquename=slug,
         name=row[0],
         year=row[1],

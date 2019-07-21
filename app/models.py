@@ -30,7 +30,6 @@ class Movie(db.Model):
     tags = db.relationship(
         "Tag", secondary=tags, lazy="subquery", backref=db.backref("movies", lazy=True)
     )
-    status = db.Column(db.String(20), nullable=False)
     recommender_id = db.Column(
         db.Integer, db.ForeignKey("user.user_id"), nullable=False
     )

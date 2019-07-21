@@ -38,7 +38,6 @@ def get_movies():
                 "year": movie.year,
                 "video": movie.video_link,
                 "tags": [x.name for x in movie.tags],
-                "status": movie.status,
                 "recommendedBy": movie.recommended_by.username,
                 "saved": True if user in movie.savers else False,
             }
@@ -163,7 +162,6 @@ def suggest_movie():
         name=title,
         year=year,
         recommender_id=user_id,
-        status="pending",
     )
     db.session.add(movie)
     db.session.commit()
