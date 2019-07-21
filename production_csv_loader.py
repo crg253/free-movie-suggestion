@@ -4,7 +4,7 @@ from app.models import Movie, Tag
 import re
 
 """
-Add approved movies for recommender_id = 1
+Must first create user 1
 """
 
 
