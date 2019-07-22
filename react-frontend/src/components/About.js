@@ -25,7 +25,6 @@ class About extends Component {
             and please let me know if you have any problems with the site.
           </p>
           <h3>- Craig</h3>
-          <h3>crg253@protonmail.com</h3>
         </div>
         <div id="about-footer" />
       </div>

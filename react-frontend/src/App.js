@@ -14,6 +14,7 @@ import ResetPassword from "./components/ResetPassword";
 import EditAccount from "./components/EditAccount";
 import DeleteAccount from "./components/DeleteAccount";
 import About from "./components/About";
+import Contact from "./components/Contact";
 
 class App extends Component {
   state = {
@@ -285,6 +286,8 @@ class App extends Component {
 
           <Switch>
             <Route path="/about" render={props => <About {...props} />} />
+
+            <Route path="/contact" render={props => <Contact {...props} />} />
 
             <Route
               path="/createaccount"
