@@ -187,3 +187,15 @@ def remove_suggestion():
         )
     else:
         return "", 401
+
+@bp.route("/contact_message", methods=["POST"])
+def contact_message():
+    msg = Message(
+        "Message from User",
+        sender="admin@freemoviesuggestion.com",
+        recipients=["admin@freemoviesuggestion.com"]
+    )
+    data = request.get_json(silent=True) or {}
+    msg.body = data.get("contactMessage")
+    mail.send(msg)
+    return "", 200
