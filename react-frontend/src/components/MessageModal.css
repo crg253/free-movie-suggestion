@@ -1,0 +1,24 @@
+#message-modal-wrapper{
+  position: absolute;
+  top:10vh;
+  left: 15vw;
+  width:70vw;
+  height: 60vh;
+  background-color: #191919;
+  border: 1px solid white;
+  text-align: center;
+}
+.modal-button{
+  min-width:100px;
+  min-height: 35px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  padding:10px;
+}

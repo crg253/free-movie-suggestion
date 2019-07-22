@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
+import MessageModal from "./MessageModal";
+
 import "./UserForm.css";
 
 class CreateAccount extends Component {
@@ -8,7 +10,6 @@ class CreateAccount extends Component {
     Name: "",
     Password: "",
     Email: "",
-    ErrorMessage: "",
     Message: ""
   };
 
@@ -50,10 +51,11 @@ class CreateAccount extends Component {
     }).then(res => {
       if (!res.ok) {
         this.setState({
-          ErrorMessage: (
-            <p style={{fontSize: "18px", color: "red"}}>
-              Sorry, username not available.
-            </p>
+          Message: (
+            <MessageModal
+              message="Sorry, username not available."
+              buttonMessage="Fine be that way"
+            />
           ),
           Name: "",
           Password: "",
@@ -62,9 +64,10 @@ class CreateAccount extends Component {
       } else {
         this.setState({
           Message: (
-            <p style={{fontSize: "18px", color: "green"}}>
-              Thank you for creating an account.
-            </p>
+            <MessageModal
+              message="Thank you for creating account."
+              buttonMessage="You're welcome."
+            />
           ),
           Name: "",
           Password: "",
@@ -114,7 +117,6 @@ class CreateAccount extends Component {
               disabled={this.isDisabled()}
             />
 
-            {this.state.ErrorMessage}
             {this.state.Message}
           </form>
 
