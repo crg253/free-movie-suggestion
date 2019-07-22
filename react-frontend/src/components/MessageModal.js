@@ -13,7 +13,6 @@ class MessageModal extends Component {
   render() {
     return (
       <div style={{display: this.state.Display}} id="message-modal-wrapper">
-        <h1>Very Important Message</h1>
         <h3>{this.props.message}</h3>
         <button
           className="modal-button"
