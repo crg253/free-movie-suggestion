@@ -11,7 +11,14 @@ class Contact extends Component {
   };
 
   handleContactMessageValueChange = event => {
-    this.setState({ContactMessage: event.target.value, ResponseMessage: ""});
+    this.setState({
+      ContactMessage: event.target.value,
+      ResponseMessage: ""
+    });
+  };
+
+  isDisabled = () => {
+    return this.state.ContactMessage.length === 0;
   };
 
   handleContactMessageSubmit = event => {
@@ -34,6 +41,7 @@ class Contact extends Component {
   };
 
   render() {
+    console.log(this.state.BoxWidth);
     return (
       <div>
         <Link to={"/"}>
@@ -44,21 +52,8 @@ class Contact extends Component {
 
           <form onSubmit={this.handleContactMessageSubmit}>
             <textarea
-              rows="10"
-              cols="50"
-              style={{
-                margin: "20px",
-                height: "40vh",
-                width: "50vw",
-                backgroundColor: "#1F1F1F",
-                border: "1px solid #1F1F1F",
-                color: "white",
-                fontSize: "18px",
-                display: "block",
-                marginLeft: "auto",
-                marginRight: "auto",
-                padding: "20px"
-              }}
+              placeholder="Type message here..."
+              id="contact-message-text-area"
               type="text"
               value={this.state.ContactMessage}
               onChange={this.handleContactMessageValueChange}
@@ -67,10 +62,12 @@ class Contact extends Component {
               className="form-submit-button"
               type="submit"
               value="Submit"
+              disabled={this.isDisabled()}
             />
           </form>
           {this.state.ResponseMessage}
         </div>
+        <div className="form-footer" />
       </div>
     );
   }

@@ -6,7 +6,7 @@ from app.api.auth import verify_password, verify_token
 import base64
 import os
 import json
-import csv_loader
+import production_csv_loader
 
 
 class TestConfig(Config):
@@ -186,7 +186,7 @@ class UserModelCase(unittest.TestCase):
         user_1.set_password("user1password")
         db.session.add(user_1)
         db.session.commit()
-        csv_loader.load_movies("movies.csv")
+        production_csv_loader.load_movies("movies.csv")
         self.assertTrue(len(user_1.recommendations) == 95)
         for m in Movie.query.all():
             self.assertTrue(m.recommended_by == user_1)

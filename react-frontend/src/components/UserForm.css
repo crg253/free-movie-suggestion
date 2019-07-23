@@ -23,6 +23,16 @@ input::-webkit-input-placeholder {
   display: block;
   margin:10px auto 10px auto;
 }
+#contact-message-text-area{
+  height: 45vh;
+  width: 30vw;
+  margin-bottom: 20px;
+  font-size: 18px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
 .form-submit-button{
   width:100px;
   height: 35px;
@@ -40,6 +50,10 @@ input::-webkit-input-placeholder {
 .form-submit-button[disabled]{
   opacity: 0.5;
 }
+#contact-message-text-area:focus{
+  outline:0;
+}
+
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
@@ -53,6 +67,10 @@ input::-webkit-input-placeholder {
   }
   input{
     width:200px;
+  }
+  #contact-message-text-area{
+    height: 30vh;
+    width: 85vw;
   }
   .form-submit-button{
     width:80px;
@@ -72,6 +90,10 @@ input::-webkit-input-placeholder {
   }
   input{
     width:250px;
+  }
+  #contact-message-text-area{
+    height: 40vh;
+    width: 70vw;
   }
   .form-submit-button{
     width:80px;
