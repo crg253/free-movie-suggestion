@@ -1,78 +1,20 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
-import MessageModal from "./MessageModal";
-import "./UserForm.css";
+import "./About.css";
 
 class Contact extends Component {
-  state = {
-    ContactMessage: "",
-    ResponseMessage: ""
-  };
-
-  handleContactMessageValueChange = event => {
-    this.setState({
-      ContactMessage: event.target.value,
-      ResponseMessage: ""
-    });
-  };
-
-  isDisabled = () => {
-    return this.state.ContactMessage.length === 0;
-  };
-
-  handleContactMessageSubmit = event => {
-    event.preventDefault();
-    fetch("/api/contact_message", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({contactMessage: this.state.ContactMessage})
-    }).then(res => {
-      this.setState({
-        ContactMessage: "",
-        ResponseMessage: (
-          <MessageModal
-            message="Thank you for contacting us."
-            buttonMessage="You're Welcome."
-          />
-        )
-      });
-    });
-  };
-
   render() {
-    console.log(this.state.BoxWidth);
     return (
       <div>
         <Link to={"/"}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div className="user-pages-body-wrapper">
-          <h1>Contact</h1>
-
-          <form
-            id="contact-message-form"
-            onSubmit={this.handleContactMessageSubmit}
-          >
-            <input type="text" placeholder="Name" />
-            <input type="text" placeholder="Email" />
-            <textarea
-              placeholder="Type message here..."
-              id="contact-message-text-area"
-              type="text"
-              value={this.state.ContactMessage}
-              onChange={this.handleContactMessageValueChange}
-            />
-            <input
-              className="form-submit-button"
-              type="submit"
-              value="Submit"
-              disabled={this.isDisabled()}
-            />
-          </form>
-          {this.state.ResponseMessage}
+        <div id="about-body">
+          <h1 id="about-heading">Contact</h1>
+          <p id="about-paragraph">admin@freemoviesuggestion.com</p>
         </div>
-        <div className="form-footer" />
+        <div id="about-footer" />
       </div>
     );
   }
