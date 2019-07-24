@@ -50,7 +50,12 @@ class Contact extends Component {
         <div className="user-pages-body-wrapper">
           <h1>Contact</h1>
 
-          <form onSubmit={this.handleContactMessageSubmit}>
+          <form
+            id="contact-message-form"
+            onSubmit={this.handleContactMessageSubmit}
+          >
+            <input type="text" placeholder="Name" />
+            <input type="text" placeholder="Email" />
             <textarea
               placeholder="Type message here..."
               id="contact-message-text-area"
