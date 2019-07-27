@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 
+import MessageModal from "./MessageModal";
+
 import "./UserForm.css";
 
 class Recommend extends Component {
@@ -8,15 +10,18 @@ class Recommend extends Component {
   state = {
     SearchValue: "",
     SearchResultOptions: [],
-    MovieMessage: ""
+    Message: ""
   };
 
   handleSearchValueChange = event => {
-    this.setState({SearchValue: event.target.value, SearchResultOptions: []});
+    this.setState({
+      SearchValue: event.target.value,
+      SearchResultOptions: [],
+      Message: ""
+    });
   };
 
   handleSearchSubmit = event => {
-    this.setState({MovieMessage: ""});
     event.preventDefault();
     fetch(
       "http://www.omdbapi.com/?s=" + this.state.SearchValue + "&apikey=e0bc91cd"
@@ -42,7 +47,12 @@ class Recommend extends Component {
         this.setState({
           SearchValue: "",
           SearchResultOptions: [],
-          MovieMessage: "Movie already selected."
+          Message: (
+            <MessageModal
+              message="Sorry, movie already selected."
+              buttonMessage="Fine be that way"
+            />
+          )
         });
       } else if (res.status === 401) {
         this.props.setUser("");
@@ -59,7 +69,12 @@ class Recommend extends Component {
           this.setState({
             SearchValue: "",
             SearchResultOptions: [],
-            MovieMessage: "Thank you for suggesting."
+            Message: (
+              <MessageModal
+                message="Thank you for suggesting!"
+                buttonMessage="You're welcome"
+              />
+            )
           });
         });
       }
@@ -93,8 +108,6 @@ class Recommend extends Component {
             />
           </form>
 
-          <h4>{this.state.MovieMessage}</h4>
-
           {this.state.SearchResultOptions.map(mov => (
             <div key={"searchresult" + mov.Title + mov.Year}>
               <p>
@@ -108,6 +121,7 @@ class Recommend extends Component {
             </div>
           ))}
         </div>
+        {this.state.Message}
         <div className="form-footer" />
       </div>
     );

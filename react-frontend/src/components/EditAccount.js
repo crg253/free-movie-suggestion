@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 
+import MessageModal from "./MessageModal";
+
 import "./UserForm.css";
 
 class EditAccount extends Component {
@@ -13,17 +15,20 @@ class EditAccount extends Component {
 
   handleNewNameChange = event => {
     this.setState({
-      NewName: event.target.value
+      NewName: event.target.value,
+      Message: ""
     });
   };
   handleNewEmailChange = event => {
     this.setState({
-      NewEmail: event.target.value
+      NewEmail: event.target.value,
+      Message: ""
     });
   };
   handleNewPasswordChange = event => {
     this.setState({
-      NewPassword: event.target.value
+      NewPassword: event.target.value,
+      Message: ""
     });
   };
 
@@ -57,7 +62,12 @@ class EditAccount extends Component {
             NewName: "",
             NewEmail: "",
             NewPassword: "",
-            Message: <p style={{fontSize: "18px"}}>Account Updated</p>
+            Message: (
+              <MessageModal
+                message="Account updated."
+                buttonMessage="Ok, good"
+              />
+            )
           });
         });
       }
@@ -104,9 +114,9 @@ class EditAccount extends Component {
                 className="form-submit-button"
               />
             </form>
-            {this.state.Message}
           </div>
         </div>
+        {this.state.Message}
         <div className="form-footer" />
       </div>
     );

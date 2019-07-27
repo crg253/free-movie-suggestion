@@ -1,28 +1,27 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 
+import MessageModal from "./MessageModal";
+
 import "./UserForm.css";
 
 class DeleteAccount extends Component {
   state = {
     Name: "",
     Password: "",
-    Message: "",
-    ErrorMessage: ""
+    Message: ""
   };
 
   handleNameChange = event => {
     this.setState({
       Name: event.target.value,
-      Message: "",
-      ErrorMessage: ""
+      Message: ""
     });
   };
   handlePasswordChange = event => {
     this.setState({
       Password: event.target.value,
-      Message: "",
-      ErrorMessage: ""
+      Message: ""
     });
   };
 
@@ -44,10 +43,11 @@ class DeleteAccount extends Component {
         this.setState({
           Name: "",
           Password: "",
-          ErrorMessage: (
-            <p style={{fontSize: "18px", color: "red"}}>
-              Incorrect username or password
-            </p>
+          Message: (
+            <MessageModal
+              message="Incorrect username or password."
+              buttonMessage="Fine be that way"
+            />
           )
         });
       } else if (res.status === 200) {
@@ -58,7 +58,9 @@ class DeleteAccount extends Component {
           Name: "",
           Email: "",
           Password: "",
-          Message: <p style={{fontSize: "18px"}}>Account Deleted</p>
+          Message: (
+            <MessageModal message="Account deleted." buttonMessage="OK" />
+          )
         });
       }
     });
@@ -97,10 +99,9 @@ class DeleteAccount extends Component {
                 className="form-submit-button"
               />
             </form>
-            {this.state.Message}
-            {this.state.ErrorMessage}
           </div>
         </div>
+        {this.state.Message}
         <div className="form-footer" />
       </div>
     );

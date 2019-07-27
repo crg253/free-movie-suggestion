@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 
+import MessageModal from "./MessageModal";
+
 import "./UserForm.css";
 import "./SignIn.css";
 
@@ -8,22 +10,19 @@ class SignIn extends Component {
   state = {
     Name: "",
     Password: "",
-    MessageLink: "",
-    ErrorMessage: ""
+    Message: ""
   };
 
   handleNameChange = event => {
     this.setState({
       Name: event.target.value,
-      MessageLink: "",
-      ErrorMessage: ""
+      Message: ""
     });
   };
   handlePasswordChange = event => {
     this.setState({
       Password: event.target.value,
-      MessageLink: "",
-      ErrorMessage: ""
+      Message: ""
     });
   };
 
@@ -45,10 +44,11 @@ class SignIn extends Component {
         this.setState({
           Name: "",
           Password: "",
-          ErrorMessage: (
-            <p style={{fontSize: "18px", color: "red"}}>
-              Incorrect username or password
-            </p>
+          Message: (
+            <MessageModal
+              message="Incorrect username or password."
+              buttonMessage="Fine be that way"
+            />
           )
         });
       } else if (res.status === 200) {
@@ -77,10 +77,11 @@ class SignIn extends Component {
             this.setState({
               Name: "",
               Password: "",
-              MessageLink: (
-                <p style={{fontSize: "18px", color: "white"}}>
-                  Now signed in as {res.user}
-                </p>
+              Message: (
+                <MessageModal
+                  message={"Now signed in as " + res.user + "."}
+                  buttonMessage="Awesome"
+                />
               )
             });
           }
@@ -128,9 +129,6 @@ class SignIn extends Component {
               value="Submit"
               className="form-submit-button"
             />
-
-            {this.state.ErrorMessage}
-            {this.state.MessageLink}
           </form>
 
           <div id="forgotpassword-createaccount-links">
@@ -147,6 +145,7 @@ class SignIn extends Component {
           </div>
         </div>
         {/*class="user-pages-body-wrapper"*/}
+        {this.state.Message}
         <div className="form-footer" />
       </div>
     );

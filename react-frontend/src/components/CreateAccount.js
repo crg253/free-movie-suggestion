@@ -16,21 +16,18 @@ class CreateAccount extends Component {
   handleNameChange = event => {
     this.setState({
       Name: event.target.value,
-      ErrorMessage: "",
       Message: ""
     });
   };
   handlePasswordChange = event => {
     this.setState({
       Password: event.target.value,
-      ErrorMessage: "",
       Message: ""
     });
   };
   handleEmailChange = event => {
     this.setState({
       Email: event.target.value,
-      ErrorMessage: "",
       Message: ""
     });
   };
@@ -66,7 +63,7 @@ class CreateAccount extends Component {
           Message: (
             <MessageModal
               message="Thank you for creating account."
-              buttonMessage="You're welcome."
+              buttonMessage="You're welcome"
             />
           ),
           Name: "",
@@ -116,8 +113,6 @@ class CreateAccount extends Component {
               className="form-submit-button"
               disabled={this.isDisabled()}
             />
-
-            {this.state.Message}
           </form>
 
           <Link to={"/signin"}>
@@ -128,6 +123,7 @@ class CreateAccount extends Component {
           </Link>
         </div>
         {/* class="user-pages-body-wrapper"*/}
+        {this.state.Message}
         <div className="form-footer" />
       </div>
     );

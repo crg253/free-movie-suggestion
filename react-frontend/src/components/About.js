@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
-import "./About.css";
+import "./AboutContact.css";
 
 class About extends Component {
   render() {
@@ -10,9 +10,9 @@ class About extends Component {
         <Link to={"/"}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
-        <div id="about-body">
-          <h1 id="about-heading">About</h1>
-          <p id="about-paragraph">
+        <div id="about-contact-body">
+          <h1 id="about-contact-heading">About</h1>
+          <p id="about-contact-paragraph">
             Hey Everyone, welcome to the website... that I have worked entirely
             too long on. It's here. Finally. It's a bunch of trailers. I hope
             you like watching trailers, lol. No seriously, I hope you do like
@@ -26,7 +26,7 @@ class About extends Component {
           </p>
           <h3>- Craig</h3>
         </div>
-        <div id="about-footer" />
+        <div id="about-contact-footer" />
       </div>
     );
   }

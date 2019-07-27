@@ -1,20 +1,20 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
+import MessageModal from "./MessageModal";
+
 import "./UserForm.css";
 
 class ResetPassword extends Component {
   state = {
     Email: "",
-    Message: "",
-    ErrorMessage: ""
+    Message: ""
   };
 
   handleEmailChange = event => {
     this.setState({
       Email: event.target.value,
-      Message: "",
-      ErrorMessage: ""
+      Message: ""
     });
   };
 
@@ -27,19 +27,21 @@ class ResetPassword extends Component {
     }).then(res => {
       if (!res.ok) {
         this.setState({
-          ErrorMessage: (
-            <p style={{fontSize: "18px", color: "red"}}>
-              Sorry, email not found.
-            </p>
+          Message: (
+            <MessageModal
+              message="Sorry, email not found."
+              buttonMessage="Fine be that way"
+            />
           ),
           Email: ""
         });
       } else {
         this.setState({
           Message: (
-            <p style={{fontSize: "18px", color: "white"}}>
-              Success. Check email for new password.
-            </p>
+            <MessageModal
+              message="Success. Check email for new password."
+              buttonMessage="Awesome"
+            />
           ),
           Email: ""
         });
@@ -67,9 +69,6 @@ class ResetPassword extends Component {
               value="Submit"
               className="form-submit-button"
             />
-
-            {this.state.ErrorMessage}
-            {this.state.Message}
           </form>
 
           <Link to={"/signin"}>
@@ -79,6 +78,7 @@ class ResetPassword extends Component {
           </Link>
         </div>
         {/* class="user-pages-body-wrapper"*/}
+        {this.state.Message}
         <div className="form-footer" />
       </div>
     );
