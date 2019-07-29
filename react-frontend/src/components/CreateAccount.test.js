@@ -25,19 +25,4 @@ describe("<CreateAccount />", () => {
 
     expect(wrapper.state("Email")).toEqual("monkey@cat.com");
   });
-
-  //#2
-  it("local state clears after mock fetchAddUser 200 response code", async () => {
-    const wrapper = shallow(<CreateAccount />);
-
-    wrapper.setState({
-      Name: "monkey",
-      Password: "monkeypassword",
-      Email: "monkey@cat.com"
-    });
-
-    await wrapper.instance().handleAddUserSubmit();
-    await wrapper.update();
-    expect(wrapper.state("Email")).toEqual("");
-  });
 });

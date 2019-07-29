@@ -37,44 +37,42 @@ class CreateAccount extends Component {
   };
 
   handleAddUserSubmit = event => {
-    //event.preventDefault();
-    fetchAddUser(this.state.Name, this.state.Password, this.state.Email)
-      // fetch("/api/adduser", {
-      //   method: "POST",
-      //   headers: {"Content-Type": "application/json"},
-      //   body: JSON.stringify({
-      //     userName: this.state.Name,
-      //     password: this.state.Password,
-      //     email: this.state.Email
-      //   })
-      // })
-      .then(res => {
-        if (!res.ok) {
-          this.setState({
-            Message: (
-              <MessageModal
-                message="Sorry, username not available."
-                buttonMessage="Fine be that way"
-              />
-            ),
-            Name: "",
-            Password: "",
-            Email: ""
-          });
-        } else {
-          this.setState({
-            Message: (
-              <MessageModal
-                message="Thank you for creating account."
-                buttonMessage="You're welcome"
-              />
-            ),
-            Name: "",
-            Password: "",
-            Email: ""
-          });
-        }
-      });
+    event.preventDefault();
+    fetch("/api/adduser", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        userName: this.state.Name,
+        password: this.state.Password,
+        email: this.state.Email
+      })
+    }).then(res => {
+      if (!res.ok) {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Sorry, username not available."
+              buttonMessage="Fine be that way"
+            />
+          ),
+          Name: "",
+          Password: "",
+          Email: ""
+        });
+      } else {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Thank you for creating account."
+              buttonMessage="You're welcome"
+            />
+          ),
+          Name: "",
+          Password: "",
+          Email: ""
+        });
+      }
+    });
   };
 
   render() {
