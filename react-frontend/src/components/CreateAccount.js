@@ -37,7 +37,7 @@ class CreateAccount extends Component {
   };
 
   handleAddUserSubmit = event => {
-    event.preventDefault();
+    //event.preventDefault();
     fetchAddUser(this.state.Name, this.state.Password, this.state.Email)
       // fetch("/api/adduser", {
       //   method: "POST",

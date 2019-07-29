@@ -1,7 +1,10 @@
 import CreateAccount from "./CreateAccount";
 
+jest.mock("../services/fetchAddUser");
+
 describe("<CreateAccount />", () => {
-  it("form input changes in local state", () => {
+  //#1
+  it("local state responds to form input changes", () => {
     const wrapper = shallow(<CreateAccount />);
 
     wrapper
@@ -21,5 +24,20 @@ describe("<CreateAccount />", () => {
       .simulate("change", {target: {value: "monkey@cat.com"}});
 
     expect(wrapper.state("Email")).toEqual("monkey@cat.com");
+  });
+
+  //#2
+  it("local state clears after mock fetchAddUser 200 response code", async () => {
+    const wrapper = shallow(<CreateAccount />);
+
+    wrapper.setState({
+      Name: "monkey",
+      Password: "monkeypassword",
+      Email: "monkey@cat.com"
+    });
+
+    await wrapper.instance().handleAddUserSubmit();
+    await wrapper.update();
+    expect(wrapper.state("Email")).toEqual("");
   });
 });
