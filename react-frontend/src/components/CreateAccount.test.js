@@ -1,10 +1,8 @@
 import CreateAccount from "./CreateAccount";
 
-jest.mock("../services/fetchAddUser");
-
 describe("<CreateAccount />", () => {
   //#1
-  it("local state responds to form input changes", () => {
+  it("local state changes with form input", () => {
     const wrapper = shallow(<CreateAccount />);
 
     wrapper

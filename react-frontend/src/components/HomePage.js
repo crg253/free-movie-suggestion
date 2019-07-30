@@ -161,6 +161,7 @@ class HomePage extends Component {
           </g>
 
           <g
+            id="action-car"
             onClick={() => {
               this.updateInstructions();
               this.props.setSelectedGenre("Action");

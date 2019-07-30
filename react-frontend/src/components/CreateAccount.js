@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
 import MessageModal from "./MessageModal";
-import fetchAddUser from "../services/fetchAddUser";
 
 import "./UserForm.css";
 

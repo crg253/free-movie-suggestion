@@ -15,7 +15,7 @@ class TestConfig(Config):
     ELASTICSEARCH_URL = None
 
 
-class UserModelCase(unittest.TestCase):
+class UnittestBackendTests(unittest.TestCase):
     def setUp(self):
         self.app = create_app(TestConfig)
         self.app_context = self.app.app_context()

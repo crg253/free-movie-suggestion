@@ -75,6 +75,7 @@ class Genres extends Component {
           <p className="sort-selector">sort by </p>
 
           <button
+            id="title-sort-button"
             style={{color: this.props.sortBy === "name" ? "white" : "grey"}}
             className="sort-selector button-nostyle"
             onClick={() => this.props.setSort("name")}
@@ -82,6 +83,7 @@ class Genres extends Component {
             TITLE
           </button>
           <button
+            id="year-sort-button"
             style={{color: this.props.sortBy === "year" ? "white" : "grey"}}
             className="sort-selector button-nostyle"
             onClick={() => this.props.setSort("year")}
