@@ -1,3 +1,6 @@
+import os
+import sys
+sys.path.append(os.path.abspath("../"))
 import csv
 from app import db
 from app.models import Movie, Tag

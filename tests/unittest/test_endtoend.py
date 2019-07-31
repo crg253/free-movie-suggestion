@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 
-class UnittestSeleniumEndToEndTests(unittest.TestCase):
+class EndToEndTests(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
 

@@ -1,12 +1,14 @@
+import os
+import sys
+sys.path.append(os.path.abspath("../../"))
 import unittest
 from app import create_app, db
 from app.models import Movie, Tag, User
 from config import Config
 from app.api.auth import verify_password, verify_token
 import base64
-import os
 import json
-import production_csv_loader
+import csv_loader
 
 
 class TestConfig(Config):
@@ -15,7 +17,7 @@ class TestConfig(Config):
     ELASTICSEARCH_URL = None
 
 
-class UnittestBackendTests(unittest.TestCase):
+class BackendTests(unittest.TestCase):
     def setUp(self):
         self.app = create_app(TestConfig)
         self.app_context = self.app.app_context()
@@ -186,7 +188,7 @@ class UnittestBackendTests(unittest.TestCase):
         user_1.set_password("user1password")
         db.session.add(user_1)
         db.session.commit()
-        production_csv_loader.load_movies("movies.csv")
+        csv_loader.load_movies("../../movies.csv")
         self.assertTrue(len(user_1.recommendations) == 95)
         for m in Movie.query.all():
             self.assertTrue(m.recommended_by == user_1)
