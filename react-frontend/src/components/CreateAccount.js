@@ -108,6 +108,7 @@ class CreateAccount extends Component {
               onChange={this.handleEmailChange}
             />
             <input
+              id="create-account-submit-button"
               type="submit"
               value="Submit"
               className="form-submit-button"

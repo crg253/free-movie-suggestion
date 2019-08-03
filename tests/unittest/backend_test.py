@@ -1,14 +1,15 @@
+import unittest
 import os
 import sys
+
 sys.path.append(os.path.abspath("../../"))
-import unittest
 from app import create_app, db
 from app.models import Movie, Tag, User
 from config import Config
 from app.api.auth import verify_password, verify_token
 import base64
 import json
-import csv_loader
+from data_loader.csv_loader import *
 
 
 class TestConfig(Config):
@@ -17,7 +18,7 @@ class TestConfig(Config):
     ELASTICSEARCH_URL = None
 
 
-class BackendTests(unittest.TestCase):
+class BackendTest(unittest.TestCase):
     def setUp(self):
         self.app = create_app(TestConfig)
         self.app_context = self.app.app_context()
@@ -43,22 +44,13 @@ class BackendTests(unittest.TestCase):
         hazel.get_token()
         # each user creates one movie
         movie_1 = Movie(
-            uniquename="movie_1",
-            name="Movie 1",
-            year=2019,
-            recommender_id=1,
+            uniquename="movie_1", name="Movie 1", year=2019, recommender_id=1
         )
         movie_2 = Movie(
-            uniquename="movie_2",
-            name="Movie 2",
-            year=2019,
-            recommender_id=2,
+            uniquename="movie_2", name="Movie 2", year=2019, recommender_id=2
         )
         movie_3 = Movie(
-            uniquename="movie_3",
-            name="Movie 3",
-            year=2019,
-            recommender_id=3,
+            uniquename="movie_3", name="Movie 3", year=2019, recommender_id=3
         )
         # create three tags
         action = Tag(name="Action")
@@ -188,7 +180,7 @@ class BackendTests(unittest.TestCase):
         user_1.set_password("user1password")
         db.session.add(user_1)
         db.session.commit()
-        csv_loader.load_movies("../../movies.csv")
+        load_movies("../../data_loader/movies.csv")
         self.assertTrue(len(user_1.recommendations) == 95)
         for m in Movie.query.all():
             self.assertTrue(m.recommended_by == user_1)

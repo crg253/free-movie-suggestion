@@ -11,11 +11,11 @@ mail = Mail()
 
 def create_app(config_class=Config):
 
-    # app = Flask(__name__,
-    #     static_folder='../react-frontend/build/static',
-    #     template_folder="../react-frontend/build")
+    app = Flask(__name__,
+        static_folder='../react-frontend/build/static',
+        template_folder="../react-frontend/build")
 
-    app = Flask(__name__)
+    #app = Flask(__name__)
     app.config.from_object(config_class)
 
     db.init_app(app)
