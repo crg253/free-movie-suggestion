@@ -5,10 +5,11 @@ class MovieList extends Component {
   render() {
     let selectedMovieList = this.props.movies
       .filter(movie => movie.recommendedBy === "crg253")
-      .filter(movie => movie.slug !== 'comingsoon');
+      .filter(movie => movie.slug !== "comingsoon");
     if (this.props.upperGenre !== "All") {
-      selectedMovieList = selectedMovieList
-      .filter(movie => movie.tags.includes(this.props.upperGenre));
+      selectedMovieList = selectedMovieList.filter(movie =>
+        movie.tags.includes(this.props.upperGenre)
+      );
     }
 
     if (this.props.sortBy === "year") {
@@ -18,7 +19,7 @@ class MovieList extends Component {
     }
 
     return (
-      <div className="list-items-wrapper">
+      <div id="movie-list-wrapper">
         {selectedMovieList.map(film => (
           <div key={film.slug}>
             <Link to={"/" + this.props.genreslug + "/" + film.slug}>

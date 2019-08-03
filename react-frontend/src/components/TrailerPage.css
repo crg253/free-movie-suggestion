@@ -102,7 +102,7 @@ iframe{
 }
 
 /* MovieList.js */
-.list-items-wrapper{
+#movie-list-wrapper{
   margin-top: 5px;
 }
 .list-items{
