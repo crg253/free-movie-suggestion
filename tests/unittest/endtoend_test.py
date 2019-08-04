@@ -48,7 +48,9 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def test_1_add_user_1_and_96_movies(self):
+    """ Test CSV Loader """
+
+    def test_csv_loader(self):
 
         # assertTrue 0 users and 0 movies (backend)
         self.assertTrue(len(User.query.all()) == 0)
@@ -85,28 +87,106 @@ class EndToEndTest(LiveServerTestCase):
             for movie in csv.reader(movies):
                 self.assertTrue(movie[0] in displayed_movie_list)
 
-        # NEED TO TEST THAT ORDER IS CORRECT BY SORT BUTTON
+        # enzyme test sort buttons
+        # user not signed in ... should see 0 saved and suggested movies
 
-    # def test_2_create_user(self):
-    #     driver = self.driver
-    #
-    #     # sampleuser123 should NOT exist
-    #     self.assertTrue(User.query.filter_by(username="sampleuser123").first() == None)
-    #
-    #     # create sampleuser123
-    #     driver.get(self.get_server_url() + "/createaccount")
-    #     elem1 = driver.find_element_by_id("create-account-username-input")
-    #     elem1.send_keys("sampleuser123")
-    #     elem2 = driver.find_element_by_id("create-account-password-input")
-    #     elem2.send_keys("password")
-    #     elem3 = driver.find_element_by_id("create-account-submit-button")
-    #     elem3.click()
-    #     # expect to see modal response
-    #
-    #     # wait
-    #     time.sleep(2)
-    #     # sampleuser123 SHOULD exist
-    #     self.assertFalse(User.query.filter_by(username="sampleuser123").first() == None)
+    """ Test Forms """
+
+    def test_add_user(self):
+        driver = self.driver
+
+        # sampleuser123 should NOT exist
+        self.assertTrue(User.query.filter_by(username="sampleuser123").first() == None)
+
+        # create sampleuser123 via frontend
+        driver.get(self.get_server_url() + "/createaccount")
+        elem1 = driver.find_element_by_id("create-account-username-input")
+        elem1.send_keys("sampleuser123")
+        elem2 = driver.find_element_by_id("create-account-password-input")
+        elem2.send_keys("password")
+        elem3 = driver.find_element_by_id("create-account-submit-button")
+        elem3.click()
+        # expect to see modal response
+
+        # wait
+        time.sleep(2)
+        # sampleuser123 SHOULD exist in db (backend)
+        self.assertFalse(User.query.filter_by(username="sampleuser123").first() == None)
+
+    def test_sign_in(self):
+        # should see change in user movies on sign in
+        pass
+
+    def test_reset_password(self):
+        pass
+
+    def test_update_account(self):
+        pass
+
+    def test_delete_account(self):
+        pass
+
+    """ Test Button Redirects """
+    # Test Save Unsave Redirects
+
+    def test_save_redirect_from_trailer_page(self):
+        pass
+
+    def test_unsave_redirect_from_trailer_page(self):
+        # simulate token expiration
+        pass
+
+    def test_save_redirect_from_user_suggestions(self):
+        pass
+
+    def test_unsave_redirect_from_user_suggestions(self):
+        # simulate token expiration
+        pass
+
+    def test_unsave_redirect_from_user_movies(self):
+        # simulate token expiration
+        pass
+
+    # Test Recommend Unrecommend Redirects
+
+    def test_recommend_movie_redirect(self):
+        pass
+
+    def test_unrecommend_movie_redirect(self):
+        # simulate token expiration
+        pass
+
+    """ Test Buttons """
+
+    def test_save_from_trailer_page(self):
+        pass
+
+    def test_unsave_from_trailer_page(self):
+        pass
+
+    def test_save_from_user_suggestions(self):
+        pass
+
+    def test_unsave_from_user_suggestions(self):
+        pass
+
+    def test_unsave_from_user_movies(self):
+        pass
+
+    def test_recommend_movie(self):
+        pass
+
+    def test_unrecommend_movie(self):
+        pass
+
+    """ Test Complex User Flow """
+
+    def test_user_flow_1(self):
+        """
+        load csv
+        add user, sign in, save, unsave, recommend, unrecommend, reset, update, delete
+        """
+        pass
 
 
 if __name__ == "__main__":

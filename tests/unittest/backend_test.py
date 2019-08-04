@@ -173,18 +173,6 @@ class BackendTest(unittest.TestCase):
         self.assertTrue(bella in movie_3.savers)
         self.assertTrue(hazel in movie_3.savers)
 
-    """ Test csv_loader"""
-
-    def test_csv_loader(self):
-        user_1 = User(username="user_1")
-        user_1.set_password("user1password")
-        db.session.add(user_1)
-        db.session.commit()
-        load_movies("../../data_loader/movies.csv")
-        self.assertTrue(len(user_1.recommendations) == 95)
-        for m in Movie.query.all():
-            self.assertTrue(m.recommended_by == user_1)
-
     """ Test Catch All Route """
 
     def test_main_page(self):
