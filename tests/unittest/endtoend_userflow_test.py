@@ -32,7 +32,7 @@ class TestConfig(Config):
     LIVESERVER_PORT = 8943
 
 
-class EndToEndTest(LiveServerTestCase):
+class EndToEndUserFlowTest(LiveServerTestCase):
     def create_app(self):
         app = create_app(TestConfig)
         return app
@@ -51,7 +51,7 @@ class EndToEndTest(LiveServerTestCase):
 
     """ Test User Flow """
 
-    def test_user_flow_1(self):
+    def test_user_flow(self):
 
         """ add user 1 and 96 movies including comingsoon (via backend) """
         crg253 = User(username="crg253")
@@ -122,18 +122,70 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue("Now signed in as sampleuser123." in displayed_modal)
 
 
-        """ save movie """
+        """ save and unsave movies """
+        # save three movies with trailer button
         driver.get(self.get_server_url()+"/romance/aintthembodiessaints2013")
         time.sleep(2)
         save_button = driver.find_element_by_id("trailer-save-button")
         save_button.click()
         time.sleep(2)
 
-        # expect to see movie saved in /usermovies
+        driver.get(self.get_server_url()+"/comedy/alltherealgirls2003")
+        time.sleep(2)
+        save_button = driver.find_element_by_id("trailer-save-button")
+        save_button.click()
+        time.sleep(2)
+
+        driver.get(self.get_server_url()+"/documentary/americanexperiencetheislandmurder2018")
+        time.sleep(2)
+        save_button = driver.find_element_by_id("trailer-save-button")
+        save_button.click()
+        time.sleep(2)
+
+        # expect to see 3 movies saved in /usermovies
         driver.get(self.get_server_url()+"/usermovies")
         time.sleep(2)
         displayed_movies = driver.find_element_by_id("saved-movies-wrapper").text
         self.assertTrue("Ain't Them Bodies Saints" in displayed_movies)
+        self.assertTrue("All the Real Girls" in displayed_movies)
+        self.assertTrue("American Experience: The Island Murder" in displayed_movies)
+
+        # unsave one movie with trailer button
+        driver.get(self.get_server_url()+"/romance/aintthembodiessaints2013")
+        time.sleep(2)
+        save_button = driver.find_element_by_id("trailer-unsave-button")
+        save_button.click()
+        time.sleep(2)
+
+        # expect to see 2 movies saved in /usermovies
+        driver.get(self.get_server_url()+"/usermovies")
+        time.sleep(2)
+        displayed_movies = driver.find_element_by_id("saved-movies-wrapper").text
+        self.assertFalse("Ain't Them Bodies Saints" in displayed_movies)
+        self.assertTrue("All the Real Girls" in displayed_movies)
+        self.assertTrue("American Experience: The Island Murder" in displayed_movies)
+
+        # unsave movie with /usermovies unsave button
+        unsave_button = driver.find_element_by_id("user-movies-alltherealgirls2003-unsave-button")
+        unsave_button.click()
+        time.sleep(2)
+
+        #expect to see only one movie left
+        displayed_movies = driver.find_element_by_id("saved-movies-wrapper").text
+        self.assertFalse("Ain't Them Bodies Saints" in displayed_movies)
+        self.assertFalse("All the Real Girls" in displayed_movies)
+        self.assertTrue("American Experience: The Island Murder" in displayed_movies)
+
+        """ suggest and unsuggest movies """
+
+        """ add second user """
+        """ second user save unsave first user movies """
+
+        """ add third user """
+        """ forgot password """
+        """ edit account """
+        """ delete account """
+
 
 
 if __name__ == "__main__":

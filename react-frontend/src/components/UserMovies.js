@@ -68,6 +68,7 @@ class UserMovies extends Component {
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
+                  id={"user-movies-" + film.slug + "-unsave-button"}
                   onClick={() =>
                     this.props.handleSaveUnsave(
                       "unsavemovie",
