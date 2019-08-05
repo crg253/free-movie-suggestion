@@ -124,7 +124,7 @@ class CreateAccount extends Component {
           </Link>
         </div>
         {/* class="user-pages-body-wrapper"*/}
-        {this.state.Message}
+        <div id="create-account-message-modal">{this.state.Message}</div>
         <div className="form-footer" />
       </div>
     );

@@ -2,17 +2,17 @@ import React, {Component} from "react";
 import {Redirect} from "react-router-dom";
 
 class Trailer extends Component {
-
-  getTitleAndYear = (title, year) =>{
-    if (title !== "Coming Soon"){
-      return  <h2 id="trailer-title">
-                {title} {year}
-              </h2>
+  getTitleAndYear = (title, year) => {
+    if (title !== "Coming Soon") {
+      return (
+        <h2 id="trailer-title">
+          {title} {year}
+        </h2>
+      );
     } else {
-      return ''
+      return "";
     }
-  }
-
+  };
 
   getSaveButton = (genreSlug, movieSlug) => {
     let buttonComponent = "";
@@ -23,6 +23,7 @@ class Trailer extends Component {
     } else if (selectedMovie.saved === true) {
       buttonComponent = (
         <button
+          id="trailer-unsave-button"
           className="button-nostyle save-unsave-button"
           onClick={() =>
             this.props.handleSaveUnsave(
@@ -39,6 +40,7 @@ class Trailer extends Component {
     } else if (selectedMovie.saved === false) {
       buttonComponent = (
         <button
+          id="trailer-save-button"
           className="button-nostyle save-unsave-button"
           onClick={() =>
             this.props.handleSaveUnsave(

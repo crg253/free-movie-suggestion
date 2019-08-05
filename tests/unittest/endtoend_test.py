@@ -48,15 +48,12 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    """ Test CSV Loader """
 
-    def test_csv_loader(self):
+    """ Test User Flow """
 
-        # assertTrue 0 users and 0 movies (backend)
-        self.assertTrue(len(User.query.all()) == 0)
-        self.assertTrue(len(Movie.query.all()) == 0)
+    def test_user_flow_1(self):
 
-        # add user 1 and 96 movies including comingsoon (backend)
+        """ add user 1 and 96 movies including comingsoon (via backend) """
         crg253 = User(username="crg253")
         crg253.set_password("crg253password")
         db.session.add(crg253)
@@ -76,117 +73,67 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(len(User.query.all()) == 1)
         self.assertTrue(len(Movie.query.all()) == 96)
 
-        # visually verify movies on website(frontend)
+        # visually verify movies on website (frontend)
         driver = self.driver
         driver.get(self.get_server_url() + "/all/comingsoon")
         time.sleep(2)
 
-        # assertTrue every title is shown on website (frontend)
+        # expect to see every title on website (frontend)
         displayed_movie_list = driver.find_element_by_id("movie-list-wrapper").text
         with open("../../data_loader/movies.csv") as movies:
             for movie in csv.reader(movies):
                 self.assertTrue(movie[0] in displayed_movie_list)
 
-        # enzyme test sort buttons
-        # user not signed in ... should see 0 saved and suggested movies
 
-    """ Test Forms """
-
-    def test_add_user(self):
-        driver = self.driver
-
-        # sampleuser123 should NOT exist
-        self.assertTrue(User.query.filter_by(username="sampleuser123").first() == None)
-
-        # create sampleuser123 via frontend
+        """ create user (via frontend) """
         driver.get(self.get_server_url() + "/createaccount")
-        elem1 = driver.find_element_by_id("create-account-username-input")
-        elem1.send_keys("sampleuser123")
-        elem2 = driver.find_element_by_id("create-account-password-input")
-        elem2.send_keys("password")
-        elem3 = driver.find_element_by_id("create-account-submit-button")
-        elem3.click()
-        # expect to see modal response
-
-        # wait
+        name_input = driver.find_element_by_id("create-account-username-input")
+        name_input.send_keys("sampleuser123")
+        pass_input = driver.find_element_by_id("create-account-password-input")
+        pass_input.send_keys("password")
+        time.sleep(1)
+        submit_button = driver.find_element_by_id("create-account-submit-button")
+        submit_button.click()
         time.sleep(2)
+
         # sampleuser123 SHOULD exist in db (backend)
         self.assertFalse(User.query.filter_by(username="sampleuser123").first() == None)
 
-    def test_sign_in(self):
-        # should see change in user movies on sign in
-        pass
+        # expect to see modal response
+        displayed_modal = driver.find_element_by_id("create-account-message-modal").text
+        self.assertTrue("Thank you for creating account." in displayed_modal)
 
-    def test_reset_password(self):
-        pass
 
-    def test_update_account(self):
-        pass
+        """ sign in user (via frontend) """
+        driver.get(self.get_server_url()+ "/signin")
+        name_input = driver.find_element_by_id("signin-username-input")
+        name_input.send_keys("sampleuser123")
+        pass_input = driver.find_element_by_id("signin-password-input")
+        pass_input.send_keys("password")
+        time.sleep(1)
+        submit_button = driver.find_element_by_id("signin-submit-button")
+        submit_button.click()
+        time.sleep(2)
 
-    def test_delete_account(self):
-        pass
+        # expect to see a token in localStorage
 
-    """ Test Button Redirects """
-    # Test Save Unsave Redirects
+        # expect to see modal
+        displayed_modal = driver.find_element_by_id("signin-message-modal").text
+        self.assertTrue("Now signed in as sampleuser123." in displayed_modal)
 
-    def test_save_redirect_from_trailer_page(self):
-        pass
 
-    def test_unsave_redirect_from_trailer_page(self):
-        # simulate token expiration
-        pass
+        """ save movie """
+        driver.get(self.get_server_url()+"/romance/aintthembodiessaints2013")
+        time.sleep(2)
+        save_button = driver.find_element_by_id("trailer-save-button")
+        save_button.click()
+        time.sleep(2)
 
-    def test_save_redirect_from_user_suggestions(self):
-        pass
-
-    def test_unsave_redirect_from_user_suggestions(self):
-        # simulate token expiration
-        pass
-
-    def test_unsave_redirect_from_user_movies(self):
-        # simulate token expiration
-        pass
-
-    # Test Recommend Unrecommend Redirects
-
-    def test_recommend_movie_redirect(self):
-        pass
-
-    def test_unrecommend_movie_redirect(self):
-        # simulate token expiration
-        pass
-
-    """ Test Buttons """
-
-    def test_save_from_trailer_page(self):
-        pass
-
-    def test_unsave_from_trailer_page(self):
-        pass
-
-    def test_save_from_user_suggestions(self):
-        pass
-
-    def test_unsave_from_user_suggestions(self):
-        pass
-
-    def test_unsave_from_user_movies(self):
-        pass
-
-    def test_recommend_movie(self):
-        pass
-
-    def test_unrecommend_movie(self):
-        pass
-
-    """ Test Complex User Flow """
-
-    def test_user_flow_1(self):
-        """
-        load csv
-        add user, sign in, save, unsave, recommend, unrecommend, reset, update, delete
-        """
-        pass
+        # expect to see movie saved in /usermovies
+        driver.get(self.get_server_url()+"/usermovies")
+        time.sleep(2)
+        displayed_movies = driver.find_element_by_id("saved-movies-wrapper").text
+        self.assertTrue("Ain't Them Bodies Saints" in displayed_movies)
 
 
 if __name__ == "__main__":
