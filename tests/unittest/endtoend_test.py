@@ -251,7 +251,7 @@ class EndToEndTest(LiveServerTestCase):
         submit_button.click()
         time.sleep(2)
 
-        """ suggest and unsuggest movies """
+        """ suggest 3 movies """
         driver.get(self.get_server_url()+"/recommend")
         movie_search_input = driver.find_element_by_id("recommend-movie-title-search-input")
         movie_search_input.send_keys("Karate Kid")
@@ -263,11 +263,10 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(3)
 
         """ expect to see modal """
-        """ expect to see movie in db """
-        """ expect to see card at /usermovies """
-        """ add video_link """
-        """ recommend second film trailer """
-        """ expect to see one blank card and one trailer in /usermovies """
+        """ expect to see 3 movies in db """
+        """ expect to see 3 cards at /usermovies """
+        """ add video_link to two movies """
+        """ expect to see 2 trailers and one card at /usermovies """
 
 
     def test_second_user_save_unsave_first_user_movies(self):
