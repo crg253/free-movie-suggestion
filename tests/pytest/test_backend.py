@@ -21,7 +21,7 @@ class TestConfig(Config):
     ELASTICSEARCH_URL = None
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_client():
     app = create_app(TestConfig)
     client = app.test_client()
@@ -31,9 +31,14 @@ def test_client():
     ctx.pop()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def init_db():
     db.create_all()
+    yield db
+    db.drop_all()
+
+
+def create_users_movies_and_tags():
 
     # create three users
     monkey = User(username="monkey")
@@ -53,45 +58,48 @@ def init_db():
     action = Tag(name="Action")
     comedy = Tag(name="Comedy")
     documentary = Tag(name="Documentarty")
-    db.session.add(monkey)
-    db.session.add(bella)
-    db.session.add(hazel)
-    db.session.add(movie_1)
-    db.session.add(movie_2)
-    db.session.add(movie_3)
-    db.session.add(action)
-    db.session.add(comedy)
-    db.session.add(documentary)
-    db.session.commit()
 
-    yield db
-    db.drop_all()
+    db.session.add_all(
+        [monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary]
+    )
+    db.session.commit()
+    return (
+        monkey,
+        bella,
+        hazel,
+        movie_1,
+        movie_2,
+        movie_3,
+        action,
+        comedy,
+        documentary,
+    )
+
 
 """ Test DB Relationships """
 
 # Movie Recommender One-to_Many
 
 
-def test_movie_recommender_id_property_creates_one_to_many(
-    test_client, init_db
-):
-    movie_1 = Movie.query.filter_by(uniquename='movie_1').first()
-    monkey = User.query.filter_by(username='monkey').first()
+def test_movie_recommender_id_property_creates_one_to_many(test_client, init_db):
+    monkey = User(username="monkey")
+    monkey.set_password("monkeypassword")
+    movie_1 = Movie(uniquename="movie_1", name="Movie 1", year=2019, recommender_id=1)
+    db.session.add_all([monkey, movie_1])
+    db.session.commit()
     # check user.recommendations array contains whole movie object
     assert movie_1 in monkey.recommendations
     # full circle, check movie.recommended_by contains whole user object
     assert movie_1.recommended_by == monkey
 
+
 # Movie Tags Many-to-Many
 
-def test_movie_tags_array_creates_many_to_many(test_client, init_db):
 
-    movie_1 = Movie.query.filter_by(uniquename='movie_1').first()
-    movie_2 = Movie.query.filter_by(uniquename='movie_2').first()
-    movie_3 = Movie.query.filter_by(uniquename='movie_3').first()
-    action = Tag.query.filter_by(name="Action").first()
-    comedy = Tag.query.filter_by(name="Comedy").first()
-    documentary = Tag.query.filter_by(name="Documentarty").first()
+def test_movie_tags_array_creates_many_to_many(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
 
     movie_1.tags.append(action)
     movie_1.tags.append(comedy)
@@ -99,7 +107,7 @@ def test_movie_tags_array_creates_many_to_many(test_client, init_db):
     movie_2.tags.append(documentary)
     movie_3.tags.append(documentary)
     movie_3.tags.append(action)
-
+    db.session.commit()
     # check the tag.movies array
     assert movie_1 in action.movies
     assert movie_1 in comedy.movies
@@ -108,16 +116,11 @@ def test_movie_tags_array_creates_many_to_many(test_client, init_db):
     assert movie_3 in documentary.movies
     assert movie_3 in action.movies
 
-    db.session.remove()
 
 def test_tag_movies_array_creates_many_to_many(test_client, init_db):
-
-    movie_1 = Movie.query.filter_by(uniquename='movie_1').first()
-    movie_2 = Movie.query.filter_by(uniquename='movie_2').first()
-    movie_3 = Movie.query.filter_by(uniquename='movie_3').first()
-    action = Tag.query.filter_by(name="Action").first()
-    comedy = Tag.query.filter_by(name="Comedy").first()
-    documentary = Tag.query.filter_by(name="Documentarty").first()
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
 
     action.movies.append(movie_1)
     action.movies.append(movie_2)
@@ -125,6 +128,7 @@ def test_tag_movies_array_creates_many_to_many(test_client, init_db):
     comedy.movies.append(movie_3)
     documentary.movies.append(movie_3)
     documentary.movies.append(movie_1)
+    db.session.commit()
 
     # check movie.tags array
     assert action in movie_1.tags
@@ -133,5 +137,3 @@ def test_tag_movies_array_creates_many_to_many(test_client, init_db):
     assert comedy in movie_2.tags
     assert comedy in movie_3.tags
     assert documentary in movie_3.tags
-
-    db.session.remove()
