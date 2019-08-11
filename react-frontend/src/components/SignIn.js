@@ -111,7 +111,7 @@ class SignIn extends Component {
           <h1>Sign In</h1>
           <form onSubmit={this.handleSignInSubmit}>
             <input
-              id="signin-username-input"
+              data-test="signin-username-input"
               type="text"
               placeholder="Name"
               value={this.state.Name}
@@ -119,7 +119,7 @@ class SignIn extends Component {
             />
 
             <input
-              id="signin-password-input"
+              data-test="signin-password-input"
               type="text"
               placeholder="Password"
               value={this.state.Password}
@@ -127,7 +127,7 @@ class SignIn extends Component {
             />
 
             <input
-              id="signin-submit-button"
+              data-test="signin-submit-button"
               type="submit"
               value="Submit"
               className="form-submit-button"
@@ -148,7 +148,7 @@ class SignIn extends Component {
           </div>
         </div>
         {/*class="user-pages-body-wrapper"*/}
-        <div id="signin-message-modal">{this.state.Message}</div>
+        <div data-test="signin-message-modal">{this.state.Message}</div>
         <div className="form-footer" />
       </div>
     );

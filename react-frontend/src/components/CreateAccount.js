@@ -85,7 +85,7 @@ class CreateAccount extends Component {
 
           <form onSubmit={this.handleAddUserSubmit}>
             <input
-              id="create-account-username-input"
+              data-test="create-account-username-input"
               type="text"
               placeholder="Username"
               value={this.state.Name}
@@ -93,7 +93,7 @@ class CreateAccount extends Component {
             />
 
             <input
-              id="create-account-password-input"
+              data-test="create-account-password-input"
               type="text"
               placeholder="Password"
               value={this.state.Password}
@@ -108,7 +108,7 @@ class CreateAccount extends Component {
               onChange={this.handleEmailChange}
             />
             <input
-              id="create-account-submit-button"
+              data-test="create-account-submit-button"
               type="submit"
               value="Submit"
               className="form-submit-button"
@@ -124,7 +124,7 @@ class CreateAccount extends Component {
           </Link>
         </div>
         {/* class="user-pages-body-wrapper"*/}
-        <div id="create-account-message-modal">{this.state.Message}</div>
+        <div data-test="create-account-message-modal">{this.state.Message}</div>
         <div className="form-footer" />
       </div>
     );

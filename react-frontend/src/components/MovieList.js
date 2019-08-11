@@ -19,7 +19,7 @@ class MovieList extends Component {
     }
 
     return (
-      <div id="movie-list-wrapper">
+      <div data-test="movie-list" id="movie-list-wrapper">
         {selectedMovieList.map(film => (
           <div key={film.slug}>
             <Link to={"/" + this.props.genreslug + "/" + film.slug}>

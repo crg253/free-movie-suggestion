@@ -95,7 +95,7 @@ class Recommend extends Component {
             <label>
               Search the OMDb to find a movie to suggest.
               <input
-                id="recommend-movie-title-search-input"
+                data-test="recommend-movie-title-search-input"
                 style={{marginTop: "20px"}}
                 type="text"
                 value={this.state.SearchValue}
@@ -103,7 +103,7 @@ class Recommend extends Component {
               />
             </label>
             <input
-              id="recommend-submit-search-button"
+              data-test="recommend-submit-search-button"
               className="form-submit-button"
               type="submit"
               value="Search"
@@ -116,7 +116,7 @@ class Recommend extends Component {
                 {mov.Title} {mov.Year}
               </p>
               <button
-                id={"recommend-search-result-add-button-" + index}
+                data-test={"recommend-search-result-add-button-" + index}
                 onClick={() => this.handleSuggestMovie(mov.Title, mov.Year)}
               >
                 Add

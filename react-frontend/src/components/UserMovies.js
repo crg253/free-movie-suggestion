@@ -53,7 +53,7 @@ class UserMovies extends Component {
         </Link>
 
         <h2 className="user-movies-title">Your Saved Movies</h2>
-        <div id="saved-movies-wrapper">
+        <div data-test="user-saved-movies" id="saved-movies-wrapper">
           {userSaves.map(film => (
             <div key={"usersave" + film.slug}>
               <iframe
@@ -68,7 +68,7 @@ class UserMovies extends Component {
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
-                  id={"user-movies-" + film.slug + "-unsave-button"}
+                  data-test={"user-movies-" + film.slug + "-unsave-button"}
                   onClick={() =>
                     this.props.handleSaveUnsave(
                       "unsavemovie",

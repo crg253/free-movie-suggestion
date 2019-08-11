@@ -23,7 +23,7 @@ class Trailer extends Component {
     } else if (selectedMovie.saved === true) {
       buttonComponent = (
         <button
-          id="trailer-unsave-button"
+          data-test="trailer-unsave-button"
           className="button-nostyle save-unsave-button"
           onClick={() =>
             this.props.handleSaveUnsave(
@@ -40,7 +40,7 @@ class Trailer extends Component {
     } else if (selectedMovie.saved === false) {
       buttonComponent = (
         <button
-          id="trailer-save-button"
+          data-test="trailer-save-button"
           className="button-nostyle save-unsave-button"
           onClick={() =>
             this.props.handleSaveUnsave(
