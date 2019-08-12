@@ -12,6 +12,7 @@ class UserSuggestions extends Component {
     if (selectedMovie.saved === true) {
       buttonComponent = (
         <button
+          data-test={"user-suggestion-unsave-button-" + movieSlug}
           onClick={() =>
             this.props.handleSaveUnsave(
               "unsavemovie",
@@ -27,6 +28,7 @@ class UserSuggestions extends Component {
     } else if (selectedMovie.saved === false) {
       buttonComponent = (
         <button
+          data-test={"user-suggestion-save-button-" + movieSlug}
           onClick={() =>
             this.props.handleSaveUnsave(
               "savemovie",
