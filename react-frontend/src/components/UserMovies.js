@@ -87,9 +87,12 @@ class UserMovies extends Component {
 
         <h2 className="user-movies-title">Your Suggestions</h2>
 
-        <div className="all-suggested-wrapper">
+        <div data-test="user-own-suggested" className="all-suggested-wrapper">
           {userSuggestionsTrailers.map(film => (
-            <div key={"usersuggestion" + film.slug}>
+            <div
+              data-test={"user-own-suggestion-with-trailer-" + film.slug}
+              key={"user-own-suggestion" + film.slug}
+            >
               <iframe
                 className="saved-or-suggested-video"
                 title={film.name}
@@ -101,7 +104,10 @@ class UserMovies extends Component {
                 <p className="film-year-style">{film.year}</p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
-                <button onClick={() => this.handleRemoveSuggestion(film.slug)}>
+                <button
+                  data-test={"unsuggest-" + film.slug}
+                  onClick={() => this.handleRemoveSuggestion(film.slug)}
+                >
                   unsuggest
                 </button>
               </div>
@@ -109,7 +115,10 @@ class UserMovies extends Component {
           ))}
 
           {userSuggestionsNoTrailers.map(film => (
-            <div key={"usersuggestion" + film.slug}>
+            <div
+              data-test={"user-own-suggestion-with-no-trailer-" + film.slug}
+              key={"user-own-suggestion" + film.slug}
+            >
               <div className="suggested-movie-tile">
                 <p id="tile-title-style">Coming</p>
                 <p>Soon</p>
@@ -120,7 +129,10 @@ class UserMovies extends Component {
                 <p className="film-year-style">{film.year}</p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
-                <button onClick={() => this.handleRemoveSuggestion(film.slug)}>
+                <button
+                  data-test={"unsuggest-" + film.slug}
+                  onClick={() => this.handleRemoveSuggestion(film.slug)}
+                >
                   unsuggest
                 </button>
               </div>

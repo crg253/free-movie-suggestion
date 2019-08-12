@@ -124,7 +124,7 @@ class Recommend extends Component {
             </div>
           ))}
         </div>
-        {this.state.Message}
+        <div data-test="recommend-message-modal">{this.state.Message}</div>
         <div className="form-footer" />
       </div>
     );

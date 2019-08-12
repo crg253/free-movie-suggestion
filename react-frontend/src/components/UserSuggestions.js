@@ -64,9 +64,12 @@ class UserSuggestions extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
 
-        <div className="all-suggested-wrapper">
+        <div data-test="user-suggested" className="all-suggested-wrapper">
           {allUserSuggestionsTrailers.map(film => (
-            <div key={"usersuggestion" + film.slug}>
+            <div
+              data-test={"user-suggestion-with-trailer-" + film.slug}
+              key={"usersuggestion" + film.slug}
+            >
               <iframe
                 className="saved-or-suggested-video"
                 title={film.name}
@@ -88,7 +91,10 @@ class UserSuggestions extends Component {
           ))}
 
           {allUserSuggestionsNoTrailers.map(film => (
-            <div key={"usersuggestion" + film.slug}>
+            <div
+              data-test={"user-suggestion-with-no-trailer-" + film.slug}
+              key={"usersuggestion" + film.slug}
+            >
               <div className="suggested-movie-tile">
                 <p className="tile-title-style">Coming</p>
                 <p>Soon</p>
