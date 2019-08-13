@@ -24,7 +24,6 @@ class Menu extends Component {
     this.props.setUser("");
     this.props.setEmail("");
     this.props.handleGetMovies("");
-    this.props.setRedirect(<Redirect to={"/"} />);
   };
 
   render() {
@@ -75,15 +74,16 @@ class Menu extends Component {
     let signOutLink = "";
     if (this.props.user.length > 0) {
       signOutLink = (
-        <button
-          className="button-nostyle"
+        <div
           onClick={() => {
             this.handleSignOut();
             this.changeMenuDisplay();
           }}
         >
-          <p className="dim-menu-links">sign out</p>
-        </button>
+          <Link to={"/"}>
+            <p className="dim-menu-links">sign out</p>
+          </Link>
+        </div>
       );
     }
 
