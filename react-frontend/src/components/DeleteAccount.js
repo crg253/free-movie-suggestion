@@ -89,6 +89,7 @@ class DeleteAccount extends Component {
               <input
                 type="text"
                 placeholder="Password"
+                type="password"
                 value={this.state.Password}
                 onChange={this.handlePasswordChange}
               />

@@ -506,7 +506,7 @@ class EndToEndTest(LiveServerTestCase):
     #     self.assertTrue('laura' in suggestion_card_content)
 
 
-    def test_second_user_save_unsave_first_user_movies(self):
+    def test_user2_save_user1_movie(self):
         print('test_second_user_save_unsave_first_user_movies')
 
         """ create user 1 with 1 movie"""
@@ -568,13 +568,13 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("Karate Kid" in all_saved_content)
 
-    # def test_second_user_forgot_password(self):
+    # def test_user_forgot_password(self):
     #     pass
 
-    # def test_second_user_edit_account(self):
+    # def test_user_edit_account(self):
     #     pass
 
-    # def test_second_user_delete_account(self):
+    # def test_user_delete_account(self):
     #     pass
 
 

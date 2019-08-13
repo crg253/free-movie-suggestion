@@ -69,10 +69,13 @@ class SignIn extends Component {
                 }
               />
             );
+            this.props.setRedirectBackSlug("");
+            this.props.setRedirectBackGenre("");
           } else if (this.props.redirectBackSlug.length > 0) {
             this.props.setRedirectBack(
               <Redirect to={"/" + this.props.redirectBackSlug} />
             );
+            this.props.setRedirectBackSlug("");
           } else {
             this.setState({
               Name: "",
@@ -96,8 +99,6 @@ class SignIn extends Component {
 
   componentWillUnmount() {
     this.props.setRedirectBack("");
-    this.props.setRedirectBackSlug("");
-    this.props.setRedirectBackGenre("");
   }
 
   render() {
@@ -122,6 +123,7 @@ class SignIn extends Component {
               data-test="signin-password-input"
               type="text"
               placeholder="Password"
+              type="password"
               value={this.state.Password}
               onChange={this.handlePasswordChange}
             />

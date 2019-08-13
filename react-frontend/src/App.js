@@ -266,6 +266,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.RedirectBackGenre);
     return (
       <BrowserRouter>
         <div>

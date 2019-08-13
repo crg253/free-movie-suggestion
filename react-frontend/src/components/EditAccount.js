@@ -105,6 +105,7 @@ class EditAccount extends Component {
               <input
                 type="text"
                 placeholder="New Password"
+                type="password"
                 value={this.state.NewPassword}
                 onChange={this.handleNewPasswordChange}
               />

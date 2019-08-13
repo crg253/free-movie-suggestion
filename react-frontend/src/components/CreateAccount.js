@@ -96,6 +96,7 @@ class CreateAccount extends Component {
               data-test="create-account-password-input"
               type="text"
               placeholder="Password"
+              type="password"
               value={this.state.Password}
               onChange={this.handlePasswordChange}
             />
