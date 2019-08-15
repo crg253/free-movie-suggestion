@@ -1,34 +1,34 @@
-#about-contact-body{
+.about-contact-body{
   text-align: center;
   margin-top:10vh;
 }
-#about-contact-paragraph{
+.about-contact-paragraph{
   font-size: 18px;
   margin: 0 15vw 0 15vw;
 }
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
-  #about-contact-body{
+  .about-contact-body{
     margin-top:0;
   }
-  #about-contact-paragraph{
+  .about-contact-paragraph{
     font-size: 16px;
   }
-  #about-contact-footer{
+  .about-contact-footer{
     height:7vh;
   }
 }
 
 /* SMALL LANDSCAPE */
 @media only screen and (max-width: 900px) and (orientation:landscape){
-  #about-contact-body{
+  .about-contact-body{
     margin-top:0;
   }
-  #about-contact-paragraph{
+  .about-contact-paragraph{
     font-size: 16px;
   }
-  #about-contact-footer{
+  .about-contact-footer{
     height:15vh;
   }
 }

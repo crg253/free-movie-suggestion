@@ -25,9 +25,7 @@ Must create a React build to run these tests
 
 class TestConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL"
-    ) or "sqlite:///" + os.path.join(basedir, "endtoend_test.db")
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "endtoend_test.db")
     ELASTICSEARCH_URL = None
     LIVESERVER_PORT = 8943
 
@@ -505,24 +503,24 @@ class EndToEndTest(LiveServerTestCase):
     #     ).text
     #     self.assertTrue('laura' in suggestion_card_content)
 
-
     def test_user2_save_user1_movie(self):
-        print('test_second_user_save_unsave_first_user_movies')
+        print("test_second_user_save_unsave_first_user_movies")
 
         """ create user 1 with 1 movie"""
         laura = User(username="laura")
         laura.set_password("laurapassword")
         karatekid = Movie(
-                uniquename="thekaratekid1984",
-                name="Karate Kid",
-                year=1984,
-                video_link="https://www.youtube.com/embed/xlnm0NtPoVs",
-                recommender_id=1)
+            uniquename="thekaratekid1984",
+            name="Karate Kid",
+            year=1984,
+            video_link="https://www.youtube.com/embed/xlnm0NtPoVs",
+            recommender_id=1,
+        )
         db.session.add(laura)
         db.session.add(karatekid)
 
         """ create user 2 """
-        monkey = User(username = "monkey")
+        monkey = User(username="monkey")
         monkey.set_password("monkeypassword")
         db.session.add(monkey)
 

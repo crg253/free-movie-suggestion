@@ -6,33 +6,27 @@ import os
 
 tags = db.Table(
     "tags",
-    db.Column(
-        "movie_id", db.Integer, db.ForeignKey("movie.movie_id"), primary_key=True
-    ),
-    db.Column("tag_id", db.Integer, db.ForeignKey("tag.tag_id"), primary_key=True),
+    db.Column("movie_id", db.Integer, db.ForeignKey("movie.id"), primary_key=True),
+    db.Column("tag_id", db.Integer, db.ForeignKey("tag.id"), primary_key=True),
 )
 
 savers = db.Table(
     "savers",
-    db.Column(
-        "movie_id", db.Integer, db.ForeignKey("movie.movie_id"), primary_key=True
-    ),
-    db.Column("user_id", db.Integer, db.ForeignKey("user.user_id"), primary_key=True),
+    db.Column("movie_id", db.Integer, db.ForeignKey("movie.id"), primary_key=True),
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
 )
 
 
 class Movie(db.Model):
-    movie_id = db.Column(db.Integer, primary_key=True)
-    uniquename = db.Column(db.String(200), unique=True, nullable=False)
-    name = db.Column(db.String(200), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    slug = db.Column(db.String(200), unique=True, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
     year = db.Column(db.Integer, nullable=False)
     video_link = db.Column(db.String(1000))
     tags = db.relationship(
         "Tag", secondary=tags, lazy="subquery", backref=db.backref("movies", lazy=True)
     )
-    recommender_id = db.Column(
-        db.Integer, db.ForeignKey("user.user_id"), nullable=False
-    )
+    recommender_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     savers = db.relationship(
         "User",
         secondary=savers,
@@ -42,13 +36,13 @@ class Movie(db.Model):
 
 
 class Tag(db.Model):
-    tag_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True, nullable=False)
 
 
 class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
     token = db.Column(db.String(32), index=True, unique=True)

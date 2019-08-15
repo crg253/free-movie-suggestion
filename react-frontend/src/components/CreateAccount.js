@@ -87,9 +87,17 @@ class CreateAccount extends Component {
             <input
               data-test="create-account-username-input"
               type="text"
-              placeholder="Username"
+              placeholder="Name"
               value={this.state.Name}
               onChange={this.handleNameChange}
+            />
+
+            <input
+              id="create-account-email-input"
+              type="text"
+              placeholder="Email"
+              value={this.state.Email}
+              onChange={this.handleEmailChange}
             />
 
             <input
@@ -101,13 +109,6 @@ class CreateAccount extends Component {
               onChange={this.handlePasswordChange}
             />
 
-            <input
-              id="create-account-email-input"
-              type="text"
-              placeholder="Email"
-              value={this.state.Email}
-              onChange={this.handleEmailChange}
-            />
             <input
               data-test="create-account-submit-button"
               type="submit"
