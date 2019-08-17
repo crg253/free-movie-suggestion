@@ -54,9 +54,7 @@ class SignIn extends Component {
       } else if (res.status === 200) {
         res.json().then(res => {
           localStorage.setItem("token", res.token);
-          this.props.setUser(res.user);
-          this.props.setEmail(res.email);
-          this.props.handleGetMovies(res.user);
+          this.props.handleGetUserAndMovies(res.token);
 
           if (this.props.redirectBackGenre.length > 0) {
             this.props.setRedirectBack(
@@ -82,7 +80,7 @@ class SignIn extends Component {
               Password: "",
               Message: (
                 <MessageModal
-                  message={"Now signed in as " + res.user + "."}
+                  message={"Now signed in as " + res.name + "."}
                   buttonMessage="Awesome"
                 />
               )

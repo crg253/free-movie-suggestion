@@ -70,13 +70,13 @@ class Trailer extends Component {
               id="trailer-and-title-and-save"
             >
               <iframe
-                title={selection.name}
+                title={selection.title}
                 src={selection.video}
                 allowFullScreen
               />
 
               <div id="title-and-save-button">
-                {this.getTitleAndYear(selection.name, selection.year)}
+                {this.getTitleAndYear(selection.title, selection.year)}
                 {this.getSaveButton(this.props.genreslug, this.props.movieslug)}
               </div>
             </div>

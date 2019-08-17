@@ -34,7 +34,11 @@ class Genres extends Component {
             this.props.subtractGenreIndex();
           }}
         >
-          <button className="button-nostyle" id="back-genres-button" />
+          <button
+            data-test="genres-back-button"
+            className="button-nostyle"
+            id="back-genres-button"
+          />
         </Link>
       );
 
@@ -53,7 +57,11 @@ class Genres extends Component {
             this.props.addGenreIndex();
           }}
         >
-          <button className="button-nostyle" id="forward-genres-button" />
+          <button
+            data-test="genres-forward-button"
+            className="button-nostyle"
+            id="forward-genres-button"
+          />
         </Link>
       );
     }
@@ -61,7 +69,11 @@ class Genres extends Component {
     return (
       <div id="main-genres-wrapper">
         <div id="genre-and-button">
-          <h2 className="selected-genre" id={this.props.upperGenre.slice(0, 3)}>
+          <h2
+            data-test="selected-genre"
+            className="selected-genre"
+            id={this.props.upperGenre.slice(0, 3)}
+          >
             {this.props.upperGenre}
           </h2>
 

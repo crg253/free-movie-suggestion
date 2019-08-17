@@ -154,7 +154,7 @@ def test_get_user_movies(test_client, init_db):
 
     j_data = json.dumps({"token": monkey.token})
     res = test_client.post(
-        "/api/get_movies", data=j_data, content_type="application/json"
+        "/api/getmovies", data=j_data, content_type="application/json"
     )
     assert res.status_code == 200
     for movie in res.json["movies"]:
@@ -173,9 +173,9 @@ def test_get_no_user_movies(test_client, init_db):
     hazel.saves.append(movie_1)
     db.session.commit()
 
-    j_data = json.dumps({"token": "nonworkingtoken"})
+    j_data = json.dumps({"token": None})
     res = test_client.post(
-        "/api/get_movies", data=j_data, content_type="application/json"
+        "/api/getmovies", data=j_data, content_type="application/json"
     )
     assert res.status_code == 200
     for movie in res.json["movies"]:

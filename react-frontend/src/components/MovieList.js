@@ -24,7 +24,7 @@ class MovieList extends Component {
           <div key={film.slug}>
             <Link to={"/" + this.props.genreslug + "/" + film.slug}>
               <div className="list-items">
-                <p>{film.name}</p> <p>{film.year}</p>
+                <p>{film.title}</p> <p>{film.year}</p>
                 {film.tags.map(tag => (
                   <p key={film.slug + tag}>{tag}</p>
                 ))}

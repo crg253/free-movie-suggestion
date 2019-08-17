@@ -21,8 +21,7 @@ class App extends Component {
     Movies: [],
     SelectedGenre: "",
     SortBy: "name",
-    User: "",
-    Email: "",
+    User: {name: "", email: ""},
     Redirect: "",
     RedirectBackGenre: "",
     RedirectBackSlug: "",
@@ -230,11 +229,23 @@ class App extends Component {
     return randomMovies;
   };
 
-  handleGetMovies = user => {
-    fetch("/api/get_movies", {
+  handleGetUser = token => {
+    fetch("/api/getuser", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({user: user})
+      body: JSON.stringify({token: token})
+    }).then(res => {
+      res.json().then(res => {
+        this.setState({User: res.user});
+      });
+    });
+  };
+
+  handleGetMovies = token => {
+    fetch("/api/getmovies", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({token: token})
     }).then(res => {
       res.json().then(res => {
         this.setState({Movies: res.movies});
@@ -242,27 +253,16 @@ class App extends Component {
     });
   };
 
-  handleInitialFetch = () => {
-    fetch("/api/checktoken", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token")
-      }
-    }).then(res => {
-      if (res.status === 401) {
-        this.setState({User: "", Email: ""});
-        this.handleGetMovies("");
-      } else if (res.status === 200) {
-        res.json().then(res => {
-          this.setState({User: res.user, Email: res.email});
-          this.handleGetMovies(res.user);
-        });
-      }
-    });
+  handleGetUserAndMovies = token => {
+    if (token === null) {
+      token = "";
+    }
+    this.handleGetUser(token);
+    this.handleGetMovies(token);
   };
 
   componentDidMount() {
-    this.handleInitialFetch();
+    this.handleGetUserAndMovies(localStorage.getItem("token"));
   }
 
   render() {
@@ -360,7 +360,7 @@ class App extends Component {
                   redirectBack={this.state.RedirectBack}
                   setUser={this.setUser}
                   setEmail={this.setEmail}
-                  handleGetMovies={this.handleGetMovies}
+                  handleGetUserAndMovies={this.handleGetUserAndMovies}
                   setMovies={this.setMovies}
                   setRedirect={this.setRedirect}
                   setRedirectBack={this.setRedirectBack}

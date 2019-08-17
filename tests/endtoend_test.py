@@ -46,50 +46,361 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    # def test_add_user_1_and_96_movies(self):
-    #     print('test_add_user_1_and_96_movies')
-    #
-    #     """ add user 1 and 96 movies including comingsoon (via backend) """
-    #     crg253 = User(username="crg253")
-    #     crg253.set_password("crg253password")
-    #     db.session.add(crg253)
-    #     comingsoon = Movie(
-    #         uniquename="comingsoon",
-    #         name="Coming Soon",
-    #         year=2019,
-    #         video_link="https://www.youtube.com/embed/RODwmMxLKa0",
-    #         recommender_id=1,
-    #     )
-    #     db.session.add(comingsoon)
-    #     db.session.commit()
-    #     load_movies("../data_loader/movies.csv")
-    #     time.sleep(5)
-    #
-    #     """ expect 1 user and 96 movies exist in db (backend) """
-    #     self.assertTrue(len(User.query.all()) == 1)
-    #     self.assertTrue(len(Movie.query.all()) == 96)
-    #
-    #     """ visually verify movies on website (frontend) """
-    #     driver = self.driver
-    #     driver.get(self.get_server_url() + "/all/comingsoon")
-    #     time.sleep(2)
-    #
-    #     """ expect to see every title on website (frontend) """
-    #     displayed_movie_list = driver.find_element_by_xpath(
-    #         "//div[@data-test='movie-list']"
-    #     ).text
-    #     with open("../data_loader/movies.csv") as movies:
-    #         for movie in csv.reader(movies):
-    #             self.assertTrue(movie[0] in displayed_movie_list)
+    def test_first_load_no_user(self):
+        print("test_first_load_no_user")
+
+        # add user 1 and 96 movies including comingsoon (via backend)
+        crg253 = User(name="crg253")
+        crg253.set_password("crg253password")
+        db.session.add(crg253)
+        comingsoon = Movie(
+            slug="comingsoon",
+            title="Coming Soon",
+            year=2019,
+            video_link="https://www.youtube.com/embed/RODwmMxLKa0",
+            recommender_id=1,
+        )
+        db.session.add(comingsoon)
+        db.session.commit()
+        load_movies("../data_loader/movies.csv")
+        time.sleep(5)
+
+        # expect 1 user and 96 movies exist in db (backend)
+        self.assertTrue(len(User.query.all()) == 1)
+        self.assertTrue(len(Movie.query.all()) == 96)
+
+        # visually verify movies on website (frontend)
+        driver = self.driver
+        driver.get(self.get_server_url() + "/all/comingsoon")
+        time.sleep(3)
+
+        # expect to see every title on website (frontend)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        with open("../data_loader/movies.csv") as movies:
+            for movie in csv.reader(movies):
+                self.assertTrue(movie[0] in displayed_movie_list)
+
+        """ TEST ARROW UP """
+        # arrow up to Action
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Action" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Oklahoma City" in displayed_movie_list)
+        self.assertTrue("The Animatrix" in displayed_movie_list)
+
+        # arrow up to Comedy
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Comedy" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Looper" in displayed_movie_list)
+        self.assertTrue("Hancock" in displayed_movie_list)
+
+        # arrow up to Documentary
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Documentary" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Ain't Them Bodies Saints" in displayed_movie_list)
+        self.assertTrue(
+            "American Experience: The Island Murder" in displayed_movie_list
+        )
+
+        # arrow up to Drama
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Drama" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("The Lookout" in displayed_movie_list)
+        self.assertTrue("Room" in displayed_movie_list)
+
+        # arrow up to Horror
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Horror" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Molly's Game" in displayed_movie_list)
+        self.assertTrue("The Loved Ones" in displayed_movie_list)
+
+        # arrow up to Mystery & Suspense
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Mystery & Suspense" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Lars and the Real Girl" in displayed_movie_list)
+        self.assertTrue("The Guilty" in displayed_movie_list)
+
+        # arrow up to Romance
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Romance" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("The Invitation" in displayed_movie_list)
+        self.assertTrue("Three Colors: Red" in displayed_movie_list)
+
+        # arrow up to Sci-Fi & Fantasy
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Sci-Fi & Fantasy" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Winter's Bone" in displayed_movie_list)
+        self.assertTrue("Unbreakable" in displayed_movie_list)
+
+        # arrow up to All
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("All" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        with open("../data_loader/movies.csv") as movies:
+            for movie in csv.reader(movies):
+                self.assertTrue(movie[0] in displayed_movie_list)
+
+        # arrow up AGAIN to Action
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Action" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Mud" in displayed_movie_list)
+        self.assertTrue("Train to Busan" in displayed_movie_list)
+
+        # arrow up AGAIN to Comedy
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Comedy" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("The Babadook" in displayed_movie_list)
+        self.assertTrue("Damsels in Distress" in displayed_movie_list)
+
+        """ TEST BACK ARROW """
+        # arrow back to Action
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Action" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Creep" in displayed_movie_list)
+        self.assertTrue("The Crazies" in displayed_movie_list)
+
+        # arrow back to All
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("All" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        with open("../data_loader/movies.csv") as movies:
+            for movie in csv.reader(movies):
+                self.assertTrue(movie[0] in displayed_movie_list)
+
+        # arrow back to Sci-Fi & Fantasy
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Sci-Fi & Fantasy" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse(
+            "There's Something Wrong with Aunt Diane" in displayed_movie_list
+        )
+        self.assertTrue("Colossal" in displayed_movie_list)
+
+        # arrow back to Romance
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Romance" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("True Adolescents" in displayed_movie_list)
+        self.assertTrue("Nothing But a Man" in displayed_movie_list)
+
+        # arrow back to Mystery & Suspense
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back to Horror
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back to Drama
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back to Documentary
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back to Comedy
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back to Action
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back to All
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back AGAIN to Sci-Fi & Fantasy
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+        # arrow back AGAIN to Romance
+        arrow_back = driver.find_element_by_xpath(
+            "//button[@data-test='genres-back-button']"
+        )
+        arrow_back.click()
+        time.sleep(1)
+
+    # def test_first_load_w_user(self):
+    #     pass
 
     # def test_sort(self):
     #     pass
 
-    # def test_arrows(self):
-    #     pass
-
     # def test_create_user(self):
-    #     print('test_create_user')
+    #     print("test_create_user")
     #
     #     """ create user (via frontend) """
     #     driver = self.driver
@@ -118,13 +429,13 @@ class EndToEndTest(LiveServerTestCase):
     #     self.assertTrue("Thank you for creating account." in displayed_modal)
     #
     #     """ sampleuser123 SHOULD exist in db (backend) """
-    #     self.assertFalse(User.query.filter_by(username="sampleuser123").first() == None)
+    #     self.assertFalse(User.query.filter_by(name="sampleuser123").first() == None)
 
     # def test_sign_in_user(self):
-    #     print('test_sign_in_user')
+    #     print("test_sign_in_user")
     #
     #     """ create user """
-    #     sampleuser123 = User(username="sampleuser123")
+    #     sampleuser123 = User(name="sampleuser123")
     #     sampleuser123.set_password("password")
     #     db.session.add(sampleuser123)
     #     db.session.commit()
@@ -503,68 +814,68 @@ class EndToEndTest(LiveServerTestCase):
     #     ).text
     #     self.assertTrue('laura' in suggestion_card_content)
 
-    def test_user2_save_user1_movie(self):
-        print("test_second_user_save_unsave_first_user_movies")
-
-        """ create user 1 with 1 movie"""
-        laura = User(username="laura")
-        laura.set_password("laurapassword")
-        karatekid = Movie(
-            uniquename="thekaratekid1984",
-            name="Karate Kid",
-            year=1984,
-            video_link="https://www.youtube.com/embed/xlnm0NtPoVs",
-            recommender_id=1,
-        )
-        db.session.add(laura)
-        db.session.add(karatekid)
-
-        """ create user 2 """
-        monkey = User(username="monkey")
-        monkey.set_password("monkeypassword")
-        db.session.add(monkey)
-
-        db.session.commit()
-        time.sleep(5)
-
-        """ sign in user 2 """
-        driver = self.driver
-        driver.get(self.get_server_url() + "/signin")
-        name_input = driver.find_element_by_xpath(
-            "//input[@data-test='signin-username-input']"
-        )
-        name_input.send_keys("monkey")
-        pass_input = driver.find_element_by_xpath(
-            "//input[@data-test='signin-password-input']"
-        )
-        pass_input.send_keys("monkeypassword")
-        time.sleep(1)
-        submit_button = driver.find_element_by_xpath(
-            "//input[@data-test='signin-submit-button']"
-        )
-        submit_button.click()
-        time.sleep(2)
-
-        """ user 2 save user 1 movie at /usersuggestions """
-        driver.get(self.get_server_url() + "/usersuggestions")
-        time.sleep(3)
-        karatekid_save_button = driver.find_element_by_xpath(
-            "//button[@data-test='user-suggestion-save-button-thekaratekid1984']"
-        )
-        karatekid_save_button.click()
-        time.sleep(3)
-
-        """ check user 1 movie in user2.saves in db """
-        self.assertTrue(karatekid in monkey.saves)
-
-        """ check user 1 movie in user 2 saved at /usermovies """
-        driver.get(self.get_server_url() + "/usermovies")
-        time.sleep(3)
-
-        all_saved_content = driver.find_element_by_xpath(
-            "//div[@data-test='user-saved-movies']"
-        ).text
-        self.assertTrue("Karate Kid" in all_saved_content)
+    # def test_user2_save_user1_movie(self):
+    #     print("test_second_user_save_unsave_first_user_movies")
+    #
+    #     """ create user 1 with 1 movie"""
+    #     laura = User(username="laura")
+    #     laura.set_password("laurapassword")
+    #     karatekid = Movie(
+    #         uniquename="thekaratekid1984",
+    #         name="Karate Kid",
+    #         year=1984,
+    #         video_link="https://www.youtube.com/embed/xlnm0NtPoVs",
+    #         recommender_id=1,
+    #     )
+    #     db.session.add(laura)
+    #     db.session.add(karatekid)
+    #
+    #     """ create user 2 """
+    #     monkey = User(username="monkey")
+    #     monkey.set_password("monkeypassword")
+    #     db.session.add(monkey)
+    #
+    #     db.session.commit()
+    #     time.sleep(5)
+    #
+    #     """ sign in user 2 """
+    #     driver = self.driver
+    #     driver.get(self.get_server_url() + "/signin")
+    #     name_input = driver.find_element_by_xpath(
+    #         "//input[@data-test='signin-username-input']"
+    #     )
+    #     name_input.send_keys("monkey")
+    #     pass_input = driver.find_element_by_xpath(
+    #         "//input[@data-test='signin-password-input']"
+    #     )
+    #     pass_input.send_keys("monkeypassword")
+    #     time.sleep(1)
+    #     submit_button = driver.find_element_by_xpath(
+    #         "//input[@data-test='signin-submit-button']"
+    #     )
+    #     submit_button.click()
+    #     time.sleep(2)
+    #
+    #     """ user 2 save user 1 movie at /usersuggestions """
+    #     driver.get(self.get_server_url() + "/usersuggestions")
+    #     time.sleep(3)
+    #     karatekid_save_button = driver.find_element_by_xpath(
+    #         "//button[@data-test='user-suggestion-save-button-thekaratekid1984']"
+    #     )
+    #     karatekid_save_button.click()
+    #     time.sleep(3)
+    #
+    #     """ check user 1 movie in user2.saves in db """
+    #     self.assertTrue(karatekid in monkey.saves)
+    #
+    #     """ check user 1 movie in user 2 saved at /usermovies """
+    #     driver.get(self.get_server_url() + "/usermovies")
+    #     time.sleep(3)
+    #
+    #     all_saved_content = driver.find_element_by_xpath(
+    #         "//div[@data-test='user-saved-movies']"
+    #     ).text
+    #     self.assertTrue("Karate Kid" in all_saved_content)
 
     # def test_user_forgot_password(self):
     #     pass

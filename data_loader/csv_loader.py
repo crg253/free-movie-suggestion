@@ -1,5 +1,6 @@
 import os
 import sys
+
 sys.path.append(os.path.abspath("../"))
 import csv
 from app import db
@@ -35,11 +36,7 @@ def add_tags(movie, tag_names):
 def load_movie(row):
     slug = slugify(row[0].lower() + row[1])
     movie = Movie(
-        recommender_id=1,
-        uniquename=slug,
-        name=row[0],
-        year=row[1],
-        video_link=row[2],
+        recommender_id=1, slug=slug, title=row[0], year=row[1], video_link=row[2]
     )
     db.session.add(movie)
     add_tags(movie, row[3:])

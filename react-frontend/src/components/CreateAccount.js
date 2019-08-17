@@ -41,7 +41,7 @@ class CreateAccount extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        userName: this.state.Name,
+        name: this.state.Name,
         password: this.state.Password,
         email: this.state.Email
       })

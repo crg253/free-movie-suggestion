@@ -28,18 +28,18 @@ class Menu extends Component {
 
   render() {
     let currentUserLink = "";
-    if (this.props.user.length > 0) {
+    if (this.props.user.name.length > 0) {
       currentUserLink = (
         <div onClick={() => this.changeMenuDisplay()}>
           <Link to={"/usermovies"}>
-            <h2 className="menu-links">{this.props.user + "'s Movies"}</h2>
+            <h2 className="menu-links">{this.props.user.name + "'s Movies"}</h2>
           </Link>
         </div>
       );
     }
 
     let signInLink = "";
-    if (this.props.user.length === 0) {
+    if (this.props.user.name.length === 0) {
       signInLink = (
         <div onClick={() => this.changeMenuDisplay()}>
           <Link to={"/signin"}>
@@ -50,7 +50,7 @@ class Menu extends Component {
     }
 
     let editAccountLink = "";
-    if (this.props.user.length > 0) {
+    if (this.props.user.name.length > 0) {
       editAccountLink = (
         <div onClick={() => this.changeMenuDisplay()}>
           <Link to={"/editaccount"}>
@@ -61,7 +61,7 @@ class Menu extends Component {
     }
 
     let deleteAccountLink = "";
-    if (this.props.user.length > 0) {
+    if (this.props.user.name.length > 0) {
       deleteAccountLink = (
         <div onClick={() => this.changeMenuDisplay()}>
           <Link to={"/deleteaccount"}>
@@ -72,7 +72,7 @@ class Menu extends Component {
     }
 
     let signOutLink = "";
-    if (this.props.user.length > 0) {
+    if (this.props.user.name.length > 0) {
       signOutLink = (
         <div
           onClick={() => {

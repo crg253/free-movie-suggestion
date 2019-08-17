@@ -20,13 +20,13 @@ def get_user():
     # pass token to this route directly
     data = request.get_json(silent=True) or {}
     user = User.check_token(data.get("token"))
-    if user != None:
-        return (jsonify({"user": {"name": user.name, "email": user.email}}), 200)
+    if user == None:
+        return (jsonify({"user": {"name": "", "email": ""}}), 200)
     else:
-        return (jsonify({"user": {"name": None, "email": None}}), 200)
+        return (jsonify({"user": {"name": user.name, "email": user.email}}), 200)
 
 
-@bp.route("/get_movies", methods=["POST"])
+@bp.route("/getmovies", methods=["POST"])
 def get_movies():
     # pass token to this route directly
     data = request.get_json(silent=True) or {}
@@ -65,7 +65,7 @@ def add_user():
 def sign_in():
     token = g.current_user.get_token()
     db.session.commit()
-    return (jsonify({"token": token}), 200)
+    return (jsonify({"token": token, "name": g.current_user.name}), 200)
 
 
 @bp.route("/resetpassword", methods=["POST"])
