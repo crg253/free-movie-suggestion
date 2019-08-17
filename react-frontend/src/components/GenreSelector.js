@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
-class Genres extends Component {
+class GenreSelector extends Component {
   componentDidMount() {
     let i = this.props.scrollGenres.indexOf(this.props.upperGenre);
     if (i === 0) {
@@ -109,4 +109,4 @@ class Genres extends Component {
   }
 }
 
-export default Genres;
+export default GenreSelector;

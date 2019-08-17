@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 import "./TrailerPage.css";
 import Trailer from "./Trailer";
-import Genres from "./Genres";
+import GenreSelector from "./GenreSelector";
 import MovieList from "./MovieList";
 
 class TrailerPage extends Component {
@@ -28,7 +28,7 @@ class TrailerPage extends Component {
           />
 
           <div id="genres-and-list">
-            <Genres
+            <GenreSelector
               getRandomMovies={this.props.getRandomMovies}
               upperGenre={upperGenre}
               changeGenreCase={this.props.changeGenreCase}

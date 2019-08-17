@@ -82,7 +82,7 @@ class EndToEndTest(LiveServerTestCase):
             for movie in csv.reader(movies):
                 self.assertTrue(movie[0] in displayed_movie_list)
 
-        """ TEST ARROW UP """
+        """ TEST UP ARROW """
         # arrow up to Action
         arrow_up = driver.find_element_by_xpath(
             "//button[@data-test='genres-forward-button']"
@@ -336,6 +336,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Mystery & Suspense" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Force Majeure" in displayed_movie_list)
+        self.assertTrue("Cold Weather" in displayed_movie_list)
 
         # arrow back to Horror
         arrow_back = driver.find_element_by_xpath(
@@ -343,6 +352,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Horror" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Emo the Musical" in displayed_movie_list)
+        self.assertTrue("Raw" in displayed_movie_list)
 
         # arrow back to Drama
         arrow_back = driver.find_element_by_xpath(
@@ -350,6 +368,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Drama" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("The Lady Vanishes" in displayed_movie_list)
+        self.assertTrue("The Founder" in displayed_movie_list)
 
         # arrow back to Documentary
         arrow_back = driver.find_element_by_xpath(
@@ -357,6 +384,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Documentary" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("The Good Girl" in displayed_movie_list)
+        self.assertTrue("Pelada" in displayed_movie_list)
 
         # arrow back to Comedy
         arrow_back = driver.find_element_by_xpath(
@@ -364,6 +400,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Comedy" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("I Like Killing Flies" in displayed_movie_list)
+        self.assertTrue("We Are the Best!" in displayed_movie_list)
 
         # arrow back to Action
         arrow_back = driver.find_element_by_xpath(
@@ -371,6 +416,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Action" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Tucker & Dale vs. Evil" in displayed_movie_list)
+        self.assertTrue("Warrior" in displayed_movie_list)
 
         # arrow back to All
         arrow_back = driver.find_element_by_xpath(
@@ -378,6 +432,16 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("All" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        with open("../data_loader/movies.csv") as movies:
+            for movie in csv.reader(movies):
+                self.assertTrue(movie[0] in displayed_movie_list)
 
         # arrow back AGAIN to Sci-Fi & Fantasy
         arrow_back = driver.find_element_by_xpath(
@@ -385,6 +449,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Sci-Fi & Fantasy" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("The Taking of Pelham One Two Three" in displayed_movie_list)
+        self.assertTrue("The Last Starfighter" in displayed_movie_list)
 
         # arrow back AGAIN to Romance
         arrow_back = driver.find_element_by_xpath(
@@ -392,12 +465,18 @@ class EndToEndTest(LiveServerTestCase):
         )
         arrow_back.click()
         time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Romance" in selected_genre)
+        displayed_movie_list = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertFalse("Jeff, Who Lives at Home" in displayed_movie_list)
+        self.assertTrue("Lars and the Real Girl" in displayed_movie_list)
 
-    # def test_first_load_w_user(self):
-    #     pass
-
-    # def test_sort(self):
-    #     pass
+        """ TEST SORT """
+        """ TEST MENU """
 
     # def test_create_user(self):
     #     print("test_create_user")
@@ -876,6 +955,9 @@ class EndToEndTest(LiveServerTestCase):
     #         "//div[@data-test='user-saved-movies']"
     #     ).text
     #     self.assertTrue("Karate Kid" in all_saved_content)
+
+    # def test_first_load_w_user(self):
+    #     pass
 
     # def test_user_forgot_password(self):
     #     pass
