@@ -74,17 +74,29 @@ class App extends Component {
   };
 
   //Sort Helper Functions
-  dropThe = slug => {
-    if (slug.slice(0, 3) === "the") {
-      return slug.slice(3);
-    } else {
-      return slug;
+  dropTheAndSlugify = title => {
+    if (title.slice(0, 4) === "The ") {
+      title = title.slice(4);
     }
+    // let itemsToRemove = [" ", "'", ",", "!", ".", ":", "&", "-"];
+    // let i;
+    // for (i = 0; i < itemsToRemove.length; i++) {
+    //   let remove = itemsToRemove[i];
+    //   let expression = new RegExp(remove, "g");
+    //   title = title.replace(expression, "");
+    // }
+    let remove = " ";
+    let expression = new RegExp(remove, "g");
+    title = title.replace(expression, "");
+    console.log(title);
+    return title;
   };
 
   compareSlug = (a, b) => {
-    if (this.dropThe(a.slug) < this.dropThe(b.slug)) return -1;
-    if (this.dropThe(a.slug) > this.dropThe(b.slug)) return 1;
+    if (this.dropTheAndSlugify(a.title) < this.dropTheAndSlugify(b.title))
+      return -1;
+    if (this.dropTheAndSlugify(a.title) > this.dropTheAndSlugify(b.title))
+      return 1;
     return 0;
   };
 
