@@ -160,19 +160,20 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(len(User.query.all()) == 1)
         self.assertTrue(len(Movie.query.all()) == 96)
 
-        # visually verify movies on website (frontend)
+        """ Start with All Movies """
         driver = self.driver
         driver.get(self.get_server_url() + "/all/comingsoon")
         time.sleep(3)
 
-        """ Compare what should be listed with what is shown"""
-        """ All """
+        """ Check title and year sort """
         # sort All by title
         title_sort_button = driver.find_element_by_xpath(
             "//button[@data-test='title-sort-button']"
         )
         title_sort_button.click()
         time.sleep(3)
+
+        # compare what should be listed with what is shown
         should_list = csv_titles_by_title("All")
         displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
@@ -185,14 +186,15 @@ class EndToEndTest(LiveServerTestCase):
         )
         year_sort_button.click()
         time.sleep(3)
+
+        # compare what should be listed with what is shown
         should_list = csv_titles_by_year("All")
         displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
         )
         self.assertTrue(should_list == displayed_list)
 
-        """ TEST UP ARROW """
-        # arrow up to Action
+        """ Arrow Up to Action """
         arrow_up = driver.find_element_by_xpath(
             "//button[@data-test='genres-forward-button']"
         )
@@ -203,12 +205,15 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("Action" in selected_genre)
 
+        """ Check title and year sort """
         # sort Action by title
         title_sort_button = driver.find_element_by_xpath(
             "//button[@data-test='title-sort-button']"
         )
         title_sort_button.click()
         time.sleep(3)
+
+        # compare what should be listed with what is shown
         should_list = csv_titles_by_title("Action")
         displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
@@ -221,6 +226,8 @@ class EndToEndTest(LiveServerTestCase):
         )
         year_sort_button.click()
         time.sleep(3)
+
+        # compare what should be listed with what is shown
         should_list = csv_titles_by_year("Action")
         displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
