@@ -74,35 +74,45 @@ class App extends Component {
   };
 
   //Sort Helper Functions
-  dropTheAndSlugify = title => {
+  dropTheAndPunct = title => {
     if (title.slice(0, 4) === "The ") {
       title = title.slice(4);
     }
-    // let itemsToRemove = [" ", "'", ",", "!", ".", ":", "&", "-"];
-    // let i;
-    // for (i = 0; i < itemsToRemove.length; i++) {
-    //   let remove = itemsToRemove[i];
-    //   let expression = new RegExp(remove, "g");
-    //   title = title.replace(expression, "");
-    // }
-    let remove = " ";
-    let expression = new RegExp(remove, "g");
-    title = title.replace(expression, "");
-    console.log(title);
+    title = title
+      .replace(/['.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+      .replace(/[" "]/g, "");
     return title;
   };
 
-  compareSlug = (a, b) => {
-    if (this.dropTheAndSlugify(a.title) < this.dropTheAndSlugify(b.title))
+  yearPlusDropTheAndPunct = (year, title) => {
+    if (title.slice(0, 4) === "The ") {
+      title = title.slice(4);
+    }
+    title = title
+      .replace(/['.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+      .replace(/[" "]/g, "");
+    let yearAndSlug = year + title;
+    return yearAndSlug;
+  };
+
+  compareTitle = (a, b) => {
+    if (this.dropTheAndPunct(a.title) < this.dropTheAndPunct(b.title))
       return -1;
-    if (this.dropTheAndSlugify(a.title) > this.dropTheAndSlugify(b.title))
-      return 1;
+    if (this.dropTheAndPunct(a.title) > this.dropTheAndPunct(b.title)) return 1;
     return 0;
   };
 
   compareYear = (a, b) => {
-    if (a.year < b.year) return -1;
-    if (a.year > b.year) return 1;
+    if (
+      this.yearPlusDropTheAndPunct(a.year, a.title) <
+      this.yearPlusDropTheAndPunct(b.year, b.title)
+    )
+      return -1;
+    if (
+      this.yearPlusDropTheAndPunct(a.year, a.title) >
+      this.yearPlusDropTheAndPunct(b.year, b.title)
+    )
+      return 1;
     return 0;
   };
 
@@ -436,7 +446,7 @@ class App extends Component {
                   setIndexes={this.setIndexes}
                   redirect={this.state.Redirect}
                   handleSaveUnsave={this.handleSaveUnsave}
-                  compareSlug={this.compareSlug}
+                  compareTitle={this.compareTitle}
                   compareYear={this.compareYear}
                 />
               )}

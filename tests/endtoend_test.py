@@ -24,7 +24,7 @@ Must create a React build to run these tests
 """
 
 
-def drop_the_and_slugify(title):
+def for_sort_by_title(title):
     if title[0:4] == "The ":
         slug = title[4:]
     else:
@@ -35,42 +35,83 @@ def drop_the_and_slugify(title):
     return slug
 
 
-def should_list_by_genre(genre):
-    """ Create a List of What Should Be Displayed (Excecpt 'M') """
+def for_sort_by_year(title):
+    if title[4:8] == "The ":
+        slug = title[0:4] + title[8:]
+    else:
+        slug = title
+    to_remove = [" ", "'", ",", "!", ".", ":", "&", "-"]
+    for item in to_remove:
+        slug = slug.replace(item, "")
+    return slug
+
+
+def csv_titles_by_title(genre):
+    """ Create a List of What Should Be Displayed  """
     genre_movies = []
     with open("../data_loader/movies.csv") as movies:
+        # for each line of movies.csv
         for movie in csv.reader(movies):
+            # if movie title is not one of these three, then proceed
             if movie[0] != "M" and movie[0] != "Cloverfield" and movie[0] != "Creep":
+                # for each tag in line, if tag matches genre
                 for tag in movie[3:]:
                     if tag == genre:
+                        # go back to the title and add the title to genre_movies
                         genre_movies.append(movie[0])
+                # if genre = "All", then get all titles
                 if genre == "All":
                     genre_movies.append(movie[0])
-    genre_movies.sort(key=drop_the_and_slugify)
+    genre_movies.sort(key=for_sort_by_title)
     print(genre_movies)
     return genre_movies
 
 
-def displayed_movie_list_as_list(displayed_data):
-    """ Create List of What is Displayed (Except 'M') """
-    all_csv_titles = []
+def csv_titles_by_year(genre):
+    """ Create a List of What Should Be Displayed  """
+    genre_movies = []
+    with open("../data_loader/movies.csv") as movies:
+        # for each line of movies.csv
+        for movie in csv.reader(movies):
+            # if movie title is not one of these three, then proceed
+            if movie[0] != "M" and movie[0] != "Cloverfield" and movie[0] != "Creep":
+                # for each tag in line, if tag matches genre
+                for tag in movie[3:]:
+                    if tag == genre:
+                        # go back to the title and add the title to genre_movies
+                        genre_movies.append(movie[1] + movie[0])
+                # if genre = "All", then get all titles
+                if genre == "All":
+                    genre_movies.append(movie[1] + movie[0])
+    genre_movies.sort(key=for_sort_by_year)
+    new_genre_movies = []
+    for movie in genre_movies:
+        new_genre_movies.append(movie[4:])
+    print(new_genre_movies)
+    return new_genre_movies
+
+
+def displayed_text_as_list(displayed_data):
+    """ Create List of What is Displayed """
+    # make list of all movie titles
+    all_titles = []
     with open("../data_loader/movies.csv") as movies:
         for movie in csv.reader(movies):
             if movie[0] != "M" and movie[0] != "Cloverfield" and movie[0] != "Creep":
-                all_csv_titles.append(movie[0])
+                all_titles.append(movie[0])
 
     #  make dict of location of each title in data (if displayed)
-    displayed_title_location = {}
-    for title in all_csv_titles:
+    location = {}
+    for title in all_titles:
         if displayed_data.find(title) != -1:
-            displayed_title_location[displayed_data.find(title)] = title
+            location[displayed_data.find(title)] = title
     # sort keys and derive a list of titles from dict
-    displayed_movie_list_as_list = []
-    for key in sorted(displayed_title_location.keys()):
-        displayed_movie_list_as_list.append(displayed_title_location[key])
-    print(displayed_movie_list_as_list)
+    displayed = []
+    for key in sorted(location.keys()):
+        displayed.append(location[key])
+    print(displayed)
 
-    return displayed_movie_list_as_list
+    return displayed
 
 
 class TestConfig(Config):
@@ -122,36 +163,70 @@ class EndToEndTest(LiveServerTestCase):
         # visually verify movies on website (frontend)
         driver = self.driver
         driver.get(self.get_server_url() + "/all/comingsoon")
-        time.sleep(30)
+        time.sleep(3)
 
-        # compare what should be listed to what is shown
-        action_movies = should_list_by_genre("All")
-        displayed_list = displayed_movie_list_as_list(
+        """ Compare what should be listed with what is shown"""
+        """ All """
+        # sort All by title
+        title_sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='title-sort-button']"
+        )
+        title_sort_button.click()
+        time.sleep(3)
+        should_list = csv_titles_by_title("All")
+        displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
         )
-        self.assertTrue(action_movies == displayed_list)
+        self.assertTrue(should_list == displayed_list)
 
-        # with open("../data_loader/movies.csv") as movies:
-        #     for movie in csv.reader(movies):
-        #         self.assertTrue(movie[0] in displayed_movie_list)
+        # sort All by year
+        year_sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='year-sort-button']"
+        )
+        year_sort_button.click()
+        time.sleep(3)
+        should_list = csv_titles_by_year("All")
+        displayed_list = displayed_text_as_list(
+            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+        )
+        self.assertTrue(should_list == displayed_list)
 
-        # """ TEST UP ARROW """
-        # # arrow up to Action
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Action" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Oklahoma City" in displayed_movie_list)
-        # self.assertTrue("The Animatrix" in displayed_movie_list)
-        #
+        """ TEST UP ARROW """
+        # arrow up to Action
+        arrow_up = driver.find_element_by_xpath(
+            "//button[@data-test='genres-forward-button']"
+        )
+        arrow_up.click()
+        time.sleep(1)
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue("Action" in selected_genre)
+
+        # sort Action by title
+        title_sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='title-sort-button']"
+        )
+        title_sort_button.click()
+        time.sleep(3)
+        should_list = csv_titles_by_title("Action")
+        displayed_list = displayed_text_as_list(
+            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+        )
+        self.assertTrue(should_list == displayed_list)
+
+        # sort Action by year
+        year_sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='year-sort-button']"
+        )
+        year_sort_button.click()
+        time.sleep(3)
+        should_list = csv_titles_by_year("Action")
+        displayed_list = displayed_text_as_list(
+            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+        )
+        self.assertTrue(should_list == displayed_list)
+
         # # arrow up to Comedy
         # arrow_up = driver.find_element_by_xpath(
         #     "//button[@data-test='genres-forward-button']"

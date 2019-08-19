@@ -15,7 +15,7 @@ class MovieList extends Component {
     if (this.props.sortBy === "year") {
       selectedMovieList.sort(this.props.compareYear);
     } else {
-      selectedMovieList.sort(this.props.compareSlug);
+      selectedMovieList.sort(this.props.compareTitle);
     }
 
     return (

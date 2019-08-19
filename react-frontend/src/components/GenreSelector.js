@@ -87,6 +87,7 @@ class GenreSelector extends Component {
           <p className="sort-selector">sort by </p>
 
           <button
+            data-test="title-sort-button"
             id="title-sort-button"
             style={{color: this.props.sortBy === "name" ? "white" : "grey"}}
             className="sort-selector button-nostyle"
@@ -95,6 +96,7 @@ class GenreSelector extends Component {
             TITLE
           </button>
           <button
+            data-test="year-sort-button"
             id="year-sort-button"
             style={{color: this.props.sortBy === "year" ? "white" : "grey"}}
             className="sort-selector button-nostyle"

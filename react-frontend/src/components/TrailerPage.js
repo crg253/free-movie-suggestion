@@ -46,7 +46,7 @@ class TrailerPage extends Component {
               genreslug={genreslug}
               upperGenre={upperGenre}
               sortBy={this.props.sortBy}
-              compareSlug={this.props.compareSlug}
+              compareTitle={this.props.compareTitle}
               compareYear={this.props.compareYear}
             />
           </div>
