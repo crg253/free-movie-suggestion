@@ -24,7 +24,8 @@ Must create a React build to run these tests
 """
 
 
-def for_sort_by_title(title):
+def sort_by_title_helper(title):
+    # remove 'The' from title
     if title[0:4] == "The ":
         slug = title[4:]
     else:
@@ -35,7 +36,8 @@ def for_sort_by_title(title):
     return slug
 
 
-def for_sort_by_year(title):
+def sort_by_year_helper(title):
+    # remove 'The' from between year and title
     if title[4:8] == "The ":
         slug = title[0:4] + title[8:]
     else:
@@ -46,59 +48,44 @@ def for_sort_by_year(title):
     return slug
 
 
-def csv_titles_by_title(genre):
-    """ Create a List of What Should Be Displayed  """
+def reduce_movie_csv(genre):
+    # movie_line consists of title, year, video_link, tag, tag, etc
     genre_movies = []
+    disregard = ["M", "Cloverfield", "Creep"]
     with open("../data_loader/movies.csv") as movies:
-        # for each line of movies.csv
-        for movie in csv.reader(movies):
-            # if movie title is not one of these three, then proceed
-            if movie[0] != "M" and movie[0] != "Cloverfield" and movie[0] != "Creep":
-                # for each tag in line, if tag matches genre
-                for tag in movie[3:]:
-                    if tag == genre:
-                        # go back to the title and add the title to genre_movies
-                        genre_movies.append(movie[0])
-                # if genre = "All", then get all titles
-                if genre == "All":
-                    genre_movies.append(movie[0])
-    genre_movies.sort(key=for_sort_by_title)
-    print(genre_movies)
+        for movie_line in csv.reader(movies):
+            if movie_line[0] not in disregard:
+                if genre in movie_line[3:] or genre == "All":
+                    genre_movies.append(movie_line)
     return genre_movies
 
 
+def csv_titles_by_title(genre):
+    # create a list of what should be displayed
+    titles = []
+    for movie_line in reduce_movie_csv(genre):
+        titles.append(movie_line[0])
+    titles.sort(key=sort_by_title_helper)
+    return titles
+
+
 def csv_titles_by_year(genre):
-    """ Create a List of What Should Be Displayed  """
-    genre_movies = []
-    with open("../data_loader/movies.csv") as movies:
-        # for each line of movies.csv
-        for movie in csv.reader(movies):
-            # if movie title is not one of these three, then proceed
-            if movie[0] != "M" and movie[0] != "Cloverfield" and movie[0] != "Creep":
-                # for each tag in line, if tag matches genre
-                for tag in movie[3:]:
-                    if tag == genre:
-                        # go back to the title and add the title to genre_movies
-                        genre_movies.append(movie[1] + movie[0])
-                # if genre = "All", then get all titles
-                if genre == "All":
-                    genre_movies.append(movie[1] + movie[0])
-    genre_movies.sort(key=for_sort_by_year)
-    new_genre_movies = []
-    for movie in genre_movies:
-        new_genre_movies.append(movie[4:])
-    print(new_genre_movies)
-    return new_genre_movies
+    # create a list of what should be displayed
+    year_with_title = []
+    for movie_line in reduce_movie_csv(genre):
+        year_with_title.append(movie_line[1] + movie_line[0])
+    year_with_title.sort(key=sort_by_year_helper)
+    # once sorted remove year from each entry
+    just_titles = [x[4:] for x in year_with_title]
+    return just_titles
 
 
 def displayed_text_as_list(displayed_data):
-    """ Create List of What is Displayed """
+    """ create a list based on what is displayed """
     # make list of all movie titles
     all_titles = []
-    with open("../data_loader/movies.csv") as movies:
-        for movie in csv.reader(movies):
-            if movie[0] != "M" and movie[0] != "Cloverfield" and movie[0] != "Creep":
-                all_titles.append(movie[0])
+    for movie_line in reduce_movie_csv("All"):
+        all_titles.append(movie_line[0])
 
     #  make dict of location of each title in data (if displayed)
     location = {}
@@ -109,7 +96,6 @@ def displayed_text_as_list(displayed_data):
     displayed = []
     for key in sorted(location.keys()):
         displayed.append(location[key])
-    print(displayed)
 
     return displayed
 
@@ -137,6 +123,50 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
+    def check_arrow_action(self, driver, direction, genre):
+        # arrow up or down
+        arrow_button = driver.find_element_by_xpath(
+            "//button[@data-test='genres-" + direction + "-button']"
+        )
+        arrow_button.click()
+        time.sleep(1)
+        # get the genre that is shown
+        selected_genre = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        # check that its the correct genre
+        self.assertTrue(genre in selected_genre)
+
+    def check_title_sort(self, driver, genre):
+        # sort by title
+        title_sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='title-sort-button']"
+        )
+        title_sort_button.click()
+        time.sleep(1)
+
+        # compare what should be listed with what is shown
+        should_list = csv_titles_by_title(genre)
+        displayed_list = displayed_text_as_list(
+            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+        )
+        self.assertTrue(should_list == displayed_list)
+
+    def check_year_sort(self, driver, genre):
+        # sort by year
+        year_sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='year-sort-button']"
+        )
+        year_sort_button.click()
+        time.sleep(1)
+
+        # compare what should be listed with what is shown
+        should_list = csv_titles_by_year(genre)
+        displayed_list = displayed_text_as_list(
+            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+        )
+        self.assertTrue(should_list == displayed_list)
+
     def test_first_load_no_user(self):
         print("test_first_load_no_user")
 
@@ -160,458 +190,52 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(len(User.query.all()) == 1)
         self.assertTrue(len(Movie.query.all()) == 96)
 
-        """ Start with All Movies """
+        # start with All movies
         driver = self.driver
         driver.get(self.get_server_url() + "/all/comingsoon")
         time.sleep(3)
 
-        """ Check title and year sort """
-        # sort All by title
-        title_sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='title-sort-button']"
-        )
-        title_sort_button.click()
-        time.sleep(3)
+        # check title and year sort
+        self.check_title_sort(driver, "All")
+        self.check_year_sort(driver, "All")
 
-        # compare what should be listed with what is shown
-        should_list = csv_titles_by_title("All")
-        displayed_list = displayed_text_as_list(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-        self.assertTrue(should_list == displayed_list)
+        # arrow up several times and for each check genre, and both sort options
+        arrow_up_array = [
+            "Action",
+            "Comedy",
+            "Documentary",
+            "Drama",
+            "Horror",
+            "Mystery & Suspense",
+            "Romance",
+            "Sci-Fi & Fantasy",
+            "All",
+            "Action",
+            "Comedy",
+        ]
+        for genre in arrow_up_array:
+            self.check_arrow_action(driver, "forward", genre)
+            self.check_title_sort(driver, genre)
+            self.check_year_sort(driver, genre)
 
-        # sort All by year
-        year_sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='year-sort-button']"
-        )
-        year_sort_button.click()
-        time.sleep(3)
+        # repeat with arrow down
+        arrow_down_array = [
+            "Action",
+            "All",
+            "Sci-Fi & Fantasy",
+            "Romance",
+            "Mystery & Suspense",
+            "Horror",
+            "Drama",
+            "Documentary",
+            "Comedy",
+        ]
+        for genre in arrow_down_array:
+            self.check_arrow_action(driver, "back", genre)
+            self.check_title_sort(driver, genre)
+            self.check_year_sort(driver, genre)
 
-        # compare what should be listed with what is shown
-        should_list = csv_titles_by_year("All")
-        displayed_list = displayed_text_as_list(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-        self.assertTrue(should_list == displayed_list)
-
-        """ Arrow Up to Action """
-        arrow_up = driver.find_element_by_xpath(
-            "//button[@data-test='genres-forward-button']"
-        )
-        arrow_up.click()
-        time.sleep(1)
-        selected_genre = driver.find_element_by_xpath(
-            "//h2[@data-test='selected-genre']"
-        ).text
-        self.assertTrue("Action" in selected_genre)
-
-        """ Check title and year sort """
-        # sort Action by title
-        title_sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='title-sort-button']"
-        )
-        title_sort_button.click()
-        time.sleep(3)
-
-        # compare what should be listed with what is shown
-        should_list = csv_titles_by_title("Action")
-        displayed_list = displayed_text_as_list(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-        self.assertTrue(should_list == displayed_list)
-
-        # sort Action by year
-        year_sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='year-sort-button']"
-        )
-        year_sort_button.click()
-        time.sleep(3)
-
-        # compare what should be listed with what is shown
-        should_list = csv_titles_by_year("Action")
-        displayed_list = displayed_text_as_list(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-        self.assertTrue(should_list == displayed_list)
-
-        # # arrow up to Comedy
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Comedy" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Looper" in displayed_movie_list)
-        # self.assertTrue("Hancock" in displayed_movie_list)
-        #
-        # # arrow up to Documentary
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Documentary" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Ain't Them Bodies Saints" in displayed_movie_list)
-        # self.assertTrue(
-        #     "American Experience: The Island Murder" in displayed_movie_list
-        # )
-        #
-        # # arrow up to Drama
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Drama" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("The Lookout" in displayed_movie_list)
-        # self.assertTrue("Room" in displayed_movie_list)
-        #
-        # # arrow up to Horror
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Horror" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Molly's Game" in displayed_movie_list)
-        # self.assertTrue("The Loved Ones" in displayed_movie_list)
-        #
-        # # arrow up to Mystery & Suspense
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Mystery & Suspense" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Lars and the Real Girl" in displayed_movie_list)
-        # self.assertTrue("The Guilty" in displayed_movie_list)
-        #
-        # # arrow up to Romance
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Romance" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("The Invitation" in displayed_movie_list)
-        # self.assertTrue("Three Colors: Red" in displayed_movie_list)
-        #
-        # # arrow up to Sci-Fi & Fantasy
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Sci-Fi & Fantasy" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Winter's Bone" in displayed_movie_list)
-        # self.assertTrue("Unbreakable" in displayed_movie_list)
-        #
-        # # arrow up to All
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("All" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # with open("../data_loader/movies.csv") as movies:
-        #     for movie in csv.reader(movies):
-        #         self.assertTrue(movie[0] in displayed_movie_list)
-        #
-        # # arrow up AGAIN to Action
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Action" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Mud" in displayed_movie_list)
-        # self.assertTrue("Train to Busan" in displayed_movie_list)
-        #
-        # # arrow up AGAIN to Comedy
-        # arrow_up = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-forward-button']"
-        # )
-        # arrow_up.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Comedy" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("The Babadook" in displayed_movie_list)
-        # self.assertTrue("Damsels in Distress" in displayed_movie_list)
-        #
-        # """ TEST BACK ARROW """
-        # # arrow back to Action
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Action" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Creep" in displayed_movie_list)
-        # self.assertTrue("The Crazies" in displayed_movie_list)
-        #
-        # # arrow back to All
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("All" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # with open("../data_loader/movies.csv") as movies:
-        #     for movie in csv.reader(movies):
-        #         self.assertTrue(movie[0] in displayed_movie_list)
-        #
-        # # arrow back to Sci-Fi & Fantasy
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Sci-Fi & Fantasy" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse(
-        #     "There's Something Wrong with Aunt Diane" in displayed_movie_list
-        # )
-        # self.assertTrue("Colossal" in displayed_movie_list)
-        #
-        # # arrow back to Romance
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Romance" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("True Adolescents" in displayed_movie_list)
-        # self.assertTrue("Nothing But a Man" in displayed_movie_list)
-        #
-        # # arrow back to Mystery & Suspense
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Mystery & Suspense" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Force Majeure" in displayed_movie_list)
-        # self.assertTrue("Cold Weather" in displayed_movie_list)
-        #
-        # # arrow back to Horror
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Horror" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Emo the Musical" in displayed_movie_list)
-        # self.assertTrue("Raw" in displayed_movie_list)
-        #
-        # # arrow back to Drama
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Drama" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("The Lady Vanishes" in displayed_movie_list)
-        # self.assertTrue("The Founder" in displayed_movie_list)
-        #
-        # # arrow back to Documentary
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Documentary" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("The Good Girl" in displayed_movie_list)
-        # self.assertTrue("Pelada" in displayed_movie_list)
-        #
-        # # arrow back to Comedy
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Comedy" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("I Like Killing Flies" in displayed_movie_list)
-        # self.assertTrue("We Are the Best!" in displayed_movie_list)
-        #
-        # # arrow back to Action
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Action" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Tucker & Dale vs. Evil" in displayed_movie_list)
-        # self.assertTrue("Warrior" in displayed_movie_list)
-        #
-        # # arrow back to All
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("All" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # with open("../data_loader/movies.csv") as movies:
-        #     for movie in csv.reader(movies):
-        #         self.assertTrue(movie[0] in displayed_movie_list)
-        #
-        # # arrow back AGAIN to Sci-Fi & Fantasy
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Sci-Fi & Fantasy" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("The Taking of Pelham One Two Three" in displayed_movie_list)
-        # self.assertTrue("The Last Starfighter" in displayed_movie_list)
-        #
-        # # arrow back AGAIN to Romance
-        # arrow_back = driver.find_element_by_xpath(
-        #     "//button[@data-test='genres-back-button']"
-        # )
-        # arrow_back.click()
-        # time.sleep(1)
-        # selected_genre = driver.find_element_by_xpath(
-        #     "//h2[@data-test='selected-genre']"
-        # ).text
-        # self.assertTrue("Romance" in selected_genre)
-        # displayed_movie_list = driver.find_element_by_xpath(
-        #     "//div[@data-test='movie-list']"
-        # ).text
-        # self.assertFalse("Jeff, Who Lives at Home" in displayed_movie_list)
-        # self.assertTrue("Lars and the Real Girl" in displayed_movie_list)
-        #
-        # """ TEST SORT """
-        # """ TEST MENU """
+        """ TEST MENU """
 
     # def test_create_user(self):
     #     print("test_create_user")
