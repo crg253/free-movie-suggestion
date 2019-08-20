@@ -123,7 +123,7 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def check_arrow_action(self, driver, direction, genre):
+    def check_arrow(self, driver, direction, genre):
         # arrow up or down
         arrow_button = driver.find_element_by_xpath(
             "//button[@data-test='genres-" + direction + "-button']"
@@ -137,31 +137,19 @@ class EndToEndTest(LiveServerTestCase):
         # check that its the correct genre
         self.assertTrue(genre in selected_genre)
 
-    def check_title_sort(self, driver, genre):
+    def check_sort(self, driver, genre, sort_type):
         # sort by title
-        title_sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='title-sort-button']"
+        sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='" + sort_type + "-sort-button']"
         )
-        title_sort_button.click()
+        sort_button.click()
         time.sleep(1)
 
         # compare what should be listed with what is shown
-        should_list = csv_titles_by_title(genre)
-        displayed_list = displayed_text_as_list(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-        self.assertTrue(should_list == displayed_list)
-
-    def check_year_sort(self, driver, genre):
-        # sort by year
-        year_sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='year-sort-button']"
-        )
-        year_sort_button.click()
-        time.sleep(1)
-
-        # compare what should be listed with what is shown
-        should_list = csv_titles_by_year(genre)
+        if sort_type == "title":
+            should_list = csv_titles_by_title(genre)
+        else:
+            should_list = csv_titles_by_year(genre)
         displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
         )
@@ -196,8 +184,8 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(3)
 
         # check title and year sort
-        self.check_title_sort(driver, "All")
-        self.check_year_sort(driver, "All")
+        self.check_sort(driver, "All", "title")
+        self.check_sort(driver, "All", "year")
 
         # arrow up several times and for each check genre, and both sort options
         arrow_up_array = [
@@ -214,9 +202,9 @@ class EndToEndTest(LiveServerTestCase):
             "Comedy",
         ]
         for genre in arrow_up_array:
-            self.check_arrow_action(driver, "forward", genre)
-            self.check_title_sort(driver, genre)
-            self.check_year_sort(driver, genre)
+            self.check_arrow(driver, "forward", genre)
+            self.check_sort(driver, genre, "title")
+            self.check_sort(driver, genre, "year")
 
         # repeat with arrow down
         arrow_down_array = [
@@ -231,9 +219,9 @@ class EndToEndTest(LiveServerTestCase):
             "Comedy",
         ]
         for genre in arrow_down_array:
-            self.check_arrow_action(driver, "back", genre)
-            self.check_title_sort(driver, genre)
-            self.check_year_sort(driver, genre)
+            self.check_arrow(driver, "back", genre)
+            self.check_sort(driver, genre, "title")
+            self.check_sort(driver, genre, "year")
 
         """ TEST MENU """
 
