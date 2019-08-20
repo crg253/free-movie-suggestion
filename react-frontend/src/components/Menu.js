@@ -88,8 +88,9 @@ class Menu extends Component {
     }
 
     return (
-      <div>
+      <div data-test="menu-wrapper">
         <button
+          data-test="open-menu-button"
           id="menu-button"
           className="button-nostyle"
           style={{display: this.state.displayButton}}
@@ -98,6 +99,7 @@ class Menu extends Component {
 
         <div id="open-menu" style={{display: this.state.displayMenu}}>
           <button
+            data-test="close-menu-button"
             id="close-menu-button"
             className="button-nostyle"
             onClick={() => this.changeMenuDisplay()}

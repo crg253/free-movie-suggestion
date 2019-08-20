@@ -19,9 +19,7 @@ from config import Config
 from data_loader.csv_loader import *
 
 
-"""
-Must create a React build to run these tests
-"""
+""" Must create a React build to run these tests """
 
 
 def sort_by_title_helper(title):
@@ -81,7 +79,7 @@ def csv_titles_by_year(genre):
 
 
 def displayed_text_as_list(displayed_data):
-    """ create a list based on what is displayed """
+    # create a list of what is displayed
     # make list of all movie titles
     all_titles = []
     for movie_line in reduce_movie_csv("All"):
@@ -123,7 +121,7 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def check_arrow(self, driver, direction, genre):
+    def check_arrow_produces_genre(self, driver, direction, genre):
         # arrow up or down
         arrow_button = driver.find_element_by_xpath(
             "//button[@data-test='genres-" + direction + "-button']"
@@ -158,6 +156,8 @@ class EndToEndTest(LiveServerTestCase):
     def test_first_load_no_user(self):
         print("test_first_load_no_user")
 
+        """ test arrows, sort buttons, and menu """
+
         # add user 1 and 96 movies including comingsoon (via backend)
         crg253 = User(name="crg253")
         crg253.set_password("crg253password")
@@ -187,8 +187,8 @@ class EndToEndTest(LiveServerTestCase):
         self.check_sort(driver, "All", "title")
         self.check_sort(driver, "All", "year")
 
-        # arrow up several times and for each check genre, and both sort options
-        arrow_up_array = [
+        all_genres = [
+            "All",
             "Action",
             "Comedy",
             "Documentary",
@@ -197,33 +197,50 @@ class EndToEndTest(LiveServerTestCase):
             "Mystery & Suspense",
             "Romance",
             "Sci-Fi & Fantasy",
-            "All",
-            "Action",
-            "Comedy",
         ]
-        for genre in arrow_up_array:
-            self.check_arrow(driver, "forward", genre)
+
+        # check arrow up, sort by title, sort by year
+        index_count_forward = [1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2]
+        for index in index_count_forward:
+            genre = all_genres[index]
+            self.check_arrow_produces_genre(driver, "forward", genre)
             self.check_sort(driver, genre, "title")
             self.check_sort(driver, genre, "year")
 
-        # repeat with arrow down
-        arrow_down_array = [
-            "Action",
-            "All",
-            "Sci-Fi & Fantasy",
-            "Romance",
-            "Mystery & Suspense",
-            "Horror",
-            "Drama",
-            "Documentary",
-            "Comedy",
-        ]
-        for genre in arrow_down_array:
-            self.check_arrow(driver, "back", genre)
+        # check arrow back, sort by title, sort by year
+        index_count_back = [1, 0, 8, 7, 6, 5, 4, 3, 2]
+        for index in index_count_back:
+            genre = all_genres[index]
+            self.check_arrow_produces_genre(driver, "back", genre)
             self.check_sort(driver, genre, "title")
             self.check_sort(driver, genre, "year")
 
-        """ TEST MENU """
+        # open menu
+        menu_button = driver.find_element_by_xpath(
+            "//button[@data-test='open-menu-button']"
+        )
+        menu_button.click()
+        time.sleep(1)
+
+        # check contents of menu
+        menu_content = driver.find_element_by_xpath(
+            "//div[@data-test='menu-wrapper']"
+        ).text
+        self.assertTrue("Sign In" in menu_content)
+        self.assertTrue("Recommend" in menu_content)
+        self.assertTrue("User Suggestions" in menu_content)
+        self.assertTrue("About" in menu_content)
+        self.assertTrue("Contact" in menu_content)
+        self.assertFalse("edit account" in menu_content)
+        self.assertFalse("delete account" in menu_content)
+        self.assertFalse("sign out" in menu_content)
+
+        # close menu
+        menu_button = driver.find_element_by_xpath(
+            "//button[@data-test='close-menu-button']"
+        )
+        menu_button.click()
+        time.sleep(3)
 
     # def test_create_user(self):
     #     print("test_create_user")
