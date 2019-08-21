@@ -283,7 +283,7 @@ class EndToEndTest(LiveServerTestCase):
     #     driver = self.driver
     #     driver.get(self.get_server_url() + "/createaccount")
     #
-    #     # TRY TO CREATE USER ALREADY IN DB
+    #     # TEST FAILED CREATE USER
     #     name_input = driver.find_element_by_xpath(
     #         "//input[@data-test='create-account-username-input']"
     #     )
@@ -311,7 +311,7 @@ class EndToEndTest(LiveServerTestCase):
     #     )
     #     modal_button.click()
     #
-    #     # CREATE USER
+    #     # TEST SUCCESSFUL CREATE USER
     #     name_input = driver.find_element_by_xpath(
     #         "//input[@data-test='create-account-username-input']"
     #     )
@@ -342,18 +342,46 @@ class EndToEndTest(LiveServerTestCase):
     #     # sampleuser123 SHOULD exist in db (backend)
     #     self.assertFalse(User.query.filter_by(name="sampleuser123").first() == None)
 
-    def test_sign_in_user(self):
+    def test_sign_in_user_and_modal(self):
         print("test_sign_in_user")
 
-        """ create user """
+        # create user
         sampleuser123 = User(name="sampleuser123")
         sampleuser123.set_password("password")
         db.session.add(sampleuser123)
         db.session.commit()
 
-        """ sign in user (via frontend) """
+        # go to /signin
         driver = self.driver
         driver.get(self.get_server_url() + "/signin")
+
+        # TEST FAILED SIGN IN
+        name_input = driver.find_element_by_xpath(
+            "//input[@data-test='signin-username-input']"
+        )
+        name_input.send_keys("bella")
+        pass_input = driver.find_element_by_xpath(
+            "//input[@data-test='signin-password-input']"
+        )
+        pass_input.send_keys("bellapassword")
+        time.sleep(1)
+        submit_button = driver.find_element_by_xpath(
+            "//input[@data-test='signin-submit-button']"
+        )
+        submit_button.click()
+        time.sleep(2)
+
+        # expect to see failure modal
+        displayed_modal = driver.find_element_by_xpath(
+            "//div[@data-test='signin-message-modal']"
+        ).text
+        self.assertTrue("Incorrect username or password." in displayed_modal)
+        modal_button = driver.find_element_by_xpath(
+            "//button[@data-test='modal-response-button']"
+        )
+        modal_button.click()
+
+        # TEST SUCCESSFUL SIGN IN
         name_input = driver.find_element_by_xpath(
             "//input[@data-test='signin-username-input']"
         )
@@ -369,15 +397,22 @@ class EndToEndTest(LiveServerTestCase):
         submit_button.click()
         time.sleep(2)
 
-        """ expect to see modal """
+        # expect to see success modal
         displayed_modal = driver.find_element_by_xpath(
             "//div[@data-test='signin-message-modal']"
         ).text
         self.assertTrue("Now signed in as sampleuser123." in displayed_modal)
+        modal_button = driver.find_element_by_xpath(
+            "//button[@data-test='modal-response-button']"
+        )
+        modal_button.click()
 
-        """ expect to see a token in localStorage """
+        # expect to see a token in localStorage
+        token = User.query.filter_by(name="sampleuser123").first().get_token()
+        local_storage_token = driver.execute_script("return window.localStorage.token;")
+        self.assertTrue(token == local_storage_token)
 
-    # def test_save_unsave_movies(self):
+    # def test_save_movie_with_successful_sigin_redirect(self):
     #     print('test_save_unsave_movies')
     #
     #     """ add user 1 and 96 movies including comingsoon (via backend) """
