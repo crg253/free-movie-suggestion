@@ -56,6 +56,7 @@ class SignIn extends Component {
           localStorage.setItem("token", res.token);
           this.props.handleGetUserAndMovies(res.token);
 
+          // redirect and modal decision
           if (this.props.redirectBackGenre.length > 0) {
             this.props.setRedirectBack(
               <Redirect

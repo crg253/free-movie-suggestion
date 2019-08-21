@@ -153,161 +153,229 @@ class EndToEndTest(LiveServerTestCase):
         )
         self.assertTrue(should_list == displayed_list)
 
-    def test_first_load_no_user(self):
-        print("test_first_load_no_user")
-
-        """ test arrows, sort buttons, and menu """
-
-        # add user 1 and 96 movies including comingsoon (via backend)
-        crg253 = User(name="crg253")
-        crg253.set_password("crg253password")
-        db.session.add(crg253)
-        comingsoon = Movie(
-            slug="comingsoon",
-            title="Coming Soon",
-            year=2019,
-            video_link="https://www.youtube.com/embed/RODwmMxLKa0",
-            recommender_id=1,
-        )
-        db.session.add(comingsoon)
-        db.session.commit()
-        load_movies("../data_loader/movies.csv")
-        time.sleep(5)
-
-        # expect 1 user and 96 movies exist in db (backend)
-        self.assertTrue(len(User.query.all()) == 1)
-        self.assertTrue(len(Movie.query.all()) == 96)
-
-        # start with All movies
-        driver = self.driver
-        driver.get(self.get_server_url() + "/all/comingsoon")
-        time.sleep(3)
-
-        # check title and year sort
-        self.check_sort(driver, "All", "title")
-        self.check_sort(driver, "All", "year")
-
-        all_genres = [
-            "All",
-            "Action",
-            "Comedy",
-            "Documentary",
-            "Drama",
-            "Horror",
-            "Mystery & Suspense",
-            "Romance",
-            "Sci-Fi & Fantasy",
-        ]
-
-        # check arrow up, sort by title, sort by year
-        index_count_forward = [1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2]
-        for index in index_count_forward:
-            genre = all_genres[index]
-            self.check_arrow_produces_genre(driver, "forward", genre)
-            self.check_sort(driver, genre, "title")
-            self.check_sort(driver, genre, "year")
-
-        # check arrow back, sort by title, sort by year
-        index_count_back = [1, 0, 8, 7, 6, 5, 4, 3, 2]
-        for index in index_count_back:
-            genre = all_genres[index]
-            self.check_arrow_produces_genre(driver, "back", genre)
-            self.check_sort(driver, genre, "title")
-            self.check_sort(driver, genre, "year")
-
-        # open menu
-        menu_button = driver.find_element_by_xpath(
-            "//button[@data-test='open-menu-button']"
-        )
-        menu_button.click()
-        time.sleep(1)
-
-        # check contents of menu
-        menu_content = driver.find_element_by_xpath(
-            "//div[@data-test='menu-wrapper']"
-        ).text
-        self.assertTrue("Sign In" in menu_content)
-        self.assertTrue("Recommend" in menu_content)
-        self.assertTrue("User Suggestions" in menu_content)
-        self.assertTrue("About" in menu_content)
-        self.assertTrue("Contact" in menu_content)
-        self.assertFalse("edit account" in menu_content)
-        self.assertFalse("delete account" in menu_content)
-        self.assertFalse("sign out" in menu_content)
-
-        # close menu
-        menu_button = driver.find_element_by_xpath(
-            "//button[@data-test='close-menu-button']"
-        )
-        menu_button.click()
-        time.sleep(3)
+    # def test_first_load_no_user(self):
+    #     print("test_first_load_no_user")
+    #
+    #     """ test arrows, sort buttons, menu, /usersuggestions, and /usermovies """
+    #
+    #     # add user 1 and 96 movies including comingsoon (via backend)
+    #     crg253 = User(name="crg253")
+    #     crg253.set_password("crg253password")
+    #     db.session.add(crg253)
+    #     comingsoon = Movie(
+    #         slug="comingsoon",
+    #         title="Coming Soon",
+    #         year=2019,
+    #         video_link="https://www.youtube.com/embed/RODwmMxLKa0",
+    #         recommender_id=1,
+    #     )
+    #     db.session.add(comingsoon)
+    #     db.session.commit()
+    #     load_movies("../data_loader/movies.csv")
+    #     time.sleep(5)
+    #
+    #     # expect 1 user and 96 movies exist in db (backend)
+    #     self.assertTrue(len(User.query.all()) == 1)
+    #     self.assertTrue(len(Movie.query.all()) == 96)
+    #
+    #     # start with All movies
+    #     driver = self.driver
+    #     driver.get(self.get_server_url() + "/all/comingsoon")
+    #     time.sleep(3)
+    #
+    #     # check title and year sort
+    #     self.check_sort(driver, "All", "title")
+    #     self.check_sort(driver, "All", "year")
+    #
+    #     all_genres = [
+    #         "All",
+    #         "Action",
+    #         "Comedy",
+    #         "Documentary",
+    #         "Drama",
+    #         "Horror",
+    #         "Mystery & Suspense",
+    #         "Romance",
+    #         "Sci-Fi & Fantasy",
+    #     ]
+    #
+    #     # check arrow up, sort by title, sort by year
+    #     index_count_forward = [1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2]
+    #     for index in index_count_forward:
+    #         genre = all_genres[index]
+    #         self.check_arrow_produces_genre(driver, "forward", genre)
+    #         self.check_sort(driver, genre, "title")
+    #         self.check_sort(driver, genre, "year")
+    #
+    #     # check arrow back, sort by title, sort by year
+    #     index_count_back = [1, 0, 8, 7, 6, 5, 4, 3, 2]
+    #     for index in index_count_back:
+    #         genre = all_genres[index]
+    #         self.check_arrow_produces_genre(driver, "back", genre)
+    #         self.check_sort(driver, genre, "title")
+    #         self.check_sort(driver, genre, "year")
+    #
+    #     # open menu
+    #     menu_button = driver.find_element_by_xpath(
+    #         "//button[@data-test='open-menu-button']"
+    #     )
+    #     menu_button.click()
+    #     time.sleep(1)
+    #
+    #     # check contents of menu
+    #     menu_content = driver.find_element_by_xpath(
+    #         "//div[@data-test='menu-wrapper']"
+    #     ).text
+    #     should_be_in_menu = [
+    #         "Sign In",
+    #         "Recommend",
+    #         "User Suggestions",
+    #         "About",
+    #         "Contact",
+    #     ]
+    #     should_not_be_in_menu = ["edit account", "delete account", "sign out"]
+    #     for item in should_be_in_menu:
+    #         self.assertTrue(item in menu_content)
+    #     for item in should_not_be_in_menu:
+    #         self.assertFalse(item in menu_content)
+    #
+    #     # close menu
+    #     menu_button = driver.find_element_by_xpath(
+    #         "//button[@data-test='close-menu-button']"
+    #     )
+    #     menu_button.click()
+    #     time.sleep(1)
+    #
+    #     # check that /usersuggestions is empty
+    #     driver.get(self.get_server_url() + "/usersuggestions")
+    #     time.sleep(3)
+    #     user_suggestions = driver.find_element_by_xpath(
+    #         "//div[@data-test='user-suggested']"
+    #     ).text
+    #     for title in csv_titles_by_title("All"):
+    #         self.assertTrue(title != None and len(title) > 0)
+    #         self.assertFalse(title in user_suggestions)
+    #
+    #     # check that saved and own_suggetions in /usermovies are empty
+    #     driver.get(self.get_server_url() + "/usermovies")
+    #     time.sleep(3)
+    #     user_saved = driver.find_element_by_xpath(
+    #         "//div[@data-test='user-saved-movies']"
+    #     ).text
+    #     user_own_suggested = driver.find_element_by_xpath(
+    #         "//div[@data-test='user-own-suggested']"
+    #     ).text
+    #     for title in csv_titles_by_title("All"):
+    #         self.assertTrue(title != None and len(title) > 0)
+    #         self.assertFalse(title in user_saved)
+    #         self.assertFalse(title in user_own_suggested)
 
     # def test_create_user(self):
     #     print("test_create_user")
     #
-    #     """ create user (via frontend) """
+    #     # create one user
+    #     monkey = User(name="monkey")
+    #     monkey.set_password("monkeypassword")
+    #     db.session.add(monkey)
+    #     db.session.commit()
+    #
+    #     # go to /createaccount (via frontend)
     #     driver = self.driver
     #     driver.get(self.get_server_url() + "/createaccount")
-    #     #            ("//div[@data-test='movie-list']")
     #
+    #     # TRY TO CREATE USER ALREADY IN DB
+    #     name_input = driver.find_element_by_xpath(
+    #         "//input[@data-test='create-account-username-input']"
+    #     )
+    #     name_input.send_keys("monkey")
+    #
+    #     pass_input = driver.find_element_by_xpath(
+    #         "//input[@data-test='create-account-password-input']"
+    #     )
+    #     pass_input.send_keys("differentmonkeypassword")
+    #     time.sleep(1)
+    #
+    #     submit_button = driver.find_element_by_xpath(
+    #         "//input[@data-test='create-account-submit-button']"
+    #     )
+    #     submit_button.click()
+    #     time.sleep(3)
+    #
+    #     # expect to see modal response
+    #     displayed_modal = driver.find_element_by_xpath(
+    #         "//div[@data-test='create-account-message-modal']"
+    #     ).text
+    #     self.assertTrue("Sorry, username not available." in displayed_modal)
+    #     modal_button = driver.find_element_by_xpath(
+    #         "//button[@data-test='modal-response-button']"
+    #     )
+    #     modal_button.click()
+    #
+    #     # CREATE USER
     #     name_input = driver.find_element_by_xpath(
     #         "//input[@data-test='create-account-username-input']"
     #     )
     #     name_input.send_keys("sampleuser123")
+    #
     #     pass_input = driver.find_element_by_xpath(
     #         "//input[@data-test='create-account-password-input']"
     #     )
     #     pass_input.send_keys("password")
     #     time.sleep(1)
+    #
     #     submit_button = driver.find_element_by_xpath(
     #         "//input[@data-test='create-account-submit-button']"
     #     )
     #     submit_button.click()
-    #     time.sleep(2)
+    #     time.sleep(3)
     #
-    #     """ expect to see modal response """
+    #     # expect to see modal response
     #     displayed_modal = driver.find_element_by_xpath(
     #         "//div[@data-test='create-account-message-modal']"
     #     ).text
     #     self.assertTrue("Thank you for creating account." in displayed_modal)
+    #     modal_button = driver.find_element_by_xpath(
+    #         "//button[@data-test='modal-response-button']"
+    #     )
+    #     modal_button.click()
     #
-    #     """ sampleuser123 SHOULD exist in db (backend) """
+    #     # sampleuser123 SHOULD exist in db (backend)
     #     self.assertFalse(User.query.filter_by(name="sampleuser123").first() == None)
 
-    # def test_sign_in_user(self):
-    #     print("test_sign_in_user")
-    #
-    #     """ create user """
-    #     sampleuser123 = User(name="sampleuser123")
-    #     sampleuser123.set_password("password")
-    #     db.session.add(sampleuser123)
-    #     db.session.commit()
-    #
-    #     """ sign in user (via frontend) """
-    #     driver = self.driver
-    #     driver.get(self.get_server_url() + "/signin")
-    #     name_input = driver.find_element_by_xpath(
-    #         "//input[@data-test='signin-username-input']"
-    #     )
-    #     name_input.send_keys("sampleuser123")
-    #     pass_input = driver.find_element_by_xpath(
-    #         "//input[@data-test='signin-password-input']"
-    #     )
-    #     pass_input.send_keys("password")
-    #     time.sleep(1)
-    #     submit_button = driver.find_element_by_xpath(
-    #         "//input[@data-test='signin-submit-button']"
-    #     )
-    #     submit_button.click()
-    #     time.sleep(2)
-    #
-    #     """ expect to see modal """
-    #     displayed_modal = driver.find_element_by_xpath(
-    #         "//div[@data-test='signin-message-modal']"
-    #     ).text
-    #     self.assertTrue("Now signed in as sampleuser123." in displayed_modal)
-    #
-    #     """ expect to see a token in localStorage """
+    def test_sign_in_user(self):
+        print("test_sign_in_user")
+
+        """ create user """
+        sampleuser123 = User(name="sampleuser123")
+        sampleuser123.set_password("password")
+        db.session.add(sampleuser123)
+        db.session.commit()
+
+        """ sign in user (via frontend) """
+        driver = self.driver
+        driver.get(self.get_server_url() + "/signin")
+        name_input = driver.find_element_by_xpath(
+            "//input[@data-test='signin-username-input']"
+        )
+        name_input.send_keys("sampleuser123")
+        pass_input = driver.find_element_by_xpath(
+            "//input[@data-test='signin-password-input']"
+        )
+        pass_input.send_keys("password")
+        time.sleep(1)
+        submit_button = driver.find_element_by_xpath(
+            "//input[@data-test='signin-submit-button']"
+        )
+        submit_button.click()
+        time.sleep(2)
+
+        """ expect to see modal """
+        displayed_modal = driver.find_element_by_xpath(
+            "//div[@data-test='signin-message-modal']"
+        ).text
+        self.assertTrue("Now signed in as sampleuser123." in displayed_modal)
+
+        """ expect to see a token in localStorage """
 
     # def test_save_unsave_movies(self):
     #     print('test_save_unsave_movies')
