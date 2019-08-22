@@ -103,6 +103,18 @@ class TestConfig(Config):
 
 
 class EndToEndTest(LiveServerTestCase):
+    all_genres = [
+        "All",
+        "Action",
+        "Comedy",
+        "Documentary",
+        "Drama",
+        "Horror",
+        "Mystery & Suspense",
+        "Romance",
+        "Sci-Fi & Fantasy",
+    ]
+
     def create_app(self):
         app = create_app(TestConfig)
         return app
@@ -118,22 +130,8 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def check_arrow_produces_genre(self, driver, direction, genre):
-        # arrow up or down
-        arrow_button = driver.find_element_by_xpath(
-            "//button[@data-test='genres-" + direction + "-button']"
-        )
-        arrow_button.click()
-        time.sleep(1)
-        # get the genre that is shown
-        selected_genre = driver.find_element_by_xpath(
-            "//h2[@data-test='selected-genre']"
-        ).text
-        # check that its the correct genre
-        self.assertTrue(genre in selected_genre)
-
     def check_sort(self, driver, genre, sort_type):
-        # sort by title
+        # sort by title or year
         sort_button = driver.find_element_by_xpath(
             "//button[@data-test='" + sort_type + "-sort-button']"
         )
@@ -148,6 +146,8 @@ class EndToEndTest(LiveServerTestCase):
         displayed_list = displayed_text_as_list(
             driver.find_element_by_xpath("//div[@data-test='movie-list']").text
         )
+        print(should_list)
+        print(displayed_list)
         self.assertTrue(should_list == displayed_list)
 
     def add_user_1_and_101_movies(self):
@@ -171,14 +171,111 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(len(User.query.all()) == 1)
         self.assertTrue(len(Movie.query.all()) == 101)
 
+    def go_to_all_movies_page(self, driver):
+        driver.get(self.get_server_url() + "/all/comingsoon")
+        time.sleep(3)
+
+    def create_user(self, driver, name, password):
+        name_input = driver.find_element_by_xpath(
+            "//input[@data-test='create-account-username-input']"
+        )
+        name_input.send_keys(name)
+        pass_input = driver.find_element_by_xpath(
+            "//input[@data-test='create-account-password-input']"
+        )
+        pass_input.send_keys(password)
+        time.sleep(1)
+        submit_button = driver.find_element_by_xpath(
+            "//input[@data-test='create-account-submit-button']"
+        )
+        submit_button.click()
+        time.sleep(3)
+
+    def expect_modal(self, driver, message):
+        displayed_modal = driver.find_element_by_xpath(
+            "//div[@data-test='create-account-message-modal']"
+        ).text
+        self.assertTrue(message in displayed_modal)
+        modal_button = driver.find_element_by_xpath(
+            "//button[@data-test='modal-response-button']"
+        )
+        modal_button.click()
+        time.sleep(2)
+
     """ Tests """
-    # test_each_movie_trailer_load
-    # test_arrows
+
+    def WORKS_test_1_test_each_movie_trailer_load(self):
+        print("test_1_test_each_movie_trailer_load")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # visually make sure each video loads
+        for slug in [x.slug for x in Movie.query.all()]:
+            driver.get(self.get_server_url() + "/all/" + slug)
+            time.sleep(2)
+
+    def WORKS_test_2_test_right_arrows(self):
+        print("test_2_test_right_arrows")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.go_to_all_movies_page(driver)
+
+        # check that right arrows take you forward through genres
+        for genre in (2 * self.all_genres)[1:12]:
+            driver.find_element_by_xpath(
+                "//button[@data-test='genres-forward-button']"
+            ).click()
+            time.sleep(1)
+            genre_shown = driver.find_element_by_xpath(
+                "//h2[@data-test='selected-genre']"
+            ).text
+            self.assertTrue(genre == genre_shown)
+
+    def WORKS_test_3_test_left_arrows(self):
+        print("test_3_test_left_arrows")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.go_to_all_movies_page(driver)
+
+        # check that left arrows take you backward through genres
+        for genre in (2 * (self.all_genres[::-1]))[0:11]:
+            driver.find_element_by_xpath(
+                "//button[@data-test='genres-back-button']"
+            ).click()
+            time.sleep(1)
+            genre_shown = driver.find_element_by_xpath(
+                "//h2[@data-test='selected-genre']"
+            ).text
+            self.assertTrue(genre == genre_shown)
+
+    def WORKS_test_4_test_both_sort_buttons(self):
+        print("test_4_test_both_sort_buttons")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.go_to_all_movies_page(driver)
+
+        # check title and year sort
+        self.check_sort(driver, "All", "title")
+        self.check_sort(driver, "All", "year")
+
+        # arrow up and test title and year sort for each genre
+        for genre in self.all_genres[1:]:
+            driver.find_element_by_xpath(
+                "//button[@data-test='genres-forward-button']"
+            ).click()
+            time.sleep(2)
+            self.check_sort(driver, genre, "title")
+            self.check_sort(driver, genre, "year")
+
     # test_load_movies_no_user_menu
     # test_load_movies_no_user_suggestions
     # test_load_movies_no_user_movies
 
-    def test_1_first_load_no_user(self):
+    def BEING_REFACTORED_test_1_first_load_no_user(self):
         print("test_1_first_load_no_user")
 
         """ test arrows, sort buttons, menu, /usersuggestions, and /usermovies """
@@ -210,7 +307,7 @@ class EndToEndTest(LiveServerTestCase):
         index_count_forward = [1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2]
         for index in index_count_forward:
             genre = all_genres[index]
-            self.check_arrow_produces_genre(driver, "forward", genre)
+            self.arrow_in_direction_and_check_genre(driver, "forward", genre)
             self.check_sort(driver, genre, "title")
             self.check_sort(driver, genre, "year")
 
@@ -218,7 +315,7 @@ class EndToEndTest(LiveServerTestCase):
         index_count_back = [1, 0, 8, 7, 6, 5, 4, 3, 2]
         for index in index_count_back:
             genre = all_genres[index]
-            self.check_arrow_produces_genre(driver, "back", genre)
+            self.arrow_in_direction_and_check_genre(driver, "back", genre)
             self.check_sort(driver, genre, "title")
             self.check_sort(driver, genre, "year")
 
@@ -277,49 +374,22 @@ class EndToEndTest(LiveServerTestCase):
             self.assertFalse(title in user_saved)
             self.assertFalse(title in user_own_suggested)
 
-    def test_2_create_user_fail_w_fail_modal(self):
-        print("test_2_create_user_fail_w_fail_modal")
+    def test_5_create_user_fail_w_fail_modal(self):
+        print("test_5_create_user_fail_w_fail_modal")
 
-        # create one user
+        # create one user on backend
         monkey = User(name="monkey")
         monkey.set_password("monkeypassword")
         db.session.add(monkey)
         db.session.commit()
 
-        # go to /createaccount (via frontend)
+        # try to create same user via frontend
         driver = self.driver
         driver.get(self.get_server_url() + "/createaccount")
+        self.create_user(driver, "monkey", "differentmonkeypassword")
+        self.expect_modal(driver, "Sorry, username not available.")
 
-        # enter bad information
-        name_input = driver.find_element_by_xpath(
-            "//input[@data-test='create-account-username-input']"
-        )
-        name_input.send_keys("monkey")
-
-        pass_input = driver.find_element_by_xpath(
-            "//input[@data-test='create-account-password-input']"
-        )
-        pass_input.send_keys("differentmonkeypassword")
-        time.sleep(1)
-
-        submit_button = driver.find_element_by_xpath(
-            "//input[@data-test='create-account-submit-button']"
-        )
-        submit_button.click()
-        time.sleep(3)
-
-        # expect to see modal response
-        displayed_modal = driver.find_element_by_xpath(
-            "//div[@data-test='create-account-message-modal']"
-        ).text
-        self.assertTrue("Sorry, username not available." in displayed_modal)
-        modal_button = driver.find_element_by_xpath(
-            "//button[@data-test='modal-response-button']"
-        )
-        modal_button.click()
-        time.sleep(2)
-
-    def test_3_create_user_success_w_success_modal(self):
+    def WORKS_test_3_create_user_success_w_success_modal(self):
         print("test_3_create_user_success_w_success_modal")
 
         # create one user
@@ -364,7 +434,7 @@ class EndToEndTest(LiveServerTestCase):
         # sampleuser123 SHOULD exist in db (backend)
         self.assertFalse(User.query.filter_by(name="sampleuser123").first() == None)
 
-    def test_4_sign_in_fail_w_fail_modal(self):
+    def WORKS_test_4_sign_in_fail_w_fail_modal(self):
         print("test_4_sign_in_fail_w_fail_modal")
 
         # create user
@@ -404,7 +474,7 @@ class EndToEndTest(LiveServerTestCase):
         modal_button.click()
         time.sleep(2)
 
-    def test_5_sign_in_success_w_success_modal(self):
+    def WORKS_test_5_sign_in_success_w_success_modal(self):
         print("test_5_sign_in_success_w_success_modal")
 
         # create user
@@ -449,7 +519,7 @@ class EndToEndTest(LiveServerTestCase):
         local_storage_token = driver.execute_script("return window.localStorage.token;")
         self.assertTrue(token == local_storage_token)
 
-    def test_6_sign_in_then_save_movie_from_trailer_page(self):
+    def WORKS_test_6_sign_in_then_save_movie_from_trailer_page(self):
         print("test_6_sign_in_then_save_movie_from_trailer_page")
 
         self.add_user_1_and_101_movies()
@@ -502,7 +572,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("Ain't Them Bodies Saints" in displayed_movies)
 
-    def REWORK_test_sigin_redirect_back_to_save_movie_from_trailer_page(self):
+    def IN_PROGRESS_test_sigin_redirect_back_to_save_movie_from_trailer_page(self):
         print("test_save_unsave_movies")
 
         self.add_user_1_and_101_movies()
@@ -609,7 +679,7 @@ class EndToEndTest(LiveServerTestCase):
 
         """ expect to see 1 movies in sampleuser123.saves """
 
-        # def REWORK_test_suggest_unsuggest(self):
+        # def IN_PROGRESS_test_suggest_unsuggest(self):
         print("test_suggest_unsuggest")
 
         """ create user """
@@ -841,7 +911,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("laura" in suggestion_card_content)
 
-    def REWORK_test_user2_save_user1_movie(self):
+    def IN_PROGRESS_test_user2_save_user1_movie(self):
         print("test_second_user_save_unsave_first_user_movies")
 
         """ create user 1 with 1 movie"""
@@ -904,16 +974,16 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("Karate Kid" in all_saved_content)
 
-    def REWORK_test_first_load_w_user(self):
+    def IN_PROGRESS_test_first_load_w_user(self):
         pass
 
-    def REWORK_test_user_forgot_password(self):
+    def IN_PROGRESS_test_user_forgot_password(self):
         pass
 
-    def REWORK_test_user_edit_account(self):
+    def IN_PROGRESS_test_user_edit_account(self):
         pass
 
-    def REWORK_test_user_delete_account(self):
+    def IN_PROGRESS_test_user_delete_account(self):
         pass
 
 
