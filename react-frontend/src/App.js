@@ -132,22 +132,14 @@ class App extends Component {
     }).then(res => {
       if (res.status === 401) {
         this.setState({
-          User: "",
-          Email: "",
           RedirectBack: "",
           RedirectBackGenre: redirectBackGenre,
           RedirectBackSlug: redirectBackSlug,
           Redirect: <Redirect to="/signin" />
         });
-        this.handleGetMovies("");
+        this.handleGetUserAndMovies(localStorage.getItem("token"));
       } else if (res.status === 200) {
-        res.json().then(res => {
-          this.setState({
-            User: res.user,
-            Email: res.email
-          });
-          this.handleGetMovies(res.user);
-        });
+        this.handleGetUserAndMovies(localStorage.getItem("token"));
       }
     });
   };
@@ -288,7 +280,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.RedirectBackGenre);
     return (
       <BrowserRouter>
         <div>

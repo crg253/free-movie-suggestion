@@ -58,12 +58,12 @@ class UserMovies extends Component {
             <div key={"usersave" + film.slug}>
               <iframe
                 className="saved-or-suggested-video"
-                title={film.name}
+                title={film.title}
                 src={film.video}
                 allowFullScreen
               />
               <div className="saved-or-suggested-title-year">
-                <p>{film.name}</p>
+                <p>{film.title}</p>
                 <p className="film-year-style">{film.year}</p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
@@ -95,12 +95,12 @@ class UserMovies extends Component {
             >
               <iframe
                 className="saved-or-suggested-video"
-                title={film.name}
+                title={film.title}
                 src={film.video}
                 allowFullScreen
               />
               <div className="saved-or-suggested-title-year">
-                <p>{film.name}</p>
+                <p>{film.title}</p>
                 <p className="film-year-style">{film.year}</p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
@@ -125,7 +125,7 @@ class UserMovies extends Component {
               </div>
 
               <div className="saved-or-suggested-title-year">
-                <p>{film.name}</p>
+                <p>{film.title}</p>
                 <p className="film-year-style">{film.year}</p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
