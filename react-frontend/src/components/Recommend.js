@@ -57,27 +57,21 @@ class Recommend extends Component {
           )
         });
       } else if (res.status === 401) {
-        this.props.setUser("");
-        this.props.setEmail("");
-        this.props.handleGetMovies("");
+        this.props.handleGetUserAndMovies(localStorage.getItem("token"));
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("recommend");
         this.props.setRedirect(<Redirect to="/signin" />);
       } else if (res.status === 200) {
-        res.json().then(res => {
-          this.props.setUser(res.user);
-          this.props.setEmail(res.email);
-          this.props.handleGetMovies(res.user);
-          this.setState({
-            SearchValue: "",
-            SearchResultOptions: [],
-            Message: (
-              <MessageModal
-                message="Thank you for suggesting!"
-                buttonMessage="You're welcome"
-              />
-            )
-          });
+        this.props.handleGetUserAndMovies(localStorage.getItem("token"));
+        this.setState({
+          SearchValue: "",
+          SearchResultOptions: [],
+          Message: (
+            <MessageModal
+              message="Thank you for suggesting!"
+              buttonMessage="You're welcome"
+            />
+          )
         });
       }
     });
@@ -92,7 +86,7 @@ class Recommend extends Component {
         </Link>
 
         <div className="user-pages-body-wrapper">
-          <h1>Hi {this.props.user} !</h1>
+          <h1>Hi {this.props.user.name} !</h1>
           <form onSubmit={this.handleSearchSubmit}>
             <label>
               Search the OMDb to find a movie to suggest.

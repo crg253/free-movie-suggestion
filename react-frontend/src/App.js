@@ -280,6 +280,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.Movies);
     return (
       <BrowserRouter>
         <div>
@@ -347,14 +348,12 @@ class App extends Component {
                 <Recommend
                   {...props}
                   user={this.state.User}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
                   setMovies={this.setMovies}
                   setRedirect={this.setRedirect}
                   redirect={this.state.Redirect}
                   setRedirectBack={this.setRedirectBack}
                   setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleGetMovies={this.handleGetMovies}
+                  handleGetUserAndMovies={this.handleGetUserAndMovies}
                 />
               )}
             />

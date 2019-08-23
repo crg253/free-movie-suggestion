@@ -92,7 +92,7 @@ class EditAccount extends Component {
             >
               <input
                 type="text"
-                placeholder={this.props.user}
+                placeholder={this.props.user.name}
                 value={this.state.NewName}
                 onChange={this.handleNewNameChange}
               />
