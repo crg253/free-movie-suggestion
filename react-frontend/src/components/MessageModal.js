@@ -13,7 +13,7 @@ class MessageModal extends Component {
   render() {
     return (
       <div style={{display: this.state.Display}} id="message-modal-wrapper">
-        <h3>{this.props.message}</h3>
+        <h3 data-test="modal-message">{this.props.message}</h3>
         <button
           data-test="modal-response-button"
           className="modal-button"

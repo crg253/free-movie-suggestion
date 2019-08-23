@@ -181,7 +181,7 @@ class EndToEndTest(LiveServerTestCase):
         driver.get(self.get_server_url() + "/all/comingsoon")
         time.sleep(3)
 
-    def create_user(self, driver, name, password):
+    def fill_create_user_form(self, driver, name, password):
         name_input = driver.find_element_by_xpath(
             "//input[@data-test='create-account-username-input']"
         )
@@ -197,21 +197,50 @@ class EndToEndTest(LiveServerTestCase):
         submit_button.click()
         time.sleep(3)
 
+    def fill_sign_in_form(self, driver, name, password):
+        name_input = driver.find_element_by_xpath(
+            "//input[@data-test='signin-username-input']"
+        )
+        name_input.send_keys(name)
+        pass_input = driver.find_element_by_xpath(
+            "//input[@data-test='signin-password-input']"
+        )
+        pass_input.send_keys(password)
+        time.sleep(1)
+        submit_button = driver.find_element_by_xpath(
+            "//input[@data-test='signin-submit-button']"
+        )
+        submit_button.click()
+        time.sleep(3)
+
     def expect_modal(self, driver, message):
-        displayed_modal = driver.find_element_by_xpath(
-            "//div[@data-test='create-account-message-modal']"
+        modal_message = driver.find_element_by_xpath(
+            "//h3[@data-test='modal-message']"
         ).text
-        self.assertTrue(message in displayed_modal)
+        self.assertTrue(message == modal_message)
         modal_button = driver.find_element_by_xpath(
             "//button[@data-test='modal-response-button']"
         )
         modal_button.click()
         time.sleep(2)
 
+    def create_user_and_sign_in(self, driver, name, password):
+        # create one user on backend
+        user = User(name=name)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+
+        driver = self.driver
+        driver.get(self.get_server_url() + "/signin")
+        # try to sign in w name but wrong password
+        self.fill_sign_in_form(driver, name, password)
+        self.expect_modal(driver, "Now signed in as " + name + ".")
+
     """ Tests """
 
-    def WORKS_test_1_first_load_test_each_movie_trailer(self):
-        print("test_1_first_load_test_each_movie_trailer")
+    def WORKS_test_a_first_load_test_each_movie_trailer(self):
+        print("test_a_first_load_test_each_movie_trailer")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -224,8 +253,8 @@ class EndToEndTest(LiveServerTestCase):
             driver.get(self.get_server_url() + "/all/" + slug)
             time.sleep(2)
 
-    def WORKS_test_2_first_load_test_right_arrows(self):
-        print("test_2_first_load_test_right_arrows")
+    def WORKS_test_b_first_load_test_right_arrows(self):
+        print("test_b_first_load_test_right_arrows")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -242,8 +271,8 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def WORKS_test_3_first_load_test_left_arrows(self):
-        print("test_3_first_load_test_left_arrows")
+    def WORKS_test_c_first_load_test_left_arrows(self):
+        print("test_c_first_load_test_left_arrows")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -260,8 +289,8 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def WORKS_test_4_first_load_arrow_up_and_test_both_sort_buttons(self):
-        print("test_4_first_load_arrow_up_and_test_both_sort_buttons")
+    def WORKS_test_d_first_load_arrow_up_and_test_both_sort_buttons(self):
+        print("test_d_first_load_arrow_up_and_test_both_sort_buttons")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -291,8 +320,8 @@ class EndToEndTest(LiveServerTestCase):
                 csv_sort("year", genre_shown) == self.click_sort(driver, "year")
             )
 
-    def WORKS_test_5_first_load_test_menu(self):
-        print("test_5_first_load_test_menu")
+    def WORKS_test_e_first_load_test_menu(self):
+        print("test_e_first_load_test_menu")
         self.add_user_1_and_101_movies()
         # open menu
         driver = self.driver
@@ -320,8 +349,8 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def WORKS_test_6_first_load_test_no_usersuggestions(self):
-        print("test_6_first_load_test_no_usersuggestions")
+    def WORKS_test_f_first_load_test_no_usersuggestions(self):
+        print("test_f_first_load_test_no_usersuggestions")
         self.add_user_1_and_101_movies()
 
         driver = self.driver
@@ -333,8 +362,8 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(user_suggestions == "")
 
-    def test_7_first_load_test_no_usermovies(self):
-        print("test_7_first_load_test_no_usermovies")
+    def WORKS_test_g_first_load_test_no_usermovies(self):
+        print("test_g_first_load_test_no_usermovies")
         self.add_user_1_and_101_movies()
 
         driver = self.driver
@@ -350,8 +379,8 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(user_saved == "")
         self.assertTrue(user_own_suggested == "")
 
-    def WORKS_test_8_create_user_fail_w_fail_modal(self):
-        print("test_8_create_user_fail_w_fail_modal")
+    def WORKS_test_h_create_user_fail_w_fail_modal(self):
+        print("test_h_create_user_fail_w_fail_modal")
 
         # create one user on backend
         monkey = User(name="monkey")
@@ -362,18 +391,66 @@ class EndToEndTest(LiveServerTestCase):
         # try to create same user via frontend
         driver = self.driver
         driver.get(self.get_server_url() + "/createaccount")
-        self.create_user(driver, "monkey", "differentmonkeypassword")
+        self.fill_create_user_form(driver, "monkey", "differentmonkeypassword")
         self.expect_modal(driver, "Sorry, username not available.")
 
-    # test_create_user_success_w_success_modal
+    def WORKS_test_i_create_user_success_w_success_modal(self):
+        print("test_i_create_user_success_w_success_modal")
 
-    # test_sign_in_fail_w_fail_modal
-    # test_sign_in_success_w_success_modal
-    # test_sign_in_menu_display
+        driver = self.driver
+        driver.get(self.get_server_url() + "/createaccount")
+        self.fill_create_user_form(driver, "monkey", "monkeypassword")
+        self.expect_modal(driver, "Thank you for creating account.")
+
+        # check that user exits in db
+        new_user = User.query.filter_by(name="monkey").first()
+        self.assertTrue(new_user.name == "monkey")
+        self.assertTrue(new_user.check_password("monkeypassword") == True)
+
+    def WORKS_test_j_sign_in_fail_w_fail_modal(self):
+        print("test_j_sign_in_fail_w_fail_modal")
+
+        # create one user on backend
+        bella = User(name="bella")
+        bella.set_password("bellapassword")
+        db.session.add(bella)
+        db.session.commit()
+
+        driver = self.driver
+        driver.get(self.get_server_url() + "/signin")
+        # try to sign in w name but wrong password
+        self.fill_sign_in_form(driver, "bella", "differentpassword")
+        self.expect_modal(driver, "Incorrect username or password.")
+
+        # try to sign in w wrong name and right password
+        self.fill_sign_in_form(driver, "bell", "bellapassword")
+        self.expect_modal(driver, "Incorrect username or password.")
+
+    def WORKS_test_k_sign_in_success_w_success_modal(self):
+        print("test_k_sign_in_success_w_success_modal")
+
+        # create one user on backend
+        bella = User(name="bella")
+        bella.set_password("bellapassword")
+        db.session.add(bella)
+        db.session.commit()
+
+        driver = self.driver
+        driver.get(self.get_server_url() + "/signin")
+        # try to sign in w name but wrong password
+        self.fill_sign_in_form(driver, "bella", "bellapassword")
+        self.expect_modal(driver, "Now signed in as bella.")
+
+    def test_l_sign_in_menu_display(self):
+        print("test_l_sign_in_menu_display")
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+
     # test_sign_in_save_movie_trailer_page
     # test_sign_in_unsave_movie_trailer_page
     # test_sign_in_recomend_movie
     # test_sign_in_unrecommend_movie
+    # test_sign_in_w_data_already_in_db
 
     # test_redirect_save_movie_trailer_page
     # test_redirect_unsave_movie_trailer_page
