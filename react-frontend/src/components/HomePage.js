@@ -206,6 +206,7 @@ class HomePage extends Component {
           </g>
 
           <g
+            data-test="mystery-and-suspense"
             onClick={() => {
               this.updateInstructions();
               this.props.setSelectedGenre("Mystery & Suspense");
