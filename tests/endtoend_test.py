@@ -441,13 +441,125 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "bella", "bellapassword")
         self.expect_modal(driver, "Now signed in as bella.")
 
-    def test_l_sign_in_menu_display(self):
+    def WORKS_test_l_sign_in_menu_display(self):
         print("test_l_sign_in_menu_display")
         driver = self.driver
         self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
 
-    # test_sign_in_save_movie_trailer_page
-    # test_sign_in_unsave_movie_trailer_page
+        # open menu
+        driver.find_element_by_xpath("//button[@data-test='open-menu-button']").click()
+        time.sleep(1)
+
+        # check contents of menu
+        menu_content = driver.find_element_by_xpath(
+            "//div[@data-test='menu-wrapper']"
+        ).text
+        should_be_in_menu = [
+            "hazel's Movies",
+            "Recommend",
+            "User Suggestions",
+            "About",
+            "Contact",
+            "edit account",
+            "delete account",
+            "sign out",
+        ]
+        for item in should_be_in_menu:
+            self.assertTrue(item in menu_content)
+        self.assertFalse("Sign In" in menu_content)
+
+        # close menu
+        driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
+        time.sleep(1)
+
+    def WORKS_test_m_sign_in_save_movie_trailer_page(self):
+        print("test_m_sign_in_save_movie_trailer_page")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+
+        # save movie with trailer button
+        driver.get(self.get_server_url() + "/romance/aintthembodiessaints2013")
+        time.sleep(2)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-save-button']"
+        )
+        save_button.click()
+        time.sleep(2)
+
+        # expect to see movie saved in /usermovies
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(2)
+        displayed_movies = driver.find_element_by_xpath(
+            "//div[@data-test='user-saved-movies']"
+        ).text
+        self.assertTrue("Ain't Them Bodies Saints" in displayed_movies)
+
+    def WORKS_test_n_sign_in_unsave_movie_trailer_page(self):
+        print("test_n_sign_in_unsave_movie_trailer_page")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        # save movie to user on backend
+        movie = Movie.query.filter_by(slug="ghostdog1999").first()
+        hazel = User.query.filter_by(name="hazel").first()
+        hazel.saves.append(movie)
+        db.session.commit()
+
+        # expect to see movie saved in /usermovies
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(2)
+        displayed_movies = driver.find_element_by_xpath(
+            "//div[@data-test='user-saved-movies']"
+        ).text
+        self.assertTrue("Ghost Dog" in displayed_movies)
+
+        # go to trailer page and unsave
+        driver.get(self.get_server_url() + "/action/ghostdog1999")
+        time.sleep(2)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-unsave-button']"
+        )
+        save_button.click()
+        time.sleep(2)
+
+        # expect to see no movies saved in /usermovies
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(2)
+        displayed_movies = driver.find_element_by_xpath(
+            "//div[@data-test='user-saved-movies']"
+        ).text
+        self.assertTrue(displayed_movies == "")
+
+    def WORKS_test_o_sign_in_unsave_movie_usermovies(self):
+        print("test_o_sign_in_unsave_movie_usermovies")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        # save movie to user on backend
+        movie = Movie.query.filter_by(slug="ghostdog1999").first()
+        hazel = User.query.filter_by(name="hazel").first()
+        hazel.saves.append(movie)
+        db.session.commit()
+
+        # unsave movie in /usermovies
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(2)
+        unsave_button = driver.find_element_by_xpath(
+            "//button[@data-test='user-movies-ghostdog1999-unsave-button']"
+        )
+        unsave_button.click()
+        time.sleep(2)
+
+        # expect to see no movies
+        displayed_movies = driver.find_element_by_xpath(
+            "//div[@data-test='user-saved-movies']"
+        ).text
+        self.assertTrue(displayed_movies == "")
+
     # test_sign_in_recomend_movie
     # test_sign_in_unrecommend_movie
     # test_sign_in_w_data_already_in_db
