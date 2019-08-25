@@ -390,17 +390,15 @@ class App extends Component {
                 <UserMovies
                   {...props}
                   user={this.state.User}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
                   movies={this.state.Movies}
                   setMovies={this.setMovies}
                   handleSaveUnsave={this.handleSaveUnsave}
                   redirect={this.state.Redirect}
-                  compareSlug={this.compareSlug}
-                  handleGetMovies={this.handleGetMovies}
+                  compareTitle={this.compareTitle}
                   setRedirectBack={this.setRedirectBack}
                   setRedirectBackSlug={this.setRedirectBackSlug}
                   setRedirect={this.setRedirect}
+                  handleGetUserAndMovies={this.handleGetUserAndMovies}
                 />
               )}
             />
@@ -413,7 +411,7 @@ class App extends Component {
                   redirect={this.state.Redirect}
                   movies={this.state.Movies}
                   handleSaveUnsave={this.handleSaveUnsave}
-                  compareSlug={this.compareSlug}
+                  compareTitle={this.compareTitle}
                 />
               )}
             />

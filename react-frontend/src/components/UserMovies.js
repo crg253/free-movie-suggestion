@@ -13,36 +13,28 @@ class UserMovies extends Component {
       },
       body: JSON.stringify({slug: slug})
     }).then(res => {
+      this.props.handleGetUserAndMovies(localStorage.getItem("token"));
       if (res.status === 401) {
-        this.props.setUser("");
-        this.props.setEmail("");
-        this.props.handleGetMovies("");
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("usermovies");
         this.props.setRedirect(<Redirect to="/signin" />);
-      } else if (res.status === 200) {
-        res.json().then(res => {
-          this.props.setUser(res.user);
-          this.props.setEmail(res.email);
-          this.props.handleGetMovies(res.user);
-        });
       }
     });
   };
 
   render() {
     let userSaves = this.props.movies.filter(movie => movie.saved === true);
-    userSaves.sort(this.props.compareSlug);
+    userSaves.sort(this.props.compareTitle);
 
     let userSuggestionsTrailers = this.props.movies
       .filter(movie => movie.recommendedBy === this.props.user.name)
       .filter(film => film.video != null);
-    userSuggestionsTrailers.sort(this.props.compareSlug);
+    userSuggestionsTrailers.sort(this.props.compareTitle);
 
     let userSuggestionsNoTrailers = this.props.movies
       .filter(movie => movie.recommendedBy === this.props.user.name)
       .filter(film => film.video === null);
-    userSuggestionsNoTrailers.sort(this.props.compareSlug);
+    userSuggestionsNoTrailers.sort(this.props.compareTitle);
 
     return (
       <div>
@@ -53,22 +45,31 @@ class UserMovies extends Component {
         </Link>
 
         <h2 className="user-movies-title">Your Saved Movies</h2>
-        <div data-test="user-saved-movies" id="saved-movies-wrapper">
+        <div data-test="saved-movies" id="saved-movies-wrapper">
           {userSaves.map(film => (
-            <div key={"usersave" + film.slug}>
+            <div
+              data-test={"saved-trailer-wrapper-" + film.slug}
+              key={"usersave" + film.slug}
+            >
               <iframe
+                data-test={"saved-trailer-" + film.slug}
                 className="saved-or-suggested-video"
                 title={film.title}
                 src={film.video}
                 allowFullScreen
               />
               <div className="saved-or-suggested-title-year">
-                <p>{film.title}</p>
-                <p className="film-year-style">{film.year}</p>
+                <p data-test={"saved-title-" + film.slug}>{film.title}</p>
+                <p
+                  data-test={"saved-year-" + film.slug}
+                  className="film-year-style"
+                >
+                  {film.year}
+                </p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
-                  data-test={"user-movies-" + film.slug + "-unsave-button"}
+                  data-test={"saved-unsave-button-" + film.slug}
                   onClick={() =>
                     this.props.handleSaveUnsave(
                       "unsavemovie",
@@ -78,7 +79,7 @@ class UserMovies extends Component {
                     )
                   }
                 >
-                  unsave
+                  Unsave
                 </button>
               </div>
             </div>
@@ -87,28 +88,41 @@ class UserMovies extends Component {
 
         <h2 className="user-movies-title">Your Suggestions</h2>
 
-        <div data-test="user-own-suggested" className="all-suggested-wrapper">
+        <div
+          data-test="own-suggested-wrapper"
+          className="all-suggested-wrapper"
+        >
           {userSuggestionsTrailers.map(film => (
             <div
-              data-test={"user-own-suggestion-with-trailer-" + film.slug}
+              data-test={"own-suggestion-trailer-wrapper-" + film.slug}
               key={"user-own-suggestion" + film.slug}
             >
               <iframe
+                data-test={"own-suggestion-trailer-" + film.slug}
                 className="saved-or-suggested-video"
                 title={film.title}
                 src={film.video}
                 allowFullScreen
               />
               <div className="saved-or-suggested-title-year">
-                <p>{film.title}</p>
-                <p className="film-year-style">{film.year}</p>
+                <p data-test={"own-suggestion-trailer-title-" + film.slug}>
+                  {film.title}
+                </p>
+                <p
+                  data-test={"own-suggestion-trailer-year-" + film.slug}
+                  className="film-year-style"
+                >
+                  {film.year}
+                </p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
-                  data-test={"unsuggest-" + film.slug}
+                  data-test={
+                    "own-suggestion-trailer-unsuggest-button-" + film.slug
+                  }
                   onClick={() => this.handleRemoveSuggestion(film.slug)}
                 >
-                  unsuggest
+                  Unsuggest
                 </button>
               </div>
             </div>
@@ -116,24 +130,36 @@ class UserMovies extends Component {
 
           {userSuggestionsNoTrailers.map(film => (
             <div
-              data-test={"user-own-suggestion-with-no-trailer-" + film.slug}
-              key={"user-own-suggestion" + film.slug}
+              data-test={"own-suggestion-card-wrapper-" + film.slug}
+              key={"own-suggestion-card-" + film.slug}
             >
-              <div className="suggested-movie-tile">
+              <div
+                data-test={"own-suggestion-card-" + film.slug}
+                className="suggested-movie-tile"
+              >
                 <p id="tile-title-style">Coming</p>
                 <p>Soon</p>
               </div>
 
               <div className="saved-or-suggested-title-year">
-                <p>{film.title}</p>
-                <p className="film-year-style">{film.year}</p>
+                <p data-test={"own-suggestion-card-title-" + film.slug}>
+                  {film.title}
+                </p>
+                <p
+                  data-test={"own-suggestion-card-year-" + film.slug}
+                  className="film-year-style"
+                >
+                  {film.year}
+                </p>
               </div>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
-                  data-test={"unsuggest-" + film.slug}
+                  data-test={
+                    "own-suggestion-card-unsuggest-button-" + film.slug
+                  }
                   onClick={() => this.handleRemoveSuggestion(film.slug)}
                 >
-                  unsuggest
+                  Unsuggest
                 </button>
               </div>
             </div>

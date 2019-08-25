@@ -12,7 +12,7 @@ class UserSuggestions extends Component {
     if (selectedMovie.saved === true) {
       buttonComponent = (
         <button
-          data-test={"user-suggestion-unsave-button-" + movieSlug}
+          data-test={"user-suggestion-trailer-unsave-button-" + movieSlug}
           onClick={() =>
             this.props.handleSaveUnsave(
               "unsavemovie",
@@ -28,7 +28,7 @@ class UserSuggestions extends Component {
     } else if (selectedMovie.saved === false) {
       buttonComponent = (
         <button
-          data-test={"user-suggestion-save-button-" + movieSlug}
+          data-test={"user-suggestion-trailer-save-button-" + movieSlug}
           onClick={() =>
             this.props.handleSaveUnsave(
               "savemovie",
@@ -50,13 +50,13 @@ class UserSuggestions extends Component {
       .filter(movie => movie.recommendedBy !== "crg253")
       .filter(film => film.video != null);
 
-    allUserSuggestionsTrailers.sort(this.props.compareSlug);
+    allUserSuggestionsTrailers.sort(this.props.compareTitle);
 
     let allUserSuggestionsNoTrailers = this.props.movies
       .filter(movie => movie.recommendedBy !== "crg253")
       .filter(film => film.video === null);
 
-    allUserSuggestionsNoTrailers.sort(this.props.compareSlug);
+    allUserSuggestionsNoTrailers.sort(this.props.compareTitle);
 
     return (
       <div>
@@ -69,22 +69,33 @@ class UserSuggestions extends Component {
         <div data-test="user-suggested" className="all-suggested-wrapper">
           {allUserSuggestionsTrailers.map(film => (
             <div
-              data-test={"user-suggestion-with-trailer-" + film.slug}
+              data-test={"user-suggestion-trailer-wrapper-" + film.slug}
               key={"usersuggestion" + film.slug}
             >
               <iframe
+                data-test={"user-suggestion-trailer-" + film.slug}
                 className="saved-or-suggested-video"
-                title={film.name}
+                title={film.title}
                 src={film.video}
                 allowFullScreen
               />
 
               <div className="saved-or-suggested-title-year">
-                <p>{film.name}</p>
-                <p className="film-year-style">{film.year}</p>
+                <p data-test={"user-suggestion-trailer-title-" + film.slug}>
+                  {film.title}
+                </p>
+                <p
+                  data-test={"user-suggestion-trailer-year-" + film.slug}
+                  className="film-year-style"
+                >
+                  {film.year}
+                </p>
               </div>
-              <p className="suggested-by-title">
-                suggested by {film.recommendedBy}
+              <p
+                data-test={"user-suggestion-trailer-comment-" + film.slug}
+                className="suggested-by-title"
+              >
+                Suggested by {film.recommendedBy}
               </p>
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 {this.getSuggSaveButton(film.slug)}
@@ -94,20 +105,33 @@ class UserSuggestions extends Component {
 
           {allUserSuggestionsNoTrailers.map(film => (
             <div
-              data-test={"user-suggestion-with-no-trailer-" + film.slug}
+              data-test={"user-suggestion-card-wrapper-" + film.slug}
               key={"usersuggestion" + film.slug}
             >
-              <div className="suggested-movie-tile">
+              <div
+                data-test={"user-suggestion-card-" + film.slug}
+                className="suggested-movie-tile"
+              >
                 <p className="tile-title-style">Coming</p>
                 <p>Soon</p>
               </div>
 
               <div className="saved-or-suggested-title-year">
-                <p>{film.name}</p>
-                <p className="film-year-style">{film.year}</p>
+                <p data-test={"user-suggestion-card-title-" + film.slug}>
+                  {film.title}
+                </p>
+                <p
+                  data-test={"user-suggestion-card-year-" + film.slug}
+                  className="film-year-style"
+                >
+                  {film.year}
+                </p>
               </div>
-              <p className="suggested-by-title">
-                suggested by {film.recommendedBy}
+              <p
+                data-test={"user-suggestion-card-comment-" + film.slug}
+                className="suggested-by-title"
+              >
+                Suggested by {film.recommendedBy}
               </p>
             </div>
           ))}

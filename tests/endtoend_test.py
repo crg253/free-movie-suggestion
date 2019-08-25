@@ -254,10 +254,18 @@ class EndToEndTest(LiveServerTestCase):
         suggest_button.click()
         time.sleep(3)
 
+    def click_through_menu_to(self, driver, location):
+        driver.find_element_by_xpath("//button[@data-test='open-menu-button']").click()
+        time.sleep(1)
+        driver.find_element_by_xpath(
+            "//div[@data-test='menu-" + location + "-link']"
+        ).click()
+        time.sleep(3)
+
     """ Tests """
 
-    def WORKS_test_aa_first_load_test_each_movie_trailer(self):
-        print("test_aa_first_load_test_each_movie_trailer")
+    def WORKS_test_aa_1_first_load_test_each_movie_trailer(self):
+        print("test_aa_1_first_load_test_each_movie_trailer")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -265,13 +273,26 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(len(User.query.all()) == 1)
         self.assertTrue(len(Movie.query.all()) == 101)
 
-        # visually make sure each video loads
-        for slug in [x.slug for x in Movie.query.all()]:
-            driver.get(self.get_server_url() + "/all/" + slug)
+        self.go_to_all_movies_page(driver)
+
+        movie_titles = []
+        with open("../data_loader/movies.csv") as movies:
+            for movie_line in csv.reader(movies):
+                movie_titles.append(movie_line[0])
+        movie_titles.sort(key=sort_by_title_helper)
+        """
+        check that each movie has a link
+        click on each link,visually make sure each video loads
+        """
+        for title in movie_titles:
+            slug = Movie.query.filter_by(title=title).first().slug
+            driver.find_element_by_xpath(
+                "//div[@data-test='movie-list-item-" + slug + "']"
+            ).click()
             time.sleep(2)
 
-    def WORKS_test_ab_first_load_test_right_arrows(self):
-        print("test_ab_first_load_test_right_arrows")
+    def WORKS_test_ab_2_first_load_test_right_arrows(self):
+        print("test_ab_2_first_load_test_right_arrows")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -288,8 +309,8 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def WORKS_test_ac_first_load_test_left_arrows(self):
-        print("test_ac_first_load_test_left_arrows")
+    def WORKS_test_ac_3_first_load_test_left_arrows(self):
+        print("test_ac_3_first_load_test_left_arrows")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -306,8 +327,8 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def WORKS_test_ad_first_load_arrow_up_and_test_both_sort_buttons(self):
-        print("test_ad_first_load_arrow_up_and_test_both_sort_buttons")
+    def WORKS_test_ad_4_first_load_arrow_up_and_test_both_sort_buttons(self):
+        print("test_ad_4_first_load_arrow_up_and_test_both_sort_buttons")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -337,8 +358,8 @@ class EndToEndTest(LiveServerTestCase):
                 csv_sort("year", genre_shown) == self.click_sort(driver, "year")
             )
 
-    def WORKS_test_ae_first_load_test_menu(self):
-        print("test_ae_first_load_test_menu")
+    def WORKS_test_ae_5_first_load_test_menu(self):
+        print("test_ae_5_first_load_test_menu")
         self.add_user_1_and_101_movies()
         # open menu
         driver = self.driver
@@ -366,8 +387,8 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def WORKS_test_af_first_load_test_no_usersuggestions(self):
-        print("test_af_first_load_test_no_usersuggestions")
+    def WORKS_test_af_6_first_load_test_no_usersuggestions(self):
+        print("test_af_6_first_load_test_no_usersuggestions")
         self.add_user_1_and_101_movies()
 
         driver = self.driver
@@ -379,8 +400,8 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(user_suggestions == "")
 
-    def WORKS_test_ag_first_load_test_no_usermovies(self):
-        print("test_ag_first_load_test_no_usermovies")
+    def WORKS_test_ag_7_first_load_test_no_usermovies(self):
+        print("test_ag_7_first_load_test_no_usermovies")
         self.add_user_1_and_101_movies()
 
         driver = self.driver
@@ -388,16 +409,16 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(2)
 
         user_saved = driver.find_element_by_xpath(
-            "//div[@data-test='user-saved-movies']"
+            "//div[@data-test='saved-movies']"
         ).text
         user_own_suggested = driver.find_element_by_xpath(
-            "//div[@data-test='user-own-suggested']"
+            "//div[@data-test='own-suggested-wrapper']"
         ).text
         self.assertTrue(user_saved == "")
         self.assertTrue(user_own_suggested == "")
 
-    def WORKS_test_ba_create_user_fail_w_fail_modal(self):
-        print("test_ba_create_user_fail_w_fail_modal")
+    def WORKS_test_ba_8_create_user_fail_w_fail_modal(self):
+        print("test_ba_8_create_user_fail_w_fail_modal")
 
         # create one user on backend
         monkey = User(name="monkey")
@@ -411,8 +432,8 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_create_user_form(driver, "monkey", "differentmonkeypassword")
         self.expect_modal(driver, "Sorry, username not available.")
 
-    def WORKS_test_bb_create_user_success_w_success_modal(self):
-        print("test_bb_create_user_success_w_success_modal")
+    def WORKS_test_bb_9_create_user_success_w_success_modal(self):
+        print("test_bb_9_create_user_success_w_success_modal")
 
         driver = self.driver
         driver.get(self.get_server_url() + "/createaccount")
@@ -424,8 +445,8 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(new_user.name == "monkey")
         self.assertTrue(new_user.check_password("monkeypassword") == True)
 
-    def WORKS_test_ca_sign_in_fail_w_fail_modal(self):
-        print("test_ca_sign_in_fail_w_fail_modal")
+    def WORKS_test_ca_10_sign_in_fail_w_fail_modal(self):
+        print("test_ca_10_sign_in_fail_w_fail_modal")
 
         # create one user on backend
         bella = User(name="bella")
@@ -443,8 +464,8 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "bell", "bellapassword")
         self.expect_modal(driver, "Incorrect username or password.")
 
-    def WORKS_test_cb_sign_in_success_w_success_modal(self):
-        print("test_cb_sign_in_success_w_success_modal")
+    def WORKS_test_cb_11_sign_in_success_w_success_modal(self):
+        print("test_cb_11_sign_in_success_w_success_modal")
 
         # create one user on backend
         bella = User(name="bella")
@@ -458,8 +479,8 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "bella", "bellapassword")
         self.expect_modal(driver, "Now signed in as bella.")
 
-    def WORKS_test_cc_sign_in_menu_display(self):
-        print("test_cc_sign_in_menu_display")
+    def WORKS_test_cc_12_sign_in_menu_display(self):
+        print("test_cc_12_sign_in_menu_display")
         driver = self.driver
         self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
 
@@ -489,8 +510,8 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def WORKS_test_cd_sign_in_save_movie_trailer_page(self):
-        print("test_cd_sign_in_save_movie_trailer_page")
+    def WORKS_test_cd_13_sign_in_save_movie_trailer_page(self):
+        print("test_cd_13_sign_in_save_movie_trailer_page")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -505,16 +526,37 @@ class EndToEndTest(LiveServerTestCase):
         save_button.click()
         time.sleep(2)
 
-        # expect to see movie saved in /usermovies
-        driver.get(self.get_server_url() + "/usermovies")
-        time.sleep(2)
-        displayed_movies = driver.find_element_by_xpath(
-            "//div[@data-test='user-saved-movies']"
-        ).text
-        self.assertTrue("Ain't Them Bodies Saints" in displayed_movies)
+        # click through menu to /usermovies
+        driver.find_element_by_xpath("//button[@data-test='open-menu-button']").click()
+        time.sleep(1)
+        driver.find_element_by_xpath("//div[@data-test='menu-usermovies-link']").click()
+        time.sleep(3)
 
-    def WORKS_test_ce_sign_in_unsave_movie_trailer_page(self):
-        print("test_ce_sign_in_unsave_movie_trailer_page")
+        # expect to see text in saved trailer wrapper
+        saved_trailer_wrapper = driver.find_element_by_xpath(
+            "//div[@data-test='saved-trailer-wrapper-aintthembodiessaints2013']"
+        ).text
+        for text in ["Ain't Them Bodies Saints", "2013", "Unsave"]:
+            self.assertTrue(text in saved_trailer_wrapper)
+
+        # expect to see elements movie trailer, title, year, and unsave button
+        driver.find_element_by_xpath(
+            "//iframe[@data-test='saved-trailer-aintthembodiessaints2013']"
+        )
+        trailer_title = driver.find_element_by_xpath(
+            "//p[@data-test='saved-title-aintthembodiessaints2013']"
+        ).text
+        self.assertTrue("Ain't Them Bodies Saints" == trailer_title)
+        trailer_year = driver.find_element_by_xpath(
+            "//p[@data-test='saved-year-aintthembodiessaints2013']"
+        ).text
+        self.assertTrue("2013" == trailer_year)
+        driver.find_element_by_xpath(
+            "//button[@data-test='saved-unsave-button-aintthembodiessaints2013']"
+        )
+
+    def WORKS_test_ce_14_sign_in_unsave_movie_trailer_page(self):
+        print("test_ce_14_sign_in_unsave_movie_trailer_page")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -528,30 +570,32 @@ class EndToEndTest(LiveServerTestCase):
         # expect to see movie saved in /usermovies
         driver.get(self.get_server_url() + "/usermovies")
         time.sleep(2)
-        displayed_movies = driver.find_element_by_xpath(
-            "//div[@data-test='user-saved-movies']"
-        ).text
-        self.assertTrue("Ghost Dog" in displayed_movies)
+        driver.find_element_by_xpath(
+            "//div[@data-test='saved-trailer-wrapper-ghostdog1999']"
+        )
 
         # go to trailer page and unsave
         driver.get(self.get_server_url() + "/action/ghostdog1999")
         time.sleep(2)
-        save_button = driver.find_element_by_xpath(
+        unsave_button = driver.find_element_by_xpath(
             "//button[@data-test='trailer-unsave-button']"
         )
-        save_button.click()
+        unsave_button.click()
         time.sleep(2)
 
+        # click through menu to /usermovies
+        driver.find_element_by_xpath("//button[@data-test='open-menu-button']").click()
+        time.sleep(1)
+        driver.find_element_by_xpath("//div[@data-test='menu-usermovies-link']").click()
+        time.sleep(3)
         # expect to see no movies saved in /usermovies
-        driver.get(self.get_server_url() + "/usermovies")
-        time.sleep(2)
         displayed_movies = driver.find_element_by_xpath(
-            "//div[@data-test='user-saved-movies']"
+            "//div[@data-test='saved-movies']"
         ).text
         self.assertTrue(displayed_movies == "")
 
-    def WORKS_test_cf_sign_in_unsave_movie_usermovies(self):
-        print("test_cf_sign_in_unsave_movie_usermovies")
+    def WORKS_test_cf_15_sign_in_unsave_movie_usermovies(self):
+        print("test_cf_15_sign_in_unsave_movie_usermovies")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -566,19 +610,19 @@ class EndToEndTest(LiveServerTestCase):
         driver.get(self.get_server_url() + "/usermovies")
         time.sleep(2)
         unsave_button = driver.find_element_by_xpath(
-            "//button[@data-test='user-movies-ghostdog1999-unsave-button']"
+            "//button[@data-test='saved-unsave-button-ghostdog1999']"
         )
         unsave_button.click()
         time.sleep(2)
 
         # expect to see no movies
         displayed_movies = driver.find_element_by_xpath(
-            "//div[@data-test='user-saved-movies']"
+            "//div[@data-test='saved-movies']"
         ).text
         self.assertTrue(displayed_movies == "")
 
-    def WORKS_test_cg_sign_in_recomend_movie_fail_w_already_exists_modal(self):
-        print("test_cg_sign_in_recomend_movie_fail_w_already_exists_modal")
+    def WORKS_test_cg_16_sign_in_recomend_movie_fail_w_already_exists_modal(self):
+        print("test_cg_16_sign_in_recomend_movie_fail_w_already_exists_modal")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -590,14 +634,14 @@ class EndToEndTest(LiveServerTestCase):
         self.search_and_recommend(driver, "Hancock")
         self.expect_modal(driver, "Sorry, movie already selected.")
 
-    def WORKS_test_ch_sign_in_recomend_movie_no_trailer(self):
-        print("test_ch_sign_in_recomend_movie_no_trailer")
+    def WORKS_test_ch_17_sign_in_recomend_movie_no_trailer(self):
+        print("test_ch_17_sign_in_recomend_movie_no_trailer")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
         self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
 
-        # go to /recommend, search, and recommend a movie that already exists
+        # go to /recommend, search, and recommend a movie that doesnt exist
         driver.get(self.get_server_url() + "/recommend")
         time.sleep(2)
         self.search_and_recommend(driver, "Drive")
@@ -608,25 +652,194 @@ class EndToEndTest(LiveServerTestCase):
         hazel = User.query.filter_by(name="hazel").first()
         self.assertTrue(drive in hazel.recommendations)
 
-        # expect to find no trailer movie at /usermovies
-        driver.get(self.get_server_url() + "/usermovies")
-        time.sleep(3)
-        driver.find_element_by_xpath(
-            "//div[@data-test='user-own-suggestion-with-no-trailer-drive2011']"
-        )
+        self.click_through_menu_to(driver, "usermovies")
 
-        # expect to find one no trailer element by laura at /usersuggestions
-        driver.get(self.get_server_url() + "/usersuggestions")
-        time.sleep(3)
-
-        suggestion_card_content = driver.find_element_by_xpath(
-            "//div[@data-test='user-suggestion-with-no-trailer-drive2011']"
+        # expect to find card wrapper with text inside
+        own_suggestion_card_wrapper = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggestion-card-wrapper-drive2011']"
         ).text
-        self.assertTrue("hazel" in suggestion_card_content)
+        for text in ["Coming", "Soon", "Drive", "2011", "Unsuggest"]:
+            self.assertTrue(text in own_suggestion_card_wrapper)
 
-    # test_sign_in_recomend_movie_with_trailer
-    # test_sign_in_unrecommend_movie
-    # test_sign_in_w_saves_and_recommendations_already_in_db
+        # expect to find individual card elements
+        for item in ["", "-title", "-year", "-unsuggest-button"]:
+            driver.find_element_by_xpath(
+                "//*[@data-test='own-suggestion-card" + item + "-drive2011']"
+            )
+
+        self.click_through_menu_to(driver, "usersuggestions")
+
+        # expect to find card wrapper with text inside
+        user_suggestion_card_wrapper = driver.find_element_by_xpath(
+            "//div[@data-test='user-suggestion-card-wrapper-drive2011']"
+        ).text
+        for text in ["Coming", "Soon", "Drive", "2011", "Suggested by hazel"]:
+            self.assertTrue(text in user_suggestion_card_wrapper)
+
+        # expect to find individual card elements
+        for item in ["", "-title", "-year", "-comment"]:
+            driver.find_element_by_xpath(
+                "//*[@data-test='user-suggestion-card" + item + "-drive2011']"
+            )
+
+    def WORKS_test_ci_18_sign_in_recomend_movie_with_trailer(self):
+        print("test_ci_18_sign_in_recomend_movie_with_trailer")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Ghostbusters")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        # expect to see movie in db
+        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
+        bella = User.query.filter_by(name="bella").first()
+        self.assertTrue(ghostbusters in bella.recommendations)
+
+        # add video_link to suggestion
+        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
+        db.session.commit()
+        driver.refresh()
+
+        self.click_through_menu_to(driver, "usermovies")
+
+        # expect to find trailer wrapper with text inside
+        own_suggestion_trailer_wrapper = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggestion-trailer-wrapper-ghostbusters1984']"
+        ).text
+        for text in ["Ghostbusters", "1984", "Unsuggest"]:
+            self.assertTrue(text in own_suggestion_trailer_wrapper)
+
+        # expect to find individual trailer elements
+        for item in ["", "-title", "-year", "-unsuggest-button"]:
+            driver.find_element_by_xpath(
+                "//*[@data-test='own-suggestion-trailer" + item + "-ghostbusters1984']"
+            )
+
+        self.click_through_menu_to(driver, "usersuggestions")
+
+        # expect to find trailer wrapper with text inside
+        user_suggestion_trailer_wrapper = driver.find_element_by_xpath(
+            "//div[@data-test='user-suggestion-trailer-wrapper-ghostbusters1984']"
+        ).text
+        for text in ["Ghostbusters", "1984", "Suggested by bella", "Save"]:
+            self.assertTrue(text in user_suggestion_trailer_wrapper)
+
+        # expect to find individual trailer elements
+        for item in ["", "-title", "-year", "-comment", "-save-button"]:
+            driver.find_element_by_xpath(
+                "//*[@data-test='user-suggestion-trailer" + item + "-ghostbusters1984']"
+            )
+
+    def WORKS_test_cj_19_sign_in_unrecommend_movie_no_trailer(self):
+        print("test_cj_19_sign_in_unrecommend_movie")
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "laura", "laurapassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Karate Kid")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        self.click_through_menu_to(driver, "usermovies")
+
+        # Unsuggest
+        unsuggest_button = driver.find_element_by_xpath(
+            "//button[@data-test='own-suggestion-card-unsuggest-button-thekaratekid1984']"
+        )
+        unsuggest_button.click()
+        time.sleep(2)
+
+        # expect no suggestions
+        suggested_movies = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        self.assertTrue(suggested_movies == "")
+
+    def WORKS_test_ck_20_sign_in_unrecommend_trailer_movie(self):
+        print("test_ck_20_sign_in_unrecommend_trailer_movie")
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Ghostbusters")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        # add video_link to suggestion
+        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
+        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
+        db.session.commit()
+        driver.refresh()
+
+        self.click_through_menu_to(driver, "usermovies")
+
+        # Unsuggest
+        unsuggest_button = driver.find_element_by_xpath(
+            "//button[@data-test='own-suggestion-trailer-unsuggest-button-ghostbusters1984']"
+        )
+        unsuggest_button.click()
+        time.sleep(2)
+
+        # expect no suggestions
+        suggested_movies = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        self.assertTrue(suggested_movies == "")
+
+    def test_cl_21_sign_in_w_saves_and_recommendations_already_in_db(self):
+        print("test_cl_21_sign_in_w_saves_and_recommendations_already_in_db")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # create user and multiple saves in backend
+        laura = User(name="laura")
+        laura.set_password("laurapassword")
+        db.session.add(laura)
+        babadook = Movie.query.filter_by(slug="thebabadook2014").first()
+        spoorloos = Movie.query.filter_by(slug="spoorloos1988").first()
+        realgirls = Movie.query.filter_by(slug="alltherealgirls2003").first()
+        crumb = Movie.query.filter_by(slug="crumb1994").first()
+        interstellar = Movie.query.filter_by(slug="interstellar2014").first()
+        inthebedroom = Movie.query.filter_by(slug="inthebedroom2001").first()
+        auntdiane = Movie.query.filter_by(
+            slug="theressomethingwrongwithauntdiane2011"
+        ).first()
+
+        for movie in [
+            babadook,
+            spoorloos,
+            realgirls,
+            crumb,
+            interstellar,
+            inthebedroom,
+            auntdiane,
+        ]:
+            laura.saves.append(movie)
+        db.session.commit()
+
+        # sign in
+        driver.get(self.get_server_url() + "/signin")
+        time.sleep(2)
+        self.fill_sign_in_form(driver, "laura", "laurapassword")
+        self.expect_modal(driver, "Now signed in as laura.")
+
+        # go to usermovies
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(20)
+
+        # check each saves element wrapper contains the right text
+        # check each element exists
+        # check the saves are in the right order
 
     # test_redirect_save_movie_trailer_page
     # test_redirect_unsave_movie_trailer_page
@@ -636,10 +849,14 @@ class EndToEndTest(LiveServerTestCase):
     # test_user_2_sign_in_save_user_1_movie_usersuggestions
     # test_user_2_sign_in_unsave_user_1_movie_usersuggestions
     # test_user_2_sign_in_unsave_user_1_movie_usermovies
+    # test_user_2_user_1_sign_in_check_order_multiple_recommendations
 
     # test_redirect_user_2_save_user_1_movie_usersuggestions
     # test_redirect_user_2_unsave_user_1_movie_usersuggestions
     # test_redirect_user_2_unsave_user_1_movie_usermovies
+
+    # test_multiple_users_recommend_many_check_order_usermovies
+    # test_multiple_users_recommend_many_check_order_usersuggestions
 
     # test_page_refresh
 

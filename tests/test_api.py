@@ -139,8 +139,8 @@ def test_get_no_user(test_client, init_db):
     j_data = json.dumps({"token": "nonworkingtoken"})
     res = test_client.post("/api/getuser", data=j_data, content_type="application/json")
     assert res.status_code == 200
-    assert res.json["user"]["name"] == None
-    assert res.json["user"]["email"] == None
+    assert res.json["user"]["name"] == ""
+    assert res.json["user"]["email"] == ""
 
 
 def test_get_user_movies(test_client, init_db):

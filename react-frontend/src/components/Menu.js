@@ -30,7 +30,10 @@ class Menu extends Component {
     let currentUserLink = "";
     if (this.props.user.name.length > 0) {
       currentUserLink = (
-        <div onClick={() => this.changeMenuDisplay()}>
+        <div
+          data-test="menu-usermovies-link"
+          onClick={() => this.changeMenuDisplay()}
+        >
           <Link to={"/usermovies"}>
             <h2 className="menu-links">{this.props.user.name + "'s Movies"}</h2>
           </Link>
@@ -117,7 +120,10 @@ class Menu extends Component {
               </Link>
             </div>
 
-            <div onClick={() => this.changeMenuDisplay()}>
+            <div
+              data-test="menu-usersuggestions-link"
+              onClick={() => this.changeMenuDisplay()}
+            >
               <Link to={"/usersuggestions"}>
                 <h2 className="menu-links">User Suggestions</h2>
               </Link>
