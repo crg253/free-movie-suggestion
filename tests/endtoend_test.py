@@ -86,16 +86,18 @@ def csv_sort(sort_type, genre):
         titles = get_titles_sorted_by_year(filtered_csv)
     else:
         titles = get_titles_sorted_by_title(filtered_csv)
-    print(titles)
     return titles
 
 
-def displayed_text_as_list(displayed_data):
+def displayed_text_as_list(titles_to_find, displayed_data):
     # create a list of what is displayed
     # make list of all movie titles
-    all_titles = []
-    for movie_line in reduce_movie_csv("All"):
-        all_titles.append(movie_line[0])
+    if titles_to_find == "csv":
+        all_titles = []
+        for movie_line in reduce_movie_csv("All"):
+            all_titles.append(movie_line[0])
+    else:
+        all_titles = titles_to_find
 
     #  make dict of location of each title in data (if displayed)
     location = {}
@@ -154,10 +156,9 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(1)
 
         displayed_list = displayed_text_as_list(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+            "csv", driver.find_element_by_xpath("//div[@data-test='movie-list']").text
         )
 
-        print(displayed_list)
         return displayed_list
 
     def add_user_1_and_101_movies(self):
@@ -437,52 +438,52 @@ class EndToEndTest(LiveServerTestCase):
 
         driver = self.driver
         driver.get(self.get_server_url() + "/createaccount")
-        self.fill_create_user_form(driver, "monkey", "monkeypassword")
+        self.fill_create_user_form(driver, "bella", "bellapassword")
         self.expect_modal(driver, "Thank you for creating account.")
 
         # check that user exits in db
-        new_user = User.query.filter_by(name="monkey").first()
-        self.assertTrue(new_user.name == "monkey")
-        self.assertTrue(new_user.check_password("monkeypassword") == True)
+        new_user = User.query.filter_by(name="bella").first()
+        self.assertTrue(new_user.name == "bella")
+        self.assertTrue(new_user.check_password("bellapassword") == True)
 
     def WORKS_test_ca_10_sign_in_fail_w_fail_modal(self):
         print("test_ca_10_sign_in_fail_w_fail_modal")
 
         # create one user on backend
-        bella = User(name="bella")
-        bella.set_password("bellapassword")
+        bella = User(name="hazel")
+        bella.set_password("hazelpassword")
         db.session.add(bella)
         db.session.commit()
 
         driver = self.driver
         driver.get(self.get_server_url() + "/signin")
         # try to sign in w name but wrong password
-        self.fill_sign_in_form(driver, "bella", "differentpassword")
+        self.fill_sign_in_form(driver, "hazel", "differentpassword")
         self.expect_modal(driver, "Incorrect username or password.")
 
         # try to sign in w wrong name and right password
-        self.fill_sign_in_form(driver, "bell", "bellapassword")
+        self.fill_sign_in_form(driver, "haze", "hazelpassword")
         self.expect_modal(driver, "Incorrect username or password.")
 
     def WORKS_test_cb_11_sign_in_success_w_success_modal(self):
         print("test_cb_11_sign_in_success_w_success_modal")
 
         # create one user on backend
-        bella = User(name="bella")
-        bella.set_password("bellapassword")
+        bella = User(name="laura")
+        bella.set_password("laurapassword")
         db.session.add(bella)
         db.session.commit()
 
         driver = self.driver
         driver.get(self.get_server_url() + "/signin")
         # try to sign in w name but wrong password
-        self.fill_sign_in_form(driver, "bella", "bellapassword")
-        self.expect_modal(driver, "Now signed in as bella.")
+        self.fill_sign_in_form(driver, "laura", "laurapassword")
+        self.expect_modal(driver, "Now signed in as laura.")
 
     def WORKS_test_cc_12_sign_in_menu_display(self):
         print("test_cc_12_sign_in_menu_display")
         driver = self.driver
-        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
 
         # open menu
         driver.find_element_by_xpath("//button[@data-test='open-menu-button']").click()
@@ -493,7 +494,7 @@ class EndToEndTest(LiveServerTestCase):
             "//div[@data-test='menu-wrapper']"
         ).text
         should_be_in_menu = [
-            "hazel's Movies",
+            "monkey's Movies",
             "Recommend",
             "User Suggestions",
             "About",
@@ -515,7 +516,7 @@ class EndToEndTest(LiveServerTestCase):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
 
         # save movie with trailer button
         driver.get(self.get_server_url() + "/romance/aintthembodiessaints2013")
@@ -599,18 +600,18 @@ class EndToEndTest(LiveServerTestCase):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        self.create_user_and_sign_in(driver, "laura", "laurapassword")
         # save movie to user on backend
-        movie = Movie.query.filter_by(slug="ghostdog1999").first()
-        hazel = User.query.filter_by(name="hazel").first()
-        hazel.saves.append(movie)
+        movie = Movie.query.filter_by(slug="looper2012").first()
+        laura = User.query.filter_by(name="laura").first()
+        laura.saves.append(movie)
         db.session.commit()
 
         # unsave movie in /usermovies
         driver.get(self.get_server_url() + "/usermovies")
         time.sleep(2)
         unsave_button = driver.find_element_by_xpath(
-            "//button[@data-test='saved-unsave-button-ghostdog1999']"
+            "//button[@data-test='saved-unsave-button-looper2012']"
         )
         unsave_button.click()
         time.sleep(2)
@@ -626,7 +627,7 @@ class EndToEndTest(LiveServerTestCase):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
 
         # go to /recommend, search, and recommend a movie that already exists
         driver.get(self.get_server_url() + "/recommend")
@@ -639,7 +640,7 @@ class EndToEndTest(LiveServerTestCase):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
 
         # go to /recommend, search, and recommend a movie that doesnt exist
         driver.get(self.get_server_url() + "/recommend")
@@ -649,8 +650,8 @@ class EndToEndTest(LiveServerTestCase):
 
         # expect to see movie in db
         drive = Movie.query.filter_by(slug="drive2011").first()
-        hazel = User.query.filter_by(name="hazel").first()
-        self.assertTrue(drive in hazel.recommendations)
+        bella = User.query.filter_by(name="bella").first()
+        self.assertTrue(drive in bella.recommendations)
 
         self.click_through_menu_to(driver, "usermovies")
 
@@ -673,7 +674,7 @@ class EndToEndTest(LiveServerTestCase):
         user_suggestion_card_wrapper = driver.find_element_by_xpath(
             "//div[@data-test='user-suggestion-card-wrapper-drive2011']"
         ).text
-        for text in ["Coming", "Soon", "Drive", "2011", "Suggested by hazel"]:
+        for text in ["Coming", "Soon", "Drive", "2011", "Suggested by bella"]:
             self.assertTrue(text in user_suggestion_card_wrapper)
 
         # expect to find individual card elements
@@ -687,7 +688,7 @@ class EndToEndTest(LiveServerTestCase):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
 
         # go to /recommend, search, and recommend a movie that doesnt exist
         driver.get(self.get_server_url() + "/recommend")
@@ -697,8 +698,8 @@ class EndToEndTest(LiveServerTestCase):
 
         # expect to see movie in db
         ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
-        bella = User.query.filter_by(name="bella").first()
-        self.assertTrue(ghostbusters in bella.recommendations)
+        hazel = User.query.filter_by(name="hazel").first()
+        self.assertTrue(ghostbusters in hazel.recommendations)
 
         # add video_link to suggestion
         ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
@@ -726,7 +727,7 @@ class EndToEndTest(LiveServerTestCase):
         user_suggestion_trailer_wrapper = driver.find_element_by_xpath(
             "//div[@data-test='user-suggestion-trailer-wrapper-ghostbusters1984']"
         ).text
-        for text in ["Ghostbusters", "1984", "Suggested by bella", "Save"]:
+        for text in ["Ghostbusters", "1984", "Suggested by hazel", "Save"]:
             self.assertTrue(text in user_suggestion_trailer_wrapper)
 
         # expect to find individual trailer elements
@@ -795,51 +796,259 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(suggested_movies == "")
 
-    def test_cl_21_sign_in_w_saves_and_recommendations_already_in_db(self):
-        print("test_cl_21_sign_in_w_saves_and_recommendations_already_in_db")
+    def WORKS_test_cl_21_sign_in_multiple_saves_already_in_db(self):
+        print("test_cl_21_sign_in_w_saves_already_in_db")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
 
-        # create user and multiple saves in backend
-        laura = User(name="laura")
-        laura.set_password("laurapassword")
-        db.session.add(laura)
-        babadook = Movie.query.filter_by(slug="thebabadook2014").first()
-        spoorloos = Movie.query.filter_by(slug="spoorloos1988").first()
-        realgirls = Movie.query.filter_by(slug="alltherealgirls2003").first()
-        crumb = Movie.query.filter_by(slug="crumb1994").first()
-        interstellar = Movie.query.filter_by(slug="interstellar2014").first()
-        inthebedroom = Movie.query.filter_by(slug="inthebedroom2001").first()
-        auntdiane = Movie.query.filter_by(
-            slug="theressomethingwrongwithauntdiane2011"
-        ).first()
+        # create user
+        bella = User(name="bella")
+        bella.set_password("bellapassword")
+        db.session.add(bella)
 
-        for movie in [
-            babadook,
-            spoorloos,
-            realgirls,
-            crumb,
-            interstellar,
-            inthebedroom,
-            auntdiane,
-        ]:
-            laura.saves.append(movie)
+        # save movies on backend
+        slugs = [
+            "alltherealgirls2003",
+            "thebabadook2014",
+            "crumb1994",
+            "interstellar2014",
+            "inthebedroom2001",
+            "spoorloos1988",
+            "theressomethingwrongwithauntdiane2011",
+        ]
+        for slug in slugs:
+            movie_to_save = Movie.query.filter_by(slug=slug).first()
+            bella.saves.append(movie_to_save)
+
         db.session.commit()
 
         # sign in
         driver.get(self.get_server_url() + "/signin")
         time.sleep(2)
-        self.fill_sign_in_form(driver, "laura", "laurapassword")
-        self.expect_modal(driver, "Now signed in as laura.")
+        self.fill_sign_in_form(driver, "bella", "bellapassword")
+        self.expect_modal(driver, "Now signed in as bella.")
 
         # go to usermovies
         driver.get(self.get_server_url() + "/usermovies")
-        time.sleep(20)
+        time.sleep(3)
 
-        # check each saves element wrapper contains the right text
-        # check each element exists
-        # check the saves are in the right order
+        manually_ordered_titles = [
+            "All the Real Girls",
+            "The Babadook",
+            "Crumb",
+            "Interstellar",
+            "In the Bedroom",
+            "Spoorloos",
+            "There's Something Wrong with Aunt Diane",
+        ]
+
+        # check each saved wrappers contains the right title
+        # loop through two lists at once
+        for slug, title in zip(slugs, manually_ordered_titles):
+            wrapper_text = driver.find_element_by_xpath(
+                "//div[@data-test='saved-trailer-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in wrapper_text)
+
+        # check the saved titles are in the right order
+        saved_text = driver.find_element_by_xpath(
+            "//div[@data-test='saved-movies']"
+        ).text
+        ordered_saved_titles = displayed_text_as_list("csv", saved_text)
+        self.assertTrue(manually_ordered_titles == ordered_saved_titles)
+
+        # check each element exists for each save
+        for slug in slugs:
+            for label in ["trailer-", "title-", "year-", "unsave-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='saved-" + label + slug + "']"
+                )
+
+    def WORKS_test_cm_22_sign_in_w_multiple_recommendations_already_in_db(self):
+        print("test_cm_22_sign_in_w_multiple_recommendations_already_in_db")
+
+        self.add_user_1_and_101_movies()
+
+        # create user
+        hazel = User(name="hazel")
+        hazel.set_password("hazelpassword")
+        db.session.add(hazel)
+
+        # recommend movies on backend
+        marypoppins = Movie(
+            slug="marypoppins1964",
+            title="Mary Poppins",
+            year=1964,
+            video_link="https://www.youtube.com/embed/YfkEQDPlb8g",
+            recommender_id=2,
+        )
+        bumblebee = Movie(
+            slug="bumblebee2018",
+            title="Bumblebee",
+            year=2018,
+            video_link="https://www.youtube.com/embed/lcwmDAYt22k",
+            recommender_id=2,
+        )
+        robocop = Movie(
+            slug="robocop1987",
+            title="Robocop",
+            year=1987,
+            video_link="https://www.youtube.com/embed/6tC_5mp3udE",
+            recommender_id=2,
+        )
+        exorcist = Movie(
+            slug="theexorcist1973",
+            title="The Exorcist",
+            year=1973,
+            video_link="https://www.youtube.com/embed/jyW5YXDcIGs",
+            recommender_id=2,
+        )
+        taxidriver = Movie(
+            slug="taxidriver1976", title="Taxi Driver", year=1976, recommender_id=2
+        )
+        thegodfather = Movie(
+            slug="thegodfather1972", title="The Godfather", year=1972, recommender_id=2
+        )
+        rocky = Movie(slug="rocky1976", title="Rocky", year=1976, recommender_id=2)
+        starwars = Movie(
+            slug="starwarsanewhope1977",
+            title="Star Wars: A New Hope",
+            year=1977,
+            recommender_id=2,
+        )
+        for movie in [
+            marypoppins,
+            bumblebee,
+            robocop,
+            exorcist,
+            taxidriver,
+            thegodfather,
+            rocky,
+            starwars,
+        ]:
+            db.session.add(movie)
+        db.session.commit()
+
+        driver = self.driver
+
+        # sign in
+        driver.get(self.get_server_url() + "/signin")
+        time.sleep(2)
+        self.fill_sign_in_form(driver, "hazel", "hazelpassword")
+        self.expect_modal(driver, "Now signed in as hazel.")
+
+        manually_sorted_titles = [
+            "Bumblebee",
+            "The Exorcist",
+            "Mary Poppins",
+            "Robocop",
+            "The Godfather",
+            "Rocky",
+            "Star Wars: A New Hope",
+            "Taxi Driver",
+        ]
+        slugs = [
+            "bumblebee2018",
+            "theexorcist1973",
+            "marypoppins1964",
+            "robocop1987",
+            "thegodfather1972",
+            "rocky1976",
+            "starwarsanewhope1977",
+            "taxidriver1976",
+        ]
+
+        """ /usermovies """
+        # got to /usermovies
+        self.click_through_menu_to(driver, "usermovies")
+        time.sleep(3)
+
+        # check each own suggestion wrapper (with trailer) contains the right text
+        for slug, title in zip(slugs[:4], manually_sorted_titles[:4]):
+            wrapper_text = driver.find_element_by_xpath(
+                "//div[@data-test='own-suggestion-trailer-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in wrapper_text)
+            self.assertTrue("Unsuggest" in wrapper_text)
+        # check each own suggestion wrapper (with card) contains the right text
+        for slug, title in zip(slugs[4:], manually_sorted_titles[4:]):
+            wrapper_text = driver.find_element_by_xpath(
+                "//div[@data-test='own-suggestion-card-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in wrapper_text)
+            self.assertTrue("Unsuggest" in wrapper_text)
+
+        # check that suggested titles (with trailers and cards) are in the right order
+        own_suggestion_text = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        displayed_suggestion_titles = displayed_text_as_list(
+            manually_sorted_titles, own_suggestion_text
+        )
+        self.assertTrue(manually_sorted_titles == displayed_suggestion_titles)
+
+        # check each element exists for each suggestion
+        for slug in slugs[:4]:
+            for label in ["", "title-", "year-", "unsuggest-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='own-suggestion-trailer-" + label + slug + "']"
+                )
+        for slug in slugs[4:]:
+            for label in ["", "title-", "year-", "unsuggest-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='own-suggestion-card-" + label + slug + "']"
+                )
+
+        """ /usersuggestions """
+        # go to /usersuggestions
+        self.click_through_menu_to(driver, "usersuggestions")
+        time.sleep(3)
+
+        # check each user suggestion wrapper (with trailer) contains the right text
+        for slug, title in zip(slugs[:4], manually_sorted_titles[:4]):
+            user_suggestion_wrapper = driver.find_element_by_xpath(
+                "//div[@data-test='user-suggestion-trailer-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in user_suggestion_wrapper)
+            self.assertTrue("Suggested by hazel" in user_suggestion_wrapper)
+            self.assertTrue("Save" in user_suggestion_wrapper)
+        # check each user suggestion wrapper (with card) contains the right text
+        for slug, title in zip(slugs[4:], manually_sorted_titles[4:]):
+            user_suggestion_wrapper = driver.find_element_by_xpath(
+                "//div[@data-test='user-suggestion-card-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in user_suggestion_wrapper)
+            self.assertTrue("Suggested by hazel" in user_suggestion_wrapper)
+
+        # check that user suggested titles are in the right order
+        user_suggestion_text = driver.find_element_by_xpath(
+            "//div[@data-test='user-suggested']"
+        ).text
+        displayed_titles = displayed_text_as_list(
+            manually_sorted_titles, user_suggestion_text
+        )
+        self.assertTrue(manually_sorted_titles == displayed_titles)
+
+        # check each element exists for each suggestion
+        for slug in slugs[:4]:
+            for label in ["", "title-", "year-", "comment-", "save-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='user-suggestion-trailer-" + label + slug + "']"
+                )
+        for slug in slugs[4:]:
+            for label in ["", "title-", "year-", "comment-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='user-suggestion-card-" + label + slug + "']"
+                )
+
+        """ /all/comingsoon """
+        # go to /all/comingsoon
+        # check that none of the user suggestions on this page
+        self.go_to_all_movies_page(driver)
+        admin_movies = self.click_sort(driver, "title")
+        for title in manually_sorted_titles:
+            self.assertTrue(title not in admin_movies)
 
     # test_redirect_save_movie_trailer_page
     # test_redirect_unsave_movie_trailer_page
@@ -859,6 +1068,22 @@ class EndToEndTest(LiveServerTestCase):
     # test_multiple_users_recommend_many_check_order_usersuggestions
 
     # test_page_refresh
+
+    # Movies Referenced, Saved or Added:
+    # aintthembodiessaints2013 test 13
+    # ghostdog1999 test 14
+    # looper2012 test 15
+    # Hancock test 16
+    # drive2011 test 17
+    # ghostbusters1984 test 18
+    # Karate Kid test 19
+    # ghostbusters1984 USED AGAIN test 20
+    # alltherealgirls2003, thebabadook2014, crumb1994, interstellar2014,
+    # inthebedroom2001, spoorloos1988, theressomethingwrongwithauntdiane2011
+    # ... test 21
+    # marypoppins,bumblebee,robocop,exorcist,taxidriver,thegodfather,
+    # rocky, starwars,
+    # ... test 22
 
 
 if __name__ == "__main__":
