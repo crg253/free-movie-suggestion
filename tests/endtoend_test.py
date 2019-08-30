@@ -937,17 +937,6 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(2)
         self.fill_sign_in_form(driver, "hazel", "hazelpassword")
         self.expect_modal(driver, "Now signed in as hazel.")
-
-        manually_sorted_titles = [
-            "Bumblebee",
-            "The Exorcist",
-            "Mary Poppins",
-            "Robocop",
-            "The Godfather",
-            "Rocky",
-            "Star Wars: A New Hope",
-            "Taxi Driver",
-        ]
         slugs = [
             "bumblebee2018",
             "theexorcist1973",
@@ -958,37 +947,42 @@ class EndToEndTest(LiveServerTestCase):
             "starwarsanewhope1977",
             "taxidriver1976",
         ]
+        manually_sorted_titles = [
+            "Bumblebee",
+            "The Exorcist",
+            "Mary Poppins",
+            "Robocop",
+            "The Godfather",
+            "Rocky",
+            "Star Wars: A New Hope",
+            "Taxi Driver",
+        ]
+        years = ["2018", "1973", "1964", "1987", "1972", "1976", "1977", "1976"]
 
         """ /usermovies """
         # got to /usermovies
         self.click_through_menu_to(driver, "usermovies")
         time.sleep(3)
 
+        # check the entire text of each suggestion
         # check each own suggestion wrapper (with trailer) contains the right text
-        for slug, title in zip(slugs[:4], manually_sorted_titles[:4]):
+        for slug, title, year in zip(slugs[:4], manually_sorted_titles[:4], years[:4]):
             wrapper_text = driver.find_element_by_xpath(
                 "//div[@data-test='own-suggestion-trailer-wrapper-" + slug + "']"
             ).text
             self.assertTrue(title in wrapper_text)
+            self.assertTrue(year in wrapper_text)
             self.assertTrue("Unsuggest" in wrapper_text)
         # check each own suggestion wrapper (with card) contains the right text
-        for slug, title in zip(slugs[4:], manually_sorted_titles[4:]):
+        for slug, title, year in zip(slugs[4:], manually_sorted_titles[4:], years[4:]):
             wrapper_text = driver.find_element_by_xpath(
                 "//div[@data-test='own-suggestion-card-wrapper-" + slug + "']"
             ).text
             self.assertTrue(title in wrapper_text)
+            self.assertTrue(year in wrapper_text)
             self.assertTrue("Unsuggest" in wrapper_text)
 
-        # check that suggested titles (with trailers and cards) are in the right order
-        own_suggestion_text = driver.find_element_by_xpath(
-            "//div[@data-test='own-suggested-wrapper']"
-        ).text
-        displayed_suggestion_titles = displayed_text_as_list(
-            manually_sorted_titles, own_suggestion_text
-        )
-        self.assertTrue(manually_sorted_titles == displayed_suggestion_titles)
-
-        # check each element exists for each suggestion
+        # similarly, check each element exists for each suggestion
         for slug in slugs[:4]:
             for label in ["", "title-", "year-", "unsuggest-button-"]:
                 driver.find_element_by_xpath(
@@ -1000,37 +994,40 @@ class EndToEndTest(LiveServerTestCase):
                     "//*[@data-test='own-suggestion-card-" + label + slug + "']"
                 )
 
+        # check that suggested titles (with trailers and cards) are in the right order
+        own_suggestion_text = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        displayed_suggestion_titles = displayed_text_as_list(
+            manually_sorted_titles, own_suggestion_text
+        )
+        self.assertTrue(manually_sorted_titles == displayed_suggestion_titles)
+
         """ /usersuggestions """
         # go to /usersuggestions
         self.click_through_menu_to(driver, "usersuggestions")
         time.sleep(3)
 
+        # check the text of each user suggestion
         # check each user suggestion wrapper (with trailer) contains the right text
-        for slug, title in zip(slugs[:4], manually_sorted_titles[:4]):
+        for slug, title, year in zip(slugs[:4], manually_sorted_titles[:4], years[:4]):
             user_suggestion_wrapper = driver.find_element_by_xpath(
                 "//div[@data-test='user-suggestion-trailer-wrapper-" + slug + "']"
             ).text
             self.assertTrue(title in user_suggestion_wrapper)
+            self.assertTrue(year in user_suggestion_wrapper)
             self.assertTrue("Suggested by hazel" in user_suggestion_wrapper)
             self.assertTrue("Save" in user_suggestion_wrapper)
         # check each user suggestion wrapper (with card) contains the right text
-        for slug, title in zip(slugs[4:], manually_sorted_titles[4:]):
+        for slug, title, year in zip(slugs[4:], manually_sorted_titles[4:], years[4:]):
             user_suggestion_wrapper = driver.find_element_by_xpath(
                 "//div[@data-test='user-suggestion-card-wrapper-" + slug + "']"
             ).text
             self.assertTrue(title in user_suggestion_wrapper)
+            self.assertTrue(year in user_suggestion_wrapper)
             self.assertTrue("Suggested by hazel" in user_suggestion_wrapper)
 
-        # check that user suggested titles are in the right order
-        user_suggestion_text = driver.find_element_by_xpath(
-            "//div[@data-test='user-suggested']"
-        ).text
-        displayed_titles = displayed_text_as_list(
-            manually_sorted_titles, user_suggestion_text
-        )
-        self.assertTrue(manually_sorted_titles == displayed_titles)
-
-        # check each element exists for each suggestion
+        # similarly, check each element exists for each suggestion
         for slug in slugs[:4]:
             for label in ["", "title-", "year-", "comment-", "save-button-"]:
                 driver.find_element_by_xpath(
@@ -1042,6 +1039,15 @@ class EndToEndTest(LiveServerTestCase):
                     "//*[@data-test='user-suggestion-card-" + label + slug + "']"
                 )
 
+        # check that user suggested titles are in the right order
+        user_suggestion_text = driver.find_element_by_xpath(
+            "//div[@data-test='user-suggested']"
+        ).text
+        displayed_titles = displayed_text_as_list(
+            manually_sorted_titles, user_suggestion_text
+        )
+        self.assertTrue(manually_sorted_titles == displayed_titles)
+
         """ /all/comingsoon """
         # go to /all/comingsoon
         # check that none of the user suggestions on this page
@@ -1050,8 +1056,22 @@ class EndToEndTest(LiveServerTestCase):
         for title in manually_sorted_titles:
             self.assertTrue(title not in admin_movies)
 
+    def test_cn_23_sign_in_edit_account(self):
+        print("test_cn_23_sign_in_edit_account")
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+
+        # go to /editaccount
+        driver.get(self.get_server_url() + "/editaccount")
+        time.sleep(2)
+
+    # test_sign_in_sign_out
+    # test_delete_account
+
     # test_redirect_save_movie_trailer_page
     # test_redirect_unsave_movie_trailer_page
+    # test_redirect_unsave_movie_user_movies_page
     # test_redirect_recommend_movie
     # test_redirect_unrecommend_movie
 
@@ -1068,22 +1088,6 @@ class EndToEndTest(LiveServerTestCase):
     # test_multiple_users_recommend_many_check_order_usersuggestions
 
     # test_page_refresh
-
-    # Movies Referenced, Saved or Added:
-    # aintthembodiessaints2013 test 13
-    # ghostdog1999 test 14
-    # looper2012 test 15
-    # Hancock test 16
-    # drive2011 test 17
-    # ghostbusters1984 test 18
-    # Karate Kid test 19
-    # ghostbusters1984 USED AGAIN test 20
-    # alltherealgirls2003, thebabadook2014, crumb1994, interstellar2014,
-    # inthebedroom2001, spoorloos1988, theressomethingwrongwithauntdiane2011
-    # ... test 21
-    # marypoppins,bumblebee,robocop,exorcist,taxidriver,thegodfather,
-    # rocky, starwars,
-    # ... test 22
 
 
 if __name__ == "__main__":
