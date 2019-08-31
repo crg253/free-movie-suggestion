@@ -41,34 +41,24 @@ class EditAccount extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        newUserName: this.state.NewName,
+        newName: this.state.NewName,
         newEmail: this.state.NewEmail,
         newPassword: this.state.NewPassword
       })
     }).then(res => {
+      this.props.handleGetUserAndMovies(localStorage.getItem("token"));
       if (res.status === 401) {
-        this.props.setUser("");
-        this.props.setEmail("");
-        this.props.handleGetMovies("");
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("editaccount");
         this.props.setRedirect(<Redirect to="/signin" />);
       } else if (res.status === 200) {
-        res.json().then(res => {
-          this.props.setUser(res.user);
-          this.props.setEmail(res.email);
-          this.props.handleGetMovies(res.user);
-          this.setState({
-            NewName: "",
-            NewEmail: "",
-            NewPassword: "",
-            Message: (
-              <MessageModal
-                message="Account updated."
-                buttonMessage="Ok, good"
-              />
-            )
-          });
+        this.setState({
+          NewName: "",
+          NewEmail: "",
+          NewPassword: "",
+          Message: (
+            <MessageModal message="Account updated." buttonMessage="Ok, good" />
+          )
         });
       }
     });
@@ -87,22 +77,26 @@ class EditAccount extends Component {
           <h1>Edit Account</h1>
           <div>
             <form
+              data-test="edit-account-form"
               onSubmit={this.handleUpdateAccount}
               style={{textAlign: "center"}}
             >
               <input
+                data-test="edit-account-username-input"
                 type="text"
                 placeholder={this.props.user.name}
                 value={this.state.NewName}
                 onChange={this.handleNewNameChange}
               />
               <input
+                data-test="edit-account-email-input"
                 type="text"
-                placeholder={this.props.email}
+                placeholder={this.props.user.email}
                 value={this.state.NewEmail}
                 onChange={this.handleNewEmailChange}
               />
               <input
+                data-test="edit-account-password-input"
                 type="text"
                 placeholder="New Password"
                 type="password"
@@ -110,6 +104,7 @@ class EditAccount extends Component {
                 onChange={this.handleNewPasswordChange}
               />
               <input
+                data-test="edit-account-submit-button"
                 type="submit"
                 value="Update"
                 className="form-submit-button"

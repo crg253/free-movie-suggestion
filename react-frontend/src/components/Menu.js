@@ -21,9 +21,7 @@ class Menu extends Component {
 
   handleSignOut = () => {
     localStorage.removeItem("token");
-    this.props.setUser("");
-    this.props.setEmail("");
-    this.props.handleGetMovies("");
+    this.props.handleGetUserAndMovies(localStorage.getItem("token"));
   };
 
   render() {
@@ -44,7 +42,10 @@ class Menu extends Component {
     let signInLink = "";
     if (this.props.user.name.length === 0) {
       signInLink = (
-        <div onClick={() => this.changeMenuDisplay()}>
+        <div
+          data-test="menu-signin-link"
+          onClick={() => this.changeMenuDisplay()}
+        >
           <Link to={"/signin"}>
             <h2 className="menu-links">Sign In</h2>
           </Link>
@@ -78,6 +79,7 @@ class Menu extends Component {
     if (this.props.user.name.length > 0) {
       signOutLink = (
         <div
+          data-test="menu-signout-link"
           onClick={() => {
             this.handleSignOut();
             this.changeMenuDisplay();

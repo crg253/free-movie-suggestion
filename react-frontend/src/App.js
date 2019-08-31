@@ -57,9 +57,6 @@ class App extends Component {
   setRedirect = newRedirect => {
     this.setState({Redirect: newRedirect});
   };
-  setMovies = newMovies => {
-    this.setState({Movies: newMovies});
-  };
   setSort = sortParam => {
     this.setState({SortBy: sortParam});
   };
@@ -290,11 +287,8 @@ class App extends Component {
               <Menu
                 {...props}
                 user={this.state.User}
-                setUser={this.setUser}
-                setEmail={this.setEmail}
-                setMovies={this.setMovies}
                 setRedirect={this.setRedirect}
-                handleGetMovies={this.handleGetMovies}
+                handleGetUserAndMovies={this.handleGetUserAndMovies}
               />
             )}
           />
@@ -316,7 +310,6 @@ class App extends Component {
                   {...props}
                   setUser={this.setUser}
                   setEmail={this.setEmail}
-                  setMovies={this.setMovies}
                   redirect={this.state.Redirect}
                   handleGetMovies={this.handleGetMovies}
                 />
@@ -329,15 +322,11 @@ class App extends Component {
                 <EditAccount
                   {...props}
                   user={this.state.User}
-                  email={this.state.Email}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
-                  setMovies={this.setMovies}
                   redirect={this.state.Redirect}
                   setRedirect={this.setRedirect}
                   setRedirectBack={this.setRedirectBack}
                   setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleGetMovies={this.handleGetMovies}
+                  handleGetUserAndMovies={this.handleGetUserAndMovies}
                 />
               )}
             />
@@ -348,7 +337,6 @@ class App extends Component {
                 <Recommend
                   {...props}
                   user={this.state.User}
-                  setMovies={this.setMovies}
                   setRedirect={this.setRedirect}
                   redirect={this.state.Redirect}
                   setRedirectBack={this.setRedirectBack}
@@ -373,7 +361,6 @@ class App extends Component {
                   setUser={this.setUser}
                   setEmail={this.setEmail}
                   handleGetUserAndMovies={this.handleGetUserAndMovies}
-                  setMovies={this.setMovies}
                   setRedirect={this.setRedirect}
                   setRedirectBack={this.setRedirectBack}
                   redirectBackSlug={this.state.RedirectBackSlug}
@@ -391,7 +378,6 @@ class App extends Component {
                   {...props}
                   user={this.state.User}
                   movies={this.state.Movies}
-                  setMovies={this.setMovies}
                   handleSaveUnsave={this.handleSaveUnsave}
                   redirect={this.state.Redirect}
                   compareTitle={this.compareTitle}

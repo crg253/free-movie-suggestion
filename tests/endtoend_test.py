@@ -147,20 +147,6 @@ class EndToEndTest(LiveServerTestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def click_sort(self, driver, sort_type):
-
-        # click requested sort button
-        sort_button = driver.find_element_by_xpath(
-            "//button[@data-test='" + sort_type + "-sort-button']"
-        ).click()
-        time.sleep(1)
-
-        displayed_list = displayed_text_as_list(
-            "csv", driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-
-        return displayed_list
-
     def add_user_1_and_101_movies(self):
         # add user 1 and 101 movies including comingsoon (via backend)
         crg253 = User(name="crg253")
@@ -182,6 +168,20 @@ class EndToEndTest(LiveServerTestCase):
         driver.get(self.get_server_url() + "/all/comingsoon")
         time.sleep(3)
 
+    def click_sort(self, driver, sort_type):
+
+        # click requested sort button
+        sort_button = driver.find_element_by_xpath(
+            "//button[@data-test='" + sort_type + "-sort-button']"
+        ).click()
+        time.sleep(1)
+
+        displayed_list = displayed_text_as_list(
+            "csv", driver.find_element_by_xpath("//div[@data-test='movie-list']").text
+        )
+
+        return displayed_list
+
     def fill_create_user_form(self, driver, name, password):
         name_input = driver.find_element_by_xpath(
             "//input[@data-test='create-account-username-input']"
@@ -197,6 +197,17 @@ class EndToEndTest(LiveServerTestCase):
         )
         submit_button.click()
         time.sleep(3)
+
+    def expect_modal(self, driver, message):
+        modal_message = driver.find_element_by_xpath(
+            "//h3[@data-test='modal-message']"
+        ).text
+        self.assertTrue(message == modal_message)
+        modal_button = driver.find_element_by_xpath(
+            "//button[@data-test='modal-response-button']"
+        )
+        modal_button.click()
+        time.sleep(2)
 
     def fill_sign_in_form(self, driver, name, password):
         name_input = driver.find_element_by_xpath(
@@ -214,20 +225,11 @@ class EndToEndTest(LiveServerTestCase):
         submit_button.click()
         time.sleep(3)
 
-    def expect_modal(self, driver, message):
-        modal_message = driver.find_element_by_xpath(
-            "//h3[@data-test='modal-message']"
-        ).text
-        self.assertTrue(message == modal_message)
-        modal_button = driver.find_element_by_xpath(
-            "//button[@data-test='modal-response-button']"
-        )
-        modal_button.click()
-        time.sleep(2)
-
-    def create_user_and_sign_in(self, driver, name, password):
+    def create_user_and_sign_in(self, driver, name, password, email=""):
         # create one user on backend
         user = User(name=name)
+        if len(email) > 0:
+            user.email = email
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
@@ -261,6 +263,38 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath(
             "//div[@data-test='menu-" + location + "-link']"
         ).click()
+        time.sleep(3)
+
+    def fill_edit_account_form(self, driver, name="", email="", password=""):
+        name_input = driver.find_element_by_xpath(
+            "//input[@data-test='edit-account-username-input']"
+        )
+        name_input.send_keys(name)
+        email_input = driver.find_element_by_xpath(
+            "//input[@data-test='edit-account-email-input']"
+        )
+        email_input.send_keys(email)
+        pass_input = driver.find_element_by_xpath(
+            "//input[@data-test='edit-account-password-input']"
+        )
+        pass_input.send_keys(password)
+        time.sleep(1)
+        submit_button = driver.find_element_by_xpath(
+            "//input[@data-test='edit-account-submit-button']"
+        )
+        submit_button.click()
+        time.sleep(3)
+
+    def expect_edit_account_placeholders(self, driver, name, email):
+        name_placeholder = driver.find_element_by_xpath(
+            "//input[@data-test='edit-account-username-input']"
+        ).get_attribute("placeholder")
+        email_placeholder = driver.find_element_by_xpath(
+            "//input[@data-test='edit-account-email-input']"
+        ).get_attribute("placeholder")
+        time.sleep(1)
+        self.assertTrue(name_placeholder == name)
+        self.assertTrue(email_placeholder == email)
         time.sleep(3)
 
     """ Tests """
@@ -1056,8 +1090,81 @@ class EndToEndTest(LiveServerTestCase):
         for title in manually_sorted_titles:
             self.assertTrue(title not in admin_movies)
 
-    def test_cn_23_sign_in_edit_account(self):
+    def WORKS_test_cn_23_sign_in_edit_account_change_name(self):
         print("test_cn_23_sign_in_edit_account")
+
+        driver = self.driver
+        self.create_user_and_sign_in(
+            driver, "monkey", "monkeypassword", email="monkey@cat.com"
+        )
+
+        # go to /editaccount
+        driver.get(self.get_server_url() + "/editaccount")
+        time.sleep(2)
+
+        # change name
+        self.fill_edit_account_form(driver, name="New Name")
+        self.expect_modal(driver, "Account updated.")
+        self.expect_edit_account_placeholders(driver, "New Name", "monkey@cat.com")
+
+    def WORKS_test_co_24_sign_in_edit_account_change_email(self):
+        print("test_co_24_sign_in_edit_account_change_email")
+
+        driver = self.driver
+        self.create_user_and_sign_in(
+            driver, "bella", "bellapassword", email="bella@dog.com"
+        )
+
+        # go to /editaccount
+        driver.get(self.get_server_url() + "/editaccount")
+        time.sleep(2)
+
+        # change email
+        self.fill_edit_account_form(driver, email="New Email")
+        self.expect_modal(driver, "Account updated.")
+        self.expect_edit_account_placeholders(driver, "bella", "New Email")
+
+    def WORKS_test_cp_25_sign_in_edit_account_change_name_and_email(self):
+        print("test_cp_25_sign_in_edit_account_change_name_and_email")
+
+        driver = self.driver
+        self.create_user_and_sign_in(
+            driver, "hazel", "hazelpassword", email="hazel@dog.com"
+        )
+
+        # go to /editaccount
+        driver.get(self.get_server_url() + "/editaccount")
+        time.sleep(2)
+
+        # change name and email
+        self.fill_edit_account_form(driver, name="New Name", email="New Email")
+        self.expect_modal(driver, "Account updated.")
+        self.expect_edit_account_placeholders(driver, "New Name", "New Email")
+
+    def WORKS_test_cq_26_sign_in_edit_name_re_sign_in(self):
+        print("test_cq_26_sign_in_edit_name_re_sign_in")
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "laura", "laurapassword")
+
+        # go to /editaccount
+        driver.get(self.get_server_url() + "/editaccount")
+        time.sleep(2)
+
+        # change name
+        self.fill_edit_account_form(driver, name="New User")
+        self.expect_modal(driver, "Account updated.")
+
+        # sign out
+        self.click_through_menu_to(driver, "signout")
+
+        # sign in with new password
+        self.click_through_menu_to(driver, "signin")
+        self.fill_sign_in_form(driver, "New User", "laurapassword")
+        self.expect_modal(driver, "Now signed in as New User.")
+
+    def WORKS_test_cr_27_sign_in_edit_password_re_sign_in(self):
+        print("test_cr_27_sign_in_edit_password_re_sign_in")
 
         driver = self.driver
         self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
@@ -1066,7 +1173,18 @@ class EndToEndTest(LiveServerTestCase):
         driver.get(self.get_server_url() + "/editaccount")
         time.sleep(2)
 
-    # test_sign_in_sign_out
+        # change password
+        self.fill_edit_account_form(driver, password="New Password")
+        self.expect_modal(driver, "Account updated.")
+
+        # sign out
+        self.click_through_menu_to(driver, "signout")
+
+        # sign in with new password
+        self.click_through_menu_to(driver, "signin")
+        self.fill_sign_in_form(driver, "monkey", "New Password")
+        self.expect_modal(driver, "Now signed in as monkey.")
+
     # test_delete_account
 
     # test_redirect_save_movie_trailer_page
