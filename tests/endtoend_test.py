@@ -265,6 +265,142 @@ class EndToEndTest(LiveServerTestCase):
         ).click()
         time.sleep(3)
 
+    def add_4_recommendations_with_trailer_on_backend(self):
+        marypoppins = Movie(
+            slug="marypoppins1964",
+            title="Mary Poppins",
+            year=1964,
+            video_link="https://www.youtube.com/embed/YfkEQDPlb8g",
+            recommender_id=2,
+        )
+        bumblebee = Movie(
+            slug="bumblebee2018",
+            title="Bumblebee",
+            year=2018,
+            video_link="https://www.youtube.com/embed/lcwmDAYt22k",
+            recommender_id=2,
+        )
+        robocop = Movie(
+            slug="robocop1987",
+            title="Robocop",
+            year=1987,
+            video_link="https://www.youtube.com/embed/6tC_5mp3udE",
+            recommender_id=2,
+        )
+        exorcist = Movie(
+            slug="theexorcist1973",
+            title="The Exorcist",
+            year=1973,
+            video_link="https://www.youtube.com/embed/jyW5YXDcIGs",
+            recommender_id=2,
+        )
+
+        for movie in [marypoppins, bumblebee, robocop, exorcist]:
+            db.session.add(movie)
+        db.session.commit()
+
+    def add_4_recommendations_with_no_trailer_on_backend(self):
+
+        taxidriver = Movie(
+            slug="taxidriver1976", title="Taxi Driver", year=1976, recommender_id=2
+        )
+        thegodfather = Movie(
+            slug="thegodfather1972", title="The Godfather", year=1972, recommender_id=2
+        )
+        rocky = Movie(slug="rocky1976", title="Rocky", year=1976, recommender_id=2)
+        starwars = Movie(
+            slug="starwarsanewhope1977",
+            title="Star Wars: A New Hope",
+            year=1977,
+            recommender_id=2,
+        )
+        for movie in [taxidriver, thegodfather, rocky, starwars]:
+            db.session.add(movie)
+        db.session.commit()
+
+    def check_usermovies_trailer_text(self, driver, trailers_data):
+        for slug, title, year in trailers_data:
+            wrapper_text = driver.find_element_by_xpath(
+                "//div[@data-test='own-suggestion-trailer-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in wrapper_text)
+            self.assertTrue(year in wrapper_text)
+            self.assertTrue("Unsuggest" in wrapper_text)
+
+    def check_usermovies_card_text(self, driver, cards_data):
+        for slug, title, year in cards_data:
+            wrapper_text = driver.find_element_by_xpath(
+                "//div[@data-test='own-suggestion-card-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in wrapper_text)
+            self.assertTrue(year in wrapper_text)
+            self.assertTrue("Unsuggest" in wrapper_text)
+
+    def check_usermovies_trailer_elements_exist(self, driver, trailers_data):
+        for slug, title, year in trailers_data:
+            for label in ["", "title-", "year-", "unsuggest-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='own-suggestion-trailer-" + label + slug + "']"
+                )
+
+    def check_usermovies_card_elements_exist(self, driver, cards_data):
+        for slug, title, year in cards_data:
+            for label in ["", "title-", "year-", "unsuggest-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='own-suggestion-card-" + label + slug + "']"
+                )
+
+    def check_usermovies_order(self, driver, ordered_suggestions):
+        own_suggestion_text = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        displayed_suggestion_titles = displayed_text_as_list(
+            ordered_suggestions, own_suggestion_text
+        )
+        self.assertTrue(ordered_suggestions == displayed_suggestion_titles)
+
+    def check_usersuggestions_trailer_text(self, driver, trailers_data, user):
+        for slug, title, year in trailers_data:
+            user_suggestion_wrapper = driver.find_element_by_xpath(
+                "//div[@data-test='user-suggestion-trailer-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in user_suggestion_wrapper)
+            self.assertTrue(year in user_suggestion_wrapper)
+            self.assertTrue("Suggested by " + user in user_suggestion_wrapper)
+            self.assertTrue("Save" in user_suggestion_wrapper)
+
+    def check_usersuggestions_card_text(self, driver, cards_data, user):
+        for slug, title, year in cards_data:
+            user_suggestion_wrapper = driver.find_element_by_xpath(
+                "//div[@data-test='user-suggestion-card-wrapper-" + slug + "']"
+            ).text
+            self.assertTrue(title in user_suggestion_wrapper)
+            self.assertTrue(year in user_suggestion_wrapper)
+            self.assertTrue("Suggested by " + user in user_suggestion_wrapper)
+
+    def check_usersuggestions_trailer_elements_exist(self, driver, trailers_data):
+        for slug, title, year in trailers_data:
+            for label in ["", "title-", "year-", "comment-", "save-button-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='user-suggestion-trailer-" + label + slug + "']"
+                )
+
+    def check_usersuggestions_card_elements_exist(self, driver, cards_data):
+        for slug, title, year in cards_data:
+            for label in ["", "title-", "year-", "comment-"]:
+                driver.find_element_by_xpath(
+                    "//*[@data-test='user-suggestion-card-" + label + slug + "']"
+                )
+
+    def check_usersuggestions_order(self, driver, ordered_suggestions):
+        user_suggestion_text = driver.find_element_by_xpath(
+            "//div[@data-test='user-suggested']"
+        ).text
+        displayed_titles = displayed_text_as_list(
+            ordered_suggestions, user_suggestion_text
+        )
+        self.assertTrue(ordered_suggestions == displayed_titles)
+
     def fill_edit_account_form(self, driver, name="", email="", password=""):
         name_input = driver.find_element_by_xpath(
             "//input[@data-test='edit-account-username-input']"
@@ -899,196 +1035,94 @@ class EndToEndTest(LiveServerTestCase):
                     "//*[@data-test='saved-" + label + slug + "']"
                 )
 
-    def WORKS_test_cm_22_sign_in_w_multiple_recommendations_already_in_db(self):
-        print("test_cm_22_sign_in_w_multiple_recommendations_already_in_db")
-
-        self.add_user_1_and_101_movies()
-
-        # create user
-        hazel = User(name="hazel")
-        hazel.set_password("hazelpassword")
-        db.session.add(hazel)
-
-        # recommend movies on backend
-        marypoppins = Movie(
-            slug="marypoppins1964",
-            title="Mary Poppins",
-            year=1964,
-            video_link="https://www.youtube.com/embed/YfkEQDPlb8g",
-            recommender_id=2,
-        )
-        bumblebee = Movie(
-            slug="bumblebee2018",
-            title="Bumblebee",
-            year=2018,
-            video_link="https://www.youtube.com/embed/lcwmDAYt22k",
-            recommender_id=2,
-        )
-        robocop = Movie(
-            slug="robocop1987",
-            title="Robocop",
-            year=1987,
-            video_link="https://www.youtube.com/embed/6tC_5mp3udE",
-            recommender_id=2,
-        )
-        exorcist = Movie(
-            slug="theexorcist1973",
-            title="The Exorcist",
-            year=1973,
-            video_link="https://www.youtube.com/embed/jyW5YXDcIGs",
-            recommender_id=2,
-        )
-        taxidriver = Movie(
-            slug="taxidriver1976", title="Taxi Driver", year=1976, recommender_id=2
-        )
-        thegodfather = Movie(
-            slug="thegodfather1972", title="The Godfather", year=1972, recommender_id=2
-        )
-        rocky = Movie(slug="rocky1976", title="Rocky", year=1976, recommender_id=2)
-        starwars = Movie(
-            slug="starwarsanewhope1977",
-            title="Star Wars: A New Hope",
-            year=1977,
-            recommender_id=2,
-        )
-        for movie in [
-            marypoppins,
-            bumblebee,
-            robocop,
-            exorcist,
-            taxidriver,
-            thegodfather,
-            rocky,
-            starwars,
-        ]:
-            db.session.add(movie)
-        db.session.commit()
+    def WORKS_test_cm_1_sign_in_check_existing_recommendations_in_usermovies(self):
+        print("test_cm_1_sign_in_check_existing_recommendations_in_usermovies")
 
         driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
 
-        # sign in
-        driver.get(self.get_server_url() + "/signin")
-        time.sleep(2)
-        self.fill_sign_in_form(driver, "hazel", "hazelpassword")
-        self.expect_modal(driver, "Now signed in as hazel.")
-        slugs = [
-            "bumblebee2018",
-            "theexorcist1973",
-            "marypoppins1964",
-            "robocop1987",
-            "thegodfather1972",
-            "rocky1976",
-            "starwarsanewhope1977",
-            "taxidriver1976",
-        ]
-        manually_sorted_titles = [
-            "Bumblebee",
-            "The Exorcist",
-            "Mary Poppins",
-            "Robocop",
-            "The Godfather",
-            "Rocky",
-            "Star Wars: A New Hope",
-            "Taxi Driver",
-        ]
-        years = ["2018", "1973", "1964", "1987", "1972", "1976", "1977", "1976"]
+        # recommend movies on backend
+        self.add_4_recommendations_with_trailer_on_backend()
+        self.add_4_recommendations_with_no_trailer_on_backend()
 
-        """ /usermovies """
-        # got to /usermovies
+        # trailers data that should exist... slugs, titles, and years
+        trailers_data = [
+            ["bumblebee2018", "Bumblebee", "2018"],
+            ["theexorcist1973", "The Exorcist", "1973"],
+            ["marypoppins1964", "Mary Poppins", "1964"],
+            ["robocop1987", "Robocop", "1987"],
+        ]
+
+        # cards data that should exist...  slugs, titles, and years
+        cards_data = [
+            ["thegodfather1972", "The Godfather", "1972"],
+            ["rocky1976", "Rocky", "1976"],
+            ["starwarsanewhope1977", "Star Wars: A New Hope", "1977"],
+            ["taxidriver1976", "Taxi Driver", "1976"],
+        ]
+
+        # go to /usermovies
+        driver.refresh()
         self.click_through_menu_to(driver, "usermovies")
         time.sleep(3)
 
-        # check the entire text of each suggestion
-        # check each own suggestion wrapper (with trailer) contains the right text
-        for slug, title, year in zip(slugs[:4], manually_sorted_titles[:4], years[:4]):
-            wrapper_text = driver.find_element_by_xpath(
-                "//div[@data-test='own-suggestion-trailer-wrapper-" + slug + "']"
-            ).text
-            self.assertTrue(title in wrapper_text)
-            self.assertTrue(year in wrapper_text)
-            self.assertTrue("Unsuggest" in wrapper_text)
-        # check each own suggestion wrapper (with card) contains the right text
-        for slug, title, year in zip(slugs[4:], manually_sorted_titles[4:], years[4:]):
-            wrapper_text = driver.find_element_by_xpath(
-                "//div[@data-test='own-suggestion-card-wrapper-" + slug + "']"
-            ).text
-            self.assertTrue(title in wrapper_text)
-            self.assertTrue(year in wrapper_text)
-            self.assertTrue("Unsuggest" in wrapper_text)
+        # check the text that shows for each trailer and card suggestion
+        self.check_usermovies_trailer_text(driver, trailers_data)
+        self.check_usermovies_card_text(driver, cards_data)
 
-        # similarly, check each element exists for each suggestion
-        for slug in slugs[:4]:
-            for label in ["", "title-", "year-", "unsuggest-button-"]:
-                driver.find_element_by_xpath(
-                    "//*[@data-test='own-suggestion-trailer-" + label + slug + "']"
-                )
-        for slug in slugs[4:]:
-            for label in ["", "title-", "year-", "unsuggest-button-"]:
-                driver.find_element_by_xpath(
-                    "//*[@data-test='own-suggestion-card-" + label + slug + "']"
-                )
+        # check that each suggestion is comprised of certain elements
+        self.check_usermovies_trailer_elements_exist(driver, trailers_data)
+        self.check_usermovies_card_elements_exist(driver, cards_data)
 
-        # check that suggested titles (with trailers and cards) are in the right order
-        own_suggestion_text = driver.find_element_by_xpath(
-            "//div[@data-test='own-suggested-wrapper']"
-        ).text
-        displayed_suggestion_titles = displayed_text_as_list(
-            manually_sorted_titles, own_suggestion_text
-        )
-        self.assertTrue(manually_sorted_titles == displayed_suggestion_titles)
+        # check that all suggestion titles are in right order (trailers then cards)
+        ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
+        self.check_usermovies_order(driver, ordered_suggestions)
 
-        """ /usersuggestions """
-        # go to /usersuggestions
+    def test_cm_2_sign_in_check_existing_recommendations_in_usersuggestions(self):
+        print("test_cm_2_sign_in_check_existing_recommendations_in_usersuggestions")
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+
+        # recommend movies on backend
+        self.add_4_recommendations_with_trailer_on_backend()
+        self.add_4_recommendations_with_no_trailer_on_backend()
+
+        # trailers data that should exist... slugs, titles, and years
+        trailers_data = [
+            ["bumblebee2018", "Bumblebee", "2018"],
+            ["theexorcist1973", "The Exorcist", "1973"],
+            ["marypoppins1964", "Mary Poppins", "1964"],
+            ["robocop1987", "Robocop", "1987"],
+        ]
+
+        # cards data that should exist...  slugs, titles, and years
+        cards_data = [
+            ["thegodfather1972", "The Godfather", "1972"],
+            ["rocky1976", "Rocky", "1976"],
+            ["starwarsanewhope1977", "Star Wars: A New Hope", "1977"],
+            ["taxidriver1976", "Taxi Driver", "1976"],
+        ]
+
+        driver.refresh()
         self.click_through_menu_to(driver, "usersuggestions")
         time.sleep(3)
 
-        # check the text of each user suggestion
-        # check each user suggestion wrapper (with trailer) contains the right text
-        for slug, title, year in zip(slugs[:4], manually_sorted_titles[:4], years[:4]):
-            user_suggestion_wrapper = driver.find_element_by_xpath(
-                "//div[@data-test='user-suggestion-trailer-wrapper-" + slug + "']"
-            ).text
-            self.assertTrue(title in user_suggestion_wrapper)
-            self.assertTrue(year in user_suggestion_wrapper)
-            self.assertTrue("Suggested by hazel" in user_suggestion_wrapper)
-            self.assertTrue("Save" in user_suggestion_wrapper)
-        # check each user suggestion wrapper (with card) contains the right text
-        for slug, title, year in zip(slugs[4:], manually_sorted_titles[4:], years[4:]):
-            user_suggestion_wrapper = driver.find_element_by_xpath(
-                "//div[@data-test='user-suggestion-card-wrapper-" + slug + "']"
-            ).text
-            self.assertTrue(title in user_suggestion_wrapper)
-            self.assertTrue(year in user_suggestion_wrapper)
-            self.assertTrue("Suggested by hazel" in user_suggestion_wrapper)
+        # check the text visible for each trailer and card suggestion
+        self.check_usersuggestions_trailer_text(driver, trailers_data, "hazel")
+        self.check_usersuggestions_card_text(driver, cards_data, "hazel")
 
-        # similarly, check each element exists for each suggestion
-        for slug in slugs[:4]:
-            for label in ["", "title-", "year-", "comment-", "save-button-"]:
-                driver.find_element_by_xpath(
-                    "//*[@data-test='user-suggestion-trailer-" + label + slug + "']"
-                )
-        for slug in slugs[4:]:
-            for label in ["", "title-", "year-", "comment-"]:
-                driver.find_element_by_xpath(
-                    "//*[@data-test='user-suggestion-card-" + label + slug + "']"
-                )
+        # check that each suggestion is comprised of certain elements
+        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
+        self.check_usersuggestions_card_elements_exist(driver, cards_data)
 
-        # check that user suggested titles are in the right order
-        user_suggestion_text = driver.find_element_by_xpath(
-            "//div[@data-test='user-suggested']"
-        ).text
-        displayed_titles = displayed_text_as_list(
-            manually_sorted_titles, user_suggestion_text
-        )
-        self.assertTrue(manually_sorted_titles == displayed_titles)
+        # check that all suggestion titles are in right order (trailers then cards)
+        ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
+        self.check_usersuggestions_order(driver, ordered_suggestions)
 
-        """ /all/comingsoon """
-        # go to /all/comingsoon
-        # check that none of the user suggestions on this page
-        self.go_to_all_movies_page(driver)
-        admin_movies = self.click_sort(driver, "title")
-        for title in manually_sorted_titles:
-            self.assertTrue(title not in admin_movies)
+    # def test_cm_3_sign_in_recommendations_in_db_check_admin_movies(self):
 
     def WORKS_test_cn_23_sign_in_edit_account_change_name(self):
         print("test_cn_23_sign_in_edit_account")
