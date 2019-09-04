@@ -43,7 +43,7 @@ def sort_by_year_helper(title):
     return slug
 
 
-def get_titles_sorted_by_title(genre_movies):
+def sort_movie_titles_by_title(genre_movies):
     # get just the title from each line of genre_movies
     titles = []
     for movie_line in genre_movies:
@@ -53,7 +53,7 @@ def get_titles_sorted_by_title(genre_movies):
     return titles
 
 
-def get_titles_sorted_by_year(genre_movies):
+def sort_movie_titles_by_year(genre_movies):
     # get just the year and title from each line of genre_movies
     year_plus_title = []
     for movie_line in genre_movies:
@@ -65,55 +65,52 @@ def get_titles_sorted_by_year(genre_movies):
     return just_titles
 
 
-def reduce_movie_csv(genre):
-    # movie_line consists of title, year, video_link, tag, tag, etc
+def filter_movie_collection(genre):
     genre_movies = []
+    # disregard titles contained in other titles
     disregard = ["M", "Cloverfield", "Creep"]
     with open("../data_loader/movies.csv") as movies:
         for movie_line in csv.reader(movies):
+            # movie_line consists of title, year, video_link, tag, tag, etc
             if movie_line[0] not in disregard:
                 if genre in movie_line[3:] or genre == "All":
                     genre_movies.append(movie_line)
     return genre_movies
 
 
-def csv_sort(sort_type, genre):
-    """ each line of movies.csv has title,year,video_link,tag,tag,tag... """
-    # first reduce that collection based on genre
-    filtered_csv = reduce_movie_csv(genre)
-    # then get the titles, sorted by year or title
+def sort_csv_movie_collection(sort_type, genre):
+    movies = filter_movie_collection(genre)
     if sort_type == "year":
-        titles = get_titles_sorted_by_year(filtered_csv)
+        titles = sort_movie_titles_by_year(movies)
     else:
-        titles = get_titles_sorted_by_title(filtered_csv)
+        titles = sort_movie_titles_by_title(movies)
     return titles
 
 
-def find_titles(displayed_data):
-    # make list of all movie titles
+def get_searchable_admin_titles():
     all_titles = []
-    for movie_line in reduce_movie_csv("All"):
-        all_titles.append(movie_line[0])
+    # disregard titles contained in other titles
+    disregard = ["M", "Cloverfield", "Creep"]
+    with open("../data_loader/movies.csv") as movies:
+        for movie_line in csv.reader(movies):
+            if movie_line[0] not in disregard:
+                all_titles.append(movie_line[0])
+    return all_titles
 
+
+def find_admin_titles_in_text(displayed_text):
+    admin_titles = get_searchable_admin_titles()
+    titles_as_displayed = find_titles_in_text(admin_titles, displayed_text)
+
+    return titles_as_displayed
+
+
+def find_titles_in_text(titles, text):
     #  make dict of location of each title in data (if displayed)
     location = {}
-    for title in all_titles:
-        if displayed_data.find(title) != -1:
-            location[displayed_data.find(title)] = title
-    # sort keys and derive a list of titles from dict
-    displayed = []
-    for key in sorted(location.keys()):
-        displayed.append(location[key])
-
-    return displayed
-
-
-def find_titles_in_text(ordered_titles, own_suggestion_text):
-    #  make dict of location of each title in data (if displayed)
-    location = {}
-    for title in ordered_titles:
-        if own_suggestion_text.find(title) != -1:
-            location[own_suggestion_text.find(title)] = title
+    for title in titles:
+        if text.find(title) != -1:
+            location[text.find(title)] = title
     # sort keys and derive a list of titles from dict
     displayed = []
     for key in sorted(location.keys()):
@@ -185,12 +182,6 @@ class EndToEndTest(LiveServerTestCase):
             "//button[@data-test='" + sort_type + "-sort-button']"
         ).click()
         time.sleep(1)
-
-        displayed_titles = find_titles(
-            driver.find_element_by_xpath("//div[@data-test='movie-list']").text
-        )
-
-        return displayed_titles
 
     def fill_create_user_form(self, driver, name, password):
         name_input = driver.find_element_by_xpath(
@@ -520,36 +511,44 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def WORKS_test_fl_4_first_load_arrow_up_and_test_both_sort_buttons(self):
+    def WORKS_fl_4_first_load_arrow_up_and_test_both_sort_buttons(self):
         print("test_fl_4_first_load_arrow_up_and_test_both_sort_buttons")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-
-        # check all movies title and year sort
         self.go_to_all_movies_page(driver)
-        self.assertTrue(csv_sort("title", "All") == self.click_sort(driver, "title"))
-        self.assertTrue(csv_sort("year", "All") == self.click_sort(driver, "year"))
+
+        # sort by title and year and check titles
+        for sort_type in ["title", "year"]:
+            self.click_sort(driver, sort_type)
+            displayed_text = driver.find_element_by_xpath(
+                "//div[@data-test='movie-list']"
+            ).text
+            self.assertTrue(
+                sort_csv_movie_collection(sort_type, "All")
+                == find_admin_titles_in_text(displayed_text)
+            )
 
         # arrow up and test title and year sort for each genre
         for i in range(len(self.all_genres[1:])):
-            # arrow up
             arrow_forward = driver.find_element_by_xpath(
                 "//button[@data-test='genres-forward-button']"
             )
             arrow_forward.click()
-            # get displayed genre
             genre_shown = driver.find_element_by_xpath(
                 "//h2[@data-test='selected-genre']"
             ).text
             time.sleep(2)
-            # compare what movies should be listed to what is displayed
-            self.assertTrue(
-                csv_sort("title", genre_shown) == self.click_sort(driver, "title")
-            )
-            self.assertTrue(
-                csv_sort("year", genre_shown) == self.click_sort(driver, "year")
-            )
+
+            for sort_type in ["title", "year"]:
+                self.click_sort(driver, sort_type)
+                displayed_text = driver.find_element_by_xpath(
+                    "//div[@data-test='movie-list']"
+                ).text
+                self.assertTrue(
+                    sort_csv_movie_collection(sort_type, genre_shown)
+                    == find_admin_titles_in_text(displayed_text)
+                )
 
     def WORKS_test_fl_5_first_load_test_menu(self):
         print("test_fl_5_first_load_test_menu")
@@ -703,7 +702,7 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def WORKS_test_si_4_sign_in_save_movie_trailer_page(self):
+    def REWORK_test_si_4_sign_in_save_movie_trailer_page(self):
         print("test_si_4_sign_in_save_movie_trailer_page")
 
         driver = self.driver
@@ -819,7 +818,7 @@ class EndToEndTest(LiveServerTestCase):
         self.search_and_recommend(driver, "Hancock")
         self.expect_modal(driver, "Sorry, movie already selected.")
 
-    def WORKS_test_si_8_sign_in_recomend_movie_no_trailer(self):
+    def REWORK_test_si_8_sign_in_recomend_movie_no_trailer(self):
         print("test_si_8_sign_in_recomend_movie_no_trailer")
 
         driver = self.driver
@@ -867,7 +866,7 @@ class EndToEndTest(LiveServerTestCase):
                 "//*[@data-test='user-suggestion-card" + item + "-drive2011']"
             )
 
-    def WORKS_test_si_9_sign_in_recomend_movie_with_trailer(self):
+    def REWORK_test_si_9_sign_in_recomend_movie_with_trailer(self):
         print("test_si_9_sign_in_recomend_movie_with_trailer")
 
         driver = self.driver
@@ -980,7 +979,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(suggested_movies == "")
 
-    def WORKS_test_si_12_sign_in_multiple_saves_already_in_db(self):
+    def REWORK_test_si_12_sign_in_multiple_saves_already_in_db(self):
         """ REFACTOR """
         print("test_si_12_sign_in_multiple_saves_already_in_db")
 
@@ -1040,7 +1039,7 @@ class EndToEndTest(LiveServerTestCase):
         saved_text = driver.find_element_by_xpath(
             "//div[@data-test='saved-movies']"
         ).text
-        saved_titles = find_titles(saved_text)
+        saved_titles = find_admin_titles_in_text(saved_text)
         self.assertTrue(manually_ordered_titles == saved_titles)
 
         # check each element exists for each save
@@ -1050,7 +1049,7 @@ class EndToEndTest(LiveServerTestCase):
                     "//*[@data-test='saved-" + label + slug + "']"
                 )
 
-    def test_si_13_sign_in_check_existing_recommendations_in_usermovies(self):
+    def WORKS_test_si_13_sign_in_check_existing_recommendations_in_usermovies(self):
         print("test_si_13_sign_in_check_existing_recommendations_in_usermovies")
 
         driver = self.driver
@@ -1094,7 +1093,7 @@ class EndToEndTest(LiveServerTestCase):
         ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
         self.check_usermovies_suggested_order(driver, ordered_suggestions)
 
-    def test_si_14_sign_in_check_existing_recommend_in_usersuggestions(self):
+    def WORKS_test_si_14_sign_in_check_existing_recommend_in_usersuggestions(self):
         print("test_si_14_sign_in_check_existing_recommend_in_usersuggestions")
 
         driver = self.driver
