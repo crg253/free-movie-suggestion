@@ -268,8 +268,12 @@ class EndToEndTest(LiveServerTestCase):
                     "//*[@data-test='saved-" + label + slug + "']"
                 )
 
-    def check_usermovies_saved_order():
-        pass
+    def check_usermovies_saved_order(self, driver, ordered_saved_titles):
+        saved_text = driver.find_element_by_xpath(
+            "//div[@data-test='saved-movies']"
+        ).text
+        saved_titles = find_titles_in_text(ordered_saved_titles, saved_text)
+        self.assertTrue(ordered_saved_titles == saved_titles)
 
     def search_and_recommend(self, driver, title):
         movie_search_input = driver.find_element_by_xpath(
@@ -466,7 +470,7 @@ class EndToEndTest(LiveServerTestCase):
 
     """ Tests """
 
-    def GOOD_test_fl_1_first_load_test_each_movie_trailer(self):
+    def test_fl_1_first_load_test_each_movie_trailer(self):
         print("test_fl_1_first_load_test_each_movie_trailer")
 
         driver = self.driver
@@ -494,7 +498,7 @@ class EndToEndTest(LiveServerTestCase):
             ).click()
             time.sleep(2)
 
-    def GOOD_test_fl_2_first_load_test_right_arrows(self):
+    def test_fl_2_first_load_test_right_arrows(self):
         print("test_fl_2_first_load_test_right_arrows")
 
         driver = self.driver
@@ -512,7 +516,7 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def GOOD_test_fl_3_first_load_test_left_arrows(self):
+    def test_fl_3_first_load_test_left_arrows(self):
         print("test_fl_3_first_load_test_left_arrows")
 
         driver = self.driver
@@ -530,7 +534,7 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def GOOD_test_fl_4_first_load_arrow_up_and_test_both_sort_buttons(self):
+    def test_fl_4_first_load_arrow_up_and_test_both_sort_buttons(self):
         print("test_fl_4_first_load_arrow_up_and_test_both_sort_buttons")
 
         driver = self.driver
@@ -569,7 +573,7 @@ class EndToEndTest(LiveServerTestCase):
                     == find_admin_titles_in_text(displayed_text)
                 )
 
-    def GOOD_test_fl_5_first_load_test_menu(self):
+    def test_fl_5_first_load_test_menu(self):
         print("test_fl_5_first_load_test_menu")
         self.add_user_1_and_101_movies()
         # open menu
@@ -598,7 +602,7 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def GOOD_test_fl_6_first_load_test_no_usersuggestions(self):
+    def test_fl_6_first_load_test_no_usersuggestions(self):
         print("test_fl_6_first_load_test_no_usersuggestions")
         self.add_user_1_and_101_movies()
 
@@ -611,7 +615,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(user_suggestions == "")
 
-    def GOOD_test_fl_7_first_load_test_no_usermovies(self):
+    def test_fl_7_first_load_test_no_usermovies(self):
         print("test_fl_7_first_load_test_no_usermovies")
         self.add_user_1_and_101_movies()
 
@@ -628,7 +632,7 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(user_saved == "")
         self.assertTrue(user_own_suggested == "")
 
-    def GOOD_test_cu_1_create_user_fail_w_fail_modal(self):
+    def test_cu_1_create_user_fail_w_fail_modal(self):
         print("test_cu_1_create_user_fail_w_fail_modal")
 
         # create one user on backend
@@ -643,7 +647,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_create_user_form(driver, "monkey", "differentmonkeypassword")
         self.expect_modal(driver, "Sorry, username not available.")
 
-    def GOOD_test_cu_2_create_user_success_w_success_modal(self):
+    def test_cu_2_create_user_success_w_success_modal(self):
         print("test_cu_2_create_user_success_w_success_modal")
 
         driver = self.driver
@@ -656,7 +660,7 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(new_user.name == "bella")
         self.assertTrue(new_user.check_password("bellapassword") == True)
 
-    def GOOD_test_si_1_sign_in_fail_w_fail_modal(self):
+    def test_si_1_sign_in_fail_w_fail_modal(self):
         print("test_si_1_sign_in_fail_w_fail_modal")
 
         # create one user on backend
@@ -675,7 +679,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "haze", "hazelpassword")
         self.expect_modal(driver, "Incorrect username or password.")
 
-    def GOOD_test_si_2_sign_in_success_w_success_modal(self):
+    def test_si_2_sign_in_success_w_success_modal(self):
         print("test_si_2_sign_in_success_w_success_modal")
 
         # create one user on backend
@@ -689,7 +693,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "laura", "laurapassword")
         self.expect_modal(driver, "Now signed in as laura.")
 
-    def GOOD_test_si_3_sign_in_menu_display(self):
+    def test_si_3_sign_in_menu_display(self):
         print("test_si_3_sign_in_menu_display")
         driver = self.driver
         self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
@@ -720,7 +724,7 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def GOOD_test_si_4_sign_in_save_movie_trailer_page(self):
+    def test_si_4_sign_in_save_movie_trailer_page(self):
         print("test_si_4_sign_in_save_movie_trailer_page")
 
         driver = self.driver
@@ -746,7 +750,7 @@ class EndToEndTest(LiveServerTestCase):
         # expect to see saved movie elements
         self.check_usermovies_saved_elements_exist(driver, saved_data)
 
-    def GOOD_WORKS_test_si_5_sign_in_unsave_movie_trailer_page(self):
+    def test_si_5_sign_in_unsave_movie_trailer_page(self):
         print("test_si_5_sign_in_unsave_movie_trailer_page")
 
         driver = self.driver
@@ -783,7 +787,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(displayed_movies == "")
 
-    def GOOD_test_si_6_sign_in_unsave_movie_usermovies(self):
+    def test_si_6_sign_in_unsave_movie_usermovies(self):
         print("test_si_6_sign_in_unsave_movie_usermovies")
 
         driver = self.driver
@@ -810,7 +814,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(displayed_movies == "")
 
-    def GOOD_test_si_7_sign_in_recomend_movie_fail_w_already_exists_modal(self):
+    def test_si_7_sign_in_recomend_movie_fail_w_already_exists_modal(self):
         print("test_si_7_sign_in_recomend_movie_fail_w_already_exists_modal")
 
         driver = self.driver
@@ -823,7 +827,7 @@ class EndToEndTest(LiveServerTestCase):
         self.search_and_recommend(driver, "Hancock")
         self.expect_modal(driver, "Sorry, movie already selected.")
 
-    def GOOD_si_8_sign_in_recomend_movie_no_trailer(self):
+    def test_si_8_sign_in_recomend_movie_no_trailer(self):
         print("test_si_8_sign_in_recomend_movie_no_trailer")
 
         driver = self.driver
@@ -853,7 +857,7 @@ class EndToEndTest(LiveServerTestCase):
         self.check_usersuggestions_card_text(driver, cards_data, "bella")
         self.check_usersuggestions_card_elements_exist(driver, cards_data)
 
-    def REWORK_test_si_9_sign_in_recomend_movie_with_trailer(self):
+    def test_si_9_sign_in_recomend_movie_with_trailer(self):
         print("test_si_9_sign_in_recomend_movie_with_trailer")
 
         driver = self.driver
@@ -876,37 +880,18 @@ class EndToEndTest(LiveServerTestCase):
         db.session.commit()
         driver.refresh()
 
+        trailers_data = [["ghostbusters1984", "Ghostbusters", "1984"]]
+
+        # /usermovies and /usersuggestions check trailer
         self.click_through_menu_to(driver, "usermovies")
-
-        # expect to find trailer wrapper with text inside
-        own_suggestion_trailer_wrapper = driver.find_element_by_xpath(
-            "//div[@data-test='own-suggestion-trailer-wrapper-ghostbusters1984']"
-        ).text
-        for text in ["Ghostbusters", "1984", "Unsuggest"]:
-            self.assertTrue(text in own_suggestion_trailer_wrapper)
-
-        # expect to find individual trailer elements
-        for item in ["", "-title", "-year", "-unsuggest-button"]:
-            driver.find_element_by_xpath(
-                "//*[@data-test='own-suggestion-trailer" + item + "-ghostbusters1984']"
-            )
+        self.check_usermovies_suggested_trailer_text(driver, trailers_data)
+        self.check_usermovies_suggested_trailer_elements_exist(driver, trailers_data)
 
         self.click_through_menu_to(driver, "usersuggestions")
+        self.check_usersuggestions_trailer_text(driver, trailers_data, "hazel")
+        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
 
-        # expect to find trailer wrapper with text inside
-        user_suggestion_trailer_wrapper = driver.find_element_by_xpath(
-            "//div[@data-test='user-suggestion-trailer-wrapper-ghostbusters1984']"
-        ).text
-        for text in ["Ghostbusters", "1984", "Suggested by hazel", "Save"]:
-            self.assertTrue(text in user_suggestion_trailer_wrapper)
-
-        # expect to find individual trailer elements
-        for item in ["", "-title", "-year", "-comment", "-save-button"]:
-            driver.find_element_by_xpath(
-                "//*[@data-test='user-suggestion-trailer" + item + "-ghostbusters1984']"
-            )
-
-    def WORKS_test_si_10_sign_in_unrecommend_movie_no_trailer(self):
+    def test_si_10_sign_in_unrecommend_movie_no_trailer(self):
         print("test_si_10_sign_in_unrecommend_movie_no_trailer")
 
         driver = self.driver
@@ -933,7 +918,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(suggested_movies == "")
 
-    def WORKS_test_si_11_sign_in_unrecommend_trailer_movie(self):
+    def test_si_11_sign_in_unrecommend_trailer_movie(self):
         print("test_si_11_sign_in_unrecommend_trailer_movie")
 
         driver = self.driver
@@ -966,77 +951,46 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(suggested_movies == "")
 
-    def REWORK_test_si_12_sign_in_multiple_saves_already_in_db(self):
-        """ REFACTOR """
+    def test_si_12_sign_in_multiple_saves_already_in_db(self):
         print("test_si_12_sign_in_multiple_saves_already_in_db")
 
         driver = self.driver
         self.add_user_1_and_101_movies()
-
-        # create user
-        bella = User(name="bella")
-        bella.set_password("bellapassword")
-        db.session.add(bella)
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
 
         # save movies on backend
-        slugs = [
-            "alltherealgirls2003",
-            "thebabadook2014",
-            "crumb1994",
-            "interstellar2014",
-            "inthebedroom2001",
-            "spoorloos1988",
-            "theressomethingwrongwithauntdiane2011",
+        saved_data = [
+            ["alltherealgirls2003", "All the Real Girls", "2003"],
+            ["thebabadook2014", "The Babadook", "2014"],
+            ["crumb1994", "Crumb", "1994"],
+            ["interstellar2014", "Interstellar", "2014"],
+            ["inthebedroom2001", "In the Bedroom", "2001"],
+            ["spoorloos1988", "Spoorloos", "1988"],
+            [
+                "theressomethingwrongwithauntdiane2011",
+                "There's Something Wrong with Aunt Diane",
+                "2011",
+            ],
         ]
-        for slug in slugs:
+
+        bella = User.query.filter_by(name="bella").first()
+        for slug, title, year in saved_data:
             movie_to_save = Movie.query.filter_by(slug=slug).first()
             bella.saves.append(movie_to_save)
 
         db.session.commit()
+        driver.refresh()
 
-        # sign in
-        driver.get(self.get_server_url() + "/signin")
-        time.sleep(2)
-        self.fill_sign_in_form(driver, "bella", "bellapassword")
-        self.expect_modal(driver, "Now signed in as bella.")
+        # /usermovies check saved data is correct and in right order
+        self.click_through_menu_to(driver, "usermovies")
 
-        # go to usermovies
-        driver.get(self.get_server_url() + "/usermovies")
-        time.sleep(3)
+        self.check_usermovies_saved_text(driver, saved_data)
+        self.check_usermovies_saved_elements_exist(driver, saved_data)
 
-        manually_ordered_titles = [
-            "All the Real Girls",
-            "The Babadook",
-            "Crumb",
-            "Interstellar",
-            "In the Bedroom",
-            "Spoorloos",
-            "There's Something Wrong with Aunt Diane",
-        ]
+        ordered_saved_titles = [x[1] for x in saved_data]
+        self.check_usermovies_saved_order(driver, ordered_saved_titles)
 
-        # check each saved wrappers contains the right title
-        # loop through two lists at once
-        for slug, title in zip(slugs, manually_ordered_titles):
-            wrapper_text = driver.find_element_by_xpath(
-                "//div[@data-test='saved-trailer-wrapper-" + slug + "']"
-            ).text
-            self.assertTrue(title in wrapper_text)
-
-        # check the saved titles are in the right order
-        saved_text = driver.find_element_by_xpath(
-            "//div[@data-test='saved-movies']"
-        ).text
-        saved_titles = find_admin_titles_in_text(saved_text)
-        self.assertTrue(manually_ordered_titles == saved_titles)
-
-        # check each element exists for each save
-        for slug in slugs:
-            for label in ["trailer-", "title-", "year-", "unsave-button-"]:
-                driver.find_element_by_xpath(
-                    "//*[@data-test='saved-" + label + slug + "']"
-                )
-
-    def WORKS_test_si_13_sign_in_check_existing_recommendations_in_usermovies(self):
+    def test_si_13_sign_in_check_existing_recommendations_in_usermovies(self):
         print("test_si_13_sign_in_check_existing_recommendations_in_usermovies")
 
         driver = self.driver
@@ -1080,7 +1034,7 @@ class EndToEndTest(LiveServerTestCase):
         ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
         self.check_usermovies_suggested_order(driver, ordered_suggestions)
 
-    def WORKS_test_si_14_sign_in_check_existing_recommend_in_usersuggestions(self):
+    def test_si_14_sign_in_check_existing_recommend_in_usersuggestions(self):
         print("test_si_14_sign_in_check_existing_recommend_in_usersuggestions")
 
         driver = self.driver
@@ -1125,7 +1079,7 @@ class EndToEndTest(LiveServerTestCase):
 
     # def test_cm_3_sign_in_recommendations_in_db_check_admin_movies(self):
 
-    def WORKS_test_si_15_sign_in_edit_account_change_name(self):
+    def test_si_15_sign_in_edit_account_change_name(self):
         print("test_si_15_sign_in_edit_account_change_name")
 
         driver = self.driver
@@ -1142,7 +1096,7 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Account updated.")
         self.expect_edit_account_placeholders(driver, "New Name", "monkey@cat.com")
 
-    def WORKS_test_si_16_sign_in_edit_account_change_email(self):
+    def test_si_16_sign_in_edit_account_change_email(self):
         print("test_si_16_sign_in_edit_account_change_email")
 
         driver = self.driver
@@ -1159,7 +1113,7 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Account updated.")
         self.expect_edit_account_placeholders(driver, "bella", "New Email")
 
-    def WORKS_test_si_17_sign_in_edit_account_change_name_and_email(self):
+    def test_si_17_sign_in_edit_account_change_name_and_email(self):
         print("test_si_17_sign_in_edit_account_change_name_and_emai")
 
         driver = self.driver
@@ -1176,7 +1130,7 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Account updated.")
         self.expect_edit_account_placeholders(driver, "New Name", "New Email")
 
-    def WORKS_test_si_18_sign_in_edit_name_re_sign_in(self):
+    def test_si_18_sign_in_edit_name_re_sign_in(self):
         print("test_si_18_sign_in_edit_name_re_sign_in")
 
         driver = self.driver
@@ -1198,7 +1152,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "New User", "laurapassword")
         self.expect_modal(driver, "Now signed in as New User.")
 
-    def WORKS_test_si_19_sign_in_edit_password_re_sign_in(self):
+    def test_si_19_sign_in_edit_password_re_sign_in(self):
         print("test_si_19_sign_in_edit_password_re_sign_in")
 
         driver = self.driver
