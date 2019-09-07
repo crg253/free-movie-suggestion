@@ -470,10 +470,10 @@ class EndToEndTest(LiveServerTestCase):
 
     """ Tests """
 
-    # test_a_home page
+    # test_a home page
+    # test_b trailer page
 
-    def test_ba_1_first_load_test_each_movie_trailer(self):
-        print("test_ba_1_first_load_test_each_movie_trailer")
+    def OK_test_ba_trailer_page_test_each_movie_trailer(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -500,8 +500,7 @@ class EndToEndTest(LiveServerTestCase):
             ).click()
             time.sleep(2)
 
-    def test_bb_2_first_load_test_right_arrows(self):
-        print("test_bb_2_first_load_test_right_arrows")
+    def OK_test_bb_trailer_page_right_arrows(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -518,8 +517,7 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def test_bc_3_first_load_test_left_arrows(self):
-        print("test_bc_3_first_load_test_left_arrows")
+    def OK_test_bc_trailer_page_left_arrows(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -536,8 +534,7 @@ class EndToEndTest(LiveServerTestCase):
             ).text
             self.assertTrue(genre == genre_shown)
 
-    def test_bd_4_first_load_arrow_up_and_test_both_sort_buttons(self):
-        print("test_bd_4_first_load_arrow_up_and_test_both_sort_buttons")
+    def OK_test_bd_trailer_page_arrow_up_and_test_both_sort_buttons(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -575,8 +572,10 @@ class EndToEndTest(LiveServerTestCase):
                     == find_admin_titles_in_text(displayed_text)
                 )
 
-    def test_be_5_first_load_test_menu(self):
-        print("test_be_5_first_load_test_menu")
+    # test_c default menu and pages
+
+    def OK_test_ca_default_menu(self):
+
         self.add_user_1_and_101_movies()
         # open menu
         driver = self.driver
@@ -604,8 +603,8 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def test_bf_6_first_load_test_no_usersuggestions(self):
-        print("test_bf_6_first_load_test_no_usersuggestions")
+    def OK_test_cb_no_usersuggestions(self):
+
         self.add_user_1_and_101_movies()
 
         driver = self.driver
@@ -617,8 +616,8 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(user_suggestions == "")
 
-    def test_bg_7_first_load_test_no_usermovies(self):
-        print("test_bg_7_first_load_test_no_usermovies")
+    def OK_test_cc_no_usermovies(self):
+
         self.add_user_1_and_101_movies()
 
         driver = self.driver
@@ -634,8 +633,9 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(user_saved == "")
         self.assertTrue(user_own_suggested == "")
 
-    def test_ca_8_create_user_fail_w_fail_modal(self):
-        print("test_ca_8_create_user_fail_w_fail_modal")
+    # test_d create user
+
+    def OK_test_da_create_user_fail_w_fail_modal(self):
 
         # create one user on backend
         monkey = User(name="monkey")
@@ -649,8 +649,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_create_user_form(driver, "monkey", "differentmonkeypassword")
         self.expect_modal(driver, "Sorry, username not available.")
 
-    def test_cb_9_create_user_success_w_success_modal(self):
-        print("test_cb_9_create_user_success_w_success_modal")
+    def OK_test_db_create_user_success_w_success_modal(self):
 
         driver = self.driver
         driver.get(self.get_server_url() + "/createaccount")
@@ -662,8 +661,10 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(new_user.name == "bella")
         self.assertTrue(new_user.check_password("bellapassword") == True)
 
-    def test_da_10_sign_in_fail_w_fail_modal(self):
-        print("test_da_10_sign_in_fail_w_fail_modal")
+    # test_e sign in and do things
+    # test_ea sign in
+
+    def OK_test_eaa_sign_in_fail_w_fail_modal(self):
 
         # create one user on backend
         bella = User(name="hazel")
@@ -681,8 +682,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "haze", "hazelpassword")
         self.expect_modal(driver, "Incorrect username or password.")
 
-    def test_db_11_sign_in_success_w_success_modal(self):
-        print("test_db_11_sign_in_success_w_success_modal")
+    def OK_test_eab_sign_in_success_w_success_modal(self):
 
         # create one user on backend
         bella = User(name="laura")
@@ -695,8 +695,8 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "laura", "laurapassword")
         self.expect_modal(driver, "Now signed in as laura.")
 
-    def test_dc_12_sign_in_menu_display(self):
-        print("test_dc_12_sign_in_menu_display")
+    def OK_test_eac_sign_in_menu_display(self):
+
         driver = self.driver
         self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
 
@@ -726,8 +726,9 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@data-test='close-menu-button']").click()
         time.sleep(1)
 
-    def test_dd_13_sign_in_save_movie_trailer_page(self):
-        print("test_dd_13_sign_in_save_movie_trailer_page")
+    # test_eb sign in, save, unsave, check output
+
+    def OK_test_eba_sign_in_save_movie_trailer_page(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -752,8 +753,7 @@ class EndToEndTest(LiveServerTestCase):
         # expect to see saved movie elements
         self.check_usermovies_saved_elements_exist(driver, saved_data)
 
-    def test_de_14_sign_in_unsave_movie_trailer_page(self):
-        print("test_de_14_sign_in_unsave_movie_trailer_page")
+    def OK_test_ebb_sign_in_unsave_movie_trailer_page(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -789,8 +789,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(displayed_movies == "")
 
-    def test_df_15_sign_in_unsave_movie_usermovies(self):
-        print("test_df_15_sign_in_unsave_movie_usermovies")
+    def OK_test_ebc_sign_in_unsave_movie_usermovies(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -816,145 +815,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue(displayed_movies == "")
 
-    def test_dg_16_sign_in_recomend_movie_fail_w_already_exists_modal(self):
-        print("test_dg_16_sign_in_recomend_movie_fail_w_already_exists_modal")
-
-        driver = self.driver
-        self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
-
-        # go to /recommend, search, and recommend a movie that already exists
-        driver.get(self.get_server_url() + "/recommend")
-        time.sleep(2)
-        self.search_and_recommend(driver, "Hancock")
-        self.expect_modal(driver, "Sorry, movie already selected.")
-
-    def test_dh_17_sign_in_recomend_movie_no_trailer(self):
-        print("test_dh_17_sign_in_recomend_movie_no_trailer")
-
-        driver = self.driver
-        self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "bella", "bellapassword")
-
-        # go to /recommend, search, and recommend a movie that doesnt exist
-        driver.get(self.get_server_url() + "/recommend")
-        time.sleep(2)
-        self.search_and_recommend(driver, "Drive")
-        self.expect_modal(driver, "Thank you for suggesting!")
-
-        # expect to see movie in db
-        drive = Movie.query.filter_by(slug="drive2011").first()
-        bella = User.query.filter_by(name="bella").first()
-        self.assertTrue(drive in bella.recommendations)
-
-        cards_data = [["drive2011", "Drive", "2011"]]
-
-        # /usermovies expect to see card text and elements
-        self.click_through_menu_to(driver, "usermovies")
-        self.check_usermovies_suggested_card_text(driver, cards_data)
-        self.check_usermovies_suggested_card_elements_exist(driver, cards_data)
-
-        # /usersuggestions expect to see card text and elements
-        self.click_through_menu_to(driver, "usersuggestions")
-        self.check_usersuggestions_card_text(driver, cards_data, "bella")
-        self.check_usersuggestions_card_elements_exist(driver, cards_data)
-
-    def test_di_18_sign_in_recomend_movie_with_trailer(self):
-        print("test_di_18_sign_in_recomend_movie_with_trailer")
-
-        driver = self.driver
-        self.add_user_1_and_101_movies()
-        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
-
-        # go to /recommend, search, and recommend a movie that doesnt exist
-        driver.get(self.get_server_url() + "/recommend")
-        time.sleep(2)
-        self.search_and_recommend(driver, "Ghostbusters")
-        self.expect_modal(driver, "Thank you for suggesting!")
-
-        # expect to see movie in db
-        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
-        hazel = User.query.filter_by(name="hazel").first()
-        self.assertTrue(ghostbusters in hazel.recommendations)
-
-        # add video_link to suggestion
-        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
-        db.session.commit()
-        driver.refresh()
-
-        trailers_data = [["ghostbusters1984", "Ghostbusters", "1984"]]
-
-        # /usermovies and /usersuggestions check trailer
-        self.click_through_menu_to(driver, "usermovies")
-        self.check_usermovies_suggested_trailer_text(driver, trailers_data)
-        self.check_usermovies_suggested_trailer_elements_exist(driver, trailers_data)
-
-        self.click_through_menu_to(driver, "usersuggestions")
-        self.check_usersuggestions_trailer_text(driver, trailers_data, "hazel")
-        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
-
-    def test_dj_19_sign_in_unrecommend_movie_no_trailer(self):
-        print("test_dj_19_sign_in_unrecommend_movie_no_trailer")
-
-        driver = self.driver
-        self.create_user_and_sign_in(driver, "laura", "laurapassword")
-
-        # go to /recommend, search, and recommend a movie that doesnt exist
-        driver.get(self.get_server_url() + "/recommend")
-        time.sleep(2)
-        self.search_and_recommend(driver, "Karate Kid")
-        self.expect_modal(driver, "Thank you for suggesting!")
-
-        self.click_through_menu_to(driver, "usermovies")
-
-        # Unsuggest
-        unsuggest_button = driver.find_element_by_xpath(
-            "//button[@data-test='own-suggestion-card-unsuggest-button-thekaratekid1984']"
-        )
-        unsuggest_button.click()
-        time.sleep(2)
-
-        # expect no suggestions
-        suggested_movies = driver.find_element_by_xpath(
-            "//div[@data-test='own-suggested-wrapper']"
-        ).text
-        self.assertTrue(suggested_movies == "")
-
-    def test_dk_20_sign_in_unrecommend_trailer_movie(self):
-        print("test_dk_20_sign_in_unrecommend_trailer_movie")
-
-        driver = self.driver
-        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
-
-        # go to /recommend, search, and recommend a movie that doesnt exist
-        driver.get(self.get_server_url() + "/recommend")
-        time.sleep(2)
-        self.search_and_recommend(driver, "Ghostbusters")
-        self.expect_modal(driver, "Thank you for suggesting!")
-
-        # add video_link to suggestion
-        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
-        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
-        db.session.commit()
-        driver.refresh()
-
-        self.click_through_menu_to(driver, "usermovies")
-
-        # Unsuggest
-        unsuggest_button = driver.find_element_by_xpath(
-            "//button[@data-test='own-suggestion-trailer-unsuggest-button-ghostbusters1984']"
-        )
-        unsuggest_button.click()
-        time.sleep(2)
-
-        # expect no suggestions
-        suggested_movies = driver.find_element_by_xpath(
-            "//div[@data-test='own-suggested-wrapper']"
-        ).text
-        self.assertTrue(suggested_movies == "")
-
-    def test_dl_21_sign_in_multiple_saves_already_in_db(self):
-        print("test_dl_21_sign_in_multiple_saves_already_in_db")
+    def OK_test_ebd_sign_in_multiple_saves_already_in_db(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -992,8 +853,141 @@ class EndToEndTest(LiveServerTestCase):
         ordered_saved_titles = [x[1] for x in saved_data]
         self.check_usermovies_saved_order(driver, ordered_saved_titles)
 
-    def test_dm_22_sign_in_check_existing_recommendations_in_usermovies(self):
-        print("test_dm_22_sign_in_check_existing_recommendations_in_usermovies")
+    # test_ec sign in, recommend, unrecommend, check output
+
+    def OK_test_eca_sign_in_recomend_movie_fail_w_already_exists_modal(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+
+        # go to /recommend, search, and recommend a movie that already exists
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Hancock")
+        self.expect_modal(driver, "Sorry, movie already selected.")
+
+    def OK_test_ecb_sign_in_recomend_movie_no_trailer(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Drive")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        # expect to see movie in db
+        drive = Movie.query.filter_by(slug="drive2011").first()
+        bella = User.query.filter_by(name="bella").first()
+        self.assertTrue(drive in bella.recommendations)
+
+        cards_data = [["drive2011", "Drive", "2011"]]
+
+        # /usermovies expect to see card text and elements
+        self.click_through_menu_to(driver, "usermovies")
+        self.check_usermovies_suggested_card_text(driver, cards_data)
+        self.check_usermovies_suggested_card_elements_exist(driver, cards_data)
+
+        # /usersuggestions expect to see card text and elements
+        self.click_through_menu_to(driver, "usersuggestions")
+        self.check_usersuggestions_card_text(driver, cards_data, "bella")
+        self.check_usersuggestions_card_elements_exist(driver, cards_data)
+
+    def OK_test_ecc_sign_in_recomend_movie_with_trailer(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Ghostbusters")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        # expect to see movie in db
+        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
+        hazel = User.query.filter_by(name="hazel").first()
+        self.assertTrue(ghostbusters in hazel.recommendations)
+
+        # add video_link to suggestion
+        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
+        db.session.commit()
+        driver.refresh()
+
+        trailers_data = [["ghostbusters1984", "Ghostbusters", "1984"]]
+
+        # /usermovies and /usersuggestions check trailer
+        self.click_through_menu_to(driver, "usermovies")
+        self.check_usermovies_suggested_trailer_text(driver, trailers_data)
+        self.check_usermovies_suggested_trailer_elements_exist(driver, trailers_data)
+
+        self.click_through_menu_to(driver, "usersuggestions")
+        self.check_usersuggestions_trailer_text(driver, trailers_data, "hazel")
+        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
+
+    def OK_test_ecd_sign_in_unrecommend_movie_no_trailer(self):
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "laura", "laurapassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Karate Kid")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        self.click_through_menu_to(driver, "usermovies")
+
+        # Unsuggest
+        unsuggest_button = driver.find_element_by_xpath(
+            "//button[@data-test='own-suggestion-card-unsuggest-button-thekaratekid1984']"
+        )
+        unsuggest_button.click()
+        time.sleep(2)
+
+        # expect no suggestions
+        suggested_movies = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        self.assertTrue(suggested_movies == "")
+
+    def OK_test_ece_sign_in_unrecommend_trailer_movie(self):
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+
+        # go to /recommend, search, and recommend a movie that doesnt exist
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Ghostbusters")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        # add video_link to suggestion
+        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
+        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
+        db.session.commit()
+        driver.refresh()
+
+        self.click_through_menu_to(driver, "usermovies")
+
+        # Unsuggest
+        unsuggest_button = driver.find_element_by_xpath(
+            "//button[@data-test='own-suggestion-trailer-unsuggest-button-ghostbusters1984']"
+        )
+        unsuggest_button.click()
+        time.sleep(2)
+
+        # expect no suggestions
+        suggested_movies = driver.find_element_by_xpath(
+            "//div[@data-test='own-suggested-wrapper']"
+        ).text
+        self.assertTrue(suggested_movies == "")
+
+    def OK_test_ecf_sign_in_check_existing_recommendations_in_usermovies(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1036,8 +1030,7 @@ class EndToEndTest(LiveServerTestCase):
         ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
         self.check_usermovies_suggested_order(driver, ordered_suggestions)
 
-    def test_dn_23_sign_in_check_existing_recommend_in_usersuggestions(self):
-        print("test_dn_23_sign_in_check_existing_recommend_in_usersuggestions")
+    def OK_test_ecg_sign_in_check_existing_recommend_in_usersuggestions(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1079,10 +1072,11 @@ class EndToEndTest(LiveServerTestCase):
         ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
         self.check_usersuggestions_order(driver, ordered_suggestions)
 
-    # def test_do_24_sign_in_recommendations_in_db_check_admin_movies(self):
+    # def test_ech_sign_in_recommendations_in_db_check_admin_movies(self):
 
-    def test_ea_25_sign_in_edit_account_change_name(self):
-        print("test_ea_25_sign_in_edit_account_change_name")
+    # test_ed sign in and change account
+
+    def OK_test_eda_sign_in_edit_account_change_name(self):
 
         driver = self.driver
         self.create_user_and_sign_in(
@@ -1098,8 +1092,7 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Account updated.")
         self.expect_edit_account_placeholders(driver, "New Name", "monkey@cat.com")
 
-    def test_eb_26_sign_in_edit_account_change_email(self):
-        print("test_eb_26_sign_in_edit_account_change_email")
+    def OK_test_edb_sign_in_edit_account_change_email(self):
 
         driver = self.driver
         self.create_user_and_sign_in(
@@ -1115,8 +1108,7 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Account updated.")
         self.expect_edit_account_placeholders(driver, "bella", "New Email")
 
-    def test_ec_27_sign_in_edit_account_change_name_and_email(self):
-        print("test_ec_27_sign_in_edit_account_change_name_and_email")
+    def OK_test_edc_sign_in_edit_account_change_name_and_email(self):
 
         driver = self.driver
         self.create_user_and_sign_in(
@@ -1132,8 +1124,7 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Account updated.")
         self.expect_edit_account_placeholders(driver, "New Name", "New Email")
 
-    def test_ed_28_sign_in_edit_name_re_sign_in(self):
-        print("test_ed_28_sign_in_edit_name_re_sign_in")
+    def OK_test_edd_sign_in_edit_name_re_sign_in(self):
 
         driver = self.driver
         self.create_user_and_sign_in(driver, "laura", "laurapassword")
@@ -1154,8 +1145,7 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "New User", "laurapassword")
         self.expect_modal(driver, "Now signed in as New User.")
 
-    def test_ee_29_sign_in_edit_password_re_sign_in(self):
-        print("test_ee_29_sign_in_edit_password_re_sign_in")
+    def OK_test_ede_sign_in_edit_password_re_sign_in(self):
 
         driver = self.driver
         self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
@@ -1176,27 +1166,30 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "monkey", "New Password")
         self.expect_modal(driver, "Now signed in as monkey.")
 
-    # def test_ef_30_sign_in_delete_account(self):
+    # def test_edf_sign_in_delete_account(self):
 
-    # test_redirect_save_movie_trailer_page
-    # test_redirect_unsave_movie_trailer_page
-    # test_redirect_unsave_movie_user_movies_page
-    # test_redirect_recommend_movie
-    # test_redirect_unrecommend_movie
+    # test_f redirect
+    # def test_fail_save_movie_redirect_to_sign_in_create_acct_first_redirect_back
+    # def test_fail_save_movie_redirect_to_sign_in_and_back
+    # def test_fail_unsave_trailer_page_redirect_to_sign_in_and_back
+    # def test_fail_unsave_usermovies_redirect_to_sign_in_and_back
+    # def test_fail_recommend_redirect_to_sign_in_and_back
+    # def test_fail_unrecommend_redirect_to_sign_in_and_back
+    # def test_fail_edit_account_redirect_to_sign_in_and_back
 
-    # test_user_2_sign_in_save_user_1_movie_usersuggestions
-    # test_user_2_sign_in_unsave_user_1_movie_usersuggestions
-    # test_user_2_sign_in_unsave_user_1_movie_usermovies
-    # test_user_2_user_1_sign_in_check_order_multiple_recommendations
+    # test_g user 1 data exists, sign in USER 2 and do things
+    # def test_user_2_sign_in_save_user_1_movie_usersuggestions
+    # def test_user_2_sign_in_save_multiple_admin_and_user_1_movies
+    # def test_user_2_sign_in_recommend_cards_check_usermovies
+    # def test_user_2_sign_in_recommend_cards_check_usersuggestions
+    # def test_user_2_sign_in_recommend_videos_check_usermovies
+    # def test_user_2_sign_in_recommend_videos_check_usersuggestions
 
-    # test_redirect_user_2_save_user_1_movie_usersuggestions
-    # test_redirect_user_2_unsave_user_1_movie_usersuggestions
-    # test_redirect_user_2_unsave_user_1_movie_usermovies
+    # test_h redirect USER 2
+    # def test_redirect_user_2_save_user_1_movie_usersuggestions
 
-    # test_multiple_users_recommend_many_check_order_usermovies
-    # test_multiple_users_recommend_many_check_order_usersuggestions
-
-    # test_page_refresh
+    # test_j miscellaneous
+    # def test_page_refresh
 
 
 if __name__ == "__main__":
