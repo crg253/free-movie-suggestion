@@ -5,7 +5,7 @@ class Trailer extends Component {
   getTitleAndYear = (title, year) => {
     if (title !== "Coming Soon") {
       return (
-        <h2 id="trailer-title">
+        <h2 data-test="trailer-title-and-year" id="trailer-title">
           {title} {year}
         </h2>
       );

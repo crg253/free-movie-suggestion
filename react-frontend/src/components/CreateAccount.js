@@ -118,7 +118,7 @@ class CreateAccount extends Component {
             />
           </form>
 
-          <Link to={"/signin"}>
+          <Link data-test="create-account-signin-link" to={"/signin"}>
             <h1>
               /sign
               <span style={{color: "#a9a9a9"}}>in</span>

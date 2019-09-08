@@ -1235,9 +1235,114 @@ class EndToEndTest(LiveServerTestCase):
         self.expect_modal(driver, "Incorrect username or password.")
 
     # test_f redirect
-    # def test_fail_save_movie_redirect_to_sign_in_create_acct_first_redirect_back
-    # def test_fail_save_movie_redirect_to_sign_in_and_back
-    # def test_fail_unsave_trailer_page_redirect_to_sign_in_and_back
+
+    def OK_test_fail_save_movie_redirect_create_acct_first_redirect_back(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # try save movie with trailer button
+        driver.get(self.get_server_url() + "/action/thelaststarfighter1984")
+        time.sleep(2)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-save-button']"
+        )
+        save_button.click()
+        time.sleep(3)
+
+        # expect to be redirected to /signin
+        title = driver.find_element_by_xpath("//h1[@data-test='signin-title']").text
+        self.assertTrue(title == "Sign In")
+
+        # go to /createaccount... create account
+        driver.find_element_by_xpath(
+            "//*[@data-test='signin-create-account-link']"
+        ).click()
+        time.sleep(3)
+        self.fill_create_user_form(driver, "laura", "laurapassword")
+        self.expect_modal(driver, "Thank you for creating account.")
+
+        # Element <a href="/signin"> could not be scrolled into view
+        # go back to /signin ... sign in
+        driver.execute_script("window.history.go(-1)")
+        time.sleep(2)
+        self.fill_sign_in_form(driver, "laura", "laurapassword")
+        time.sleep(3)
+
+        # expect to be redirected back to /action/thelaststarfighter1984
+        trailer_data = driver.find_element_by_xpath(
+            "//h2[@data-test='trailer-title-and-year']"
+        ).text
+        self.assertTrue("The Last Starfighter" in trailer_data)
+
+    def OK_test_fail_save_movie_redirect_to_sign_in_and_back(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # create one user on backend
+        user = User(name="monkey")
+        user.set_password("monkeypassword")
+        db.session.add(user)
+        db.session.commit()
+
+        # try save movie with trailer button
+        driver.get(self.get_server_url() + "/mysteryandsuspense/thief1981")
+        time.sleep(2)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-save-button']"
+        )
+        save_button.click()
+        time.sleep(3)
+
+        # expect to be redirected to /signin
+        title = driver.find_element_by_xpath("//h1[@data-test='signin-title']").text
+        self.assertTrue(title == "Sign In")
+
+        self.fill_sign_in_form(driver, "monkey", "monkeypassword")
+        time.sleep(3)
+
+        # expect to be redirected back to /mysteryandsuspense/thief1981
+        trailer_data = driver.find_element_by_xpath(
+            "//h2[@data-test='trailer-title-and-year']"
+        ).text
+        self.assertTrue("Thief" in trailer_data)
+
+    def OK_test_fail_unsave_trailer_page_redirect_to_sign_in_and_back(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+        # add one save on backend
+        bella = User.query.filter_by(name="bella").first()
+        movie_to_save = Movie.query.filter_by(slug="theladyvanishes1938").first()
+        bella.saves.append(movie_to_save)
+        db.session.commit()
+
+        # go to page, dump token, then try unsave movie with trailer button
+        driver.get(self.get_server_url() + "/mysteryandsuspense/theladyvanishes1938")
+        time.sleep(2)
+        driver.execute_script("window.localStorage.removeItem('token');")
+        unsave_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-unsave-button']"
+        )
+        unsave_button.click()
+        time.sleep(3)
+
+        # expect to be redirected to /signin
+        title = driver.find_element_by_xpath("//h1[@data-test='signin-title']").text
+        self.assertTrue(title == "Sign In")
+
+        self.fill_sign_in_form(driver, "bella", "bellapassword")
+        time.sleep(3)
+
+        # expect to be redirected back to /mysteryandsuspense/theladyvanishes1938
+        trailer_data = driver.find_element_by_xpath(
+            "//h2[@data-test='trailer-title-and-year']"
+        ).text
+        self.assertTrue("The Lady Vanishes" in trailer_data)
+
     # def test_fail_unsave_usermovies_redirect_to_sign_in_and_back
     # def test_fail_recommend_redirect_to_sign_in_and_back
     # def test_fail_unrecommend_redirect_to_sign_in_and_back

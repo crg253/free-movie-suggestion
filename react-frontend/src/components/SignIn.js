@@ -108,7 +108,7 @@ class SignIn extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
         <div className="user-pages-body-wrapper">
-          <h1>Sign In</h1>
+          <h1 data-test="signin-title">Sign In</h1>
           <form onSubmit={this.handleSignInSubmit}>
             <input
               data-test="signin-username-input"
@@ -140,7 +140,7 @@ class SignIn extends Component {
               <h1 id="resetpassword-link">forgot password?</h1>
             </Link>
 
-            <Link to={"/createaccount"}>
+            <Link data-test="signin-create-account-link" to={"/createaccount"}>
               <h1 id="createaccount-link">
                 /create
                 <span id="account-word-style">account</span>
