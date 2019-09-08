@@ -51,9 +51,7 @@ class DeleteAccount extends Component {
           )
         });
       } else if (res.status === 200) {
-        this.props.setUser("");
-        this.props.setEmail("");
-        this.props.handleGetMovies("");
+        this.props.handleSetUserAndMovies(localStorage.getItem("token"));
         this.setState({
           Name: "",
           Email: "",
@@ -81,12 +79,14 @@ class DeleteAccount extends Component {
           <div>
             <form onSubmit={this.handleDeleteAccount}>
               <input
+                data-test="delete-account-username-input"
                 type="text"
                 placeholder="Username"
                 value={this.state.Name}
                 onChange={this.handleNameChange}
               />
               <input
+                data-test="delete-account-password-input"
                 type="text"
                 placeholder="Password"
                 type="password"
@@ -94,6 +94,7 @@ class DeleteAccount extends Component {
                 onChange={this.handlePasswordChange}
               />
               <input
+                data-test="delete-account-submit-button"
                 type="submit"
                 value="Delete"
                 style={{backgroundColor: "#B22222"}}

@@ -468,6 +468,22 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(email_placeholder == email)
         time.sleep(3)
 
+    def fill_delete_account_form(self, driver, name, password):
+        name_input = driver.find_element_by_xpath(
+            "//input[@data-test='delete-account-username-input']"
+        )
+        name_input.send_keys(name)
+        pass_input = driver.find_element_by_xpath(
+            "//input[@data-test='delete-account-password-input']"
+        )
+        pass_input.send_keys(password)
+        time.sleep(1)
+        submit_button = driver.find_element_by_xpath(
+            "//input[@data-test='delete-account-submit-button']"
+        )
+        submit_button.click()
+        time.sleep(3)
+
     """ Tests """
 
     # test_a home page
@@ -1072,7 +1088,44 @@ class EndToEndTest(LiveServerTestCase):
         ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
         self.check_usersuggestions_order(driver, ordered_suggestions)
 
-    # def test_ech_sign_in_recommendations_in_db_check_admin_movies(self):
+    def OK_test_ech_sign_in_recommendations_in_db_check_admin_movies(self):
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+
+        # recommend movies on backend
+        self.add_4_recommendations_with_trailer_on_backend()
+        self.add_4_recommendations_with_no_trailer_on_backend()
+
+        # trailers data that should exist... slugs, titles, and years
+        trailers_data = [
+            ["bumblebee2018", "Bumblebee", "2018"],
+            ["theexorcist1973", "The Exorcist", "1973"],
+            ["marypoppins1964", "Mary Poppins", "1964"],
+            ["robocop1987", "Robocop", "1987"],
+        ]
+
+        # cards data that should exist...  slugs, titles, and years
+        cards_data = [
+            ["thegodfather1972", "The Godfather", "1972"],
+            ["rocky1976", "Rocky", "1976"],
+            ["starwarsanewhope1977", "Star Wars: A New Hope", "1977"],
+            ["taxidriver1976", "Taxi Driver", "1976"],
+        ]
+
+        driver.refresh()
+        self.click_through_menu_to(driver, "usersuggestions")
+
+        # check that all suggestion titles are in right order (trailers then cards)
+        ordered_suggestions = [x[1] for x in trailers_data] + [x[1] for x in cards_data]
+        self.check_usersuggestions_order(driver, ordered_suggestions)
+
+        # check that suggestions not in admin movies
+        self.go_to_all_movies_page(driver)
+        displayed_text = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertTrue(find_titles_in_text(ordered_suggestions, displayed_text) == [])
 
     # test_ed sign in and change account
 
@@ -1083,9 +1136,7 @@ class EndToEndTest(LiveServerTestCase):
             driver, "monkey", "monkeypassword", email="monkey@cat.com"
         )
 
-        # go to /editaccount
-        driver.get(self.get_server_url() + "/editaccount")
-        time.sleep(2)
+        self.click_through_menu_to(driver, "edit-account")
 
         # change name
         self.fill_edit_account_form(driver, name="New Name")
@@ -1099,9 +1150,7 @@ class EndToEndTest(LiveServerTestCase):
             driver, "bella", "bellapassword", email="bella@dog.com"
         )
 
-        # go to /editaccount
-        driver.get(self.get_server_url() + "/editaccount")
-        time.sleep(2)
+        self.click_through_menu_to(driver, "edit-account")
 
         # change email
         self.fill_edit_account_form(driver, email="New Email")
@@ -1115,9 +1164,7 @@ class EndToEndTest(LiveServerTestCase):
             driver, "hazel", "hazelpassword", email="hazel@dog.com"
         )
 
-        # go to /editaccount
-        driver.get(self.get_server_url() + "/editaccount")
-        time.sleep(2)
+        self.click_through_menu_to(driver, "edit-account")
 
         # change name and email
         self.fill_edit_account_form(driver, name="New Name", email="New Email")
@@ -1129,9 +1176,7 @@ class EndToEndTest(LiveServerTestCase):
         driver = self.driver
         self.create_user_and_sign_in(driver, "laura", "laurapassword")
 
-        # go to /editaccount
-        driver.get(self.get_server_url() + "/editaccount")
-        time.sleep(2)
+        self.click_through_menu_to(driver, "edit-account")
 
         # change name
         self.fill_edit_account_form(driver, name="New User")
@@ -1150,9 +1195,7 @@ class EndToEndTest(LiveServerTestCase):
         driver = self.driver
         self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
 
-        # go to /editaccount
-        driver.get(self.get_server_url() + "/editaccount")
-        time.sleep(2)
+        self.click_through_menu_to(driver, "edit-account")
 
         # change password
         self.fill_edit_account_form(driver, password="New Password")
@@ -1166,7 +1209,30 @@ class EndToEndTest(LiveServerTestCase):
         self.fill_sign_in_form(driver, "monkey", "New Password")
         self.expect_modal(driver, "Now signed in as monkey.")
 
-    # def test_edf_sign_in_delete_account(self):
+    def OK_test_edf_sign_in_delete_account_fail(self):
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+
+        self.click_through_menu_to(driver, "delete-account")
+
+        self.fill_delete_account_form(driver, "bella", "wrongpassword")
+        self.expect_modal(driver, "Incorrect username or password.")
+
+    def OK_test_edg_sign_in_delete_account_success(self):
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+
+        self.click_through_menu_to(driver, "delete-account")
+
+        self.fill_delete_account_form(driver, "hazel", "hazelpassword")
+        self.expect_modal(driver, "Account deleted.")
+
+        # try to sign in again
+        self.click_through_menu_to(driver, "signin")
+        self.fill_sign_in_form(driver, "hazel", "hazelpassword")
+        self.expect_modal(driver, "Incorrect username or password.")
 
     # test_f redirect
     # def test_fail_save_movie_redirect_to_sign_in_create_acct_first_redirect_back
@@ -1190,6 +1256,13 @@ class EndToEndTest(LiveServerTestCase):
 
     # test_j miscellaneous
     # def test_page_refresh
+
+    # test_k user flow
+    # def test_user_flow_1
+    # def test_user_flow_2
+    # def test_user_flow_3
+    # def test_user_flow_4
+    # def test_user_flow_5
 
 
 if __name__ == "__main__":

@@ -54,7 +54,7 @@ class SignIn extends Component {
       } else if (res.status === 200) {
         res.json().then(res => {
           localStorage.setItem("token", res.token);
-          this.props.handleGetUserAndMovies(res.token);
+          this.props.handleSetUserAndMovies(res.token);
 
           // redirect and modal decision
           if (this.props.redirectBackGenre.length > 0) {

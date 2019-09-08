@@ -13,7 +13,7 @@ class UserMovies extends Component {
       },
       body: JSON.stringify({slug: slug})
     }).then(res => {
-      this.props.handleGetUserAndMovies(localStorage.getItem("token"));
+      this.props.handleSetUserAndMovies(localStorage.getItem("token"));
       if (res.status === 401) {
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("usermovies");

@@ -57,12 +57,12 @@ class Recommend extends Component {
           )
         });
       } else if (res.status === 401) {
-        this.props.handleGetUserAndMovies(localStorage.getItem("token"));
+        this.props.handleSetUserAndMovies(localStorage.getItem("token"));
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("recommend");
         this.props.setRedirect(<Redirect to="/signin" />);
       } else if (res.status === 200) {
-        this.props.handleGetUserAndMovies(localStorage.getItem("token"));
+        this.props.handleSetUserAndMovies(localStorage.getItem("token"));
         this.setState({
           SearchValue: "",
           SearchResultOptions: [],

@@ -60,12 +60,6 @@ class App extends Component {
   setSort = sortParam => {
     this.setState({SortBy: sortParam});
   };
-  setUser = newUser => {
-    this.setState({User: newUser});
-  };
-  setEmail = newEmail => {
-    this.setState({Email: newEmail});
-  };
   setIndexes = (down, index, up) => {
     this.setState({IndexDown: down, GenreIndex: index, IndexUp: up});
   };
@@ -134,9 +128,9 @@ class App extends Component {
           RedirectBackSlug: redirectBackSlug,
           Redirect: <Redirect to="/signin" />
         });
-        this.handleGetUserAndMovies(localStorage.getItem("token"));
+        this.handleSetUserAndMovies(localStorage.getItem("token"));
       } else if (res.status === 200) {
-        this.handleGetUserAndMovies(localStorage.getItem("token"));
+        this.handleSetUserAndMovies(localStorage.getItem("token"));
       }
     });
   };
@@ -240,7 +234,7 @@ class App extends Component {
     return randomMovies;
   };
 
-  handleGetUser = token => {
+  handleSetUser = token => {
     fetch("/api/getuser", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -252,7 +246,7 @@ class App extends Component {
     });
   };
 
-  handleGetMovies = token => {
+  handleSetMovies = token => {
     fetch("/api/getmovies", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -264,16 +258,16 @@ class App extends Component {
     });
   };
 
-  handleGetUserAndMovies = token => {
+  handleSetUserAndMovies = token => {
     if (token === null) {
       token = "";
     }
-    this.handleGetUser(token);
-    this.handleGetMovies(token);
+    this.handleSetUser(token);
+    this.handleSetMovies(token);
   };
 
   componentDidMount() {
-    this.handleGetUserAndMovies(localStorage.getItem("token"));
+    this.handleSetUserAndMovies(localStorage.getItem("token"));
   }
 
   render() {
@@ -288,7 +282,7 @@ class App extends Component {
                 {...props}
                 user={this.state.User}
                 setRedirect={this.setRedirect}
-                handleGetUserAndMovies={this.handleGetUserAndMovies}
+                handleSetUserAndMovies={this.handleSetUserAndMovies}
               />
             )}
           />
@@ -308,10 +302,8 @@ class App extends Component {
               render={props => (
                 <DeleteAccount
                   {...props}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
                   redirect={this.state.Redirect}
-                  handleGetMovies={this.handleGetMovies}
+                  handleSetUserAndMovies={this.handleSetUserAndMovies}
                 />
               )}
             />
@@ -326,7 +318,7 @@ class App extends Component {
                   setRedirect={this.setRedirect}
                   setRedirectBack={this.setRedirectBack}
                   setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleGetUserAndMovies={this.handleGetUserAndMovies}
+                  handleSetUserAndMovies={this.handleSetUserAndMovies}
                 />
               )}
             />
@@ -341,7 +333,7 @@ class App extends Component {
                   redirect={this.state.Redirect}
                   setRedirectBack={this.setRedirectBack}
                   setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleGetUserAndMovies={this.handleGetUserAndMovies}
+                  handleSetUserAndMovies={this.handleSetUserAndMovies}
                 />
               )}
             />
@@ -358,9 +350,7 @@ class App extends Component {
                   {...props}
                   user={this.state.User}
                   redirectBack={this.state.RedirectBack}
-                  setUser={this.setUser}
-                  setEmail={this.setEmail}
-                  handleGetUserAndMovies={this.handleGetUserAndMovies}
+                  handleSetUserAndMovies={this.handleSetUserAndMovies}
                   setRedirect={this.setRedirect}
                   setRedirectBack={this.setRedirectBack}
                   redirectBackSlug={this.state.RedirectBackSlug}
@@ -384,7 +374,7 @@ class App extends Component {
                   setRedirectBack={this.setRedirectBack}
                   setRedirectBackSlug={this.setRedirectBackSlug}
                   setRedirect={this.setRedirect}
-                  handleGetUserAndMovies={this.handleGetUserAndMovies}
+                  handleSetUserAndMovies={this.handleSetUserAndMovies}
                 />
               )}
             />

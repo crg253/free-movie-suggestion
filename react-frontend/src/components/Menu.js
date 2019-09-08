@@ -21,7 +21,7 @@ class Menu extends Component {
 
   handleSignOut = () => {
     localStorage.removeItem("token");
-    this.props.handleGetUserAndMovies(localStorage.getItem("token"));
+    this.props.handleSetUserAndMovies(localStorage.getItem("token"));
   };
 
   render() {
@@ -56,7 +56,10 @@ class Menu extends Component {
     let editAccountLink = "";
     if (this.props.user.name.length > 0) {
       editAccountLink = (
-        <div onClick={() => this.changeMenuDisplay()}>
+        <div
+          data-test="menu-edit-account-link"
+          onClick={() => this.changeMenuDisplay()}
+        >
           <Link to={"/editaccount"}>
             <p className="dim-menu-links">edit account</p>
           </Link>
@@ -67,7 +70,10 @@ class Menu extends Component {
     let deleteAccountLink = "";
     if (this.props.user.name.length > 0) {
       deleteAccountLink = (
-        <div onClick={() => this.changeMenuDisplay()}>
+        <div
+          data-test="menu-delete-account-link"
+          onClick={() => this.changeMenuDisplay()}
+        >
           <Link to={"/deleteaccount"}>
             <p className="dim-menu-links">delete account</p>
           </Link>
