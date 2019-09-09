@@ -234,6 +234,7 @@ class EndToEndTest(LiveServerTestCase):
         submit_button = driver.find_element_by_xpath(
             "//input[@data-test='signin-submit-button']"
         )
+        time.sleep(2)
         submit_button.click()
         time.sleep(3)
 
@@ -1343,10 +1344,103 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("The Lady Vanishes" in trailer_data)
 
-    # def test_fail_unsave_usermovies_redirect_to_sign_in_and_back
-    # def test_fail_recommend_redirect_to_sign_in_and_back
-    # def test_fail_unrecommend_redirect_to_sign_in_and_back
-    # def test_fail_edit_account_redirect_to_sign_in_and_back
+    def OK_test_fail_unsave_usermovies_redirect_to_sign_in_and_back(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        # add one save on backend
+        hazel = User.query.filter_by(name="hazel").first()
+        movie_to_save = Movie.query.filter_by(slug="takeshelter2011").first()
+        hazel.saves.append(movie_to_save)
+        db.session.commit()
+
+        # go to page, dump token, then try unsave movie with trailer button
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(2)
+        driver.execute_script("window.localStorage.removeItem('token');")
+        unsave_button = driver.find_element_by_xpath(
+            "//button[@data-test='saved-unsave-button-takeshelter2011']"
+        )
+        unsave_button.click()
+        time.sleep(3)
+
+        # expect to be redirected to /signin
+        title = driver.find_element_by_xpath("//h1[@data-test='signin-title']").text
+        self.assertTrue(title == "Sign In")
+
+        self.fill_sign_in_form(driver, "hazel", "hazelpassword")
+        time.sleep(3)
+
+        # expect to be redirected back to /usermovies
+        driver.find_element_by_xpath("//p[@data-test='saved-title-takeshelter2011']")
+
+    def OK_test_fail_recommend_redirect_to_sign_in_and_back(self):
+
+        driver = self.driver
+
+        # create one user on backend
+        user = User(name="laura")
+        user.set_password("laurapassword")
+        db.session.add(user)
+        db.session.commit()
+
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+
+        self.search_and_recommend(driver, "Goonies")
+
+        # expect to be redirected to /signin
+        title = driver.find_element_by_xpath("//h1[@data-test='signin-title']").text
+        self.assertTrue(title == "Sign In")
+
+        self.fill_sign_in_form(driver, "laura", "laurapassword")
+        time.sleep(3)
+
+        # expect to be redirected back to /recommend
+        driver.find_element_by_xpath("//label[@data-test='recommend-title']")
+
+    def OK_test_fail_unrecommend_redirect_to_sign_in_and_back(self):
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+        driver.get(self.get_server_url() + "/recommend")
+        time.sleep(2)
+        self.search_and_recommend(driver, "Karate Kid")
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(2)
+        # dump token to simulate expiration
+        driver.execute_script("window.localStorage.removeItem('token');")
+        time.sleep(2)
+        unsuggest_button = driver.find_element_by_xpath(
+            "//button[@data-test='own-suggestion-card-unsuggest-button-thekaratekid1984']"
+        )
+        unsuggest_button.click()
+        # expect to be redirected to /signin
+        time.sleep(2)
+        title = driver.find_element_by_xpath("//h1[@data-test='signin-title']").text
+        self.assertTrue(title == "Sign In")
+        self.fill_sign_in_form(driver, "monkey", "monkeypassword")
+        # expect to be redirected back to /usermovies
+        driver.find_element_by_xpath(
+            "//button[@data-test='own-suggestion-card-unsuggest-button-thekaratekid1984']"
+        )
+
+    def OK_test_fail_edit_account_redirect_to_sign_in_and_back(self):
+
+        driver = self.driver
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+        driver.get(self.get_server_url() + "/editaccount")
+        # dump token to simulate expiration
+        driver.execute_script("window.localStorage.removeItem('token');")
+        time.sleep(2)
+        self.fill_edit_account_form(driver, name="New Name")
+        # expect to be redirected to /signin
+        time.sleep(2)
+        self.fill_sign_in_form(driver, "bella", "bellapassword")
+        # expect to be redirected back to /editaccount
+        driver.find_element_by_xpath("//form[@data-test='edit-account-form']")
 
     # test_g user 1 data exists, sign in USER 2 and do things
     # def test_user_2_sign_in_save_user_1_movie_usersuggestions

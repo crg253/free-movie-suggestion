@@ -88,7 +88,7 @@ class Recommend extends Component {
         <div className="user-pages-body-wrapper">
           <h1>Hi {this.props.user.name} !</h1>
           <form onSubmit={this.handleSearchSubmit}>
-            <label>
+            <label data-test="recommend-title">
               Search the OMDb to find a movie to suggest.
               <input
                 data-test="recommend-movie-title-search-input"
