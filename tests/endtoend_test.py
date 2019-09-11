@@ -9,6 +9,7 @@ import sys
 import time
 import csv
 import string
+import random
 
 sys.path.append(os.path.abspath("../"))
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -1443,12 +1444,88 @@ class EndToEndTest(LiveServerTestCase):
         driver.find_element_by_xpath("//form[@data-test='edit-account-form']")
 
     # test_g user 1 data exists, sign in USER 2 and do things
-    # def test_user_2_sign_in_save_user_1_movie_usersuggestions
-    # def test_user_2_sign_in_save_multiple_admin_and_user_1_movies
-    # def test_user_2_sign_in_recommend_cards_check_usermovies
-    # def test_user_2_sign_in_recommend_cards_check_usersuggestions
-    # def test_user_2_sign_in_recommend_videos_check_usermovies
-    # def test_user_2_sign_in_recommend_videos_check_usersuggestions
+
+    def OK_test_user_3_sign_in_save_user_2_movie_usersuggestions(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # create user 2 on backend
+        user = User(name="hazel")
+        user.set_password("hazelpassword")
+        db.session.add(user)
+        db.session.commit()
+
+        # user 2 recommend movies on backend
+        self.add_4_recommendations_with_trailer_on_backend()
+
+        # create user 3
+        self.create_user_and_sign_in(driver, "laura", "laurapassword")
+
+        # go to /usersuggestions, save user 2 movie
+        driver.get(self.get_server_url() + "/usersuggestions")
+        time.sleep(3)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='user-suggestion-trailer-save-button-bumblebee2018']"
+        )
+        save_button.click()
+
+        # check movie exists at user 3 /usermovies
+        self.click_through_menu_to(driver, "usermovies")
+        time.sleep(3)
+        # expect to see text in saved trailer wrapper
+        saved_data = [["bumblebee2018", "Bumblebee", "2018"]]
+        self.check_usermovies_saved_text(driver, saved_data)
+
+        # expect to see saved movie elements
+        self.check_usermovies_saved_elements_exist(driver, saved_data)
+
+    def OK_test_user_3_sign_in_save_multiple_admin_and_user_2_movies(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # create user 2 on backend
+        user = User(name="laura")
+        user.set_password("laurapassword")
+        db.session.add(user)
+        db.session.commit()
+
+        # user 2 recommend movies on backend
+        self.add_4_recommendations_with_trailer_on_backend()
+
+        # create user 3
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+        # save user 1 movie and 4 user 2 movies on backend
+        monkey = User.query.filter_by(name="monkey").first()
+        data_to_save = [
+            ["bumblebee2018", "Bumblebee", "2018"],
+            ["theexorcist1973", "The Exorcist", "1973"],
+            ["larsandtherealgirl2007", "Lars and the Real Girl", "2007"],
+            ["marypoppins1964", "Mary Poppins", "1964"],
+            ["robocop1987", "Robocop", "1987"],
+        ]
+        shuffled_slugs = [x[0] for x in data_to_save]
+        random.shuffle(shuffled_slugs)
+        for slug in shuffled_slugs:
+            movie_to_save = Movie.query.filter_by(slug=slug).first()
+            monkey.saves.append(movie_to_save)
+        db.session.commit()
+
+        # check saves exist at user 3 /usermovies
+        driver.get(self.get_server_url() + "/usermovies")
+        time.sleep(3)
+
+        self.check_usermovies_saved_text(driver, data_to_save)
+        self.check_usermovies_saved_elements_exist(driver, data_to_save)
+
+        ordered_saved_titles = [x[1] for x in data_to_save]
+        self.check_usermovies_saved_order(driver, ordered_saved_titles)
+
+    # def test_user_2_and_3_sign_in_recommend_cards_check_usermovies
+    # def test_user_2_and_3_sign_in_recommend_cards_check_usersuggestions
+    # def test_user_2_and_3_sign_in_recommend_videos_check_usermovies
+    # def test_user_2_and_3_sign_in_recommend_videos_check_usersuggestions
 
     # test_h redirect USER 2
     # def test_redirect_user_2_save_user_1_movie_usersuggestions
@@ -1458,10 +1535,6 @@ class EndToEndTest(LiveServerTestCase):
 
     # test_k user flow
     # def test_user_flow_1
-    # def test_user_flow_2
-    # def test_user_flow_3
-    # def test_user_flow_4
-    # def test_user_flow_5
 
 
 if __name__ == "__main__":
