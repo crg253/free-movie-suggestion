@@ -396,8 +396,8 @@ class EndToEndTest(LiveServerTestCase):
         displayed_titles = find_titles_in_text(ordered_titles, own_suggestion_text)
         self.assertTrue(ordered_titles == displayed_titles)
 
-    def check_usersuggestions_trailer_text(self, driver, trailers_data, user):
-        for slug, title, year in trailers_data:
+    def check_usersuggestions_trailer_text(self, driver, trailers_data):
+        for slug, title, year, user in trailers_data:
             user_suggestion_wrapper = driver.find_element_by_xpath(
                 "//div[@data-test='user-suggestion-trailer-wrapper-" + slug + "']"
             ).text
@@ -407,14 +407,14 @@ class EndToEndTest(LiveServerTestCase):
             self.assertTrue("Save" in user_suggestion_wrapper)
 
     def check_usersuggestions_trailer_elements_exist(self, driver, trailers_data):
-        for slug, title, year in trailers_data:
+        for slug, title, year, user in trailers_data:
             for label in ["", "title-", "year-", "comment-", "save-button-"]:
                 driver.find_element_by_xpath(
                     "//*[@data-test='user-suggestion-trailer-" + label + slug + "']"
                 )
 
-    def check_usersuggestions_card_text(self, driver, cards_data, user):
-        for slug, title, year in cards_data:
+    def check_usersuggestions_card_text(self, driver, cards_data):
+        for slug, title, year, user in cards_data:
             user_suggestion_wrapper = driver.find_element_by_xpath(
                 "//div[@data-test='user-suggestion-card-wrapper-" + slug + "']"
             ).text
@@ -425,7 +425,7 @@ class EndToEndTest(LiveServerTestCase):
             self.assertTrue("Suggested by " + user in user_suggestion_wrapper)
 
     def check_usersuggestions_card_elements_exist(self, driver, cards_data):
-        for slug, title, year in cards_data:
+        for slug, title, year, user in cards_data:
             for label in ["", "title-", "year-", "comment-"]:
                 driver.find_element_by_xpath(
                     "//*[@data-test='user-suggestion-card-" + label + slug + "']"
@@ -903,6 +903,7 @@ class EndToEndTest(LiveServerTestCase):
         self.assertTrue(drive in bella.recommendations)
 
         cards_data = [["drive2011", "Drive", "2011"]]
+        cards_data_w_user = [["drive2011", "Drive", "2011", "bella"]]
 
         # /usermovies expect to see card text and elements
         self.click_through_menu_to(driver, "usermovies")
@@ -911,8 +912,8 @@ class EndToEndTest(LiveServerTestCase):
 
         # /usersuggestions expect to see card text and elements
         self.click_through_menu_to(driver, "usersuggestions")
-        self.check_usersuggestions_card_text(driver, cards_data, "bella")
-        self.check_usersuggestions_card_elements_exist(driver, cards_data)
+        self.check_usersuggestions_card_text(driver, cards_data_w_user)
+        self.check_usersuggestions_card_elements_exist(driver, cards_data_w_user)
 
     def OK_test_ecc_sign_in_recomend_movie_with_trailer(self):
 
@@ -937,6 +938,7 @@ class EndToEndTest(LiveServerTestCase):
         driver.refresh()
 
         trailers_data = [["ghostbusters1984", "Ghostbusters", "1984"]]
+        trailers_data_w_user = [["ghostbusters1984", "Ghostbusters", "1984", "hazel"]]
 
         # /usermovies and /usersuggestions check trailer
         self.click_through_menu_to(driver, "usermovies")
@@ -944,8 +946,8 @@ class EndToEndTest(LiveServerTestCase):
         self.check_usermovies_suggested_trailer_elements_exist(driver, trailers_data)
 
         self.click_through_menu_to(driver, "usersuggestions")
-        self.check_usersuggestions_trailer_text(driver, trailers_data, "hazel")
-        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
+        self.check_usersuggestions_trailer_text(driver, trailers_data_w_user)
+        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data_w_user)
 
     def OK_test_ecd_sign_in_unrecommend_movie_no_trailer(self):
 
@@ -1060,18 +1062,18 @@ class EndToEndTest(LiveServerTestCase):
 
         # trailers data that should exist... slugs, titles, and years
         trailers_data = [
-            ["bumblebee2018", "Bumblebee", "2018"],
-            ["theexorcist1973", "The Exorcist", "1973"],
-            ["marypoppins1964", "Mary Poppins", "1964"],
-            ["robocop1987", "Robocop", "1987"],
+            ["bumblebee2018", "Bumblebee", "2018", "hazel"],
+            ["theexorcist1973", "The Exorcist", "1973", "hazel"],
+            ["marypoppins1964", "Mary Poppins", "1964", "hazel"],
+            ["robocop1987", "Robocop", "1987", "hazel"],
         ]
 
         # cards data that should exist...  slugs, titles, and years
         cards_data = [
-            ["thegodfather1972", "The Godfather", "1972"],
-            ["rocky1976", "Rocky", "1976"],
-            ["starwarsanewhope1977", "Star Wars: A New Hope", "1977"],
-            ["taxidriver1976", "Taxi Driver", "1976"],
+            ["thegodfather1972", "The Godfather", "1972", "hazel"],
+            ["rocky1976", "Rocky", "1976", "hazel"],
+            ["starwarsanewhope1977", "Star Wars: A New Hope", "1977", "hazel"],
+            ["taxidriver1976", "Taxi Driver", "1976", "hazel"],
         ]
 
         driver.refresh()
@@ -1079,8 +1081,8 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(3)
 
         # check the text visible for each trailer and card suggestion
-        self.check_usersuggestions_trailer_text(driver, trailers_data, "hazel")
-        self.check_usersuggestions_card_text(driver, cards_data, "hazel")
+        self.check_usersuggestions_trailer_text(driver, trailers_data)
+        self.check_usersuggestions_card_text(driver, cards_data)
 
         # check that each suggestion is comprised of certain elements
         self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
@@ -1238,7 +1240,7 @@ class EndToEndTest(LiveServerTestCase):
 
     # test_f redirect
 
-    def OK_test_fail_save_movie_redirect_create_acct_first_redirect_back(self):
+    def OK_test_fa_fail_save_movie_redirect_create_acct_first_redirect_back(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1277,7 +1279,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("The Last Starfighter" in trailer_data)
 
-    def OK_test_fail_save_movie_redirect_to_sign_in_and_back(self):
+    def OK_test_fb_fail_save_movie_redirect_to_sign_in_and_back(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1310,7 +1312,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("Thief" in trailer_data)
 
-    def OK_test_fail_unsave_trailer_page_redirect_to_sign_in_and_back(self):
+    def OK_test_fc_fail_unsave_trailer_page_redirect_to_sign_in_and_back(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1345,7 +1347,7 @@ class EndToEndTest(LiveServerTestCase):
         ).text
         self.assertTrue("The Lady Vanishes" in trailer_data)
 
-    def OK_test_fail_unsave_usermovies_redirect_to_sign_in_and_back(self):
+    def OK_test_fd_fail_unsave_usermovies_redirect_to_sign_in_and_back(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1377,7 +1379,7 @@ class EndToEndTest(LiveServerTestCase):
         # expect to be redirected back to /usermovies
         driver.find_element_by_xpath("//p[@data-test='saved-title-takeshelter2011']")
 
-    def OK_test_fail_recommend_redirect_to_sign_in_and_back(self):
+    def OK_test_fe_fail_recommend_redirect_to_sign_in_and_back(self):
 
         driver = self.driver
 
@@ -1402,7 +1404,7 @@ class EndToEndTest(LiveServerTestCase):
         # expect to be redirected back to /recommend
         driver.find_element_by_xpath("//label[@data-test='recommend-title']")
 
-    def OK_test_fail_unrecommend_redirect_to_sign_in_and_back(self):
+    def OK_test_ff_fail_unrecommend_redirect_to_sign_in_and_back(self):
 
         driver = self.driver
         self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
@@ -1428,7 +1430,7 @@ class EndToEndTest(LiveServerTestCase):
             "//button[@data-test='own-suggestion-card-unsuggest-button-thekaratekid1984']"
         )
 
-    def OK_test_fail_edit_account_redirect_to_sign_in_and_back(self):
+    def OK_test_fg_fail_edit_account_redirect_to_sign_in_and_back(self):
 
         driver = self.driver
         self.create_user_and_sign_in(driver, "bella", "bellapassword")
@@ -1445,7 +1447,7 @@ class EndToEndTest(LiveServerTestCase):
 
     # test_g user 1 data exists, sign in USER 2 and do things
 
-    def OK_test_user_3_sign_in_save_user_2_movie_usersuggestions(self):
+    def OK_test_ga_user_3_sign_in_save_user_2_movie_usersuggestions(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1480,24 +1482,19 @@ class EndToEndTest(LiveServerTestCase):
         # expect to see saved movie elements
         self.check_usermovies_saved_elements_exist(driver, saved_data)
 
-    def OK_test_user_3_sign_in_save_multiple_admin_and_user_2_movies(self):
+    def OK_test_gb_user_3_sign_in_save_multiple_admin_and_user_2_movies(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
 
-        # create user 2 on backend
+        # create user 2 on backend and recommend movies
         user = User(name="laura")
         user.set_password("laurapassword")
         db.session.add(user)
         db.session.commit()
-
-        # user 2 recommend movies on backend
         self.add_4_recommendations_with_trailer_on_backend()
 
-        # create user 3
-        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
-        # save user 1 movie and 4 user 2 movies on backend
-        monkey = User.query.filter_by(name="monkey").first()
+        # create user 3 and save user 1 movie and 4 user 2 movies on backend
         data_to_save = [
             ["bumblebee2018", "Bumblebee", "2018"],
             ["theexorcist1973", "The Exorcist", "1973"],
@@ -1505,6 +1502,10 @@ class EndToEndTest(LiveServerTestCase):
             ["marypoppins1964", "Mary Poppins", "1964"],
             ["robocop1987", "Robocop", "1987"],
         ]
+        self.create_user_and_sign_in(driver, "monkey", "monkeypassword")
+
+        monkey = User.query.filter_by(name="monkey").first()
+        # save the movies in random order on the backend
         shuffled_slugs = [x[0] for x in data_to_save]
         random.shuffle(shuffled_slugs)
         for slug in shuffled_slugs:
@@ -1522,10 +1523,99 @@ class EndToEndTest(LiveServerTestCase):
         ordered_saved_titles = [x[1] for x in data_to_save]
         self.check_usermovies_saved_order(driver, ordered_saved_titles)
 
-    # def test_user_2_and_3_sign_in_recommend_cards_check_usermovies
-    # def test_user_2_and_3_sign_in_recommend_cards_check_usersuggestions
-    # def test_user_2_and_3_sign_in_recommend_videos_check_usermovies
-    # def test_user_2_and_3_sign_in_recommend_videos_check_usersuggestions
+    def OK_test_gc_user_2_and_3_recommend_cards_check_usermovies_and_usersugg(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # create user 2 on backend and recommend movies
+        user = User(name="monkey")
+        user.set_password("monkeypassword")
+        db.session.add(user)
+        db.session.commit()
+        self.add_4_recommendations_with_no_trailer_on_backend()
+
+        # create user 3 and recommend 1 card
+        self.create_user_and_sign_in(driver, "bella", "bellapassword")
+        self.click_through_menu_to(driver, "recommend")
+        time.sleep(3)
+        self.search_and_recommend(driver, "Mr. Mom")
+        self.expect_modal(driver, "Thank you for suggesting!")
+
+        # check only 1 card at user 3 /usermovies
+        user_3_card_data = [["mrmom1983", "Mr. Mom", "1983"]]
+
+        self.click_through_menu_to(driver, "usermovies")
+        time.sleep(4)
+        self.check_usermovies_suggested_card_text(driver, user_3_card_data)
+        self.check_usermovies_suggested_card_elements_exist(driver, user_3_card_data)
+        ordered_suggestions = [x[1] for x in user_3_card_data]
+        self.check_usermovies_suggested_order(driver, ordered_suggestions)
+
+        # check 5 movies at /usersuggestions
+        cards_data = [
+            ["thegodfather1972", "The Godfather", "1972", "monkey"],
+            ["mrmom1983", "Mr. Mom", "1983", "bella"],
+            ["rocky1976", "Rocky", "1976", "monkey"],
+            ["starwarsanewhope1977", "Star Wars: A New Hope", "1977", "monkey"],
+            ["taxidriver1976", "Taxi Driver", "1976", "monkey"],
+        ]
+        self.click_through_menu_to(driver, "usersuggestions")
+        time.sleep(4)
+        self.check_usersuggestions_card_text(driver, cards_data)
+        self.check_usersuggestions_card_elements_exist(driver, cards_data)
+        ordered_suggestions = [x[1] for x in cards_data]
+        self.check_usersuggestions_order(driver, ordered_suggestions)
+
+    def OK_test_gd_user_2_and_3_recommend_videos_check_usermovies_and_usersugg(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+
+        # create user 2 on backend and recommend movies
+        user = User(name="bella")
+        user.set_password("bellapassword")
+        db.session.add(user)
+        db.session.commit()
+        self.add_4_recommendations_with_trailer_on_backend()
+
+        # create user 3 and recommend 1 movie with video
+        self.create_user_and_sign_in(driver, "hazel", "hazelpassword")
+        self.click_through_menu_to(driver, "recommend")
+        time.sleep(3)
+        self.search_and_recommend(driver, "Moneyball")
+        self.expect_modal(driver, "Thank you for suggesting!")
+        moneyball = Movie.query.filter_by(slug="moneyball2011").first()
+        moneyball.video_link = "https://www.youtube.com/embed/-4QPVo0UIzc"
+        db.session.commit()
+        driver.refresh()
+
+        # check only 1 video at user 3 /usermovies
+        user_3_video_data = [["moneyball2011", "Moneyball", "2011"]]
+
+        self.click_through_menu_to(driver, "usermovies")
+        time.sleep(4)
+        self.check_usermovies_suggested_trailer_text(driver, user_3_video_data)
+        self.check_usermovies_suggested_trailer_elements_exist(
+            driver, user_3_video_data
+        )
+        ordered_suggestions = [x[1] for x in user_3_video_data]
+        self.check_usermovies_suggested_order(driver, ordered_suggestions)
+
+        # check 5 movies with trailers at /usersuggestions
+        trailers_data = [
+            ["bumblebee2018", "Bumblebee", "2018", "bella"],
+            ["theexorcist1973", "The Exorcist", "1973", "bella"],
+            ["marypoppins1964", "Mary Poppins", "1964", "bella"],
+            ["moneyball2011", "Moneyball", "2011", "hazel"],
+            ["robocop1987", "Robocop", "1987", "bella"],
+        ]
+
+        self.click_through_menu_to(driver, "usersuggestions")
+        self.check_usersuggestions_trailer_text(driver, trailers_data)
+        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
+        ordered_suggestions = [x[1] for x in trailers_data]
+        self.check_usersuggestions_order(driver, ordered_suggestions)
 
     # test_h redirect USER 2
     # def test_redirect_user_2_save_user_1_movie_usersuggestions
@@ -1534,7 +1624,7 @@ class EndToEndTest(LiveServerTestCase):
     # def test_page_refresh
 
     # test_k user flow
-    # def test_user_flow_1
+    # def test_user_flow
 
 
 if __name__ == "__main__":

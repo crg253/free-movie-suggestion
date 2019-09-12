@@ -122,7 +122,10 @@ class Menu extends Component {
             {signInLink}
             {currentUserLink}
 
-            <div onClick={() => this.changeMenuDisplay()}>
+            <div
+              data-test="menu-recommend-link"
+              onClick={() => this.changeMenuDisplay()}
+            >
               <Link to={"/recommend"}>
                 <h2 className="menu-links">Recommend</h2>
               </Link>
