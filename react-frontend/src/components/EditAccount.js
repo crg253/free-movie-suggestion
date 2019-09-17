@@ -34,7 +34,7 @@ class EditAccount extends Component {
 
   handleUpdateAccount = event => {
     event.preventDefault();
-    fetch("/api/updateaccount", {
+    fetch("/api/editaccount", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),

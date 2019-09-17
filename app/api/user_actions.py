@@ -48,8 +48,8 @@ def get_movies():
     return jsonify({"movies": movies}), 200
 
 
-@bp.route("/adduser", methods=["POST"])
-def add_user():
+@bp.route("/createaccount", methods=["POST"])
+def create_account():
     data = request.get_json(silent=True) or {}
     new_user = User(name=data.get("name"))
     if data.get("email"):
@@ -88,9 +88,9 @@ def reset_password():
         return "", 200
 
 
-@bp.route("/updateaccount", methods=["POST"])
+@bp.route("/editaccount", methods=["POST"])
 @token_auth.login_required
-def update_account():
+def edit_account():
     data = request.get_json(silent=True) or {}
     user = User.query.filter_by(name=g.current_user.name).first()
     if data.get("newName"):

@@ -902,18 +902,19 @@ class EndToEndTest(LiveServerTestCase):
         bella = User.query.filter_by(name="bella").first()
         self.assertTrue(drive in bella.recommendations)
 
-        cards_data = [["drive2011", "Drive", "2011"]]
-        cards_data_w_user = [["drive2011", "Drive", "2011", "bella"]]
+        cards_data = [["drive2011", "Drive", "2011", "bella"]]
 
         # /usermovies expect to see card text and elements
         self.click_through_menu_to(driver, "usermovies")
-        self.check_usermovies_suggested_card_text(driver, cards_data)
-        self.check_usermovies_suggested_card_elements_exist(driver, cards_data)
+        self.check_usermovies_suggested_card_text(driver, [x[:3] for x in cards_data])
+        self.check_usermovies_suggested_card_elements_exist(
+            driver, [x[:3] for x in cards_data]
+        )
 
         # /usersuggestions expect to see card text and elements
         self.click_through_menu_to(driver, "usersuggestions")
-        self.check_usersuggestions_card_text(driver, cards_data_w_user)
-        self.check_usersuggestions_card_elements_exist(driver, cards_data_w_user)
+        self.check_usersuggestions_card_text(driver, cards_data)
+        self.check_usersuggestions_card_elements_exist(driver, cards_data)
 
     def OK_test_ecc_sign_in_recomend_movie_with_trailer(self):
 
@@ -937,17 +938,20 @@ class EndToEndTest(LiveServerTestCase):
         db.session.commit()
         driver.refresh()
 
-        trailers_data = [["ghostbusters1984", "Ghostbusters", "1984"]]
-        trailers_data_w_user = [["ghostbusters1984", "Ghostbusters", "1984", "hazel"]]
+        trailers_data = [["ghostbusters1984", "Ghostbusters", "1984", "hazel"]]
 
         # /usermovies and /usersuggestions check trailer
         self.click_through_menu_to(driver, "usermovies")
-        self.check_usermovies_suggested_trailer_text(driver, trailers_data)
-        self.check_usermovies_suggested_trailer_elements_exist(driver, trailers_data)
+        self.check_usermovies_suggested_trailer_text(
+            driver, [x[:3] for x in trailers_data]
+        )
+        self.check_usermovies_suggested_trailer_elements_exist(
+            driver, [x[:3] for x in trailers_data]
+        )
 
         self.click_through_menu_to(driver, "usersuggestions")
-        self.check_usersuggestions_trailer_text(driver, trailers_data_w_user)
-        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data_w_user)
+        self.check_usersuggestions_trailer_text(driver, trailers_data)
+        self.check_usersuggestions_trailer_elements_exist(driver, trailers_data)
 
     def OK_test_ecd_sign_in_unrecommend_movie_no_trailer(self):
 
@@ -1624,7 +1628,79 @@ class EndToEndTest(LiveServerTestCase):
     # def test_page_refresh
 
     # test_k user flow
-    # def test_user_flow
+    def test_user_flow(self):
+
+        driver = self.driver
+        self.add_user_1_and_101_movies()
+        self.go_to_all_movies_page(driver)
+
+        # check all movies sorted by title
+        displayed_text = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertTrue(
+            sort_csv_movie_collection("title", "All")
+            == find_admin_titles_in_text(displayed_text)
+        )
+
+        # arrow up. arrow back. check sort by year
+        for i in range(16):
+            driver.find_element_by_xpath(
+                "//button[@data-test='genres-forward-button']"
+            ).click()
+            time.sleep(1)
+        for i in range(12):
+            driver.find_element_by_xpath(
+                "//button[@data-test='genres-back-button']"
+            ).click()
+            time.sleep(1)
+        self.click_sort(driver, "year")
+        genre_shown = driver.find_element_by_xpath(
+            "//h2[@data-test='selected-genre']"
+        ).text
+        self.assertTrue(genre_shown == "Drama")
+        displayed_text = driver.find_element_by_xpath(
+            "//div[@data-test='movie-list']"
+        ).text
+        self.assertTrue(
+            sort_csv_movie_collection("year", genre_shown)
+            == find_admin_titles_in_text(displayed_text)
+        )
+
+        # try to save, should redirect to sign in
+        driver.get(self.get_server_url() + "/action/thelaststarfighter1984")
+        time.sleep(2)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-save-button']"
+        )
+        save_button.click()
+        time.sleep(2)
+
+        # then from signin, go to /createaccount... create account
+        driver.find_element_by_xpath(
+            "//*[@data-test='signin-create-account-link']"
+        ).click()
+        time.sleep(2)
+        self.fill_create_user_form(driver, "laura", "laurapassword")
+        self.expect_modal(driver, "Thank you for creating account.")
+
+        # Element <a href="/signin"> could not be scrolled into view
+        # go back to /signin ... sign in
+        driver.execute_script("window.history.go(-1)")
+        time.sleep(2)
+        self.fill_sign_in_form(driver, "laura", "laurapassword")
+        time.sleep(3)
+
+        # expect to be redirected back to /action/thelaststarfighter1984
+        trailer_data = driver.find_element_by_xpath(
+            "//h2[@data-test='trailer-title-and-year']"
+        ).text
+        self.assertTrue("The Last Starfighter" in trailer_data)
+
+        # save a few movies
+        # recommend a few movies (with trailers and without)
+        # check /usermovies
+        # check /usersuggestions
 
 
 if __name__ == "__main__":

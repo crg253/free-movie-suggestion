@@ -37,7 +37,7 @@ class CreateAccount extends Component {
 
   handleAddUserSubmit = event => {
     event.preventDefault();
-    fetch("/api/adduser", {
+    fetch("/api/createaccount", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({

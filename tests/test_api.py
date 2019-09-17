@@ -189,7 +189,7 @@ def test_add_user(test_client, init_db):
     assert "laura" not in [u.name for u in User.query.all()]
 
     j_data = json.dumps({"name": "laura", "password": "laurapassword", "email": ""})
-    res = test_client.post("/api/adduser", data=j_data, content_type="application/json")
+    res = test_client.post("/api/createaccount", data=j_data, content_type="application/json")
     assert "laura" in [u.name for u in User.query.all()]
 
 
@@ -213,7 +213,7 @@ def test_update_account(test_client, init_db):
     headers = {"Authorization": "Bearer " + monkey.token}
     j_data = json.dumps({"newName": "monkeycat", "newEmail": None, "newPassword": None})
     res = test_client.post(
-        "/api/updateaccount",
+        "/api/editaccount",
         headers=headers,
         data=j_data,
         content_type="application/json",
@@ -229,7 +229,7 @@ def test_update_account(test_client, init_db):
         {"newName": "belladog", "newEmail": "bella@dog.com", "newPassword": None}
     )
     res = test_client.post(
-        "/api/updateaccount",
+        "/api/editaccount",
         headers=headers,
         data=j_data,
         content_type="application/json",
@@ -249,7 +249,7 @@ def test_update_account(test_client, init_db):
         }
     )
     res = test_client.post(
-        "/api/updateaccount",
+        "/api/editaccount",
         headers=headers,
         data=j_data,
         content_type="application/json",
@@ -263,7 +263,7 @@ def test_update_account(test_client, init_db):
     headers = {"Authorization": "Bearer " + hazel.token}
     j_data = json.dumps({"newName": None, "newEmail": None, "newPassword": None})
     res = test_client.post(
-        "/api/updateaccount",
+        "/api/editaccount",
         headers=headers,
         data=j_data,
         content_type="application/json",
