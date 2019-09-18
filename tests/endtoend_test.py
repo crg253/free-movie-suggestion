@@ -16,7 +16,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 from app import create_app, db
 from app.models import Movie, Tag, User
-from config import Config
+from config import DevConfig
 from data_loader.csv_loader import *
 
 
@@ -131,7 +131,7 @@ def find_admin_titles_in_text(displayed_text):
     return titles_as_displayed
 
 
-class TestConfig(Config):
+class TestConfig(DevConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "endtoend_test.db")
     ELASTICSEARCH_URL = None
@@ -1692,14 +1692,37 @@ class EndToEndTest(LiveServerTestCase):
         time.sleep(3)
 
         # expect to be redirected back to /action/thelaststarfighter1984
+        # save that movie
         trailer_data = driver.find_element_by_xpath(
             "//h2[@data-test='trailer-title-and-year']"
         ).text
         self.assertTrue("The Last Starfighter" in trailer_data)
+        time.sleep(2)
+        save_button = driver.find_element_by_xpath(
+            "//button[@data-test='trailer-save-button']"
+        )
+        save_button.click()
+        time.sleep(2)
 
-        # save a few movies
-        # recommend a few movies (with trailers and without)
+        # save two more movies
+        save_urls = [
+            "/comedy/goon2011",
+            "/horror/theinvitation2015",
+            "/mysteryandsuspense/the39steps1935",
+        ]
+        for url in save_urls:
+            driver.get(self.get_server_url() + url)
+            time.sleep(2)
+            save_button = driver.find_element_by_xpath(
+                "//button[@data-test='trailer-save-button']"
+            )
+            save_button.click()
+            time.sleep(2)
+
         # check /usermovies
+        self.click_through_menu_to(driver, "usermovies")
+
+        # recommend a few movies (with trailers and without)
         # check /usersuggestions
 
 

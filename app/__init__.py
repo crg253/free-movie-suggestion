@@ -1,5 +1,5 @@
 from flask import Flask
-from config import Config
+from config import DevConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
@@ -9,7 +9,7 @@ migrate = Migrate()
 mail = Mail()
 
 
-def create_app(config_class=Config):
+def create_app(config_class=DevConfig):
 
     app = Flask(
         __name__,
