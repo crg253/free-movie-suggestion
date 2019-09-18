@@ -53,7 +53,7 @@ def create_account():
     data = request.get_json(silent=True) or {}
     new_user = User(name=data.get("name"))
     if data.get("email"):
-        newUser.email = data.get("email")
+        new_user.email = data.get("email")
     new_user.set_password(data.get("password"))
     db.session.add(new_user)
     db.session.commit()

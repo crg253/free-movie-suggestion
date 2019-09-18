@@ -11069,3 +11069,21 @@ Exiting due to channel error.
 1568830200548	Marionette	INFO	Listening on port 57152
 1568830200637	Marionette	WARN	TLS certificate errors will be ignored for this session
 1568830299931	Marionette	INFO	Stopped listening on port 57152
+1568832787575	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/pw/hcj16hj94hxfx3hlcy21p2gc0000gn/T/rust_mozprofile.mHKeoagFUOUy"
+1568832788790	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1568832788790	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1568832788790	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1568832788790	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1568832792391	Marionette	INFO	Listening on port 57637
+1568832792407	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8943/static/js/main.bfd9bef3.chunk.js, line 1: TypeError: a.props.state is undefined
+JavaScript error: http://localhost:8943/static/js/main.bfd9bef3.chunk.js, line 1: TypeError: a.props.state is undefined
+1568832803237	Marionette	INFO	Stopped listening on port 57637
+1568836754636	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/pw/hcj16hj94hxfx3hlcy21p2gc0000gn/T/rust_mozprofile.m2aWO9iK0lta"
+1568836755914	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1568836755915	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1568836755915	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1568836755915	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1568836759940	Marionette	INFO	Listening on port 58150
+1568836760010	Marionette	WARN	TLS certificate errors will be ignored for this session
+1568836858296	Marionette	INFO	Stopped listening on port 58150

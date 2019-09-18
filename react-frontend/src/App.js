@@ -1,20 +1,7 @@
 import React, {Component} from "react";
-import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
-
+import {Redirect} from "react-router-dom";
+import RoutingComponent from "./components/RoutingComponent";
 import "./App.css";
-import HomePage from "./components/HomePage";
-import TrailerPage from "./components/TrailerPage";
-import SignIn from "./components/SignIn";
-import CreateAccount from "./components/CreateAccount";
-import Recommend from "./components/Recommend";
-import Menu from "./components/Menu";
-import UserMovies from "./components/UserMovies";
-import UserSuggestions from "./components/UserSuggestions";
-import ResetPassword from "./components/ResetPassword";
-import EditAccount from "./components/EditAccount";
-import DeleteAccount from "./components/DeleteAccount";
-import About from "./components/About";
-import Contact from "./components/Contact";
 
 class App extends Component {
   state = {
@@ -271,166 +258,36 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.Movies);
     return (
-      <BrowserRouter>
-        <div>
-          <Route
-            path="/"
-            render={props => (
-              <Menu
-                {...props}
-                user={this.state.User}
-                setRedirect={this.setRedirect}
-                handleSetUserAndMovies={this.handleSetUserAndMovies}
-              />
-            )}
-          />
-
-          <Switch>
-            <Route path="/about" render={props => <About {...props} />} />
-
-            <Route path="/contact" render={props => <Contact {...props} />} />
-
-            <Route
-              path="/createaccount"
-              render={props => <CreateAccount {...props} />}
-            />
-
-            <Route
-              path="/deleteaccount"
-              render={props => (
-                <DeleteAccount
-                  {...props}
-                  redirect={this.state.Redirect}
-                  handleSetUserAndMovies={this.handleSetUserAndMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/editaccount"
-              render={props => (
-                <EditAccount
-                  {...props}
-                  user={this.state.User}
-                  redirect={this.state.Redirect}
-                  setRedirect={this.setRedirect}
-                  setRedirectBack={this.setRedirectBack}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleSetUserAndMovies={this.handleSetUserAndMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/recommend"
-              render={props => (
-                <Recommend
-                  {...props}
-                  user={this.state.User}
-                  setRedirect={this.setRedirect}
-                  redirect={this.state.Redirect}
-                  setRedirectBack={this.setRedirectBack}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  handleSetUserAndMovies={this.handleSetUserAndMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/resetpassword"
-              render={props => <ResetPassword {...props} />}
-            />
-
-            <Route
-              path="/signin"
-              render={props => (
-                <SignIn
-                  {...props}
-                  user={this.state.User}
-                  redirectBack={this.state.RedirectBack}
-                  handleSetUserAndMovies={this.handleSetUserAndMovies}
-                  setRedirect={this.setRedirect}
-                  setRedirectBack={this.setRedirectBack}
-                  redirectBackSlug={this.state.RedirectBackSlug}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  redirectBackGenre={this.state.RedirectBackGenre}
-                  setRedirectBackGenre={this.setRedirectBackGenre}
-                />
-              )}
-            />
-
-            <Route
-              path="/usermovies"
-              render={props => (
-                <UserMovies
-                  {...props}
-                  user={this.state.User}
-                  movies={this.state.Movies}
-                  handleSaveUnsave={this.handleSaveUnsave}
-                  redirect={this.state.Redirect}
-                  compareTitle={this.compareTitle}
-                  setRedirectBack={this.setRedirectBack}
-                  setRedirectBackSlug={this.setRedirectBackSlug}
-                  setRedirect={this.setRedirect}
-                  handleSetUserAndMovies={this.handleSetUserAndMovies}
-                />
-              )}
-            />
-
-            <Route
-              path="/usersuggestions"
-              render={props => (
-                <UserSuggestions
-                  {...props}
-                  redirect={this.state.Redirect}
-                  movies={this.state.Movies}
-                  handleSaveUnsave={this.handleSaveUnsave}
-                  compareTitle={this.compareTitle}
-                />
-              )}
-            />
-
-            <Route
-              path="/:genreslug/:movieslug"
-              render={props => (
-                <TrailerPage
-                  {...props}
-                  movies={this.state.Movies}
-                  changeGenreCase={this.changeGenreCase}
-                  getRandomMovies={this.getRandomMovies}
-                  sortBy={this.state.SortBy}
-                  setSort={this.setSort}
-                  scrollGenres={this.state.ScrollGenres}
-                  indexUp={this.state.IndexUp}
-                  indexDown={this.state.IndexDown}
-                  subtractGenreIndex={this.subtractGenreIndex}
-                  addGenreIndex={this.addGenreIndex}
-                  setIndexes={this.setIndexes}
-                  redirect={this.state.Redirect}
-                  handleSaveUnsave={this.handleSaveUnsave}
-                  compareTitle={this.compareTitle}
-                  compareYear={this.compareYear}
-                />
-              )}
-            />
-
-            <Route
-              path="/"
-              render={props => (
-                <HomePage
-                  {...props}
-                  setSelectedGenre={this.setSelectedGenre}
-                  selectedGenre={this.state.SelectedGenre}
-                  getRandomMovies={this.getRandomMovies}
-                  setRedirect={this.setRedirect}
-                />
-              )}
-            />
-          </Switch>
-        </div>
-      </BrowserRouter>
+      <RoutingComponent
+        movies={this.state.Movies}
+        redirect={this.state.Redirect}
+        redirectBack={this.state.RedirectBack}
+        redirectBackGenre={this.state.RedirectBackGenre}
+        redirectBackSlug={this.state.RedirectBackSlug}
+        selectedGenre={this.state.SelectedGenre}
+        scrollGenres={this.state.ScrollGenres}
+        user={this.state.User}
+        addGenreIndex={this.addGenreIndex}
+        changeGenreCase={this.changeGenreCase}
+        compareTitle={this.compareTitle}
+        compareYear={this.compareYear}
+        getRandomMovies={this.getRandomMovies}
+        handleSaveUnsave={this.handleSaveUnsave}
+        handleSetUserAndMovies={this.handleSetUserAndMovies}
+        indexDown={this.state.IndexDown}
+        indexUp={this.state.IndexUp}
+        redirect={this.state.Redirect}
+        setIndexes={this.setIndexes}
+        setRedirect={this.setRedirect}
+        setRedirectBack={this.setRedirectBack}
+        setRedirectBackGenre={this.setRedirectBackGenre}
+        setRedirectBackSlug={this.setRedirectBackSlug}
+        setSelectedGenre={this.setSelectedGenre}
+        setSort={this.setSort}
+        sortBy={this.state.SortBy}
+        subtractGenreIndex={this.subtractGenreIndex}
+      />
     );
   }
 }
