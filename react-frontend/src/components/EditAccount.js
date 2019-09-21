@@ -46,7 +46,7 @@ class EditAccount extends Component {
         newPassword: this.state.NewPassword
       })
     }).then(res => {
-      this.props.handleSetUserAndMovies(localStorage.getItem("token"));
+      this.props.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
       if (res.status === 401) {
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("editaccount");
@@ -98,7 +98,7 @@ class EditAccount extends Component {
               <input
                 data-test="edit-account-password-input"
                 type="text"
-                placeholder="New Password"
+                placeholder="Password"
                 type="password"
                 value={this.state.NewPassword}
                 onChange={this.handleNewPasswordChange}

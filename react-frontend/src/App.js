@@ -115,9 +115,9 @@ class App extends Component {
           RedirectBackSlug: redirectBackSlug,
           Redirect: <Redirect to="/signin" />
         });
-        this.handleSetUserAndMovies(localStorage.getItem("token"));
+        this.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
       } else if (res.status === 200) {
-        this.handleSetUserAndMovies(localStorage.getItem("token"));
+        this.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
       }
     });
   };
@@ -221,7 +221,7 @@ class App extends Component {
     return randomMovies;
   };
 
-  handleSetUser = token => {
+  handleGetAndSetUser = token => {
     fetch("/api/getuser", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -233,7 +233,7 @@ class App extends Component {
     });
   };
 
-  handleSetMovies = token => {
+  handleGetAndSetMovies = token => {
     fetch("/api/getmovies", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -245,16 +245,16 @@ class App extends Component {
     });
   };
 
-  handleSetUserAndMovies = token => {
+  handleGetAndSetUserAndMovies = token => {
     if (token === null) {
       token = "";
     }
-    this.handleSetUser(token);
-    this.handleSetMovies(token);
+    this.handleGetAndSetUser(token);
+    this.handleGetAndSetMovies(token);
   };
 
   componentDidMount() {
-    this.handleSetUserAndMovies(localStorage.getItem("token"));
+    this.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
   }
 
   render() {
@@ -274,7 +274,7 @@ class App extends Component {
         compareYear={this.compareYear}
         getRandomMovies={this.getRandomMovies}
         handleSaveUnsave={this.handleSaveUnsave}
-        handleSetUserAndMovies={this.handleSetUserAndMovies}
+        handleGetAndSetUserAndMovies={this.handleGetAndSetUserAndMovies}
         indexDown={this.state.IndexDown}
         indexUp={this.state.IndexUp}
         redirect={this.state.Redirect}

@@ -17,7 +17,6 @@ def create_app(config_class=DevConfig):
         template_folder="../react-frontend/build",
     )
 
-    # app = Flask(__name__)
     app.config.from_object(config_class)
 
     db.init_app(app)

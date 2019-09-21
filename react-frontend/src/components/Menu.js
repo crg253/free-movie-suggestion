@@ -21,7 +21,7 @@ class Menu extends Component {
 
   handleSignOut = () => {
     localStorage.removeItem("token");
-    this.props.handleSetUserAndMovies(localStorage.getItem("token"));
+    this.props.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
   };
 
   render() {

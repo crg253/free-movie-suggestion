@@ -1628,7 +1628,7 @@ class EndToEndTest(LiveServerTestCase):
     # def test_page_refresh
 
     # test_k user flow
-    def test_user_flow(self):
+    def test_user_flow_1(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()
@@ -1644,12 +1644,12 @@ class EndToEndTest(LiveServerTestCase):
         )
 
         # arrow up. arrow back. check sort by year
-        for i in range(16):
+        for i in range(6):
             driver.find_element_by_xpath(
                 "//button[@data-test='genres-forward-button']"
             ).click()
             time.sleep(1)
-        for i in range(12):
+        for i in range(2):
             driver.find_element_by_xpath(
                 "//button[@data-test='genres-back-button']"
             ).click()

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 import MessageModal from "./MessageModal";
 
@@ -51,7 +51,7 @@ class DeleteAccount extends Component {
           )
         });
       } else if (res.status === 200) {
-        this.props.handleSetUserAndMovies(localStorage.getItem("token"));
+        this.props.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
         this.setState({
           Name: "",
           Email: "",
@@ -67,8 +67,6 @@ class DeleteAccount extends Component {
   render() {
     return (
       <div>
-        {this.props.redirect}
-
         <Link to={"/"}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
@@ -81,7 +79,7 @@ class DeleteAccount extends Component {
               <input
                 data-test="delete-account-username-input"
                 type="text"
-                placeholder="Username"
+                placeholder="Name"
                 value={this.state.Name}
                 onChange={this.handleNameChange}
               />
