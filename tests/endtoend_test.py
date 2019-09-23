@@ -29,7 +29,7 @@ def sort_by_title_helper(title):
     to_remove = [" ", "'", ",", "!", ".", ":", "&", "-"]
     for item in to_remove:
         slug = slug.replace(item, "")
-    return slug
+    return slug.lower()
 
 
 def sort_by_year_helper(title):
@@ -41,7 +41,7 @@ def sort_by_year_helper(title):
     to_remove = [" ", "'", ",", "!", ".", ":", "&", "-"]
     for item in to_remove:
         slug = slug.replace(item, "")
-    return slug
+    return slug.lower()
 
 
 def sort_movie_titles_by_title(genre_movies):
@@ -1704,7 +1704,7 @@ class EndToEndTest(LiveServerTestCase):
         save_button.click()
         time.sleep(2)
 
-        # save two more movies
+        # save three more movies
         save_urls = [
             "/comedy/goon2011",
             "/horror/theinvitation2015",
@@ -1721,8 +1721,21 @@ class EndToEndTest(LiveServerTestCase):
 
         # check /usermovies
         self.click_through_menu_to(driver, "usermovies")
+        saved_data = [
+            ["the39steps1935", "The 39 Steps", "1935"],
+            ["goon2011", "Goon", "2011"],
+            ["theinvitation2015", "The Invitation", "2015"],
+            ["thelaststarfighter1984", "The Last Starfighter", "1984"],
+        ]
+        self.check_usermovies_saved_text(driver, saved_data)
+        self.check_usermovies_saved_elements_exist(driver, saved_data)
+        ordered_saved_titles = [x[1] for x in saved_data]
+        self.check_usermovies_saved_order(driver, ordered_saved_titles)
 
         # recommend a few movies (with trailers and without)
+        self.click_through_menu_to(driver, "recommend")
+
+        # check /usermovies again (check order of all items)
         # check /usersuggestions
 
 

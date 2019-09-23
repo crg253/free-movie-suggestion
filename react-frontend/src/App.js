@@ -58,7 +58,8 @@ class App extends Component {
     }
     title = title
       .replace(/['.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
-      .replace(/[" "]/g, "");
+      .replace(/[" "]/g, "")
+      .toLowerCase();
     return title;
   };
 
@@ -68,7 +69,8 @@ class App extends Component {
     }
     title = title
       .replace(/['.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
-      .replace(/[" "]/g, "");
+      .replace(/[" "]/g, "")
+      .toLowerCase();
     let yearAndSlug = year + title;
     return yearAndSlug;
   };
