@@ -302,54 +302,62 @@ class EndToEndTest(LiveServerTestCase):
         ).click()
         time.sleep(3)
 
-    def add_4_recommendations_with_trailer_on_backend(self):
+    def add_4_recommendations_with_trailer_on_backend(self, recommender_id):
         marypoppins = Movie(
             slug="marypoppins1964",
             title="Mary Poppins",
             year=1964,
             video_link="https://www.youtube.com/embed/YfkEQDPlb8g",
-            recommender_id=2,
+            recommender_id=recommender_id,
         )
         bumblebee = Movie(
             slug="bumblebee2018",
             title="Bumblebee",
             year=2018,
             video_link="https://www.youtube.com/embed/lcwmDAYt22k",
-            recommender_id=2,
+            recommender_id=recommender_id,
         )
         robocop = Movie(
             slug="robocop1987",
             title="Robocop",
             year=1987,
             video_link="https://www.youtube.com/embed/6tC_5mp3udE",
-            recommender_id=2,
+            recommender_id=recommender_id,
         )
         exorcist = Movie(
             slug="theexorcist1973",
             title="The Exorcist",
             year=1973,
             video_link="https://www.youtube.com/embed/jyW5YXDcIGs",
-            recommender_id=2,
+            recommender_id=recommender_id,
         )
 
         for movie in [marypoppins, bumblebee, robocop, exorcist]:
             db.session.add(movie)
         db.session.commit()
 
-    def add_4_recommendations_with_no_trailer_on_backend(self):
+    def add_4_recommendations_with_no_trailer_on_backend(self, recommender_id):
 
         taxidriver = Movie(
-            slug="taxidriver1976", title="Taxi Driver", year=1976, recommender_id=2
+            slug="taxidriver1976",
+            title="Taxi Driver",
+            year=1976,
+            recommender_id=recommender_id,
         )
         thegodfather = Movie(
-            slug="thegodfather1972", title="The Godfather", year=1972, recommender_id=2
+            slug="thegodfather1972",
+            title="The Godfather",
+            year=1972,
+            recommender_id=recommender_id,
         )
-        rocky = Movie(slug="rocky1976", title="Rocky", year=1976, recommender_id=2)
+        rocky = Movie(
+            slug="rocky1976", title="Rocky", year=1976, recommender_id=recommender_id
+        )
         starwars = Movie(
             slug="starwarsanewhope1977",
             title="Star Wars: A New Hope",
             year=1977,
-            recommender_id=2,
+            recommender_id=recommender_id,
         )
         for movie in [taxidriver, thegodfather, rocky, starwars]:
             db.session.add(movie)
@@ -1643,7 +1651,7 @@ class EndToEndTest(LiveServerTestCase):
             == find_admin_titles_in_text(displayed_text)
         )
 
-        # arrow up. arrow back. check sort by year
+        # arrow up. arrow back.
         for i in range(6):
             driver.find_element_by_xpath(
                 "//button[@data-test='genres-forward-button']"
@@ -1654,6 +1662,8 @@ class EndToEndTest(LiveServerTestCase):
                 "//button[@data-test='genres-back-button']"
             ).click()
             time.sleep(1)
+
+        # check sort by year
         self.click_sort(driver, "year")
         genre_shown = driver.find_element_by_xpath(
             "//h2[@data-test='selected-genre']"
@@ -1719,24 +1729,78 @@ class EndToEndTest(LiveServerTestCase):
             save_button.click()
             time.sleep(2)
 
-        # check /usermovies
-        self.click_through_menu_to(driver, "usermovies")
-        saved_data = [
-            ["the39steps1935", "The 39 Steps", "1935"],
-            ["goon2011", "Goon", "2011"],
-            ["theinvitation2015", "The Invitation", "2015"],
-            ["thelaststarfighter1984", "The Last Starfighter", "1984"],
-        ]
-        self.check_usermovies_saved_text(driver, saved_data)
-        self.check_usermovies_saved_elements_exist(driver, saved_data)
-        ordered_saved_titles = [x[1] for x in saved_data]
-        self.check_usermovies_saved_order(driver, ordered_saved_titles)
-
-        # recommend a few movies (with trailers and without)
+        # recommend movies without trailers
         self.click_through_menu_to(driver, "recommend")
+        self.search_and_recommend(driver, "Drive")
+        self.expect_modal(driver, "Thank you for suggesting!")
+        self.search_and_recommend(driver, "Back to the Future")
+        self.expect_modal(driver, "Thank you for suggesting!")
 
-        # check /usermovies again (check order of all items)
-        # check /usersuggestions
+        # recommend a movie with trailer
+        self.search_and_recommend(driver, "Ghostbusters")
+        self.expect_modal(driver, "Thank you for suggesting!")
+        ghostbusters = Movie.query.filter_by(slug="ghostbusters1984").first()
+        ghostbusters.video_link = "https://www.youtube.com/embed/6hDkhw5Wkas"
+        db.session.commit()
+        driver.refresh()
+
+        # check order at /usermovies
+        driver.refresh()
+        self.click_through_menu_to(driver, "usermovies")
+
+        user_movies_all_titles = [
+            "The 39 Steps",
+            "Goon",
+            "The Invitation",
+            "The Last Starfighter",
+            "Ghostbusters",
+            "Back to the Future",
+            "Drive",
+        ]
+        all_usermovies_text = driver.find_element_by_xpath(
+            "//div[@data-test='user-movies-full-page-wrapper']"
+        ).text
+        displayed_titles = find_titles_in_text(
+            user_movies_all_titles, all_usermovies_text
+        )
+        self.assertTrue(user_movies_all_titles == displayed_titles)
+        time.sleep(3)
+
+        # sign out
+        self.click_through_menu_to(driver, "signout")
+
+        # create and sign in user 2
+        self.create_user_and_sign_in(
+            driver, "monkey", "monkeypassword", email="monkey@cat.com"
+        )
+        self.add_4_recommendations_with_trailer_on_backend(3)
+        self.add_4_recommendations_with_no_trailer_on_backend(3)
+        driver.refresh()
+
+        # check order at /usersuggestions
+        self.click_through_menu_to(driver, "usersuggestions")
+
+        user_suggestions_all_titles = [
+            "Bumblebee",
+            "The Exorcist",
+            "Ghostbusters",
+            "Mary Poppins",
+            "Robocop",
+            "Back to the Future",
+            "Drive",
+            "The Godfather",
+            "Rocky",
+            "Star Wars: A New Hope",
+            "Taxi Driver",
+        ]
+        all_usersuggested_text = driver.find_element_by_xpath(
+            "//div[@data-test='user-suggested']"
+        ).text
+        displayed_titles = find_titles_in_text(
+            user_suggestions_all_titles, all_usersuggested_text
+        )
+        self.assertTrue(user_suggestions_all_titles == displayed_titles)
+        time.sleep(3)
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@ class UserMovies extends Component {
     userSuggestionsNoTrailers.sort(this.props.compareTitle);
 
     return (
-      <div>
+      <div data-test="user-movies-full-page-wrapper">
         {this.props.redirect}
 
         <Link to={"/"}>
