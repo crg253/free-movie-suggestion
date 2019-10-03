@@ -91,12 +91,14 @@ class UserSuggestions extends Component {
                   {film.year}
                 </p>
               </div>
+
               <p
                 data-test={"user-suggestion-trailer-comment-" + film.slug}
                 className="suggested-by-title"
               >
                 Suggested by {film.recommendedBy}
               </p>
+
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 {this.getSuggSaveButton(film.slug)}
               </div>
@@ -127,6 +129,7 @@ class UserSuggestions extends Component {
                   {film.year}
                 </p>
               </div>
+
               <p
                 data-test={"user-suggestion-card-comment-" + film.slug}
                 className="suggested-by-title"

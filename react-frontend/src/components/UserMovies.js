@@ -58,6 +58,7 @@ class UserMovies extends Component {
                 src={film.video}
                 allowFullScreen
               />
+
               <div className="saved-or-suggested-title-year">
                 <p data-test={"saved-title-" + film.slug}>{film.title}</p>
                 <p
@@ -67,6 +68,7 @@ class UserMovies extends Component {
                   {film.year}
                 </p>
               </div>
+
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
                   data-test={"saved-unsave-button-" + film.slug}
@@ -104,6 +106,7 @@ class UserMovies extends Component {
                 src={film.video}
                 allowFullScreen
               />
+
               <div className="saved-or-suggested-title-year">
                 <p data-test={"own-suggestion-trailer-title-" + film.slug}>
                   {film.title}
@@ -115,6 +118,7 @@ class UserMovies extends Component {
                   {film.year}
                 </p>
               </div>
+
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
                   data-test={
@@ -152,6 +156,7 @@ class UserMovies extends Component {
                   {film.year}
                 </p>
               </div>
+
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 <button
                   data-test={

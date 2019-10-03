@@ -19,10 +19,10 @@ savers = db.Table(
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    slug = db.Column(db.String(200), unique=True, nullable=False)
-    title = db.Column(db.String(200), nullable=False)
+    slug = db.Column(db.Text, unique=True, nullable=False)
+    title = db.Column(db.Text, nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    video_link = db.Column(db.String(1000))
+    video_link = db.Column(db.Text, unique=True)
     tags = db.relationship(
         "Tag", secondary=tags, lazy="subquery", backref=db.backref("movies", lazy=True)
     )
@@ -37,15 +37,15 @@ class Movie(db.Model):
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), unique=True, nullable=False)
+    name = db.Column(db.Text, unique=True, nullable=False)
 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True, unique=True, nullable=False)
-    email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128), nullable=False)
-    token = db.Column(db.String(32), index=True, unique=True)
+    name = db.Column(db.Text, index=True, unique=True, nullable=False)
+    email = db.Column(db.Text, index=True, unique=True)
+    password_hash = db.Column(db.Text, nullable=False)
+    token = db.Column(db.Text, index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     recommendations = db.relationship("Movie", backref="recommended_by", lazy=True)
 

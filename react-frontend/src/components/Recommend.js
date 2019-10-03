@@ -51,7 +51,7 @@ class Recommend extends Component {
           SearchResultOptions: [],
           Message: (
             <MessageModal
-              message="Sorry, movie already selected."
+              message="Sorry, movie already selected, or not available."
               buttonMessage="Fine be that way"
             />
           )

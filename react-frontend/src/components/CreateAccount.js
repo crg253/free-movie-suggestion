@@ -50,7 +50,7 @@ class CreateAccount extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, username not available."
+              message="Sorry, username not available, or not able to process."
               buttonMessage="Fine be that way"
             />
           ),
