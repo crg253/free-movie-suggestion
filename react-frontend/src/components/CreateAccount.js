@@ -46,11 +46,23 @@ class CreateAccount extends Component {
         email: this.state.Email
       })
     }).then(res => {
-      if (!res.ok) {
+      if (res.status == 401) {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, username not available, or not able to process."
+              message="Sorry, not able to process username or password."
+              buttonMessage="Fine be that way"
+            />
+          ),
+          Name: "",
+          Password: "",
+          Email: ""
+        });
+      } else if (res.status == 500) {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Sorry, username not available, or email in use."
               buttonMessage="Fine be that way"
             />
           ),
