@@ -85,7 +85,6 @@ class DeleteAccount extends Component {
               />
               <input
                 data-test="delete-account-password-input"
-                type="text"
                 placeholder="Password"
                 type="password"
                 value={this.state.Password}

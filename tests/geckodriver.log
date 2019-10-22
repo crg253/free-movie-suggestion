@@ -11200,3 +11200,11 @@ JavaScript error: https://www.youtube.com/yts/jsbin/player_ias-vfleGIwAA/en_US/b
 1570083558295	Marionette	INFO	Listening on port 59500
 1570083558358	Marionette	WARN	TLS certificate errors will be ignored for this session
 1570083689216	Marionette	INFO	Stopped listening on port 59500
+1570839679767	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/pw/hcj16hj94hxfx3hlcy21p2gc0000gn/T/rust_mozprofile.rpnKQGkNziUs"
+1570839681855	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1570839681856	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1570839681856	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1570839681856	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1570839687293	Marionette	INFO	Listening on port 49987
+1570839687452	Marionette	WARN	TLS certificate errors will be ignored for this session
+1570839819824	Marionette	INFO	Stopped listening on port 49987

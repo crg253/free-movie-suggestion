@@ -1632,11 +1632,8 @@ class EndToEndTest(LiveServerTestCase):
     # test_h redirect USER 2
     # def test_redirect_user_2_save_user_1_movie_usersuggestions
 
-    # test_j miscellaneous
-    # def test_page_refresh
-
     # test_k user flow
-    def test_user_flow_1(self):
+    def test_user_flow(self):
 
         driver = self.driver
         self.add_user_1_and_101_movies()

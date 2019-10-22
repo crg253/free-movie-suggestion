@@ -52,7 +52,7 @@ def get_movies():
 def create_account():
     data = request.get_json(silent=True) or {}
     if len(data.get("name")) == 0 or len(data.get("password")) < 6:
-        abort(401)
+        abort(400)
     new_user = User(name=data.get("name"))
     if data.get("email"):
         new_user.email = data.get("email")

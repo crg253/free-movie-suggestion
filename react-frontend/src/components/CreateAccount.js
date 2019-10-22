@@ -46,7 +46,7 @@ class CreateAccount extends Component {
         email: this.state.Email
       })
     }).then(res => {
-      if (res.status == 401) {
+      if (res.status === 400) {
         this.setState({
           Message: (
             <MessageModal
@@ -58,7 +58,7 @@ class CreateAccount extends Component {
           Password: "",
           Email: ""
         });
-      } else if (res.status == 500) {
+      } else if (res.status === 500) {
         this.setState({
           Message: (
             <MessageModal
@@ -70,7 +70,7 @@ class CreateAccount extends Component {
           Password: "",
           Email: ""
         });
-      } else {
+      } else if (res.status === 200) {
         this.setState({
           Message: (
             <MessageModal
@@ -114,7 +114,6 @@ class CreateAccount extends Component {
 
             <input
               data-test="create-account-password-input"
-              type="text"
               placeholder="Password"
               type="password"
               value={this.state.Password}

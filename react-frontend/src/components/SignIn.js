@@ -120,7 +120,6 @@ class SignIn extends Component {
 
             <input
               data-test="signin-password-input"
-              type="text"
               placeholder="Password"
               type="password"
               value={this.state.Password}

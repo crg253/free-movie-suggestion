@@ -32,6 +32,12 @@ class EditAccount extends Component {
     });
   };
 
+  isDisabled = () => {
+    return (
+      this.state.NewPassword.length > 0 && this.state.NewPassword.length < 6
+    );
+  };
+
   handleUpdateAccount = event => {
     event.preventDefault();
     fetch("/api/editaccount", {
@@ -97,7 +103,6 @@ class EditAccount extends Component {
               />
               <input
                 data-test="edit-account-password-input"
-                type="text"
                 placeholder="Password"
                 type="password"
                 value={this.state.NewPassword}
@@ -108,6 +113,7 @@ class EditAccount extends Component {
                 type="submit"
                 value="Update"
                 className="form-submit-button"
+                disabled={this.isDisabled()}
               />
             </form>
           </div>
