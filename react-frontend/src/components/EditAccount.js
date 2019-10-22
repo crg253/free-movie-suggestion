@@ -34,7 +34,10 @@ class EditAccount extends Component {
 
   isDisabled = () => {
     return (
-      this.state.NewPassword.length > 0 && this.state.NewPassword.length < 6
+      (this.state.NewName.length === 0 &&
+        this.state.NewEmail.length === 0 &&
+        this.state.NewPassword.length === 0) ||
+      (this.state.NewPassword.length > 0 && this.state.NewPassword.length < 6)
     );
   };
 
