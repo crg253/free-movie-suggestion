@@ -135,6 +135,7 @@ class CreateAccount extends Component {
               <span style={{color: "#a9a9a9"}}>in</span>
             </h1>
           </Link>
+          <p>* Email optional. Used for password reset only</p>
         </div>
         {/* class="user-pages-body-wrapper"*/}
         <div data-test="create-account-message-modal">{this.state.Message}</div>
