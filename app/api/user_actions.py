@@ -152,19 +152,19 @@ def suggest_movie():
     movie = Movie(slug=slug, title=title, year=year, recommender_id=g.current_user.id)
     db.session.add(movie)
     db.session.commit()
-    msg = Message(
-        "New Suggestion",
-        sender="admin@freemoviesuggestion.com",
-        recipients=["admin@freemoviesuggestion.com"],
-    )
-    msg.body = (
-        g.current_user.name
-        + " recommended "
-        + data.get("title")
-        + " "
-        + data.get("year")
-    )
-    mail.send(msg)
+    # msg = Message(
+    #     "New Suggestion",
+    #     sender="admin@freemoviesuggestion.com",
+    #     recipients=["admin@freemoviesuggestion.com"],
+    # )
+    # msg.body = (
+    #     g.current_user.name
+    #     + " recommended "
+    #     + data.get("title")
+    #     + " "
+    #     + data.get("year")
+    # )
+    # mail.send(msg)
     return "", 200
 
 

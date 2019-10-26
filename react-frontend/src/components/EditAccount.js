@@ -60,6 +60,30 @@ class EditAccount extends Component {
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("editaccount");
         this.props.setRedirect(<Redirect to="/signin" />);
+      } else if (res.status === 400) {
+        this.setState({
+          NewName: "",
+          NewEmail: "",
+          NewPassword: "",
+          Message: (
+            <MessageModal
+              message="Sorry, not able to process username or password."
+              buttonMessage="Fine be that way"
+            />
+          )
+        });
+      } else if (res.status === 500) {
+        this.setState({
+          NewName: "",
+          NewEmail: "",
+          NewPassword: "",
+          Message: (
+            <MessageModal
+              message="Sorry, username not available, or email in use."
+              buttonMessage="Fine be that way"
+            />
+          )
+        });
       } else if (res.status === 200) {
         this.setState({
           NewName: "",
