@@ -260,6 +260,8 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.User);
+
     return (
       <RoutingComponent
         movies={this.state.Movies}

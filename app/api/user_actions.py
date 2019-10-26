@@ -23,7 +23,10 @@ def get_user():
     if user == None:
         return (jsonify({"user": {"name": "", "email": ""}}), 200)
     else:
-        return (jsonify({"user": {"name": user.name, "email": user.email}}), 200)
+        if user.email:
+            return (jsonify({"user": {"name": user.name, "email": user.email}}), 200)
+        else:
+            return (jsonify({"user": {"name": user.name, "email": ""}}), 200)
 
 
 @bp.route("/getmovies", methods=["POST"])

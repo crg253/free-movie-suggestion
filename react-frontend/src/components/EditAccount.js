@@ -100,13 +100,17 @@ class EditAccount extends Component {
               <input
                 data-test="edit-account-email-input"
                 type="text"
-                placeholder={this.props.user.email}
+                placeholder={
+                  this.props.user.email.length > 0
+                    ? this.props.user.email
+                    : "no email provided"
+                }
                 value={this.state.NewEmail}
                 onChange={this.handleNewEmailChange}
               />
               <input
                 data-test="edit-account-password-input"
-                placeholder="Password"
+                placeholder="password hidden"
                 type="password"
                 value={this.state.NewPassword}
                 onChange={this.handleNewPasswordChange}
