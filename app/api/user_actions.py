@@ -100,7 +100,10 @@ def edit_account():
     if data.get("newEmail"):
         user.email = data.get("newEmail")
     if data.get("newPassword"):
-        user.set_password(data.get("newPassword"))
+        if len(data.get("newPassword")) < 6:
+            abort(400)
+        else:
+            user.set_password(data.get("newPassword"))
     db.session.commit()
     return "", 200
 
