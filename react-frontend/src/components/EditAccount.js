@@ -117,7 +117,11 @@ class EditAccount extends Component {
               <input
                 data-test="edit-account-username-input"
                 type="text"
-                placeholder={this.props.user.name}
+                placeholder={
+                  this.props.user.name.length > 0
+                    ? this.props.user.name
+                    : "no name provided"
+                }
                 value={this.state.NewName}
                 onChange={this.handleNewNameChange}
               />
@@ -134,7 +138,7 @@ class EditAccount extends Component {
               />
               <input
                 data-test="edit-account-password-input"
-                placeholder="password hidden"
+                placeholder="password"
                 type="password"
                 value={this.state.NewPassword}
                 onChange={this.handleNewPasswordChange}
