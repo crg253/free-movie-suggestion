@@ -18,6 +18,10 @@ class ResetPassword extends Component {
     });
   };
 
+  isDisabled = () => {
+    return this.state.Email.length === 0;
+  };
+
   handlePasswordReset = event => {
     event.preventDefault();
     fetch("/api/resetpassword", {
@@ -68,6 +72,7 @@ class ResetPassword extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
+              disabled={this.isDisabled()}
             />
           </form>
 
