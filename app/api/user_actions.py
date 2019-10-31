@@ -175,9 +175,11 @@ def remove_suggestion():
     slug = data.get("slug")
     movie_to_unsuggest = Movie.query.filter_by(slug=data.get("slug")).first()
     user = User.query.filter_by(name=g.current_user.name).first()
+    if movie_to_unsuggest == None:
+        return "", 500
+    if movie_to_unsuggest not in user.recommendations:
+        return "", 500
     if movie_to_unsuggest in user.recommendations:
         db.session.delete(movie_to_unsuggest)
         db.session.commit()
         return "", 200
-    else:
-        return "", 401
