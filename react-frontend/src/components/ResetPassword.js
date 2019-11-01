@@ -72,7 +72,7 @@ class ResetPassword extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              // disabled={this.isDisabled()}
+              disabled={this.isDisabled()}
             />
           </form>
 

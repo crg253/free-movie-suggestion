@@ -25,6 +25,10 @@ class DeleteAccount extends Component {
     });
   };
 
+  isDisabled = () => {
+    return this.state.Name.length === 0 || this.state.Password.length < 6;
+  };
+
   handleDeleteAccount = event => {
     let headers = new Headers();
     headers.set(
@@ -96,6 +100,7 @@ class DeleteAccount extends Component {
                 value="Delete"
                 style={{backgroundColor: "#B22222"}}
                 className="form-submit-button"
+                disabled={this.isDisabled()}
               />
             </form>
           </div>
