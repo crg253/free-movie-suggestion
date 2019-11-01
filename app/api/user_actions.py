@@ -77,6 +77,9 @@ def sign_in():
 def reset_password():
     data = request.get_json(silent=True) or {}
     email = data.get("email")
+    if email == None or len(email) == 0:
+        print("400")
+        abort(400)
     user = User.query.filter_by(email=email).first()
     if user == None:
         abort(401)

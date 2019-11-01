@@ -29,7 +29,7 @@ class ResetPassword extends Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email: this.state.Email})
     }).then(res => {
-      if (!res.ok) {
+      if (res.status === 400 || res.status === 401) {
         this.setState({
           Message: (
             <MessageModal
@@ -72,7 +72,7 @@ class ResetPassword extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              disabled={this.isDisabled()}
+              // disabled={this.isDisabled()}
             />
           </form>
 

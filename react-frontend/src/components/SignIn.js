@@ -44,7 +44,7 @@ class SignIn extends Component {
       method: "POST",
       headers: headers
     }).then(res => {
-      if (res.status === 401) {
+      if (res.status === 400 || res.status === 401) {
         this.setState({
           Name: "",
           Password: "",
