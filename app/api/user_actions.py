@@ -8,6 +8,9 @@ import string
 import random
 
 
+acceptable_characters = string.ascii_letters + string.digits + string.punctuation
+
+
 def slugify(slug):
     to_remove = [" ", "'", ",", "!", ".", ":", "&", "-"]
     for item in to_remove:
@@ -54,12 +57,26 @@ def get_movies():
 @bp.route("/createaccount", methods=["POST"])
 def create_account():
     data = request.get_json(silent=True) or {}
-    if len(data.get("name")) == 0 or len(data.get("password")) < 6:
+    name = data.get("name")
+    password = data.get("password")
+    if len(name) == 0 or name == None:
+        print("name too short")
         abort(400)
-    new_user = User(name=data.get("name"))
+    if len(password) < 6 or password == None:
+        print("password too short")
+        abort(400)
+    for char in name:
+        if char not in acceptable_characters:
+            print("unacceptable char in name")
+            abort(400)
+    for char in password:
+        if char not in acceptable_characters:
+            print("unacceptable char in password")
+            abort(400)
+    new_user = User(name=name)
     if data.get("email"):
         new_user.email = data.get("email")
-    new_user.set_password(data.get("password"))
+    new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
     return "", 200
