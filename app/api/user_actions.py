@@ -6,6 +6,7 @@ from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
 import random
+from types import *
 
 
 acceptable_characters = string.ascii_letters + string.digits + string.punctuation
@@ -14,20 +15,14 @@ acceptable_characters = string.ascii_letters + string.digits + string.punctuatio
 def validate_name_and_password(data):
     name = data.get("name")
     password = data.get("password")
-    if len(name) == 0 or name == None:
-        print("name too short")
+    if type(name) is not str or type(password) is not str:
         abort(400)
-    if len(password) < 6 or password == None:
-        print("password too short")
+    if len(name) == 0 or len(password) < 6:
         abort(400)
-    for char in name:
-        if char not in acceptable_characters:
-            print("unacceptable char in name")
-            abort(400)
-    for char in password:
-        if char not in acceptable_characters:
-            print("unacceptable char in password")
-            abort(400)
+    bad_name_char = [x not in acceptable_characters for x in name]
+    bad_pass_char = [x not in acceptable_characters for x in password]
+    if len(bad_name_char) > 0 or len(bad_pass_char) > 0:
+        abort(400)
 
 
 def slugify(slug):
