@@ -8,21 +8,27 @@ import string
 import random
 from types import *
 
-
 acceptable_characters = string.ascii_letters + string.digits + string.punctuation
 
 
-def validate_name_and_password(data):
-    name = data.get("name")
-    password = data.get("password")
-    if type(name) is not str or type(password) is not str:
+def validate_name(name):
+    if type(name) is not str:
         abort(400)
-    if len(name) == 0 or len(password) < 6:
+    if len(name) == 0:
         abort(400)
-    bad_name_char = [x not in acceptable_characters for x in name]
-    bad_pass_char = [x not in acceptable_characters for x in password]
-    if len(bad_name_char) > 0 or len(bad_pass_char) > 0:
+    for char in name:
+        if char not in acceptable_characters:
+            abort(400)
+
+
+def validate_password(password):
+    if type(password) is not str:
         abort(400)
+    if len(password) < 6:
+        abort(400)
+    for char in password:
+        if char not in acceptable_characters:
+            abort(400)
 
 
 def slugify(slug):
@@ -71,9 +77,12 @@ def get_movies():
 @bp.route("/createaccount", methods=["POST"])
 def create_account():
     data = request.get_json(silent=True) or {}
-    validate_name_and_password(data)
-    new_user = User(name=data.get("name"))
-    new_user.set_password(data.get("password"))
+    name = data.get("name")
+    password = data.get("password")
+    validate_name(name)
+    validate_password(password)
+    new_user = User(name=name)
+    new_user.set_password(password)
     if data.get("email"):
         new_user.email = data.get("email")
     db.session.add(new_user)
