@@ -10,7 +10,6 @@ token_auth = HTTPTokenAuth()
 
 @basic_auth.verify_password
 def verify_password(name, password):
-    # should never need next 2 lines in normal usage
     if name is None or len(name) == 0 or password is None or len(password) < 6:
         abort(400)
     user = User.query.filter_by(name=name).first()

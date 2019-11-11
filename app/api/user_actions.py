@@ -65,7 +65,8 @@ def create_account():
         db.session.add(new_user)
         db.session.commit()
         return "", 200
-    return "", 400
+    else:
+        return "", 400
 
 
 @bp.route("/signin", methods=["POST"])
