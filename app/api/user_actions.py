@@ -2,33 +2,12 @@ from flask import jsonify, render_template, request, g, abort
 from flask_mail import Message
 from app import db, mail
 from app.models import Movie, Tag, User
+from app.forms import CreateAccountForm
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
 import random
 from types import *
-
-acceptable_characters = string.ascii_letters + string.digits + string.punctuation
-
-
-def validate_name(name):
-    if type(name) is not str:
-        abort(400)
-    if len(name) == 0:
-        abort(400)
-    for char in name:
-        if char not in acceptable_characters:
-            abort(400)
-
-
-def validate_password(password):
-    if type(password) is not str:
-        abort(400)
-    if len(password) < 6:
-        abort(400)
-    for char in password:
-        if char not in acceptable_characters:
-            abort(400)
 
 
 def slugify(slug):
@@ -77,17 +56,16 @@ def get_movies():
 @bp.route("/createaccount", methods=["POST"])
 def create_account():
     data = request.get_json(silent=True) or {}
-    name = data.get("name")
-    password = data.get("password")
-    validate_name(name)
-    validate_password(password)
-    new_user = User(name=name)
-    new_user.set_password(password)
-    if data.get("email"):
-        new_user.email = data.get("email")
-    db.session.add(new_user)
-    db.session.commit()
-    return "", 200
+    form = CreateAccountForm(
+        name=data.get("name"), email=data.get("password"), password=data.get("password")
+    )
+    if form.validate():
+        new_user = User(name=form.name.data, email=form.email.data)
+        new_user.set_password(form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        return "", 200
+    return "", 400
 
 
 @bp.route("/signin", methods=["POST"])
