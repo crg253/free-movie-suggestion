@@ -44,7 +44,7 @@ class SignIn extends Component {
       method: "POST",
       headers: headers
     }).then(res => {
-      if (res.status === 400 || res.status === 401) {
+      if (res.status === 400 || res.status === 401 || res.status === 500) {
         this.setState({
           Name: "",
           Password: "",
@@ -135,7 +135,7 @@ class SignIn extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              disabled={this.isDisabled()}
+              // disabled={this.isDisabled()}
             />
           </form>
 
