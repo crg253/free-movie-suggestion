@@ -12,6 +12,10 @@ class SignInForm(Form):
     password = PasswordField("password", [validators.Length(min=6)])
 
 
+class TokenForm(Form):
+    token = StringField("token")
+
+
 class ResetPasswordForm(Form):
     email = StringField("email")
 
