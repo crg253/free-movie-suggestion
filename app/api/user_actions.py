@@ -2,7 +2,12 @@ from flask import jsonify, render_template, request, g, abort
 from flask_mail import Message
 from app import db, mail
 from app.models import Movie, Tag, User
-from app.forms import CreateAccountForm
+from app.forms import (
+    CreateAccountForm,
+    ChangeNameForm,
+    ChangeEmailForm,
+    ChangePasswordForm,
+)
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
@@ -104,17 +109,37 @@ def reset_password():
 def edit_account():
     data = request.get_json(silent=True) or {}
     user = User.query.filter_by(name=g.current_user.name).first()
-    if data.get("newName"):
-        user.name = data.get("newName")
-    if data.get("newEmail"):
-        user.email = data.get("newEmail")
-    if data.get("newPassword"):
-        if len(data.get("newPassword")) < 6:
-            abort(400)
-        else:
-            user.set_password(data.get("newPassword"))
-    db.session.commit()
-    return "", 200
+
+    new_name = data.get("newName")
+    change_name_form = ChangeNameForm(name=new_name)
+    new_email = data.get("newEmail")
+    change_email_form = ChangeEmailForm(email=new_email)
+    new_password = data.get("newPassword")
+    change_password_form = ChangePasswordForm(password=new_password)
+
+    if (
+        change_name_form.validate()
+        or change_email_form.validate()
+        or change_password_form.validate()
+    ):
+
+        if change_name_form.validate():
+            print("new name")
+            user.name = new_name
+
+        if change_email_form.validate():
+            print("new email")
+            user.email = new_email
+
+        if change_password_form.validate():
+            print("new password")
+            user.set_password(new_password)
+
+        db.session.commit()
+        return "", 200
+    else:
+        print("no new inputs")
+        abort(400)
 
 
 @bp.route("/deleteaccount", methods=["DELETE"])

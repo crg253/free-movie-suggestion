@@ -144,7 +144,7 @@ class EditAccount extends Component {
                 type="submit"
                 value="Update"
                 className="form-submit-button"
-                // disabled={this.isDisabled()}
+                disabled={this.isDisabled()}
               />
             </form>
           </div>
