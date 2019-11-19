@@ -13,13 +13,13 @@ token_auth = HTTPTokenAuth()
 def verify_password(name, password):
     form = SignInForm(name=name, password=password)
     if form.validate():
-        users_list = User.query.filter_by(name=name).all()
-        if len(users_list) > 1:
+        all_users = User.query.filter_by(name=name).all()
+        if len(all_users) > 1:
             abort(500)
-        elif len(users_list) == 0:
+        elif len(all_users) == 0:
             return False
         else:
-            user = users_list[0]
+            user = all_users[0]
             g.current_user = user
             return user.check_password(password)
     else:

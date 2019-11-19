@@ -45,7 +45,7 @@ class Recommend extends Component {
       },
       body: JSON.stringify({title: title, year: year})
     }).then(res => {
-      if (res.status === 500) {
+      if (res.status === 500 || res.status === 400) {
         this.setState({
           SearchValue: "",
           SearchResultOptions: [],

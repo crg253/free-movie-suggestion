@@ -7,6 +7,7 @@ from app.forms import (
     ChangeNameForm,
     ChangeEmailForm,
     ChangePasswordForm,
+    SuggestMovieForm,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -124,21 +125,17 @@ def edit_account():
     ):
 
         if change_name_form.validate():
-            print("new name")
             user.name = new_name
 
         if change_email_form.validate():
-            print("new email")
             user.email = new_email
 
         if change_password_form.validate():
-            print("new password")
             user.set_password(new_password)
 
         db.session.commit()
         return "", 200
     else:
-        print("no new inputs")
         abort(400)
 
 
@@ -177,26 +174,32 @@ def unsave_movie():
 @token_auth.login_required
 def suggest_movie():
     data = request.get_json(silent=True) or {}
-    slug = slugify(data.get("title")).lower() + data.get("year")
     title = data.get("title")
     year = data.get("year")
-    movie = Movie(slug=slug, title=title, year=year, recommender_id=g.current_user.id)
-    db.session.add(movie)
-    db.session.commit()
-    # msg = Message(
-    #     "New Suggestion",
-    #     sender="admin@freemoviesuggestion.com",
-    #     recipients=["admin@freemoviesuggestion.com"],
-    # )
-    # msg.body = (
-    #     g.current_user.name
-    #     + " recommended "
-    #     + data.get("title")
-    #     + " "
-    #     + data.get("year")
-    # )
-    # mail.send(msg)
-    return "", 200
+    form = SuggestMovieForm(title=title, year=year)
+    if form.validate():
+        slug = slugify(data.get("title")).lower() + data.get("year")
+        movie = Movie(
+            slug=slug, title=title, year=year, recommender_id=g.current_user.id
+        )
+        db.session.add(movie)
+        db.session.commit()
+        # msg = Message(
+        #     "New Suggestion",
+        #     sender="admin@freemoviesuggestion.com",
+        #     recipients=["admin@freemoviesuggestion.com"],
+        # )
+        # msg.body = (
+        #     g.current_user.name
+        #     + " recommended "
+        #     + data.get("title")
+        #     + " "
+        #     + data.get("year")
+        # )
+        # mail.send(msg)
+        return "", 200
+    else:
+        abort(400)
 
 
 @bp.route("/removesuggestion", methods=["POST"])
