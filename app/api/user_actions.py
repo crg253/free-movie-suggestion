@@ -8,6 +8,7 @@ from app.forms import (
     ChangeEmailForm,
     ChangePasswordForm,
     SuggestMovieForm,
+    RemoveSuggestionForm,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -207,13 +208,16 @@ def suggest_movie():
 def remove_suggestion():
     data = request.get_json(silent=True) or {}
     slug = data.get("slug")
-    movie_to_unsuggest = Movie.query.filter_by(slug=data.get("slug")).first()
-    user = User.query.filter_by(name=g.current_user.name).first()
-    if movie_to_unsuggest == None:
-        return "", 500
-    if movie_to_unsuggest not in user.recommendations:
-        return "", 500
-    if movie_to_unsuggest in user.recommendations:
-        db.session.delete(movie_to_unsuggest)
-        db.session.commit()
-        return "", 200
+    form = RemoveSuggestionForm(slug=slug)
+    if form.validate():
+        movies_to_unsuggest = Movie.query.filter_by(slug=slug).all()
+        if len(movies_to_unsuggest) > 1 or len(movies_to_unsuggest) == 0:
+            abort(500)
+        if movies_to_unsuggest[0] not in g.current_user.recommendations:
+            abort(500)
+        else:
+            db.session.delete(movies_to_unsuggest[0])
+            db.session.commit()
+            return "", 200
+    else:
+        abort(400)

@@ -35,3 +35,7 @@ class ChangePasswordForm(Form):
 class SuggestMovieForm(Form):
     title = StringField("title", [validators.Length(min=1)])
     year = StringField("year", [validators.Length(min=4, max=4)])
+
+
+class RemoveSuggestionForm(Form):
+    slug = StringField("slug")

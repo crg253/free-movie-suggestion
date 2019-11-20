@@ -19,9 +19,6 @@ class UserMovies extends Component {
         this.props.setRedirectBackSlug("usermovies");
         this.props.setRedirect(<Redirect to="/signin" />);
       }
-      if (res.status === 500) {
-        window.location.reload(true);
-      }
     });
   };
 
