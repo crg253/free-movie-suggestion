@@ -10,6 +10,7 @@ from app.forms import (
     SuggestMovieForm,
     RemoveSuggestionForm,
     SaveMovieForm,
+    UnsaveMovieForm,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -176,10 +177,20 @@ def save_movie():
 @token_auth.login_required
 def unsave_movie():
     data = request.get_json(silent=True) or {}
-    movie_to_unsave = Movie.query.filter_by(slug=data.get("slug")).first()
-    g.current_user.saves.remove(movie_to_unsave)
-    db.session.commit()
-    return "", 200
+    slug = data.get("slug")
+    form = UnsaveMovieForm(slug=slug)
+    if form.validate():
+        movies_to_unsave = Movie.query.filter_by(slug=slug).all()
+        if len(movies_to_unsave) > 1 or len(movies_to_unsave) == 0:
+            abort(500)
+        if movies_to_unsave[0] not in g.current_user.saves:
+            abort(500)
+        else:
+            g.current_user.saves.remove(movies_to_unsave[0])
+            db.session.commit()
+            return "", 200
+    else:
+        abort(400)
 
 
 @bp.route("/suggestmovie", methods=["POST"])
