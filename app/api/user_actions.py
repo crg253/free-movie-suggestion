@@ -9,6 +9,7 @@ from app.forms import (
     ChangePasswordForm,
     SuggestMovieForm,
     RemoveSuggestionForm,
+    SaveMovieForm,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -155,10 +156,20 @@ def delete_account():
 @token_auth.login_required
 def save_movie():
     data = request.get_json(silent=True) or {}
-    movie_to_save = Movie.query.filter_by(slug=data.get("slug")).first()
-    g.current_user.saves.append(movie_to_save)
-    db.session.commit()
-    return "", 200
+    slug = data.get("slug")
+    form = SaveMovieForm(slug=slug)
+    if form.validate():
+        movies_to_save = Movie.query.filter_by(slug=slug).all()
+        if len(movies_to_save) > 1 or len(movies_to_save) == 0:
+            abort(500)
+        if movies_to_save[0] in g.current_user.saves:
+            abort(500)
+        else:
+            g.current_user.saves.append(movies_to_save[0])
+            db.session.commit()
+            return "", 200
+    else:
+        abort(400)
 
 
 @bp.route("/unsavemovie", methods=["POST"])

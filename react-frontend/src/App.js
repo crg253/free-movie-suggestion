@@ -110,6 +110,7 @@ class App extends Component {
       },
       body: JSON.stringify({slug: slug})
     }).then(res => {
+      this.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
       if (res.status === 401) {
         this.setState({
           RedirectBack: "",
@@ -117,9 +118,6 @@ class App extends Component {
           RedirectBackSlug: redirectBackSlug,
           Redirect: <Redirect to="/signin" />
         });
-        this.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
-      } else if (res.status === 200) {
-        this.handleGetAndSetUserAndMovies(localStorage.getItem("token"));
       }
     });
   };

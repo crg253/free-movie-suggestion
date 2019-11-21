@@ -39,3 +39,7 @@ class SuggestMovieForm(Form):
 
 class RemoveSuggestionForm(Form):
     slug = StringField("slug")
+
+
+class SaveMovieForm(Form):
+    slug = StringField("slug")
