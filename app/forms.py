@@ -1,14 +1,15 @@
 from wtforms import Form, PasswordField, StringField, validators, ValidationError
 
 
-def name_length_check(form, field):
-    if type(field.data) == str:
-        if len(field.data) < 1:
-            raise ValidationError()
+def name_type_and_length_check(form, field):
+    if type(field.data) != str:
+        raise ValidationError()
+    if len(field.data) == 0:
+        raise ValidationError()
 
 
 class CreateAccountForm(Form):
-    name = StringField("name", [name_length_check])
+    name = StringField("name", [name_type_and_length_check])
     email = StringField("email")
     password = PasswordField("password")
 

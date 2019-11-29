@@ -185,31 +185,21 @@ def create_users_movies_and_tags():
 
 
 def test_add_user_bad_name_type_num(test_client, init_db):
-    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-        create_users_movies_and_tags()
-    )
-    assert "6" not in [u.name for u in User.query.all()]
 
     j_data = json.dumps({"name": 6, "password": "6password", "email": ""})
     res = test_client.post(
         "/api/createaccount", data=j_data, content_type="application/json"
     )
-    assert res.status_code == 200
-    assert "6" in [u.name for u in User.query.all()]
+    assert res.status_code == 400
 
 
 def test_add_user_bad_name_type_bool(test_client, init_db):
-    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-        create_users_movies_and_tags()
-    )
-    assert "1" not in [u.name for u in User.query.all()]
 
     j_data = json.dumps({"name": True, "password": "Truepassword", "email": ""})
     res = test_client.post(
         "/api/createaccount", data=j_data, content_type="application/json"
     )
-    assert res.status_code == 200
-    assert "1" in [u.name for u in User.query.all()]
+    assert res.status_code == 400
 
 
 def test_add_user_bad_name_type_str_tooshort(test_client, init_db):
