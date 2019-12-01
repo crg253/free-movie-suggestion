@@ -10,6 +10,7 @@ from app import create_app, db
 from app.models import Movie, Tag, User
 from app.api.auth import verify_password, verify_token
 from config import DevConfig
+from werkzeug.security import generate_password_hash, check_password_hash
 
 import base64
 import json
@@ -92,24 +93,35 @@ def create_users_movies_and_tags():
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
 #     )
-#     assert verify_password("monkey", "monkeypassword") == True
-#     assert verify_password("bella", "bellapassword") == True
+#     assert verify_password(6, "monkeypassword") == False
+#     assert verify_password(True, "monkeypassword") == False
+#     assert verify_password("", "monkeypassword") == False
+#
+#     assert verify_password("monkey", 15) == False
+#     assert verify_password("monkey", False) == False
+#     assert verify_password("monkey", "monk") == False
+#
 #     assert verify_password("monkey", "bellapassword") == False
 #     assert verify_password("bella", "monkeypassword") == False
+#     assert verify_password("monkey", "monkeypassword") == True
+#     assert verify_password("bella", "bellapassword") == True
 
 
 # def test_verify_token(test_client, init_db):
-#     # only checks that token exists, not that it belongs to user
-#     # test_check_token will verify that token returns correct user
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
 #     )
+#     assert verify_token(4) == False
+#     assert verify_token(True) == False
+#
+#     assert verify_token("") == False
+#     assert verify_token(base64.b64encode(os.urandom(24)).decode("utf-8")) == False
+#     assert verify_token(base64.b64encode(os.urandom(24)).decode("utf-8")) == False
+#     assert verify_token(base64.b64encode(os.urandom(24)).decode("utf-8")) == False
+#
 #     assert verify_token(monkey.token) == True
 #     assert verify_token(bella.token) == True
 #     assert verify_token(hazel.token) == True
-#     assert verify_token(base64.b64encode(os.urandom(24)).decode("utf-8")) == False
-#     assert verify_token(base64.b64encode(os.urandom(24)).decode("utf-8")) == False
-#     assert verify_token(base64.b64encode(os.urandom(24)).decode("utf-8")) == False
 
 
 """ Test API Routes"""
@@ -122,8 +134,8 @@ def create_users_movies_and_tags():
 #     assert res.status_code == 200
 #     assert res.json["user"]["name"] == "monkey"
 #     assert res.json["user"]["email"] == "monkey@cat.com"
-#
-#
+
+
 # def test_get_user_no_email(test_client, init_db):
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
@@ -132,17 +144,17 @@ def create_users_movies_and_tags():
 #     res = test_client.post("/api/getuser", data=j_data, content_type="application/json")
 #     assert res.status_code == 200
 #     assert res.json["user"]["name"] == "bella"
-#     assert res.json["user"]["email"] == None
-#
-#
+#     assert res.json["user"]["email"] == ""
+
+
 # def test_get_no_user(test_client, init_db):
 #     j_data = json.dumps({"token": "nonworkingtoken"})
 #     res = test_client.post("/api/getuser", data=j_data, content_type="application/json")
 #     assert res.status_code == 200
 #     assert res.json["user"]["name"] == ""
 #     assert res.json["user"]["email"] == ""
-#
-#
+
+
 # def test_get_user_movies(test_client, init_db):
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
@@ -162,8 +174,8 @@ def create_users_movies_and_tags():
 #             assert movie["saved"] == True
 #         else:
 #             assert movie["saved"] == False
-#
-#
+
+
 # def test_get_no_user_movies(test_client, init_db):
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
@@ -180,52 +192,149 @@ def create_users_movies_and_tags():
 #     assert res.status_code == 200
 #     for movie in res.json["movies"]:
 #         assert movie["saved"] == False
+
+
+# test_add_user
+
+
+# def test_add_user_no_name(test_client, init_db):
 #
-#
-
-
-def test_add_user_bad_name_type_num(test_client, init_db):
-
-    j_data = json.dumps({"name": 6, "password": "6password", "email": ""})
-    res = test_client.post(
-        "/api/createaccount", data=j_data, content_type="application/json"
-    )
-    assert res.status_code == 400
-
-
-def test_add_user_bad_name_type_bool(test_client, init_db):
-
-    j_data = json.dumps({"name": True, "password": "Truepassword", "email": ""})
-    res = test_client.post(
-        "/api/createaccount", data=j_data, content_type="application/json"
-    )
-    assert res.status_code == 400
-
-
-def test_add_user_bad_name_type_str_tooshort(test_client, init_db):
-    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-        create_users_movies_and_tags()
-    )
-
-    j_data = json.dumps({"name": "", "password": "Truepassword", "email": ""})
-    res = test_client.post(
-        "/api/createaccount", data=j_data, content_type="application/json"
-    )
-    assert res.status_code == 400
-
-
-# def test_add_user(test_client, init_db):
-#     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-#         create_users_movies_and_tags()
+#     j_data = json.dumps({"password": "laurapassword", "email": "laura@email.com"})
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
 #     )
-#     assert "laura" not in [u.name for u in User.query.all()]
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_name_type_num(test_client, init_db):
+#
+#     j_data = json.dumps(
+#         {"name": 6, "password": "laurapassword", "email": "laura@email.com"}
+#     )
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_name_type_bool(test_client, init_db):
+#
+#     j_data = json.dumps(
+#         {"name": True, "password": "laurapassword", "email": "laura@email.com"}
+#     )
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_name_tooshort(test_client, init_db):
+#
+#     j_data = json.dumps(
+#         {"name": "", "password": "laurapassword", "email": "laura@email.com"}
+#     )
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_no_password(test_client, init_db):
+#
+#     j_data = json.dumps({"name": "laura", "email": "laura@email.com"})
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_password_type_num(test_client, init_db):
+#
+#     j_data = json.dumps({"name": "laura", "password": 7, "email": "laura@email.com"})
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_password_type_bool(test_client, init_db):
+#
+#     j_data = json.dumps(
+#         {"name": "laura", "password": False, "email": "laura@email.com"}
+#     )
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_password_type_str_tooshort(test_client, init_db):
+#
+#     j_data = json.dumps(
+#         {"name": "laura", "password": "short", "email": "laura@email.com"}
+#     )
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_no_email(test_client, init_db):
+#
+#     j_data = json.dumps({"name": "laura", "password": "laurapassword"})
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_email_type_num(test_client, init_db):
+#
+#     j_data = json.dumps({"name": "laura", "password": "laurapassword", "email": 15})
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_bad_email_type_bool(test_client, init_db):
+#
+#     j_data = json.dumps({"name": "laura", "password": "laurapassword", "email": False})
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#     assert res.status_code == 400
+
+
+# def test_add_user_email_len_zero(test_client, init_db):
 #
 #     j_data = json.dumps({"name": "laura", "password": "laurapassword", "email": ""})
 #     res = test_client.post(
 #         "/api/createaccount", data=j_data, content_type="application/json"
 #     )
-#     assert "laura" in [u.name for u in User.query.all()]
+#
+#     assert res.status_code == 200
+#     laura = User.query.filter_by(name="laura").first()
+#     assert laura.check_password("laurapassword") == True
+#     assert laura.email == ""
 
+
+# def test_add_user_w_email(test_client, init_db):
+#
+#     j_data = json.dumps(
+#         {"name": "laura", "password": "laurapassword", "email": "laura@email.com"}
+#     )
+#     res = test_client.post(
+#         "/api/createaccount", data=j_data, content_type="application/json"
+#     )
+#
+#     assert res.status_code == 200
+#     laura = User.query.filter_by(name="laura").first()
+#     assert laura.check_password("laurapassword") == True
+#     assert laura.email == "laura@email.com"
+
+
+""" BOOKMARK TESTS ALL WORK TO THIS POINT """
 
 # def test_sign_in(test_client, init_db):
 #     monkey = create_users_movies_and_tags()[0]

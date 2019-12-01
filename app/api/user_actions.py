@@ -66,7 +66,7 @@ def get_movies():
 def create_account():
     data = request.get_json(silent=True) or {}
     form = CreateAccountForm(
-        name=data.get("name"), email=data.get("password"), password=data.get("password")
+        name=data.get("name"), email=data.get("email"), password=data.get("password")
     )
     if form.validate():
         new_user = User(name=form.name.data, email=form.email.data)

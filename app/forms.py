@@ -8,19 +8,31 @@ def name_type_and_length_check(form, field):
         raise ValidationError()
 
 
+def string_type_check(form, field):
+    if type(field.data) != str:
+        raise ValidationError()
+
+
+def password_type_and_length_check(form, field):
+    if type(field.data) != str:
+        raise ValidationError()
+    if len(field.data) < 6:
+        raise ValidationError()
+
+
 class CreateAccountForm(Form):
     name = StringField("name", [name_type_and_length_check])
-    email = StringField("email")
-    password = PasswordField("password")
+    email = StringField("email", [string_type_check])
+    password = PasswordField("password", [password_type_and_length_check])
 
 
 class SignInForm(Form):
-    name = StringField("name", [validators.Length(min=1)])
-    password = PasswordField("password", [validators.Length(min=6)])
+    name = StringField("name", [name_type_and_length_check])
+    password = PasswordField("password", [password_type_and_length_check])
 
 
 class TokenForm(Form):
-    token = StringField("token")
+    token = StringField("token", [string_type_check])
 
 
 class ResetPasswordForm(Form):

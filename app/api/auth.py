@@ -15,7 +15,8 @@ def verify_password(name, password):
     if form.validate():
         all_users = User.query.filter_by(name=name).all()
         if len(all_users) > 1:
-            abort(500)
+            # might should be abort(500)
+            return False
         elif len(all_users) == 0:
             return False
         else:
@@ -23,7 +24,8 @@ def verify_password(name, password):
             g.current_user = user
             return user.check_password(password)
     else:
-        abort(400)
+        # might should be abort(400)
+        return False
 
 
 @basic_auth.error_handler
@@ -38,7 +40,7 @@ def verify_token(token):
         g.current_user = User.check_token(token)
         return g.current_user is not None
     else:
-        False
+        return False
 
 
 @token_auth.error_handler
