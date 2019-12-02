@@ -334,19 +334,27 @@ def create_users_movies_and_tags():
 #     assert laura.email == "laura@email.com"
 
 
-""" BOOKMARK TESTS ALL WORK TO THIS POINT """
+# def test_sign_in_fail(test_client, init_db):
+#     # username bella password bellapassword
+#     headers = {"Authorization": "Basic YmVsbGE6YmVsbGFwYXNzd29yZA=="}
+#     res = test_client.post("/api/signin", headers=headers)
+#     assert res.status_code == 401
 
-# def test_sign_in(test_client, init_db):
+
+# def test_sign_in_succeed(test_client, init_db):
 #     monkey = create_users_movies_and_tags()[0]
 #     headers = {"Authorization": "Basic bW9ua2V5Om1vbmtleXBhc3N3b3Jk"}
 #     res = test_client.post("/api/signin", headers=headers)
 #     assert res.status_code == 200
 #     assert res.json["token"] != None
-#
-#
-# # test_reset_password
-#
-#
+
+
+# test_reset_password
+
+
+""" BOOKMARK TESTS ALL WORK TO THIS POINT """
+
+
 # def test_update_account(test_client, init_db):
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
