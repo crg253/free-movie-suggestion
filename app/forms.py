@@ -1,19 +1,19 @@
 from wtforms import Form, PasswordField, StringField, validators, ValidationError
 
 
-def name_type_and_length_check(form, field):
+def string_type_check(form, field):
+    if type(field.data) != str:
+        raise ValidationError()
+
+
+def string_type_some_length_check(form, field):
     if type(field.data) != str:
         raise ValidationError()
     if len(field.data) == 0:
         raise ValidationError()
 
 
-def string_type_check(form, field):
-    if type(field.data) != str:
-        raise ValidationError()
-
-
-def password_type_and_length_check(form, field):
+def string_type_password_length_check(form, field):
     if type(field.data) != str:
         raise ValidationError()
     if len(field.data) < 6:
@@ -21,14 +21,14 @@ def password_type_and_length_check(form, field):
 
 
 class CreateAccountForm(Form):
-    name = StringField("name", [name_type_and_length_check])
+    name = StringField("name", [string_type_some_length_check])
     email = StringField("email", [string_type_check])
-    password = PasswordField("password", [password_type_and_length_check])
+    password = PasswordField("password", [string_type_password_length_check])
 
 
 class SignInForm(Form):
-    name = StringField("name", [name_type_and_length_check])
-    password = PasswordField("password", [password_type_and_length_check])
+    name = StringField("name", [string_type_some_length_check])
+    password = PasswordField("password", [string_type_password_length_check])
 
 
 class TokenForm(Form):
@@ -40,15 +40,15 @@ class ResetPasswordForm(Form):
 
 
 class ChangeNameForm(Form):
-    name = StringField("name", [validators.Length(min=1)])
+    name = StringField("name", [string_type_some_length_check])
 
 
 class ChangeEmailForm(Form):
-    email = StringField("email", [validators.Length(min=1)])
+    email = StringField("email", [string_type_some_length_check])
 
 
 class ChangePasswordForm(Form):
-    password = PasswordField("password", [validators.Length(min=6)])
+    password = PasswordField("password", [string_type_password_length_check])
 
 
 class SuggestMovieForm(Form):

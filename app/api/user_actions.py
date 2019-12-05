@@ -69,7 +69,11 @@ def create_account():
         name=data.get("name"), email=data.get("email"), password=data.get("password")
     )
     if form.validate():
-        new_user = User(name=form.name.data, email=form.email.data)
+        new_user = User(name=form.name.data)
+        if len(form.email.data) > 0:
+            new_user.email = form.email.data
+        else:
+            new_user.email = None
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
