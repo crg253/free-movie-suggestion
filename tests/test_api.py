@@ -360,15 +360,29 @@ def test_sign_in_succeed(test_client, init_db):
 # test_reset_password
 
 
-""" BOOKMARK TESTS ALL WORK TO THIS POINT """
-
 # test_update_account
 
 
-def test_update_account_bad_name_num(test_client, init_db):
+def test_update_account_invalid_input_all_three(test_client, init_db):
     hazel = create_users_movies_and_tags()[2]
     headers = {"Authorization": "Bearer " + hazel.token}
-    j_data = json.dumps({"newName": "hazeldog", "newEmail": "", "newPassword": ""})
+    j_data = json.dumps({"newName": 7, "newEmail": True, "newPassword": ""})
+    res = test_client.post(
+        "/api/editaccount",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+    assert hazel.name == "hazel"
+    assert hazel.email == None
+    assert hazel.check_password("hazelpassword") == True
+
+
+def test_update_account_name_valid(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"newName": "hazeldog", "newEmail": True, "newPassword": ""})
     res = test_client.post(
         "/api/editaccount",
         headers=headers,
@@ -381,78 +395,117 @@ def test_update_account_bad_name_num(test_client, init_db):
     assert hazel.check_password("hazelpassword") == True
 
 
-""" TOTAL 24 TESTS """
+def test_update_account_email_valid(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps(
+        {"newName": False, "newEmail": "hazel@dog.com", "newPassword": 65}
+    )
+    res = test_client.post(
+        "/api/editaccount",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert hazel.name == "hazel"
+    assert hazel.email == "hazel@dog.com"
+    assert hazel.check_password("hazelpassword") == True
 
-# def test_update_account(test_client, init_db):
-#     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-#         create_users_movies_and_tags()
-#     )
-#
-#     # 1. change just monkey username
-#     headers = {"Authorization": "Bearer " + monkey.token}
-#     j_data = json.dumps({"newName": "monkeycat", "newEmail": None, "newPassword": None})
-#     res = test_client.post(
-#         "/api/editaccount",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert res.status_code == 200
-#     assert monkey.name == "monkeycat"
-#     assert monkey.email == "monkey@cat.com"
-#     assert monkey.check_password("monkeypassword") == True
-#
-#     # 2.change bella username and email
-#     headers = {"Authorization": "Bearer " + bella.token}
-#     j_data = json.dumps(
-#         {"newName": "belladog", "newEmail": "bella@dog.com", "newPassword": None}
-#     )
-#     res = test_client.post(
-#         "/api/editaccount",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert res.status_code == 200
-#     assert bella.name == "belladog"
-#     assert bella.email == "bella@dog.com"
-#     assert bella.check_password("bellapassword") == True
-#
-#     # 3.change hazel username, email, and password
-#     headers = {"Authorization": "Bearer " + hazel.token}
-#     j_data = json.dumps(
-#         {
-#             "newName": "hazeldog",
-#             "newEmail": "hazel@dog.com",
-#             "newPassword": "hazelnewpassword",
-#         }
-#     )
-#     res = test_client.post(
-#         "/api/editaccount",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert res.status_code == 200
-#     assert hazel.name == "hazeldog"
-#     assert hazel.email == "hazel@dog.com"
-#     assert hazel.check_password("hazelnewpassword") == True
-#
-#     # 4. submit to hazel again, but w no changes
-#     headers = {"Authorization": "Bearer " + hazel.token}
-#     j_data = json.dumps({"newName": None, "newEmail": None, "newPassword": None})
-#     res = test_client.post(
-#         "/api/editaccount",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert res.status_code == 200
-#     assert hazel.name == "hazeldog"
-#     assert hazel.email == "hazel@dog.com"
-#     assert hazel.check_password("hazelnewpassword") == True
-#
-#
+
+def test_update_account_password_valid(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps(
+        {"newName": 52, "newEmail": 74, "newPassword": "newhazelpassword"}
+    )
+    res = test_client.post(
+        "/api/editaccount",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert hazel.name == "hazel"
+    assert hazel.email == None
+    assert hazel.check_password("newhazelpassword") == True
+
+
+def test_update_account_name_and_email_valid(test_client, init_db):
+    bella = create_users_movies_and_tags()[1]
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps(
+        {"newName": "newBella", "newEmail": "bella@dog.com", "newPassword": 42}
+    )
+    res = test_client.post(
+        "/api/editaccount",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert bella.name == "newBella"
+    assert bella.email == "bella@dog.com"
+    assert bella.check_password("bellapassword") == True
+
+
+def test_update_account_email_and_password_valid(test_client, init_db):
+    bella = create_users_movies_and_tags()[1]
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps(
+        {
+            "newName": True,
+            "newEmail": "bella@dog.com",
+            "newPassword": "newbellapassword",
+        }
+    )
+    res = test_client.post(
+        "/api/editaccount",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert bella.name == "bella"
+    assert bella.email == "bella@dog.com"
+    assert bella.check_password("newbellapassword") == True
+
+
+def test_update_account_all_three_valid(test_client, init_db):
+    bella = create_users_movies_and_tags()[1]
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps(
+        {
+            "newName": "newBella",
+            "newEmail": "bella@dog.com",
+            "newPassword": "newbellapassword",
+        }
+    )
+    res = test_client.post(
+        "/api/editaccount",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert bella.name == "newBella"
+    assert bella.email == "bella@dog.com"
+    assert bella.check_password("newbellapassword") == True
+
+
+def test_update_account_name_valid_unique_fail(test_client, init_db):
+    # unable to test 500 response
+    pass
+
+
+def test_update_account_email_valid_unique_fail(test_client, init_db):
+    # unable to test 500 response
+    pass
+
+
+""" TOTAL 32 TESTS """
+
+
 # def test_delete_account(test_client, init_db):
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
