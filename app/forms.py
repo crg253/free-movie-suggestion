@@ -51,18 +51,18 @@ class ChangePasswordForm(Form):
     password = PasswordField("password", [string_type_password_length_check])
 
 
+class SaveMovieForm(Form):
+    slug = StringField("slug", [string_type_some_length_check])
+
+
+class UnsaveMovieForm(Form):
+    slug = StringField("slug", [string_type_some_length_check])
+
+
 class SuggestMovieForm(Form):
     title = StringField("title", [validators.Length(min=1)])
     year = StringField("year", [validators.Length(min=4, max=4)])
 
 
 class RemoveSuggestionForm(Form):
-    slug = StringField("slug")
-
-
-class SaveMovieForm(Form):
-    slug = StringField("slug")
-
-
-class UnsaveMovieForm(Form):
     slug = StringField("slug")
