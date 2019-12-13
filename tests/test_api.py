@@ -503,6 +503,9 @@ def test_update_account_email_valid_unique_fail(test_client, init_db):
     pass
 
 
+# test_delete_account
+
+
 def test_delete_account(test_client, init_db):
     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
         create_users_movies_and_tags()
@@ -516,6 +519,9 @@ def test_delete_account(test_client, init_db):
     assert len(User.query.all()) == 2
     assert bella in User.query.all()
     assert hazel in User.query.all()
+
+
+# test_save_movie
 
 
 def test_save_movie_bad_slug_type_num(test_client, init_db):
@@ -575,11 +581,14 @@ def test_save_movies(test_client, init_db):
     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
         create_users_movies_and_tags()
     )
+
     headers = {"Authorization": "Bearer " + monkey.token}
     j_data = json.dumps({"slug": "movie_1"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
+    assert res.status_code == 200
+
     assert monkey in movie_1.savers
     assert movie_1 in monkey.saves
     assert monkey not in movie_2.savers
@@ -587,16 +596,21 @@ def test_save_movies(test_client, init_db):
     assert len(movie_1.savers) == 1
     assert len(movie_2.savers) == 0
     assert len(movie_3.savers) == 0
+
     headers = {"Authorization": "Bearer " + bella.token}
     j_data = json.dumps({"slug": "movie_1"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
+    assert res.status_code == 200
+
     headers = {"Authorization": "Bearer " + bella.token}
     j_data = json.dumps({"slug": "movie_2"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
+    assert res.status_code == 200
+
     assert monkey in movie_1.savers and bella in movie_1.savers
     assert movie_1 in monkey.saves
     assert movie_1 in bella.saves
@@ -607,58 +621,142 @@ def test_save_movies(test_client, init_db):
     assert len(movie_3.savers) == 0
 
 
-""" TOTAL 38 TESTS """
+# test_unsave_movie
 
 
-# def test_unsave_movies(test_client, init_db):
-#     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-#         create_users_movies_and_tags()
-#     )
-#     movie_1.savers.append(monkey)
-#     movie_1.savers.append(bella)
-#     movie_2.savers.append(bella)
-#     movie_2.savers.append(hazel)
-#     movie_3.savers.append(hazel)
-#     movie_3.savers.append(monkey)
-#     db.session.commit()
-#     # remove movie_1 from monkey.saves
-#     assert movie_1 in monkey.saves
-#     headers = {"Authorization": "Bearer " + monkey.token}
-#     j_data = json.dumps({"slug": "movie_1"})
-#     res = test_client.post(
-#         "/api/unsavemovie",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert movie_1 not in monkey.saves
-#     # remove movie_3 from monkey.saves
-#     assert movie_3 in monkey.saves
-#     headers = {"Authorization": "Bearer " + monkey.token}
-#     j_data = json.dumps({"slug": "movie_3"})
-#     res = test_client.post(
-#         "/api/unsavemovie",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert movie_3 not in monkey.saves
-#     # remove movie_1 from bella.saves
-#     assert movie_1 in bella.saves
-#     headers = {"Authorization": "Bearer " + bella.token}
-#     j_data = json.dumps({"slug": "movie_1"})
-#     res = test_client.post(
-#         "/api/unsavemovie",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert movie_1 not in bella.saves
-#     assert len(movie_1.savers) == 0
-#     assert len(movie_2.savers) == 2
-#     assert len(movie_3.savers) == 1
-#
-#
+def test_unsave_movie_bad_slug_type_num(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"slug": 15})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_unsave_movie_bad_slug_type_bool(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"slug": True})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_unsave_movie_bad_slug_type_none(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"slug": None})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_unsave_movie_doesnt_exist(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"slug": "Hoosiers"})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 500
+
+
+def test_unsave_movie_not_saved(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"slug": "movie_1"})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 500
+
+
+def test_unsave_movies(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    movie_1.savers.append(monkey)
+    movie_1.savers.append(bella)
+    movie_2.savers.append(bella)
+    movie_2.savers.append(hazel)
+    movie_3.savers.append(hazel)
+    movie_3.savers.append(monkey)
+    db.session.commit()
+
+    # remove movie_1 from monkey.saves
+    assert movie_1 in monkey.saves
+    headers = {"Authorization": "Bearer " + monkey.token}
+    j_data = json.dumps({"slug": "movie_1"})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert movie_1 not in monkey.saves
+
+    # remove movie_3 from monkey.saves
+    assert movie_3 in monkey.saves
+    headers = {"Authorization": "Bearer " + monkey.token}
+    j_data = json.dumps({"slug": "movie_3"})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert movie_3 not in monkey.saves
+
+    # remove movie_1 from bella.saves
+    assert movie_1 in bella.saves
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": "movie_1"})
+    res = test_client.post(
+        "/api/unsavemovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert movie_1 not in bella.saves
+    assert len(movie_1.savers) == 0
+    assert len(movie_2.savers) == 2
+    assert len(movie_3.savers) == 1
+
+
+""" TOTAL 44 TESTS """
+
+
 # def test_suggest_movie(test_client, init_db):
 #     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
 #         create_users_movies_and_tags()
