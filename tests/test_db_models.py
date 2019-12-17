@@ -9,14 +9,14 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 from app import create_app, db
 from app.models import Movie, Tag, User
 from app.api.auth import verify_password, verify_token
-from config import Config
+from config import DevConfig
 
 import base64
 import json
 from data_loader.csv_loader import *
 
 
-class TestConfig(Config):
+class TestConfig(DevConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "test_db_models.db")
     ELASTICSEARCH_URL = None
@@ -52,9 +52,9 @@ def create_users_movies_and_tags():
     hazel.set_password("hazelpassword")
     hazel.get_token()
     # each user creates one movie
-    movie_1 = Movie(slug="movie_1", title="Movie 1", year=2019, recommender_id=1)
-    movie_2 = Movie(slug="movie_2", title="Movie 2", year=2019, recommender_id=2)
-    movie_3 = Movie(slug="movie_3", title="Movie 3", year=2019, recommender_id=3)
+    movie_1 = Movie(slug="movie12019", title="Movie 1", year=2019, recommender_id=1)
+    movie_2 = Movie(slug="movie22019", title="Movie 2", year=2019, recommender_id=2)
+    movie_3 = Movie(slug="movie32019", title="Movie 3", year=2019, recommender_id=3)
     # create three tags
     action = Tag(name="Action")
     comedy = Tag(name="Comedy")
@@ -85,7 +85,7 @@ def create_users_movies_and_tags():
 def test_movie_recommender_id_property_creates_one_to_many(test_client, init_db):
     monkey = User(name="monkey")
     monkey.set_password("monkeypassword")
-    movie_1 = Movie(slug="movie_1", title="Movie 1", year=2019, recommender_id=1)
+    movie_1 = Movie(slug="movie12019", title="Movie 1", year=2019, recommender_id=1)
     db.session.add_all([monkey, movie_1])
     db.session.commit()
     # check user.recommendations array contains whole movie object
