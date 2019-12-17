@@ -13,6 +13,13 @@ def string_type_some_length_check(form, field):
         raise ValidationError()
 
 
+def string_type_length_4_check(form, field):
+    if type(field.data) != str:
+        raise ValidationError()
+    if len(field.data) != 4:
+        raise ValidationError()
+
+
 def string_type_password_length_check(form, field):
     if type(field.data) != str:
         raise ValidationError()
@@ -60,9 +67,9 @@ class UnsaveMovieForm(Form):
 
 
 class SuggestMovieForm(Form):
-    title = StringField("title", [validators.Length(min=1)])
-    year = StringField("year", [validators.Length(min=4, max=4)])
+    title = StringField("title", [string_type_some_length_check])
+    year = StringField("year", [string_type_length_4_check])
 
 
 class RemoveSuggestionForm(Form):
-    slug = StringField("slug")
+    slug = StringField("slug", [string_type_some_length_check])

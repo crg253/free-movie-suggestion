@@ -53,9 +53,9 @@ def create_users_movies_and_tags():
     hazel.set_password("hazelpassword")
     hazel.get_token()
     # each user creates one movie
-    movie_1 = Movie(slug="movie_1", title="Movie 1", year=2019, recommender_id=1)
-    movie_2 = Movie(slug="movie_2", title="Movie 2", year=2019, recommender_id=2)
-    movie_3 = Movie(slug="movie_3", title="Movie 3", year=2019, recommender_id=3)
+    movie_1 = Movie(slug="movie12019", title="Movie 1", year=2019, recommender_id=1)
+    movie_2 = Movie(slug="movie22019", title="Movie 2", year=2019, recommender_id=2)
+    movie_3 = Movie(slug="movie32019", title="Movie 3", year=2019, recommender_id=3)
     # create three tags
     action = Tag(name="Action")
     comedy = Tag(name="Comedy")
@@ -175,7 +175,7 @@ def test_get_user_movies(test_client, init_db):
     )
     assert res.status_code == 200
     for movie in res.json["movies"]:
-        if movie["slug"] == "movie_2":
+        if movie["slug"] == "movie22019":
             assert movie["saved"] == True
         else:
             assert movie["saved"] == False
@@ -565,7 +565,7 @@ def test_save_movie_already_saved(test_client, init_db):
         create_users_movies_and_tags()
     )
     headers = {"Authorization": "Bearer " + monkey.token}
-    j_data = json.dumps({"slug": "movie_1"})
+    j_data = json.dumps({"slug": "movie12019"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
@@ -583,7 +583,7 @@ def test_save_movies(test_client, init_db):
     )
 
     headers = {"Authorization": "Bearer " + monkey.token}
-    j_data = json.dumps({"slug": "movie_1"})
+    j_data = json.dumps({"slug": "movie12019"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
@@ -598,14 +598,14 @@ def test_save_movies(test_client, init_db):
     assert len(movie_3.savers) == 0
 
     headers = {"Authorization": "Bearer " + bella.token}
-    j_data = json.dumps({"slug": "movie_1"})
+    j_data = json.dumps({"slug": "movie12019"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
     assert res.status_code == 200
 
     headers = {"Authorization": "Bearer " + bella.token}
-    j_data = json.dumps({"slug": "movie_2"})
+    j_data = json.dumps({"slug": "movie22019"})
     res = test_client.post(
         "/api/savemovie", headers=headers, data=j_data, content_type="application/json"
     )
@@ -689,7 +689,7 @@ def test_unsave_movie_not_saved(test_client, init_db):
         create_users_movies_and_tags()
     )
     headers = {"Authorization": "Bearer " + hazel.token}
-    j_data = json.dumps({"slug": "movie_1"})
+    j_data = json.dumps({"slug": "movie12019"})
     res = test_client.post(
         "/api/unsavemovie",
         headers=headers,
@@ -714,7 +714,7 @@ def test_unsave_movies(test_client, init_db):
     # remove movie_1 from monkey.saves
     assert movie_1 in monkey.saves
     headers = {"Authorization": "Bearer " + monkey.token}
-    j_data = json.dumps({"slug": "movie_1"})
+    j_data = json.dumps({"slug": "movie12019"})
     res = test_client.post(
         "/api/unsavemovie",
         headers=headers,
@@ -727,7 +727,7 @@ def test_unsave_movies(test_client, init_db):
     # remove movie_3 from monkey.saves
     assert movie_3 in monkey.saves
     headers = {"Authorization": "Bearer " + monkey.token}
-    j_data = json.dumps({"slug": "movie_3"})
+    j_data = json.dumps({"slug": "movie32019"})
     res = test_client.post(
         "/api/unsavemovie",
         headers=headers,
@@ -740,7 +740,7 @@ def test_unsave_movies(test_client, init_db):
     # remove movie_1 from bella.saves
     assert movie_1 in bella.saves
     headers = {"Authorization": "Bearer " + bella.token}
-    j_data = json.dumps({"slug": "movie_1"})
+    j_data = json.dumps({"slug": "movie12019"})
     res = test_client.post(
         "/api/unsavemovie",
         headers=headers,
@@ -754,51 +754,241 @@ def test_unsave_movies(test_client, init_db):
     assert len(movie_3.savers) == 1
 
 
-""" TOTAL 44 TESTS """
+# test_suggest_movie
 
 
-# def test_suggest_movie(test_client, init_db):
-#     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-#         create_users_movies_and_tags()
-#     )
-#     # add movie_4 w recommender_id = 3 (hazel)
-#     assert len(hazel.recommendations) == 1
-#     headers = {"Authorization": "Bearer " + hazel.token}
-#     j_data = json.dumps({"title": "Movie 4", "year": "2019"})
-#     res = test_client.post(
-#         "/api/suggestmovie",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     movie_4 = Movie.query.filter_by(title="Movie 4").first()
-#     assert movie_4 in hazel.recommendations
-#     assert len(hazel.recommendations) == 2
-#
-#
-# def test_unsuggest_movie(test_client, init_db):
-#     monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
-#         create_users_movies_and_tags()
-#     )
-#     # remove movie_2 recommended by bella
-#     assert len(bella.recommendations) == 1
-#     headers = {"Authorization": "Bearer " + bella.token}
-#     j_data = json.dumps({"slug": "movie_2"})
-#     res = test_client.post(
-#         "/api/removesuggestion",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert res.status_code == 200
-#     assert len(bella.recommendations) == 0
-#     # try to remove movie not recommended by person
-#     headers = {"Authorization": "Bearer " + bella.token}
-#     j_data = json.dumps({"slug": "movie_3"})
-#     res = test_client.post(
-#         "/api/removesuggestion",
-#         headers=headers,
-#         data=j_data,
-#         content_type="application/json",
-#     )
-#     assert res.status_code == 401
+def test_suggest_movie_bad_data_name_is_num(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": 73, "year": "2019"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_name_is_bool(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": False, "year": "2019"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_name_is_none(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": None, "year": "2019"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_year_is_num(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 4", "year": 2019})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_year_is_bool(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 4", "year": True})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_year_is_none(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 4", "year": None})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_year_is_too_short(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 4", "year": "199"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_bad_data_year_is_too_long(test_client, init_db):
+    hazel = create_users_movies_and_tags()[2]
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 4", "year": "19999"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_suggest_movie_already_suggested(test_client, init_db):
+    # unable to test 500 response
+    pass
+
+
+def test_suggest_movie_same_name_diff_year(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    # add movie_4 w recommender_id = 3 (hazel)
+    assert len(hazel.recommendations) == 1
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 1", "year": "2018"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    movie_1_the_second = Movie.query.filter_by(slug="movie12018").first()
+    assert movie_1_the_second in hazel.recommendations
+    assert len(hazel.recommendations) == 2
+
+
+def test_suggest_movie_movie_4(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    # add movie_4 w recommender_id = 3 (hazel)
+    assert len(hazel.recommendations) == 1
+    headers = {"Authorization": "Bearer " + hazel.token}
+    j_data = json.dumps({"title": "Movie 4", "year": "2019"})
+    res = test_client.post(
+        "/api/suggestmovie",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    movie_4 = Movie.query.filter_by(title="Movie 4").first()
+    assert movie_4 in hazel.recommendations
+    assert len(hazel.recommendations) == 2
+
+
+def test_unsuggest_movie_bad_data_num(test_client, init_db):
+    bella = (create_users_movies_and_tags())[1]
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": 22})
+    res = test_client.post(
+        "/api/removesuggestion",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_unsuggest_movie_bad_data_bool(test_client, init_db):
+    bella = (create_users_movies_and_tags())[1]
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": True})
+    res = test_client.post(
+        "/api/removesuggestion",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_unsuggest_movie_bad_data_true(test_client, init_db):
+    bella = (create_users_movies_and_tags())[1]
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": True})
+    res = test_client.post(
+        "/api/removesuggestion",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 400
+
+
+def test_unsuggest_movie_bad_data_no_movie_exists(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": "moviedoesntexist"})
+    res = test_client.post(
+        "/api/removesuggestion",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 500
+
+
+def test_unsuggest_movie_bad_data_movie_not_in_suggestions(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": "movie12019"})
+    res = test_client.post(
+        "/api/removesuggestion",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 500
+
+
+def test_unsuggest_movie(test_client, init_db):
+    monkey, bella, hazel, movie_1, movie_2, movie_3, action, comedy, documentary = (
+        create_users_movies_and_tags()
+    )
+    # remove Movie 2 recommended by bella
+    assert len(bella.recommendations) == 1
+    headers = {"Authorization": "Bearer " + bella.token}
+    j_data = json.dumps({"slug": "movie22019"})
+    res = test_client.post(
+        "/api/removesuggestion",
+        headers=headers,
+        data=j_data,
+        content_type="application/json",
+    )
+    assert res.status_code == 200
+    assert len(bella.recommendations) == 0
+
+
+""" TOTAL 61 TESTS """
