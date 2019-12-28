@@ -4,13 +4,14 @@ from app import db, mail
 from app.models import Movie, Tag, User
 from app.forms import (
     CreateAccountForm,
+    CheckEmailForm,
     ChangeNameForm,
     ChangeEmailForm,
     ChangePasswordForm,
-    SuggestMovieForm,
-    RemoveSuggestionForm,
     SaveMovieForm,
     UnsaveMovieForm,
+    SuggestMovieForm,
+    RemoveSuggestionForm,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -90,33 +91,61 @@ def sign_in():
     return (jsonify({"token": token, "name": g.current_user.name}), 200)
 
 
-@bp.route("/resetpassword", methods=["POST"])
-def reset_password():
-    data = request.get_json(silent=True) or {}
-    email = data.get("email")
-    if email == None or len(email) == 0:
-        abort(400)
-    user = User.query.filter_by(email=email).first()
-    if user == None:
-        abort(401)
-    else:
-        chars = string.ascii_letters + string.digits + "@#$%&*"
-        password = "".join(random.sample(chars, 6))
-        user.set_password(password)
-        db.session.commit()
+# /resetpassword
+
+
+def try_email_new_password_to_user(email, password):
+    try:
         msg = Message(
             "Password Reset", sender="admin@freemoviesuggestion.com", recipients=[email]
         )
         msg.body = f"Your new password is {password}"
-        mail.send(msg)
-        return "", 200
+        # mail.send(msg)
+    except:
+        abort(500)
+
+
+def lookup_user_abort_find_zero_or_many(email):
+    users = User.query.filter_by(email=email).all()
+    if len(users) > 1:
+        abort(500)
+    elif len(users) == 0:
+        abort(401)
+
+
+def create_new_password():
+    chars = string.ascii_letters + string.digits + "@#$%&*"
+    password = "".join(random.sample(chars, 6))
+    return password
+
+
+def validate_email_input(email):
+    form = CheckEmailForm(email=email)
+    if form.validate():
+        pass
+    else:
+        abort(400)
+
+
+@bp.route("/resetpassword", methods=["POST"])
+def reset_password():
+    data = request.get_json(silent=True) or {}
+    email = email = data.get("email")
+    validate_email_input(email)
+    lookup_user_abort_find_zero_or_many(email)
+    user = User.query.filter_by(email=email).first()
+    password = create_new_password()
+    try_email_new_password_to_user(email, password)
+    user.set_password(password)
+    db.session.commit()
+    return "", 200
 
 
 @bp.route("/editaccount", methods=["POST"])
 @token_auth.login_required
 def edit_account():
     data = request.get_json(silent=True) or {}
-    user = User.query.filter_by(name=g.current_user.name).first()
+    user = g.current_user
 
     new_name = data.get("newName")
     change_name_form = ChangeNameForm(name=new_name)
@@ -211,19 +240,22 @@ def suggest_movie():
         )
         db.session.add(movie)
         db.session.commit()
-        # msg = Message(
-        #     "New Suggestion",
-        #     sender="admin@freemoviesuggestion.com",
-        #     recipients=["admin@freemoviesuggestion.com"],
-        # )
-        # msg.body = (
-        #     g.current_user.name
-        #     + " recommended "
-        #     + data.get("title")
-        #     + " "
-        #     + data.get("year")
-        # )
-        # mail.send(msg)
+        try:
+            msg = Message(
+                "New Suggestion",
+                sender="admin@freemoviesuggestion.com",
+                recipients=["admin@freemoviesuggestion.com"],
+            )
+            msg.body = (
+                g.current_user.name
+                + " recommended "
+                + data.get("title")
+                + " "
+                + data.get("year")
+            )
+            mail.send(msg)
+        except:
+            print("No email connection")
         return "", 200
     else:
         abort(400)

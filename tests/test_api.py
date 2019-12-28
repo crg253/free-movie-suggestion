@@ -311,7 +311,7 @@ def test_add_user_bad_email_type_bool(test_client, init_db):
     assert res.status_code == 400
 
 
-def test_add_user_email_len_zero(test_client, init_db):
+def test_add_users_email_len_zero(test_client, init_db):
 
     j_data = json.dumps({"name": "laura", "password": "laurapassword", "email": ""})
     res = test_client.post(
@@ -322,6 +322,17 @@ def test_add_user_email_len_zero(test_client, init_db):
     laura = User.query.filter_by(name="laura").first()
     assert laura.check_password("laurapassword") == True
     assert laura.email == None
+
+    # add second user w email len zero
+
+    j_data = json.dumps({"name": "bella", "password": "bellapassword", "email": ""})
+    res = test_client.post(
+        "/api/createaccount", data=j_data, content_type="application/json"
+    )
+
+    assert res.status_code == 200
+    bella = User.query.filter_by(name="bella").first()
+    assert bella.email == None
 
 
 def test_add_user_w_email(test_client, init_db):

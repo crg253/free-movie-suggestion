@@ -42,8 +42,8 @@ class TokenForm(Form):
     token = StringField("token", [string_type_check])
 
 
-class ResetPasswordForm(Form):
-    email = StringField("email")
+class CheckEmailForm(Form):
+    email = StringField("email", [string_type_some_length_check])
 
 
 class ChangeNameForm(Form):

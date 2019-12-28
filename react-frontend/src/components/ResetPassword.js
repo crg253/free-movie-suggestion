@@ -39,6 +39,16 @@ class ResetPassword extends Component {
           ),
           Email: ""
         });
+      } else if (res.status === 500) {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Sorry, unable to complete request."
+              buttonMessage="So sad"
+            />
+          ),
+          Email: ""
+        });
       } else {
         this.setState({
           Message: (
