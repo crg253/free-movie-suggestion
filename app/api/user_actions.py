@@ -1,4 +1,4 @@
-from flask import jsonify, render_template, request, g, abort
+from flask import jsonify, render_template, request, g, abort, url_for
 from flask_mail import Message
 from app import db, mail
 from app.models import Movie, Tag, User
@@ -18,6 +18,7 @@ from app.api.auth import basic_auth, token_auth
 import string
 import random
 from types import *
+from itsdangerous import URLSafeTimedSerializer
 
 
 def slugify(slug):
@@ -70,14 +71,23 @@ def create_account():
         name=data.get("name"), email=data.get("email"), password=data.get("password")
     )
     if form.validate():
-        new_user = User(name=form.name.data)
-        if len(form.email.data) > 0:
-            new_user.email = form.email.data
-        else:
-            new_user.email = None
+        new_user = User(name=form.name.data, email=form.email.data)
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
+
+        # Send email confirmation link
+        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+        token = ts.dumps(user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+        confirm_url = url_for("confirm_email", token=token, _external=True)
+        msg = Message(
+            "Confirm your email",
+            sender="admin@freemoviesuggestion.com",
+            recipients=[user.email],
+        )
+        msg.body = f"Click to confirm email and activate account: {confirm_url}"
+        mail.send(msg)
+
         return "", 200
     else:
         return "", 400
@@ -100,7 +110,7 @@ def try_email_new_password_to_user(email, password):
             "Password Reset", sender="admin@freemoviesuggestion.com", recipients=[email]
         )
         msg.body = f"Your new password is {password}"
-        # mail.send(msg)
+        mail.send(msg)
     except:
         abort(500)
 

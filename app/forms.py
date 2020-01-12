@@ -29,7 +29,7 @@ def string_type_password_length_check(form, field):
 
 class CreateAccountForm(Form):
     name = StringField("name", [string_type_some_length_check])
-    email = StringField("email", [string_type_check])
+    email = StringField("email", [string_type_some_length_check, validators.Email()])
     password = PasswordField("password", [string_type_password_length_check])
 
 
