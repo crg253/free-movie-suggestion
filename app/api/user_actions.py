@@ -71,7 +71,9 @@ def create_account():
         name=data.get("name"), email=data.get("email"), password=data.get("password")
     )
     if form.validate():
-        new_user = User(name=form.name.data, email=form.email.data)
+        new_user = User(
+            name=form.name.data, email=form.email.data  # email_confirmed=False
+        )
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
@@ -79,7 +81,7 @@ def create_account():
         # Send email confirmation link
         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
         token = ts.dumps(user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-        confirm_url = url_for("confirm_email", token=token, _external=True)
+        confirm_url = url_for("confirm", token=token, _external=True)
         msg = Message(
             "Confirm your email",
             sender="admin@freemoviesuggestion.com",
@@ -91,6 +93,21 @@ def create_account():
         return "", 200
     else:
         return "", 400
+
+
+# @bp.route("/confirm/<token>")
+# def confirm_email(token):
+#     try:
+#         email = ts.loads(
+#             token, salt=os.environ.get("EMAIL-CONFIRM-SALT"), max_age=86400
+#         )
+#     except:
+#         abort(404)
+#     user = User.query.filter_by(email=email).first_or_404()
+#     user.email_confirmed = True
+#     db.session.add(user)
+#     db.session.commit()
+#     return "", 200
 
 
 @bp.route("/signin", methods=["POST"])

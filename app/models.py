@@ -44,6 +44,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, index=True, unique=True, nullable=False)
     email = db.Column(db.Text, index=True, unique=True)
+    email_confirmed = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.Text, nullable=False)
     token = db.Column(db.Text, index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
