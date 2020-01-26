@@ -19,6 +19,7 @@ import string
 import random
 from types import *
 from itsdangerous import URLSafeTimedSerializer
+import os
 
 
 def slugify(slug):
@@ -72,7 +73,7 @@ def create_account():
     )
     if form.validate():
         new_user = User(
-            name=form.name.data, email=form.email.data  # email_confirmed=False
+            name=form.name.data, email=form.email.data, email_confirmed=False
         )
         new_user.set_password(form.password.data)
         db.session.add(new_user)
@@ -80,12 +81,12 @@ def create_account():
 
         # Send email confirmation link
         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        token = ts.dumps(user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-        confirm_url = url_for("confirm", token=token, _external=True)
+        token = ts.dumps(new_user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+        confirm_url = url_for("api.confirm_email", token=token, _external=True)
         msg = Message(
             "Confirm your email",
             sender="admin@freemoviesuggestion.com",
-            recipients=[user.email],
+            recipients=[new_user.email],
         )
         msg.body = f"Click to confirm email and activate account: {confirm_url}"
         mail.send(msg)
@@ -95,19 +96,19 @@ def create_account():
         return "", 400
 
 
-# @bp.route("/confirm/<token>")
-# def confirm_email(token):
-#     try:
-#         email = ts.loads(
-#             token, salt=os.environ.get("EMAIL-CONFIRM-SALT"), max_age=86400
-#         )
-#     except:
-#         abort(404)
-#     user = User.query.filter_by(email=email).first_or_404()
-#     user.email_confirmed = True
-#     db.session.add(user)
-#     db.session.commit()
-#     return "", 200
+@bp.route("/confirm/<token>")
+def confirm_email(token):
+    try:
+        email = ts.loads(
+            token, salt=os.environ.get("EMAIL-CONFIRM-SALT"), max_age=86400
+        )
+    except:
+        abort(404)
+    user = User.query.filter_by(email=email).first_or_404()
+    user.email_confirmed = True
+    db.session.add(user)
+    db.session.commit()
+    return "", 200
 
 
 @bp.route("/signin", methods=["POST"])
