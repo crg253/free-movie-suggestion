@@ -81,8 +81,12 @@ def create_account():
 
         # Send email confirmation link
         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        token = ts.dumps(new_user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-        confirm_url = url_for("main.catch_all", token=token, _external=True)
+        email_token = ts.dumps(
+            new_user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT")
+        )
+        confirm_url = url_for(
+            "main.confirm_email", email_token=email_token, _external=True
+        )
         msg = Message(
             "Confirm your email",
             sender="admin@freemoviesuggestion.com",

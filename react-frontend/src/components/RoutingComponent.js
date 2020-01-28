@@ -27,7 +27,9 @@ class RoutingComponent extends Component {
                 {...props}
                 user={this.props.user}
                 setRedirect={this.props.setRedirect}
-                handleGetAndSetUserAndMovies={this.props.handleGetAndSetUserAndMovies}
+                handleGetAndSetUserAndMovies={
+                  this.props.handleGetAndSetUserAndMovies
+                }
               />
             )}
           />
@@ -48,7 +50,9 @@ class RoutingComponent extends Component {
                 <DeleteAccount
                   {...props}
                   redirect={this.props.redirect}
-                  handleGetAndSetUserAndMovies={this.props.handleGetAndSetUserAndMovies}
+                  handleGetAndSetUserAndMovies={
+                    this.props.handleGetAndSetUserAndMovies
+                  }
                 />
               )}
             />
@@ -63,7 +67,9 @@ class RoutingComponent extends Component {
                   setRedirect={this.props.setRedirect}
                   setRedirectBack={this.props.setRedirectBack}
                   setRedirectBackSlug={this.props.setRedirectBackSlug}
-                  handleGetAndSetUserAndMovies={this.props.handleGetAndSetUserAndMovies}
+                  handleGetAndSetUserAndMovies={
+                    this.props.handleGetAndSetUserAndMovies
+                  }
                 />
               )}
             />
@@ -78,7 +84,9 @@ class RoutingComponent extends Component {
                   redirect={this.props.redirect}
                   setRedirectBack={this.props.setRedirectBack}
                   setRedirectBackSlug={this.props.setRedirectBackSlug}
-                  handleGetAndSetUserAndMovies={this.props.handleGetAndSetUserAndMovies}
+                  handleGetAndSetUserAndMovies={
+                    this.props.handleGetAndSetUserAndMovies
+                  }
                 />
               )}
             />
@@ -95,7 +103,9 @@ class RoutingComponent extends Component {
                   {...props}
                   user={this.props.user}
                   redirectBack={this.props.redirectBack}
-                  handleGetAndSetUserAndMovies={this.props.handleGetAndSetUserAndMovies}
+                  handleGetAndSetUserAndMovies={
+                    this.props.handleGetAndSetUserAndMovies
+                  }
                   setRedirect={this.props.setRedirect}
                   setRedirectBack={this.props.setRedirectBack}
                   redirectBackSlug={this.props.redirectBackSlug}
@@ -119,7 +129,9 @@ class RoutingComponent extends Component {
                   setRedirectBack={this.props.setRedirectBack}
                   setRedirectBackSlug={this.props.setRedirectBackSlug}
                   setRedirect={this.props.setRedirect}
-                  handleGetAndSetUserAndMovies={this.props.handleGetAndSetUserAndMovies}
+                  handleGetAndSetUserAndMovies={
+                    this.props.handleGetAndSetUserAndMovies
+                  }
                 />
               )}
             />
@@ -135,6 +147,11 @@ class RoutingComponent extends Component {
                   compareTitle={this.props.compareTitle}
                 />
               )}
+            />
+
+            <Route
+              path="/confirm/:emailtoken"
+              render={props => <ConfirmEmail {...props} />}
             />
 
             <Route
