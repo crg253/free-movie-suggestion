@@ -7,10 +7,18 @@ import "./UserForm.css";
 
 class CreateAccount extends Component {
   state = {
+    Email: "",
+    EmailToken: "",
     Name: "",
     Password: "",
-    Email: "",
     Message: ""
+  };
+
+  handleEmailChange = event => {
+    this.setState({
+      Email: event.target.value,
+      Message: ""
+    });
   };
 
   handleNameChange = event => {
@@ -25,17 +33,59 @@ class CreateAccount extends Component {
       Message: ""
     });
   };
-  handleEmailChange = event => {
-    this.setState({
-      Email: event.target.value,
-      Message: ""
-    });
+
+  submitEmailIsDisabled = () => {
+    return this.state.Email.length === 0;
   };
+
   isDisabled = () => {
     return this.state.Name.length === 0 || this.state.Password.length < 6;
   };
 
-  handleAddUserSubmit = event => {
+  handleSubmitEmail = event => {
+    event.preventDefault();
+    fetch("/api/submitemail", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        email: this.state.Email
+      })
+    }).then(res => {
+      if (res.status === 400) {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Sorry, email format is incorrect."
+              buttonMessage="Fine be that way"
+            />
+          ),
+          Email: ""
+        });
+      } else if (res.status === 500) {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Sorry, email in use."
+              buttonMessage="Fine be that way"
+            />
+          ),
+          Email: ""
+        });
+      } else if (res.status === 200) {
+        this.setState({
+          Message: (
+            <MessageModal
+              message="Thank you, please check your email."
+              buttonMessage="You're welcome"
+            />
+          ),
+          Email: ""
+        });
+      }
+    });
+  };
+
+  handleNameAndPasswordSubmit = event => {
     event.preventDefault();
     fetch("/api/createaccount", {
       method: "POST",
@@ -43,7 +93,7 @@ class CreateAccount extends Component {
       body: JSON.stringify({
         name: this.state.Name,
         password: this.state.Password,
-        email: this.state.Email
+        emailToken: this.state.EmailToken
       })
     }).then(res => {
       if (res.status === 400) {
@@ -55,8 +105,7 @@ class CreateAccount extends Component {
             />
           ),
           Name: "",
-          Password: "",
-          Email: ""
+          Password: ""
         });
       } else if (res.status === 500) {
         this.setState({
@@ -67,8 +116,7 @@ class CreateAccount extends Component {
             />
           ),
           Name: "",
-          Password: "",
-          Email: ""
+          Password: ""
         });
       } else if (res.status === 200) {
         this.setState({
@@ -79,14 +127,71 @@ class CreateAccount extends Component {
             />
           ),
           Name: "",
-          Password: "",
-          Email: ""
+          Password: ""
         });
       }
     });
   };
 
+  componentDidMount() {
+    console.log("Component Did Mount");
+    console.log(this.props.location.state.EmailToken);
+    this.setState({
+      EmailToken: this.props.location.state.EmailToken
+    });
+  }
+
   render() {
+    let emailForm = "";
+    let nameAndPasswordForm = "";
+
+    if (this.state.EmailToken === "") {
+      emailForm = (
+        <form onSubmit={this.handleSubmitEmail}>
+          <input
+            id="create-account-email-input"
+            type="text"
+            placeholder="Email"
+            value={this.state.Email}
+            onChange={this.handleEmailChange}
+          />
+          <input
+            data-test="create-account-submit-button"
+            type="submit"
+            value="Submit"
+            className="form-submit-button"
+            disabled={this.submitEmailIsDisabled()}
+          />
+        </form>
+      );
+    } else {
+      nameAndPasswordForm = (
+        <form onSubmit={this.handleNameAndPasswordSubmit}>
+          <input
+            data-test="create-account-username-input"
+            type="text"
+            placeholder="Name"
+            value={this.state.Name}
+            onChange={this.handleNameChange}
+          />
+          <input
+            data-test="create-account-password-input"
+            placeholder="Password"
+            type="password"
+            value={this.state.Password}
+            onChange={this.handlePasswordChange}
+          />
+          <input
+            data-test="create-account-submit-button"
+            type="submit"
+            value="Submit"
+            className="form-submit-button"
+            disabled={this.isDisabled()}
+          />
+        </form>
+      );
+    }
+
     return (
       <div>
         <Link to={"/"}>
@@ -95,39 +200,8 @@ class CreateAccount extends Component {
         <div className="user-pages-body-wrapper">
           <h1>Create Account</h1>
 
-          <form onSubmit={this.handleAddUserSubmit}>
-            <input
-              data-test="create-account-username-input"
-              type="text"
-              placeholder="Name"
-              value={this.state.Name}
-              onChange={this.handleNameChange}
-            />
-
-            <input
-              id="create-account-email-input"
-              type="text"
-              placeholder="Email"
-              value={this.state.Email}
-              onChange={this.handleEmailChange}
-            />
-
-            <input
-              data-test="create-account-password-input"
-              placeholder="Password"
-              type="password"
-              value={this.state.Password}
-              onChange={this.handlePasswordChange}
-            />
-
-            <input
-              data-test="create-account-submit-button"
-              type="submit"
-              value="Submit"
-              className="form-submit-button"
-              disabled={this.isDisabled()}
-            />
-          </form>
+          {emailForm}
+          {nameAndPasswordForm}
 
           <Link data-test="create-account-signin-link" to={"/signin"}>
             <h1>
@@ -135,7 +209,6 @@ class CreateAccount extends Component {
               <span style={{color: "#a9a9a9"}}>in</span>
             </h1>
           </Link>
-          <p>* Email optional. Used for password reset only</p>
         </div>
         {/* class="user-pages-body-wrapper"*/}
         <div data-test="create-account-message-modal">{this.state.Message}</div>

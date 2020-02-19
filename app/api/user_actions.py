@@ -65,35 +65,56 @@ def get_movies():
     return jsonify({"movies": movies}), 200
 
 
-@bp.route("/createaccount", methods=["POST"])
-def create_account():
+@bp.route("/submitemail", methods=["POST"])
+def submit_email():
     data = request.get_json(silent=True) or {}
-    form = CreateAccountForm(
-        name=data.get("name"), email=data.get("email"), password=data.get("password")
-    )
+    email = data.get("email")
+    form = CheckEmailForm(email=email)
     if form.validate():
-        new_user = User(
-            name=form.name.data, email=form.email.data, email_confirmed=False
-        )
-        new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.commit()
 
-        # Send email confirmation link
+        email_user = User.query.filter_by(email=email).first()
+        if len(email_user) == 1:
+            abort(500)
+
         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        email_token = ts.dumps(
-            new_user.email, salt=os.environ.get("EMAIL-CONFIRM-SALT")
-        )
+        email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
         confirm_url = url_for(
             "main.confirm_email", email_token=email_token, _external=True
         )
         msg = Message(
             "Confirm your email",
             sender="admin@freemoviesuggestion.com",
-            recipients=[new_user.email],
+            recipients=[email],
         )
         msg.body = f"Click to confirm email and activate account: {confirm_url}"
         mail.send(msg)
+
+        return "", 200
+    else:
+        return "", 400
+
+
+@bp.route("/createaccount", methods=["POST"])
+def create_account():
+    data = request.get_json(silent=True) or {}
+    token = data.get("emailToken")
+    ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+    print(token)
+    try:
+        email = ts.loads(
+            token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
+        )
+    except:
+        abort(404)
+
+    form = CreateAccountForm(
+        email=email, name=data.get("name"), password=data.get("password")
+    )
+    if form.validate():
+        new_user = User(email=form.email.data, name=form.name.data)
+        new_user.set_password(form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
 
         return "", 200
     else:

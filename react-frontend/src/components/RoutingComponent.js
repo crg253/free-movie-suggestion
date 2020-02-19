@@ -14,6 +14,7 @@ import EditAccount from "./EditAccount";
 import DeleteAccount from "./DeleteAccount";
 import About from "./About";
 import Contact from "./Contact";
+import ConfirmEmail from "./ConfirmEmail";
 
 class RoutingComponent extends Component {
   render() {
@@ -38,6 +39,11 @@ class RoutingComponent extends Component {
             <Route path="/about" render={props => <About {...props} />} />
 
             <Route path="/contact" render={props => <Contact {...props} />} />
+
+            <Route
+              path="/confirmemail/:emailtoken"
+              render={props => <ConfirmEmail {...props} />}
+            />
 
             <Route
               path="/createaccount"
@@ -147,11 +153,6 @@ class RoutingComponent extends Component {
                   compareTitle={this.props.compareTitle}
                 />
               )}
-            />
-
-            <Route
-              path="/confirm/:emailtoken"
-              render={props => <ConfirmEmail {...props} />}
             />
 
             <Route

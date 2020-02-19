@@ -2,7 +2,7 @@ from flask import render_template
 from app.main import bp
 
 
-@bp.route("/confirm/<email_token>")
+@bp.route("/confirmemail/<email_token>")
 def confirm_email(email_token):
     return render_template("index.html")
 
