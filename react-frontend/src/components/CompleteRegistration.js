@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 import MessageModal from "./MessageModal";
 
@@ -9,7 +9,8 @@ class CompleteRegistration extends Component {
   state = {
     Name: "",
     Password: "",
-    Message: ""
+    Message: "",
+    Redirect: ""
   };
 
   handleNameChange = event => {
@@ -65,12 +66,18 @@ class CompleteRegistration extends Component {
         });
       } else if (res.status === 200) {
         this.setState({
-          Message: (
-            <MessageModal
-              message="Thank you for creating account."
-              buttonMessage="You're welcome"
+          Redirect: (
+            <Redirect
+              to={{
+                pathname: "/signin",
+                state: {
+                  message: "Thank you for creating account.",
+                  buttonMessage: "You're welcome"
+                }
+              }}
             />
           ),
+
           Name: "",
           Password: ""
         });
@@ -81,6 +88,7 @@ class CompleteRegistration extends Component {
   render() {
     return (
       <div>
+        {this.state.Redirect}
         <Link to={"/"}>
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
