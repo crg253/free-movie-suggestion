@@ -14,7 +14,7 @@ import EditAccount from "./EditAccount";
 import DeleteAccount from "./DeleteAccount";
 import About from "./About";
 import Contact from "./Contact";
-import ConfirmEmail from "./ConfirmEmail";
+import CompleteRegistration from "./CompleteRegistration";
 
 class RoutingComponent extends Component {
   render() {
@@ -41,8 +41,8 @@ class RoutingComponent extends Component {
             <Route path="/contact" render={props => <Contact {...props} />} />
 
             <Route
-              path="/confirmemail/:emailtoken"
-              render={props => <ConfirmEmail {...props} />}
+              path="/completeregistration/:emailtoken"
+              render={props => <CompleteRegistration {...props} />}
             />
 
             <Route

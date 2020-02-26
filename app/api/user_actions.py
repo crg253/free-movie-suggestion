@@ -73,28 +73,28 @@ def submit_email():
     if form.validate():
 
         email_user = User.query.filter_by(email=email).first()
-        if len(email_user) == 1:
+        if email_user == None:
+            ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+            email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+            confirm_url = url_for(
+                "main.confirm_email", email_token=email_token, _external=True
+            )
+            msg = Message(
+                "Confirm your email",
+                sender="admin@freemoviesuggestion.com",
+                recipients=[email],
+            )
+            msg.body = f"Click to confirm email and activate account: {confirm_url}"
+            mail.send(msg)
+
+            return "", 200
+        else:
             abort(500)
-
-        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-        confirm_url = url_for(
-            "main.confirm_email", email_token=email_token, _external=True
-        )
-        msg = Message(
-            "Confirm your email",
-            sender="admin@freemoviesuggestion.com",
-            recipients=[email],
-        )
-        msg.body = f"Click to confirm email and activate account: {confirm_url}"
-        mail.send(msg)
-
-        return "", 200
     else:
-        return "", 400
+        abort(400)
 
 
-@bp.route("/createaccount", methods=["POST"])
+@bp.route("/completeregistration", methods=["POST"])
 def create_account():
     data = request.get_json(silent=True) or {}
     token = data.get("emailToken")
@@ -105,7 +105,7 @@ def create_account():
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
     except:
-        abort(404)
+        abort(400)
 
     form = CreateAccountForm(
         email=email, name=data.get("name"), password=data.get("password")
@@ -121,21 +121,6 @@ def create_account():
         return "", 400
 
 
-@bp.route("/confirm/<token>")
-def confirm_email(token):
-    try:
-        email = ts.loads(
-            token, salt=os.environ.get("EMAIL-CONFIRM-SALT"), max_age=86400
-        )
-    except:
-        abort(404)
-    user = User.query.filter_by(email=email).first_or_404()
-    user.email_confirmed = True
-    db.session.add(user)
-    db.session.commit()
-    return "", 200
-
-
 @bp.route("/signin", methods=["POST"])
 @basic_auth.login_required
 def sign_in():
@@ -147,51 +132,9 @@ def sign_in():
 # /resetpassword
 
 
-def try_email_new_password_to_user(email, password):
-    try:
-        msg = Message(
-            "Password Reset", sender="admin@freemoviesuggestion.com", recipients=[email]
-        )
-        msg.body = f"Your new password is {password}"
-        mail.send(msg)
-    except:
-        abort(500)
-
-
-def lookup_user_abort_find_zero_or_many(email):
-    users = User.query.filter_by(email=email).all()
-    if len(users) > 1:
-        abort(500)
-    elif len(users) == 0:
-        abort(401)
-
-
-def create_new_password():
-    chars = string.ascii_letters + string.digits + "@#$%&*"
-    password = "".join(random.sample(chars, 6))
-    return password
-
-
-def validate_email_input(email):
-    form = CheckEmailForm(email=email)
-    if form.validate():
-        pass
-    else:
-        abort(400)
-
-
 @bp.route("/resetpassword", methods=["POST"])
 def reset_password():
-    data = request.get_json(silent=True) or {}
-    email = email = data.get("email")
-    validate_email_input(email)
-    lookup_user_abort_find_zero_or_many(email)
-    user = User.query.filter_by(email=email).first()
-    password = create_new_password()
-    try_email_new_password_to_user(email, password)
-    user.set_password(password)
-    db.session.commit()
-    return "", 200
+    pass
 
 
 @bp.route("/editaccount", methods=["POST"])

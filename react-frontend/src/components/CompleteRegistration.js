@@ -5,61 +5,74 @@ import MessageModal from "./MessageModal";
 
 import "./UserForm.css";
 
-class CreateAccount extends Component {
+class CompleteRegistration extends Component {
   state = {
-    Email: "",
+    Name: "",
+    Password: "",
     Message: ""
   };
 
-  handleEmailChange = event => {
+  handleNameChange = event => {
     this.setState({
-      Email: event.target.value,
+      Name: event.target.value,
       Message: ""
     });
   };
 
-  submitEmailIsDisabled = () => {
-    return this.state.Email.length === 0;
+  handlePasswordChange = event => {
+    this.setState({
+      Password: event.target.value,
+      Message: ""
+    });
   };
 
-  handleSubmitEmail = event => {
+  isDisabled = () => {
+    return this.state.Name.length === 0 || this.state.Password.length < 6;
+  };
+
+  handleNameAndPasswordSubmit = event => {
     event.preventDefault();
-    fetch("/api/submitemail", {
+    fetch("/api/completeregistration", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        email: this.state.Email
+        name: this.state.Name,
+        password: this.state.Password,
+        emailToken: this.props.match.params.emailtoken
       })
     }).then(res => {
       if (res.status === 400) {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, email format is incorrect."
+              message="Sorry, not able to process username or password."
               buttonMessage="Fine be that way"
             />
           ),
-          Email: ""
+          Name: "",
+          Password: ""
         });
       } else if (res.status === 500) {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, email in use."
+              message="Sorry, username not available, or email in use."
               buttonMessage="Fine be that way"
             />
           ),
-          Email: ""
+          Name: "",
+          Password: ""
         });
       } else if (res.status === 200) {
         this.setState({
           Message: (
             <MessageModal
-              message="Thank you, please check your email."
+              message="Thank you for creating account."
               buttonMessage="You're welcome"
             />
           ),
-          Email: ""
+          Name: "",
+          Password: ""
         });
       }
     });
@@ -72,22 +85,29 @@ class CreateAccount extends Component {
           <h1 id="main-title">FREE MOVIE SUGGESTION</h1>
         </Link>
         <div className="user-pages-body-wrapper">
-          <h1>Create Account</h1>
+          <h1>Complete Registration</h1>
 
-          <form onSubmit={this.handleSubmitEmail}>
+          <form onSubmit={this.handleNameAndPasswordSubmit}>
             <input
-              id="create-account-email-input"
+              data-test="create-account-username-input"
               type="text"
-              placeholder="Email"
-              value={this.state.Email}
-              onChange={this.handleEmailChange}
+              placeholder="Name"
+              value={this.state.Name}
+              onChange={this.handleNameChange}
+            />
+            <input
+              data-test="create-account-password-input"
+              placeholder="Password"
+              type="password"
+              value={this.state.Password}
+              onChange={this.handlePasswordChange}
             />
             <input
               data-test="create-account-submit-button"
               type="submit"
               value="Submit"
               className="form-submit-button"
-              disabled={this.submitEmailIsDisabled()}
+              disabled={this.isDisabled()}
             />
           </form>
         </div>
@@ -99,4 +119,4 @@ class CreateAccount extends Component {
   }
 }
 
-export default CreateAccount;
+export default CompleteRegistration;
