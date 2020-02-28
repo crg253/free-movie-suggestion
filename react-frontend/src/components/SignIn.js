@@ -98,6 +98,16 @@ class SignIn extends Component {
 
   componentDidMount() {
     this.props.setRedirect("");
+    if (this.props.location.state !== undefined) {
+      this.setState({
+        Message: (
+          <MessageModal
+            message={this.props.location.state.message}
+            buttonMessage={this.props.location.state.buttonMessage}
+          />
+        )
+      });
+    }
   }
 
   componentWillUnmount() {
