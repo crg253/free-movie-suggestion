@@ -8,7 +8,8 @@ import "./UserForm.css";
 class CompleteRegistration extends Component {
   state = {
     Name: "",
-    Password: "",
+    Password1: "",
+    Password2: "",
     Message: "",
     Redirect: ""
   };
@@ -20,15 +21,26 @@ class CompleteRegistration extends Component {
     });
   };
 
-  handlePasswordChange = event => {
+  handlePassword1Change = event => {
     this.setState({
-      Password: event.target.value,
+      Password1: event.target.value,
+      Message: ""
+    });
+  };
+
+  handlePassword2Change = event => {
+    this.setState({
+      Password2: event.target.value,
       Message: ""
     });
   };
 
   isDisabled = () => {
-    return this.state.Name.length === 0 || this.state.Password.length < 6;
+    return (
+      this.state.Name.length === 0 ||
+      this.state.Password1.length < 6 ||
+      this.state.Password1 !== this.state.Password2
+    );
   };
 
   handleNameAndPasswordSubmit = event => {
@@ -38,7 +50,7 @@ class CompleteRegistration extends Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         name: this.state.Name,
-        password: this.state.Password,
+        password: this.state.Password1,
         emailToken: this.props.match.params.emailtoken
       })
     }).then(res => {
@@ -104,11 +116,18 @@ class CompleteRegistration extends Component {
               onChange={this.handleNameChange}
             />
             <input
-              data-test="create-account-password-input"
+              data-test="create-account-password-input-1"
               placeholder="Password"
               type="password"
-              value={this.state.Password}
-              onChange={this.handlePasswordChange}
+              value={this.state.Password1}
+              onChange={this.handlePassword1Change}
+            />
+            <input
+              data-test="create-account-password-input-2"
+              placeholder="Password"
+              type="password"
+              value={this.state.Password2}
+              onChange={this.handlePassword2Change}
             />
             <input
               data-test="create-account-submit-button"
