@@ -82,14 +82,19 @@ class SignIn extends Component {
           } else {
             this.setState({
               Name: "",
-              Password: "",
-              Message: (
-                <MessageModal
-                  message={"Now signed in as " + res.name + "."}
-                  buttonMessage="Awesome"
-                />
-              )
+              Password: ""
             });
+            this.props.setRedirectBack(
+              <Redirect
+                to={{
+                  pathname: "/",
+                  state: {
+                    message: "Now signed in as " + res.name + ".",
+                    buttonMessage: "Awesome"
+                  }
+                }}
+              />
+            );
           }
         });
       }
