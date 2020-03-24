@@ -38,6 +38,11 @@ class SignInForm(Form):
     password = PasswordField("password", [string_type_password_length_check])
 
 
+class ResetPasswordForm(Form):
+    email = StringField("email", [string_type_some_length_check, validators.Email()])
+    password = PasswordField("password", [string_type_password_length_check])
+
+
 class TokenForm(Form):
     token = StringField("token", [string_type_check])
 

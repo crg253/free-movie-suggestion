@@ -24,7 +24,7 @@ class ResetPassword extends Component {
 
   handlePasswordReset = event => {
     event.preventDefault();
-    fetch("/api/resetpassword", {
+    fetch("/api/resetpasswordemail", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email: this.state.Email})
@@ -33,7 +33,7 @@ class ResetPassword extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, email not found."
+              message="Sorry, unable to complete request."
               buttonMessage="Fine be that way"
             />
           ),
@@ -43,7 +43,7 @@ class ResetPassword extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, unable to complete request."
+              message="Sorry, email not found."
               buttonMessage="So sad"
             />
           ),
@@ -53,7 +53,7 @@ class ResetPassword extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Success. Check email for new password."
+              message="Success. Check email to reset password."
               buttonMessage="Awesome"
             />
           ),

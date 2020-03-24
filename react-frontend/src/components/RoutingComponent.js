@@ -15,6 +15,7 @@ import DeleteAccount from "./DeleteAccount";
 import About from "./About";
 import Contact from "./Contact";
 import CompleteRegistration from "./CompleteRegistration";
+import CompleteResetPassword from "./CompleteResetPassword";
 
 class RoutingComponent extends Component {
   render() {
@@ -43,6 +44,11 @@ class RoutingComponent extends Component {
             <Route
               path="/completeregistration/:emailtoken"
               render={props => <CompleteRegistration {...props} />}
+            />
+
+            <Route
+              path="/completeresetpassword/:emailtoken"
+              render={props => <CompleteResetPassword {...props} />}
             />
 
             <Route

@@ -12,6 +12,7 @@ from app.forms import (
     UnsaveMovieForm,
     SuggestMovieForm,
     RemoveSuggestionForm,
+    ResetPasswordForm,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -71,7 +72,6 @@ def submit_email():
     email = data.get("email")
     form = CheckEmailForm(email=email)
     if form.validate():
-
         email_user = User.query.filter_by(email=email).first()
         if email_user == None:
             ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
@@ -99,7 +99,6 @@ def create_account():
     data = request.get_json(silent=True) or {}
     token = data.get("emailToken")
     ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-    print(token)
     try:
         email = ts.loads(
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
@@ -129,12 +128,55 @@ def sign_in():
     return (jsonify({"token": token, "name": g.current_user.name}), 200)
 
 
-# /resetpassword
-
-
-@bp.route("/resetpassword", methods=["POST"])
+@bp.route("/resetpasswordemail", methods=["POST"])
 def reset_password():
-    pass
+    data = request.get_json(silent=True) or {}
+    email = data.get("email")
+    form = CheckEmailForm(email=email)
+    if form.validate():
+        email_user = User.query.filter_by(email=email).first()
+        if email_user != None:
+            ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+            email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+            reset_url = url_for(
+                "main.complete_reset_password", email_token=email_token, _external=True
+            )
+            msg = Message(
+                "Reset your password.",
+                sender="admin@freemoviesuggestion.com",
+                recipients=[email],
+            )
+            msg.body = f"Click to reset your password: {reset_url}"
+            mail.send(msg)
+
+            return "", 200
+        else:
+            abort(500)
+    else:
+        abort(400)
+
+
+@bp.route("/completepasswordreset", methods=["POST"])
+def complete_password_reset():
+    data = request.get_json(silent=True) or {}
+    token = data.get("emailToken")
+    ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+    try:
+        email = ts.loads(
+            token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
+        )
+    except:
+        abort(400)
+
+    form = ResetPasswordForm(email=email, password=data.get("password"))
+    if form.validate():
+        user = User.query.filter_by(email=email).first()
+        user.set_password(form.password.data)
+        db.session.commit()
+
+        return "", 200
+    else:
+        return "", 400
 
 
 @bp.route("/editaccount", methods=["POST"])
