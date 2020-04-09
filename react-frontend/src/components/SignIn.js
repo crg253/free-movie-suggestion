@@ -154,15 +154,15 @@ class SignIn extends Component {
             />
           </form>
 
-          <div id="forgotpassword-createaccount-links">
+          <div>
             <Link to={"/resetpassword"}>
-              <h1 id="resetpassword-link">forgot password?</h1>
+              <h1>forgot password?</h1>
             </Link>
 
-            <Link data-test="signin-create-account-link" to={"/createaccount"}>
-              <h1 id="createaccount-link">
+            <Link to={"/createaccount"}>
+              <h1>
                 /create
-                <span id="account-word-style">account</span>
+                <span>account</span>
               </h1>
             </Link>
           </div>

@@ -1,0 +1,44 @@
+#two-links{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#single-color-link{
+  color: #778899;
+}
+#second-link-position{
+  margin-left: 30px;
+}
+#half-link-color{
+  color:#a9a9a9;
+}
+
+/* PORTRAIT */
+@media only screen and (orientation:portrait){
+  #two-links{
+    display: block;
+  }
+  #single-color-link{
+    margin: 10px auto 10px auto;
+    padding:0;
+  }
+  #second-link-position{
+    margin:0;
+    padding:0;
+  }
+}
+
+/* SMALL LANDSCAPE */
+@media only screen and (max-width: 900px) and (orientation:landscape){
+  #two-links{
+    display: block;
+  }
+  #single-color-link{
+    margin: 10px auto 10px auto;
+    padding:0;
+  }
+  #second-link-position{
+    margin:0;
+    padding:0;
+  }
+}

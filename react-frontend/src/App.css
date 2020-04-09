@@ -7,9 +7,7 @@ a{
   text-decoration: none;
   color: #E8E8E8;
 }
-a:visited {
-  color: purple;
-}
+
 .button-nostyle{
   background:none;
   border:none;

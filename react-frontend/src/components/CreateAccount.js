@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import MessageModal from "./MessageModal";
 
 import "./UserForm.css";
+import "./FormLinks.css";
 
 class CreateAccount extends Component {
   state = {
@@ -90,6 +91,19 @@ class CreateAccount extends Component {
               disabled={this.submitEmailIsDisabled()}
             />
           </form>
+
+          <div id="two-links">
+            <Link to={"/resetpassword"}>
+              <h1 id="single-color-link">forgot password?</h1>
+            </Link>
+
+            <Link to={"/signin"}>
+              <h1 id="second-link-position">
+                /sign
+                <span id="half-link-color">in</span>
+              </h1>
+            </Link>
+          </div>
         </div>
         {/* class="user-pages-body-wrapper"*/}
         <div data-test="create-account-message-modal">{this.state.Message}</div>
