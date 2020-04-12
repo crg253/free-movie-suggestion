@@ -3,15 +3,9 @@
   justify-content: center;
   align-items: center;
 }
-/* #forgot-password-link{
-  color: #778899;
-} */
 #second-link{
   margin-left: 30px;
 }
-/* #half-link-color{
-  color:#a9a9a9;
-} */
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){

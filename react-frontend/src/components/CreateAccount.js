@@ -19,8 +19,15 @@ class CreateAccount extends Component {
     });
   };
 
+  validateEmail = email => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
   submitEmailIsDisabled = () => {
-    return this.state.Email.length === 0;
+    return (
+      this.state.Email.length === 0 || !this.validateEmail(this.state.Email)
+    );
   };
 
   handleSubmitEmail = event => {
