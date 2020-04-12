@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import MessageModal from "./MessageModal";
 
 import "./UserForm.css";
-import "./ResetPassword.css";
+import "./FormLinks.css";
 
 class ResetPassword extends Component {
   state = {
@@ -87,16 +87,16 @@ class ResetPassword extends Component {
             />
           </form>
 
-          <div id="signin-createaccount-links">
+          <div id="two-links">
             <Link to={"/signin"}>
-              <h1 id="signin-link">
+              <h1 id="first-link">
                 /sign<span style={{color: "#a9a9a9"}}>in</span>
               </h1>
             </Link>
 
             <Link to={"/createaccount"}>
-              <h1 id="createaccount-link">
-                /create<span style={{color: "#a9a9a9"}}>account</span>
+              <h1 id="second-link">
+                /create<span style={{color: "#778899"}}>account</span>
               </h1>
             </Link>
           </div>

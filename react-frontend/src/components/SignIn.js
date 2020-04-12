@@ -4,7 +4,7 @@ import {Link, Redirect} from "react-router-dom";
 import MessageModal from "./MessageModal";
 
 import "./UserForm.css";
-import "./SignIn.css";
+import "./FormLinks.css";
 
 class SignIn extends Component {
   state = {
@@ -154,15 +154,17 @@ class SignIn extends Component {
             />
           </form>
 
-          <div>
+          <div id="two-links">
             <Link to={"/resetpassword"}>
-              <h1>forgot password?</h1>
+              <h1 id="first-link" style={{color: "#778899"}}>
+                forgot password?
+              </h1>
             </Link>
 
             <Link to={"/createaccount"}>
-              <h1>
+              <h1 id="second-link">
                 /create
-                <span>account</span>
+                <span style={{color: "#a9a9a9"}}>account</span>
               </h1>
             </Link>
           </div>

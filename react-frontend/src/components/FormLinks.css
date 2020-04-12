@@ -3,26 +3,26 @@
   justify-content: center;
   align-items: center;
 }
-#single-color-link{
+/* #forgot-password-link{
   color: #778899;
-}
-#second-link-position{
+} */
+#second-link{
   margin-left: 30px;
 }
-#half-link-color{
+/* #half-link-color{
   color:#a9a9a9;
-}
+} */
 
 /* PORTRAIT */
 @media only screen and (orientation:portrait){
   #two-links{
     display: block;
   }
-  #single-color-link{
+  #first-link{
     margin: 10px auto 10px auto;
     padding:0;
   }
-  #second-link-position{
+  #second-link{
     margin:0;
     padding:0;
   }
@@ -33,11 +33,11 @@
   #two-links{
     display: block;
   }
-  #single-color-link{
+  #first-link{
     margin: 10px auto 10px auto;
     padding:0;
   }
-  #second-link-position{
+  #second-link{
     margin:0;
     padding:0;
   }

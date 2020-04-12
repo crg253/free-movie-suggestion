@@ -94,13 +94,15 @@ class CreateAccount extends Component {
 
           <div id="two-links">
             <Link to={"/resetpassword"}>
-              <h1 id="single-color-link">forgot password?</h1>
+              <h1 id="first-link" style={{color: "#778899"}}>
+                forgot password?
+              </h1>
             </Link>
 
             <Link to={"/signin"}>
-              <h1 id="second-link-position">
+              <h1 id="second-link">
                 /sign
-                <span id="half-link-color">in</span>
+                <span style={{color: "#a9a9a9"}}>in</span>
               </h1>
             </Link>
           </div>
