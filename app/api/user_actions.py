@@ -14,6 +14,9 @@ from app.forms import (
     RemoveSuggestionForm,
     ResetPasswordForm,
 )
+from app.schemas import(
+    EmailSchema
+)
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
@@ -21,6 +24,7 @@ import random
 from types import *
 from itsdangerous import URLSafeTimedSerializer
 import os
+import json
 
 
 def slugify(slug):
@@ -69,9 +73,12 @@ def get_movies():
 @bp.route("/submitemail", methods=["POST"])
 def submit_email():
     data = request.get_json(silent=True) or {}
-    email = data.get("email")
-    form = CheckEmailForm(email=email)
-    if form.validate():
+    email_schema = EmailSchema()
+    errors = email_schema.validate(data)
+    if errors:
+        abort(400)
+    else:
+        email = data.get("email")
         email_user = User.query.filter_by(email=email).first()
         if email_user == None:
             ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
@@ -90,8 +97,30 @@ def submit_email():
             return "", 200
         else:
             abort(500)
-    else:
-        abort(400)
+
+
+    # form = CheckEmailForm(email=email)
+    # if form.validate():
+    #     email_user = User.query.filter_by(email=email).first()
+    #     if email_user == None:
+    #         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+    #         email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+    #         confirm_url = url_for(
+    #             "main.confirm_email", email_token=email_token, _external=True
+    #         )
+    #         msg = Message(
+    #             "Confirm your email",
+    #             sender="admin@freemoviesuggestion.com",
+    #             recipients=[email],
+    #         )
+    #         msg.body = f"Click to confirm email and activate account: {confirm_url}"
+    #         mail.send(msg)
+    #
+    #         return "", 200
+    #     else:
+    #         abort(500)
+    # else:
+    #     abort(400)
 
 
 @bp.route("/completeregistration", methods=["POST"])
