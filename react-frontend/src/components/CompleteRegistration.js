@@ -4,6 +4,7 @@ import {Link, Redirect} from "react-router-dom";
 import MessageModal from "./MessageModal";
 
 import "./UserForm.css";
+import "./FormLinks.css";
 
 class CompleteRegistration extends Component {
   state = {
@@ -63,18 +64,20 @@ class CompleteRegistration extends Component {
             />
           ),
           Name: "",
-          Password: ""
+          Password1: "",
+          Password2: ""
         });
       } else if (res.status === 500) {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, username not available, or email in use."
+              message="Sorry, username or email in use."
               buttonMessage="Fine be that way"
             />
           ),
           Name: "",
-          Password: ""
+          Password1: "",
+          Password2: ""
         });
       } else if (res.status === 200) {
         this.setState({
@@ -91,7 +94,8 @@ class CompleteRegistration extends Component {
           ),
 
           Name: "",
-          Password: ""
+          Password1: "",
+          Password2: ""
         });
       }
     });
