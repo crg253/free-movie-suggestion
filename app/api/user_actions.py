@@ -14,9 +14,7 @@ from app.forms import (
     RemoveSuggestionForm,
     ResetPasswordForm,
 )
-from app.schemas import(
-    EmailSchema
-)
+from app.schemas import EmailSchema, NewUserSchema
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
@@ -76,11 +74,16 @@ def submit_email():
     email_schema = EmailSchema()
     errors = email_schema.validate(data)
     if errors:
+        # fail 1: email data is wrong format or type
         abort(400)
     else:
+        # pass 1: email data is good
         email = data.get("email")
+        # not sure if this is ok ... should I be pulling data out of schema instead?
         email_user = User.query.filter_by(email=email).first()
+
         if email_user == None:
+            # pass 2: email data is good and hasn't been used
             ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
             email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
             confirm_url = url_for(
@@ -96,36 +99,15 @@ def submit_email():
 
             return "", 200
         else:
+            # fail 2: email already being used
             abort(500)
-
-
-    # form = CheckEmailForm(email=email)
-    # if form.validate():
-    #     email_user = User.query.filter_by(email=email).first()
-    #     if email_user == None:
-    #         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-    #         email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-    #         confirm_url = url_for(
-    #             "main.confirm_email", email_token=email_token, _external=True
-    #         )
-    #         msg = Message(
-    #             "Confirm your email",
-    #             sender="admin@freemoviesuggestion.com",
-    #             recipients=[email],
-    #         )
-    #         msg.body = f"Click to confirm email and activate account: {confirm_url}"
-    #         mail.send(msg)
-    #
-    #         return "", 200
-    #     else:
-    #         abort(500)
-    # else:
-    #     abort(400)
 
 
 @bp.route("/completeregistration", methods=["POST"])
 def create_account():
     data = request.get_json(silent=True) or {}
+
+    # get email data
     token = data.get("emailToken")
     ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
     try:
@@ -135,18 +117,22 @@ def create_account():
     except:
         abort(400)
 
-    form = CreateAccountForm(
-        email=email, name=data.get("name"), password=data.get("password")
-    )
-    if form.validate():
-        new_user = User(email=form.email.data, name=form.name.data)
-        new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.commit()
+    # get name and password
+    name = data.get("name")
+    password = data.get("password")
 
-        return "", 200
-    else:
-        return "", 400
+    # validate all data
+    user_data = {"email": email, "name": name, "password": password}
+    try:
+        NewUserSchema().load(user_data)
+    except:
+        abort(400)
+
+    new_user = User(email=email, name=name)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+    return "", 200
 
 
 @bp.route("/signin", methods=["POST"])
