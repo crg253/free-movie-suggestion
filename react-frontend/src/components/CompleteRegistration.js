@@ -59,7 +59,7 @@ class CompleteRegistration extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, not able to process username or password."
+              message="Sorry, not able to complete registration."
               buttonMessage="Fine be that way"
             />
           ),

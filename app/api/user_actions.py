@@ -14,7 +14,7 @@ from app.forms import (
     RemoveSuggestionForm,
     ResetPasswordForm,
 )
-from app.schemas import EmailSchema, NewUserSchema
+from app.schemas import EmailSchema, UserSchema
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
@@ -105,34 +105,25 @@ def submit_email():
 
 @bp.route("/completeregistration", methods=["POST"])
 def create_account():
-    data = request.get_json(silent=True) or {}
-
-    # get email data
-    token = data.get("emailToken")
-    ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
     try:
+        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+        data = request.get_json(silent=True) or {}
+        token = data.get("emailToken")
         email = ts.loads(
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
-    except:
+        name = data.get("name")
+        password = data.get("password")
+        user_data = {"email": email, "name": name, "password": password}
+        UserSchema().load(user_data)
+        new_user = User(email=email, name=name)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+        return "", 200
+    except Exception as e:
+        # print(e)
         abort(400)
-
-    # get name and password
-    name = data.get("name")
-    password = data.get("password")
-
-    # validate all data
-    user_data = {"email": email, "name": name, "password": password}
-    try:
-        NewUserSchema().load(user_data)
-    except:
-        abort(400)
-
-    new_user = User(email=email, name=name)
-    new_user.set_password(password)
-    db.session.add(new_user)
-    db.session.commit()
-    return "", 200
 
 
 @bp.route("/signin", methods=["POST"])
@@ -146,9 +137,8 @@ def sign_in():
 @bp.route("/resetpasswordemail", methods=["POST"])
 def reset_password():
     data = request.get_json(silent=True) or {}
-    email = data.get("email")
-    form = CheckEmailForm(email=email)
-    if form.validate():
+    try:
+        UserSchema().load(data)
         email_user = User.query.filter_by(email=email).first()
         if email_user != None:
             ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
@@ -167,7 +157,7 @@ def reset_password():
             return "", 200
         else:
             abort(500)
-    else:
+    except:
         abort(400)
 
 
