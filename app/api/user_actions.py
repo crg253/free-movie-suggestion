@@ -71,59 +71,62 @@ def get_movies():
 @bp.route("/submitemail", methods=["POST"])
 def submit_email():
     data = request.get_json(silent=True) or {}
-    email_schema = EmailSchema()
-    errors = email_schema.validate(data)
-    if errors:
-        # fail 1: email data is wrong format or type
-        abort(400)
+
+    try:
+        EmailSchema().load(data)
+    except:
+        return "", 200
+
+    # if email not being used then send link
+    email = data.get("email")
+    email_user = User.query.filter_by(email=email).first()
+    if email_user == None:
+        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+        email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+        confirm_url = url_for(
+            "main.confirm_email", email_token=email_token, _external=True
+        )
+        msg = Message(
+            "Confirm your email",
+            sender="admin@freemoviesuggestion.com",
+            recipients=[email],
+        )
+        msg.body = f"Click to confirm email and activate account: {confirm_url}"
+        mail.send(msg)
+        return "", 200
     else:
-        # pass 1: email data is good
-        email = data.get("email")
-        # not sure if this is ok ... should I be pulling data out of schema instead?
-        email_user = User.query.filter_by(email=email).first()
-
-        if email_user == None:
-            # pass 2: email data is good and hasn't been used
-            ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-            email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-            confirm_url = url_for(
-                "main.confirm_email", email_token=email_token, _external=True
-            )
-            msg = Message(
-                "Confirm your email",
-                sender="admin@freemoviesuggestion.com",
-                recipients=[email],
-            )
-            msg.body = f"Click to confirm email and activate account: {confirm_url}"
-            mail.send(msg)
-
-            return "", 200
-        else:
-            # fail 2: email already being used
-            abort(500)
+        return "", 200
 
 
 @bp.route("/completeregistration", methods=["POST"])
 def create_account():
+    data = request.get_json(silent=True) or {}
     try:
         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        data = request.get_json(silent=True) or {}
         token = data.get("emailToken")
         email = ts.loads(
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
+    except:
+        abort(400)
+
+    try:
         name = data.get("name")
         password = data.get("password")
         user_data = {"email": email, "name": name, "password": password}
         UserSchema().load(user_data)
+    except:
+        abort(400)
+
+    try:
         new_user = User(email=email, name=name)
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
-        return "", 200
-    except Exception as e:
-        # print(e)
+    except:
         abort(400)
+
+    return "", 200
 
 
 @bp.route("/signin", methods=["POST"])
@@ -136,29 +139,27 @@ def sign_in():
 
 @bp.route("/resetpasswordemail", methods=["POST"])
 def reset_password():
-    data = request.get_json(silent=True) or {}
+    json_data = request.get_json(silent=True) or {}
     try:
-        UserSchema().load(data)
-        email_user = User.query.filter_by(email=email).first()
-        if email_user != None:
-            ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-            email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
-            reset_url = url_for(
-                "main.complete_reset_password", email_token=email_token, _external=True
-            )
-            msg = Message(
-                "Reset your password.",
-                sender="admin@freemoviesuggestion.com",
-                recipients=[email],
-            )
-            msg.body = f"Click to reset your password: {reset_url}"
-            mail.send(msg)
-
-            return "", 200
-        else:
-            abort(500)
+        data = EmailSchema().load(json_data)
     except:
-        abort(400)
+        return "", 200
+    email = data["email"]
+    email_user = User.query.filter_by(email=email).first()
+    if email_user != None:
+        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+        email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+        reset_url = url_for(
+            "main.complete_reset_password", email_token=email_token, _external=True
+        )
+        msg = Message(
+            "Reset your password.",
+            sender="admin@freemoviesuggestion.com",
+            recipients=[email],
+        )
+        msg.body = f"Click to reset your password: {reset_url}"
+        mail.send(msg)
+    return "", 200
 
 
 @bp.route("/completepasswordreset", methods=["POST"])

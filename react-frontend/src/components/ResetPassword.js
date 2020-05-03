@@ -54,7 +54,7 @@ class ResetPassword extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Success. Check email to reset password."
+              message="Check email to reset password."
               buttonMessage="Awesome"
             />
           ),

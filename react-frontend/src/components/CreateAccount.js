@@ -43,7 +43,7 @@ class CreateAccount extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, email format is incorrect."
+              message="Sorry, unable to complete request."
               buttonMessage="Fine be that way"
             />
           ),
