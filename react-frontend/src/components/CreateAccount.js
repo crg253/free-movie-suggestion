@@ -24,11 +24,11 @@ class CreateAccount extends Component {
     return re.test(String(email).toLowerCase());
   };
 
-  submitEmailIsDisabled = () => {
-    return (
-      this.state.Email.length === 0 || !this.validateEmail(this.state.Email)
-    );
-  };
+  // submitEmailIsDisabled = () => {
+  //   return (
+  //     this.state.Email.length === 0 || !this.validateEmail(this.state.Email)
+  //   );
+  // };
 
   handleSubmitEmail = event => {
     event.preventDefault();
@@ -39,37 +39,15 @@ class CreateAccount extends Component {
         email: this.state.Email
       })
     }).then(res => {
-      if (res.status === 400) {
-        this.setState({
-          Message: (
-            <MessageModal
-              message="Sorry, unable to complete request."
-              buttonMessage="Fine be that way"
-            />
-          ),
-          Email: ""
-        });
-      } else if (res.status === 500) {
-        this.setState({
-          Message: (
-            <MessageModal
-              message="Sorry, email in use."
-              buttonMessage="Fine be that way"
-            />
-          ),
-          Email: ""
-        });
-      } else if (res.status === 200) {
-        this.setState({
-          Message: (
-            <MessageModal
-              message="Thank you, please check your email."
-              buttonMessage="You're welcome"
-            />
-          ),
-          Email: ""
-        });
-      }
+      this.setState({
+        Message: (
+          <MessageModal
+            message="Thank you, please check your email."
+            buttonMessage="You're welcome"
+          />
+        ),
+        Email: ""
+      });
     });
   };
 
@@ -95,7 +73,7 @@ class CreateAccount extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              disabled={this.submitEmailIsDisabled()}
+              // disabled={this.submitEmailIsDisabled()}
             />
           </form>
 

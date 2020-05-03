@@ -14,7 +14,7 @@ from app.forms import (
     RemoveSuggestionForm,
     ResetPasswordForm,
 )
-from app.schemas import EmailSchema, UserSchema
+from app.schemas import EmailSchema, UserSchema, ResetPasswordSchema
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
@@ -71,9 +71,11 @@ def get_movies():
 @bp.route("/submitemail", methods=["POST"])
 def submit_email():
     json_data = request.get_json(silent=True) or {}
+    # validate email
     try:
         data = EmailSchema().load(json_data)
     except:
+        print("bad email format")
         return "", 200
     # if email not being used then send link
     email = data["email"]
@@ -91,8 +93,10 @@ def submit_email():
         )
         msg.body = f"Click to confirm email and activate account: {confirm_url}"
         mail.send(msg)
+        print("success")
         return "", 200
     else:
+        print("email being used")
         return "", 200
 
 
@@ -106,6 +110,7 @@ def create_account():
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
     except:
+        print("bad email token")
         abort(400)
     name = json_data.get("name")
     password = json_data.get("password")
@@ -113,6 +118,7 @@ def create_account():
     try:
         data = UserSchema().load(new_user_data)
     except:
+        print("bad user data")
         abort(400)
     new_user = User(email=data["email"], name=data["name"])
     new_user.set_password(data["password"])
@@ -120,8 +126,9 @@ def create_account():
     try:
         db.session.commit()
     except:
+        print("user name or email already exists")
         abort(400)
-
+    print("success")
     return "", 200
 
 
@@ -139,6 +146,7 @@ def reset_password():
     try:
         data = EmailSchema().load(json_data)
     except:
+        print("bad email format")
         return "", 200
     email = data["email"]
     email_user = User.query.filter_by(email=email).first()
@@ -155,30 +163,41 @@ def reset_password():
         )
         msg.body = f"Click to reset your password: {reset_url}"
         mail.send(msg)
+    else:
+        print("unable to find user")
+        return "", 200
+
+    print("sent password reset link")
     return "", 200
 
 
 @bp.route("/completepasswordreset", methods=["POST"])
 def complete_password_reset():
-    data = request.get_json(silent=True) or {}
-    token = data.get("emailToken")
+    json_data = request.get_json(silent=True) or {}
+    token = json_data.get("emailToken")
     ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
     try:
         email = ts.loads(
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
     except:
+        print("bad email format")
         abort(400)
-
-    form = ResetPasswordForm(email=email, password=data.get("password"))
-    if form.validate():
-        user = User.query.filter_by(email=email).first()
-        user.set_password(form.password.data)
+    password = json_data.get("password")
+    user_data = {"email": email, "password": password}
+    try:
+        data = ResetPasswordSchema().load(user_data)
+    except:
+        print("bad data")
+        abort(400)
+    user = User.query.filter_by(email=data["email"]).first()
+    if user != None:
+        user.set_password(data["password"])
         db.session.commit()
-
         return "", 200
     else:
-        return "", 400
+        print("user not found")
+        abort(500)
 
 
 @bp.route("/editaccount", methods=["POST"])

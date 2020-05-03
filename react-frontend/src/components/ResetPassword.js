@@ -30,37 +30,15 @@ class ResetPassword extends Component {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email: this.state.Email})
     }).then(res => {
-      if (res.status === 400 || res.status === 401) {
-        this.setState({
-          Message: (
-            <MessageModal
-              message="Sorry, unable to complete request."
-              buttonMessage="Fine be that way"
-            />
-          ),
-          Email: ""
-        });
-      } else if (res.status === 500) {
-        this.setState({
-          Message: (
-            <MessageModal
-              message="Sorry, email not found."
-              buttonMessage="So sad"
-            />
-          ),
-          Email: ""
-        });
-      } else {
-        this.setState({
-          Message: (
-            <MessageModal
-              message="Check email to reset password."
-              buttonMessage="Awesome"
-            />
-          ),
-          Email: ""
-        });
-      }
+      this.setState({
+        Message: (
+          <MessageModal
+            message="Check email to reset password."
+            buttonMessage="Awesome"
+          />
+        ),
+        Email: ""
+      });
     });
   };
 
@@ -83,7 +61,7 @@ class ResetPassword extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              disabled={this.isDisabled()}
+              // disabled={this.isDisabled()}
             />
           </form>
 

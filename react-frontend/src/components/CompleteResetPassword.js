@@ -59,7 +59,7 @@ class CompleteRegistration extends Component {
         this.setState({
           Message: (
             <MessageModal
-              message="Sorry, username not available, or email in use."
+              message="Sorry, user not found."
               buttonMessage="Fine be that way"
             />
           ),
@@ -117,7 +117,7 @@ class CompleteRegistration extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              disabled={this.isDisabled()}
+              // disabled={this.isDisabled()}
             />
           </form>
         </div>
