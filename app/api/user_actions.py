@@ -70,15 +70,13 @@ def get_movies():
 
 @bp.route("/submitemail", methods=["POST"])
 def submit_email():
-    data = request.get_json(silent=True) or {}
-
+    json_data = request.get_json(silent=True) or {}
     try:
-        EmailSchema().load(data)
+        data = EmailSchema().load(json_data)
     except:
         return "", 200
-
     # if email not being used then send link
-    email = data.get("email")
+    email = data["email"]
     email_user = User.query.filter_by(email=email).first()
     if email_user == None:
         ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
@@ -100,28 +98,26 @@ def submit_email():
 
 @bp.route("/completeregistration", methods=["POST"])
 def create_account():
-    data = request.get_json(silent=True) or {}
+    json_data = request.get_json(silent=True) or {}
+    ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+    token = json_data.get("emailToken")
     try:
-        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        token = data.get("emailToken")
         email = ts.loads(
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
     except:
         abort(400)
-
+    name = json_data.get("name")
+    password = json_data.get("password")
+    new_user_data = {"email": email, "name": name, "password": password}
     try:
-        name = data.get("name")
-        password = data.get("password")
-        user_data = {"email": email, "name": name, "password": password}
-        UserSchema().load(user_data)
+        data = UserSchema().load(new_user_data)
     except:
         abort(400)
-
+    new_user = User(email=data["email"], name=data["name"])
+    new_user.set_password(data["password"])
+    db.session.add(new_user)
     try:
-        new_user = User(email=email, name=name)
-        new_user.set_password(password)
-        db.session.add(new_user)
         db.session.commit()
     except:
         abort(400)
