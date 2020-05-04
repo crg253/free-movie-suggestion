@@ -25,14 +25,18 @@ class MovieList extends Component {
             data-test={"movie-list-item-" + film.slug}
             key={"movie-list-item-" + film.slug}
           >
-            <Link to={"/" + this.props.genreslug + "/" + film.slug}>
-              <div className="list-items">
-                <p>{film.title}</p> <p>{film.year}</p>
-                {film.tags.map(tag => (
-                  <p key={film.slug + tag}>{tag}</p>
-                ))}
-              </div>
-            </Link>
+            <div className="list-items">
+              <Link to={"/" + this.props.genreslug + "/" + film.slug}>
+                <p>
+                  {film.title + " "}
+                  {film.year}
+                </p>
+              </Link>
+
+              {film.tags.map(tag => (
+                <p key={film.slug + tag}>{tag}</p>
+              ))}
+            </div>
           </div>
         ))}
       </div>

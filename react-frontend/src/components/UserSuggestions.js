@@ -52,12 +52,6 @@ class UserSuggestions extends Component {
 
     allUserSuggestionsTrailers.sort(this.props.compareTitle);
 
-    let allUserSuggestionsNoTrailers = this.props.movies
-      .filter(movie => movie.recommendedBy !== "crg253")
-      .filter(film => film.video === null);
-
-    allUserSuggestionsNoTrailers.sort(this.props.compareTitle);
-
     return (
       <div>
         {this.props.redirect}
@@ -102,40 +96,6 @@ class UserSuggestions extends Component {
               <div className="save-unsave-or-unsuggest-button-wrapper">
                 {this.getSuggSaveButton(film.slug)}
               </div>
-            </div>
-          ))}
-
-          {allUserSuggestionsNoTrailers.map(film => (
-            <div
-              data-test={"user-suggestion-card-wrapper-" + film.slug}
-              key={"usersuggestion" + film.slug}
-            >
-              <div
-                data-test={"user-suggestion-card-" + film.slug}
-                className="suggested-movie-tile"
-              >
-                <p className="tile-title-style">Coming</p>
-                <p>Soon</p>
-              </div>
-
-              <div className="saved-or-suggested-title-year">
-                <p data-test={"user-suggestion-card-title-" + film.slug}>
-                  {film.title}
-                </p>
-                <p
-                  data-test={"user-suggestion-card-year-" + film.slug}
-                  className="film-year-style"
-                >
-                  {film.year}
-                </p>
-              </div>
-
-              <p
-                data-test={"user-suggestion-card-comment-" + film.slug}
-                className="suggested-by-title"
-              >
-                Suggested by {film.recommendedBy}
-              </p>
             </div>
           ))}
         </div>
