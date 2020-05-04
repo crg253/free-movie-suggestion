@@ -250,41 +250,29 @@ def delete_account():
 @bp.route("/savemovie", methods=["POST"])
 @token_auth.login_required
 def save_movie():
-    data = request.get_json(silent=True) or {}
-    slug = data.get("slug")
-    form = SaveMovieForm(slug=slug)
-    if form.validate():
-        movies_to_save = Movie.query.filter_by(slug=slug).all()
-        if len(movies_to_save) > 1 or len(movies_to_save) == 0:
-            abort(500)
-        if movies_to_save[0] in g.current_user.saves:
+    json_data = request.get_json(silent=True) or {}
+    movie = Movie.query.filter_by(slug=json_data.get("slug")).first()
+    if movie is not None:
+        if movie in g.current_user.saves:
             abort(500)
         else:
-            g.current_user.saves.append(movies_to_save[0])
+            g.current_user.saves.append(movie)
             db.session.commit()
             return "", 200
-    else:
-        abort(400)
 
 
 @bp.route("/unsavemovie", methods=["POST"])
 @token_auth.login_required
 def unsave_movie():
-    data = request.get_json(silent=True) or {}
-    slug = data.get("slug")
-    form = UnsaveMovieForm(slug=slug)
-    if form.validate():
-        movies_to_unsave = Movie.query.filter_by(slug=slug).all()
-        if len(movies_to_unsave) > 1 or len(movies_to_unsave) == 0:
-            abort(500)
-        if movies_to_unsave[0] not in g.current_user.saves:
+    json_data = request.get_json(silent=True) or {}
+    movie = Movie.query.filter_by(slug=json_data.get("slug")).first()
+    if movie is not None:
+        if movie not in g.current_user.saves:
             abort(500)
         else:
-            g.current_user.saves.remove(movies_to_unsave[0])
+            g.current_user.saves.remove(movie)
             db.session.commit()
             return "", 200
-    else:
-        abort(400)
 
 
 @bp.route("/suggestmovie", methods=["POST"])
