@@ -14,7 +14,13 @@ from app.forms import (
     RemoveSuggestionForm,
     ResetPasswordForm,
 )
-from app.schemas import EmailSchema, UserSchema, ResetPasswordSchema
+from app.schemas import (
+    EmailSchema,
+    NameSchema,
+    PasswordSchema,
+    UserSchema,
+    ResetPasswordSchema,
+)
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
 import string
@@ -203,35 +209,31 @@ def complete_password_reset():
 @bp.route("/editaccount", methods=["POST"])
 @token_auth.login_required
 def edit_account():
-    data = request.get_json(silent=True) or {}
+    json_data = request.get_json(silent=True) or {}
     user = g.current_user
 
-    new_name = data.get("newName")
-    change_name_form = ChangeNameForm(name=new_name)
-    new_email = data.get("newEmail")
-    change_email_form = ChangeEmailForm(email=new_email)
-    new_password = data.get("newPassword")
-    change_password_form = ChangePasswordForm(password=new_password)
+    new_name = {"name": json_data.get("newName")}
+    new_email = {"email": json_data.get("newEmail")}
+    new_password = {"password": json_data.get("newPassword")}
 
-    if (
-        change_name_form.validate()
-        or change_email_form.validate()
-        or change_password_form.validate()
-    ):
+    try:
+        name_data = NameSchema().load(new_name)
+        user.name = name_data["name"]
+    except:
+        pass
+    try:
+        email_data = EmailSchema().load(new_email)
+        user.email = email_data["email"]
+    except:
+        pass
+    try:
+        password_data = PasswordSchema().load(new_password)
+        user.set_password(password_data["password"])
+    except:
+        pass
 
-        if change_name_form.validate():
-            user.name = new_name
-
-        if change_email_form.validate():
-            user.email = new_email
-
-        if change_password_form.validate():
-            user.set_password(new_password)
-
-        db.session.commit()
-        return "", 200
-    else:
-        abort(400)
+    db.session.commit()
+    return "", 200
 
 
 @bp.route("/deleteaccount", methods=["DELETE"])

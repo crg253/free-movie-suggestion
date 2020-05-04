@@ -5,12 +5,20 @@ class EmailSchema(Schema):
     email = fields.Email(required=True)
 
 
-class UserSchema(Schema):
+class NameSchema(Schema):
     name = fields.Str(required=True, validate=validate.Length(min=1))
-    email = fields.Email(required=True)
+
+
+class PasswordSchema(Schema):
     password = fields.Str(required=True, validate=validate.Length(min=6))
+
+
+class UserSchema(Schema):
+    name = fields.Nested(NameSchema())
+    email = fields.Nested(EmailSchema())
+    password = fields.Nested(PasswordSchema())
 
 
 class ResetPasswordSchema(Schema):
-    email = fields.Email(required=True)
-    password = fields.Str(required=True, validate=validate.Length(min=6))
+    email = fields.Nested(EmailSchema())
+    password = fields.Nested(PasswordSchema())
