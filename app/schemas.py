@@ -13,6 +13,10 @@ class PasswordSchema(Schema):
     password = fields.Str(required=True, validate=validate.Length(min=6))
 
 
+class SlugSchema(Schema):
+    slug = fields.Str(required=True, validate=validate.Length(min=5))
+
+
 class UserSchema(Schema):
     name = fields.Nested(NameSchema())
     email = fields.Nested(EmailSchema())

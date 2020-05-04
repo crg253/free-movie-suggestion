@@ -2,11 +2,11 @@ from flask import jsonify, render_template, request, g, abort, url_for
 from flask_mail import Message
 from app import db, mail
 from app.models import Movie, Tag, User
-from app.forms import RemoveSuggestionForm
 from app.schemas import (
     EmailSchema,
     NameSchema,
     PasswordSchema,
+    SlugSchema,
     UserSchema,
     ResetPasswordSchema,
     MovieSchema,
@@ -314,18 +314,18 @@ def suggest_movie():
 @bp.route("/removesuggestion", methods=["POST"])
 @token_auth.login_required
 def remove_suggestion():
-    data = request.get_json(silent=True) or {}
-    slug = data.get("slug")
-    form = RemoveSuggestionForm(slug=slug)
-    if form.validate():
-        movies_to_unsuggest = Movie.query.filter_by(slug=slug).all()
-        if len(movies_to_unsuggest) > 1 or len(movies_to_unsuggest) == 0:
-            abort(500)
-        if movies_to_unsuggest[0] not in g.current_user.recommendations:
-            abort(500)
-        else:
-            db.session.delete(movies_to_unsuggest[0])
-            db.session.commit()
-            return "", 200
-    else:
+    json_data = request.get_json(silent=True) or {}
+    try:
+        data = SlugSchema().load(json_data)
+    except:
         abort(400)
+    slug = data["slug"]
+    movie_to_unsuggest = Movie.query.filter_by(slug=slug).first()
+    if movie_to_unsuggest is None:
+        abort(500)
+    if movie_to_unsuggest not in g.current_user.recommendations:
+        abort(500)
+    else:
+        db.session.delete(movie_to_unsuggest)
+        db.session.commit()
+        return "", 200
