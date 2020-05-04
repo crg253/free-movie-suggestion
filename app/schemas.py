@@ -22,3 +22,8 @@ class UserSchema(Schema):
 class ResetPasswordSchema(Schema):
     email = fields.Nested(EmailSchema())
     password = fields.Nested(PasswordSchema())
+
+
+class MovieSchema(Schema):
+    title = fields.Str(required=True, validate=validate.Length(min=1))
+    year = fields.Str(required=True, validate=validate.Length(min=1))

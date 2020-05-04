@@ -2,24 +2,14 @@ from flask import jsonify, render_template, request, g, abort, url_for
 from flask_mail import Message
 from app import db, mail
 from app.models import Movie, Tag, User
-from app.forms import (
-    CreateAccountForm,
-    CheckEmailForm,
-    ChangeNameForm,
-    ChangeEmailForm,
-    ChangePasswordForm,
-    SaveMovieForm,
-    UnsaveMovieForm,
-    SuggestMovieForm,
-    RemoveSuggestionForm,
-    ResetPasswordForm,
-)
+from app.forms import RemoveSuggestionForm
 from app.schemas import (
     EmailSchema,
     NameSchema,
     PasswordSchema,
     UserSchema,
     ResetPasswordSchema,
+    MovieSchema,
 )
 from app.api import bp
 from app.api.auth import basic_auth, token_auth
@@ -35,7 +25,7 @@ def slugify(slug):
     to_remove = [" ", "'", ",", "!", ".", ":", "&", "-"]
     for item in to_remove:
         slug = slug.replace(item, "")
-    return slug
+    return slug.lower()
 
 
 @bp.route("/getuser", methods=["POST"])
@@ -278,36 +268,47 @@ def unsave_movie():
 @bp.route("/suggestmovie", methods=["POST"])
 @token_auth.login_required
 def suggest_movie():
-    data = request.get_json(silent=True) or {}
-    title = data.get("title")
-    year = data.get("year")
-    form = SuggestMovieForm(title=title, year=year)
-    if form.validate():
-        slug = slugify(data.get("title")).lower() + data.get("year")
+    json_data = request.get_json(silent=True) or {}
+    try:
+        # validate title and year as strings
+        data = MovieSchema().load(json_data)
+        print("data: two good strings")
+    except:
+        abort(400)
+    # prepare data for Movie model
+    title = data["title"]
+    year_string = data["year"]
+    slug = slugify(title + year_string)
+    try:
+        # convert year to integer
+        year = int(data["year"])
+        print("year to int")
+    except:
+        abort(400)
+    try:
+        # add to db ... check for uniqueness
         movie = Movie(
             slug=slug, title=title, year=year, recommender_id=g.current_user.id
         )
         db.session.add(movie)
         db.session.commit()
-        try:
-            msg = Message(
-                "New Suggestion",
-                sender="admin@freemoviesuggestion.com",
-                recipients=["admin@freemoviesuggestion.com"],
-            )
-            msg.body = (
-                g.current_user.name
-                + " recommended "
-                + data.get("title")
-                + " "
-                + data.get("year")
-            )
-            mail.send(msg)
-        except:
-            print("No email connection")
-        return "", 200
-    else:
-        abort(400)
+        print("added to db")
+    except:
+        abort(500)
+    try:
+        # send myself a message
+        msg = Message(
+            "New Suggestion",
+            sender="admin@freemoviesuggestion.com",
+            recipients=["admin@freemoviesuggestion.com"],
+        )
+        msg.body = g.current_user.name + " recommended " + title + " " + year_string
+        mail.send(msg)
+        print("email sent")
+    except:
+        print("no email connection")
+
+    return "", 200
 
 
 @bp.route("/removesuggestion", methods=["POST"])
