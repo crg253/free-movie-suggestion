@@ -30,9 +30,10 @@ def slugify(slug):
 
 @bp.route("/getuser", methods=["POST"])
 def get_user():
-    # pass token to this route directly
+    # pass token to this route directly instead of token_auth
     data = request.get_json(silent=True) or {}
     user = User.check_token(data.get("token"))
+    # worst case data, user == None
     if user == None:
         return (jsonify({"user": {"name": "", "email": ""}}), 200)
     else:
@@ -242,6 +243,7 @@ def delete_account():
 def save_movie():
     json_data = request.get_json(silent=True) or {}
     movie = Movie.query.filter_by(slug=json_data.get("slug")).first()
+    # any type of data here produces movie object or None
     if movie is not None:
         if movie in g.current_user.saves:
             abort(500)
