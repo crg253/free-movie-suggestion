@@ -19,6 +19,7 @@ from types import *
 from itsdangerous import URLSafeTimedSerializer
 import os
 import json
+from marshmallow import ValidationError
 
 
 def slugify(slug):
@@ -72,7 +73,6 @@ def submit_email():
     try:
         data = EmailSchema().load(json_data)
     except:
-        print("bad email format")
         return "", 200
     # if email not being used then send link
     email = data["email"]
@@ -90,10 +90,8 @@ def submit_email():
         )
         msg.body = f"Click to confirm email and activate account: {confirm_url}"
         mail.send(msg)
-        print("success")
         return "", 200
     else:
-        print("email being used")
         return "", 200
 
 
@@ -107,15 +105,14 @@ def create_account():
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
     except:
-        print("bad email token")
         abort(400)
     name = json_data.get("name")
     password = json_data.get("password")
-    new_user_data = {"email": email, "name": name, "password": password}
+    new_user_data = {"name": name, "email": email, "password": password}
+    print(new_user_data)
     try:
         data = UserSchema().load(new_user_data)
     except:
-        print("bad user data")
         abort(400)
     new_user = User(email=data["email"], name=data["name"])
     new_user.set_password(data["password"])
@@ -123,9 +120,7 @@ def create_account():
     try:
         db.session.commit()
     except:
-        print("user name or email already exists")
-        abort(400)
-    print("success")
+        abort(500)
     return "", 200
 
 
@@ -143,7 +138,6 @@ def reset_password():
     try:
         data = EmailSchema().load(json_data)
     except:
-        print("bad email format")
         return "", 200
     email = data["email"]
     email_user = User.query.filter_by(email=email).first()
@@ -161,10 +155,8 @@ def reset_password():
         msg.body = f"Click to reset your password: {reset_url}"
         mail.send(msg)
     else:
-        print("unable to find user")
         return "", 200
 
-    print("sent password reset link")
     return "", 200
 
 
@@ -178,14 +170,12 @@ def complete_password_reset():
             token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
         )
     except:
-        print("bad email format")
         abort(400)
     password = json_data.get("password")
     user_data = {"email": email, "password": password}
     try:
         data = ResetPasswordSchema().load(user_data)
     except:
-        print("bad data")
         abort(400)
     user = User.query.filter_by(email=data["email"]).first()
     if user != None:
@@ -193,7 +183,6 @@ def complete_password_reset():
         db.session.commit()
         return "", 200
     else:
-        print("user not found")
         abort(500)
 
 
@@ -274,7 +263,6 @@ def suggest_movie():
     try:
         # validate title and year as strings
         data = MovieSchema().load(json_data)
-        print("data: two good strings")
     except:
         abort(400)
     # prepare data for Movie model
@@ -284,7 +272,6 @@ def suggest_movie():
     try:
         # convert year to integer
         year = int(data["year"])
-        print("year to int")
     except:
         abort(400)
     try:
@@ -294,7 +281,6 @@ def suggest_movie():
         )
         db.session.add(movie)
         db.session.commit()
-        print("added to db")
     except:
         abort(500)
     try:
@@ -306,9 +292,8 @@ def suggest_movie():
         )
         msg.body = g.current_user.name + " recommended " + title + " " + year_string
         mail.send(msg)
-        print("email sent")
     except:
-        print("no email connection")
+        pass
 
     return "", 200
 
@@ -317,11 +302,7 @@ def suggest_movie():
 @token_auth.login_required
 def remove_suggestion():
     json_data = request.get_json(silent=True) or {}
-    try:
-        data = SlugSchema().load(json_data)
-    except:
-        abort(400)
-    slug = data["slug"]
+    slug = json_data.get("slug")
     movie_to_unsuggest = Movie.query.filter_by(slug=slug).first()
     if movie_to_unsuggest is None:
         abort(500)

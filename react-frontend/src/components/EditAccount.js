@@ -32,12 +32,20 @@ class EditAccount extends Component {
     });
   };
 
+  validateEmail = email => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   isDisabled = () => {
     return (
       (this.state.NewName.length === 0 &&
         this.state.NewEmail.length === 0 &&
         this.state.NewPassword.length === 0) ||
-      (this.state.NewPassword.length > 0 && this.state.NewPassword.length < 6)
+      (this.state.NewPassword.length > 0 &&
+        this.state.NewPassword.length < 6) ||
+      (this.state.NewEmail.length > 0 &&
+        !this.validateEmail(this.state.NewEmail))
     );
   };
 
@@ -60,18 +68,6 @@ class EditAccount extends Component {
         this.props.setRedirectBack("");
         this.props.setRedirectBackSlug("editaccount");
         this.props.setRedirect(<Redirect to="/signin" />);
-      } else if (res.status === 400) {
-        this.setState({
-          NewName: "",
-          NewEmail: "",
-          NewPassword: "",
-          Message: (
-            <MessageModal
-              message="Sorry, not able to process username or password."
-              buttonMessage="Fine be that way"
-            />
-          )
-        });
       } else if (res.status === 500) {
         this.setState({
           NewName: "",
@@ -79,7 +75,7 @@ class EditAccount extends Component {
           NewPassword: "",
           Message: (
             <MessageModal
-              message="Sorry, username not available, or email in use."
+              message="Sorry, unable to process changes."
               buttonMessage="Fine be that way"
             />
           )
@@ -144,7 +140,7 @@ class EditAccount extends Component {
                 type="submit"
                 value="Update"
                 className="form-submit-button"
-                // disabled={this.isDisabled()}
+                disabled={this.isDisabled()}
               />
             </form>
           </div>

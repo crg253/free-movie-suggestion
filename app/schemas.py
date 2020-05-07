@@ -18,16 +18,16 @@ class SlugSchema(Schema):
 
 
 class UserSchema(Schema):
-    name = fields.Nested(NameSchema())
-    email = fields.Nested(EmailSchema())
-    password = fields.Nested(PasswordSchema())
+    name = fields.Str(required=True, validate=validate.Length(min=1))
+    email = fields.Email(required=True)
+    password = fields.Str(required=True, validate=validate.Length(min=6))
 
 
 class ResetPasswordSchema(Schema):
-    email = fields.Nested(EmailSchema())
-    password = fields.Nested(PasswordSchema())
+    email = fields.Email(required=True)
+    password = fields.Str(required=True, validate=validate.Length(min=6))
 
 
 class MovieSchema(Schema):
     title = fields.Str(required=True, validate=validate.Length(min=1))
-    year = fields.Str(required=True, validate=validate.Length(min=1))
+    year = fields.Str(required=True, validate=validate.Length(min=4))

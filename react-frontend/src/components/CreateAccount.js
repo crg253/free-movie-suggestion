@@ -24,11 +24,11 @@ class CreateAccount extends Component {
     return re.test(String(email).toLowerCase());
   };
 
-  // submitEmailIsDisabled = () => {
-  //   return (
-  //     this.state.Email.length === 0 || !this.validateEmail(this.state.Email)
-  //   );
-  // };
+  submitEmailIsDisabled = () => {
+    return (
+      this.state.Email.length === 0 || !this.validateEmail(this.state.Email)
+    );
+  };
 
   handleSubmitEmail = event => {
     event.preventDefault();
@@ -73,7 +73,7 @@ class CreateAccount extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              // disabled={this.submitEmailIsDisabled()}
+              disabled={this.submitEmailIsDisabled()}
             />
           </form>
 

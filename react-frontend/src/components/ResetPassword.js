@@ -19,8 +19,15 @@ class ResetPassword extends Component {
     });
   };
 
+  validateEmail = email => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   isDisabled = () => {
-    return this.state.Email.length === 0;
+    return (
+      this.state.Email.length === 0 || !this.validateEmail(this.state.Email)
+    );
   };
 
   handlePasswordReset = event => {
@@ -61,7 +68,7 @@ class ResetPassword extends Component {
               type="submit"
               value="Submit"
               className="form-submit-button"
-              // disabled={this.isDisabled()}
+              disabled={this.isDisabled()}
             />
           </form>
 
