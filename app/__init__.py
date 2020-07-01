@@ -1,5 +1,5 @@
 from flask import Flask
-from config import DevConfig
+from config import ProductionConfig, DevConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
