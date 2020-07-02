@@ -24,7 +24,7 @@ class Recommend extends Component {
   handleSearchSubmit = event => {
     event.preventDefault();
     fetch(
-      "http://www.omdbapi.com/?s=" +
+      "https://www.omdbapi.com/?s=" +
         this.state.SearchValue.trim() +
         "&apikey=e0bc91cd"
     )
