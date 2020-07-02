@@ -246,8 +246,8 @@ class App extends Component {
   };
 
   handleGetAndSetUserAndMovies = token => {
-    if (token === null) {
-      token = "";
+    if (typeof token !== "string") {
+      token = "token";
     }
     this.handleGetAndSetUser(token);
     this.handleGetAndSetMovies(token);
