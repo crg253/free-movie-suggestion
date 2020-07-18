@@ -24,5 +24,16 @@ class DevConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    pyanywhere_username = os.environ.get("PYANYWHERE_USERNAME")
+    pyanywhere_mysql_password = os.environ.get("PYANYWHERE_MYSQL_PASSWORD")
+    pyanywhere_mysql_hostname = os.environ.get("PYANYWHERE_MYSQL_HOSTNAME")
+    pyanywhere_mysql_dbname = os.environ.get("PYANYWHERE_MYSQL_DBNAME")
+
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+        username=pyanywhere_username,
+        password=pyanywhere_mysql_password,
+        hostname=pyanywhere_mysql_hostname,
+        databasename=pyanywhere_mysql_dbname,
+    )
+
     DEBUG = False
