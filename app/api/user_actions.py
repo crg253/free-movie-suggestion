@@ -1,4 +1,4 @@
-from flask import jsonify, render_template, request, g, abort, url_for
+from flask import jsonify, render_template, request, g, abort, url_for, current_app
 from flask_mail import Message
 from app import db, mail
 from app.models import Movie, Tag, User
@@ -78,8 +78,8 @@ def submit_email():
     email = data["email"]
     email_user = User.query.filter_by(email=email).first()
     if email_user == None:
-        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+        ts = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+        email_token = ts.dumps(email, salt=current_app.config["EMAIL_CONFIRM_SALT"])
         confirm_url = url_for(
             "main.confirm_email", email_token=email_token, _external=True
         )
@@ -98,11 +98,11 @@ def submit_email():
 @bp.route("/completeregistration", methods=["POST"])
 def create_account():
     json_data = request.get_json(silent=True) or {}
-    ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+    ts = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
     token = json_data.get("emailToken")
     try:
         email = ts.loads(
-            token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
+            token, salt=current_app.config["EMAIL_CONFIRM_SALT"]  # max_age=86400
         )
     except:
         abort(400)
@@ -142,8 +142,8 @@ def reset_password():
     email = data["email"]
     email_user = User.query.filter_by(email=email).first()
     if email_user != None:
-        ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
-        email_token = ts.dumps(email, salt=os.environ.get("EMAIL-CONFIRM-SALT"))
+        ts = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+        email_token = ts.dumps(email, salt=current_app.config["EMAIL_CONFIRM_SALT"])
         reset_url = url_for(
             "main.complete_reset_password", email_token=email_token, _external=True
         )
@@ -164,10 +164,10 @@ def reset_password():
 def complete_password_reset():
     json_data = request.get_json(silent=True) or {}
     token = json_data.get("emailToken")
-    ts = URLSafeTimedSerializer(os.environ.get("SECRET_KEY"))
+    ts = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
     try:
         email = ts.loads(
-            token, salt=os.environ.get("EMAIL-CONFIRM-SALT")  # max_age=86400
+            token, salt=current_app.config["EMAIL_CONFIRM_SALT"]  # max_age=86400
         )
     except:
         abort(400)
